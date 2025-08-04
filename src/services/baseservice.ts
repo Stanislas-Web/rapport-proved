@@ -16,7 +16,13 @@ export function prodUrl(): string {
 export const URL = environment === Environment.DEVELOPPEMENT ? devUrl() : prodUrl();
 
 // Fonction pour générer l'URL complète
-const getFullUrl = (route: string): string => `${URL}${route}`;
+const getFullUrl = (route: string): string => {
+    const fullUrl = `${URL}${route}`;
+    console.log('🔍 BaseService - URL générée:', fullUrl);
+    console.log('🔍 BaseService - URL de base:', URL);
+    console.log('🔍 BaseService - Route:', route);
+    return fullUrl;
+};
 
 // Configuration par défaut
 const defaultConfig: AxiosRequestConfig = {
@@ -26,12 +32,18 @@ const defaultConfig: AxiosRequestConfig = {
     timeout: 5000, // Timeout de 5 secondes
 };
 
-const configToken = {
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('token'),
-    },
-    timeout: 5000, // Timeout de 5 secondes
+// Fonction pour obtenir la configuration avec token
+const getConfigWithToken = (): AxiosRequestConfig => {
+    const token = localStorage.getItem('token');
+    console.log('🔍 BaseService - Token récupéré:', token);
+    
+    return {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : '',
+        },
+        timeout: 5000, // Timeout de 5 secondes
+    };
 };
 
 // Service de base avec méthodes GET, POST, PUT, DELETE
@@ -39,9 +51,14 @@ export const BaseService = {
     // Méthode GET avec config
     get: async (route: string, config: AxiosRequestConfig = {}): Promise<any> => {
         try {
-            const response: AxiosResponse = await axios.get(getFullUrl(route), { ...configToken, ...config });
+            const tokenConfig = getConfigWithToken();
+            console.log('🔍 BaseService.get - Route:', route);
+            console.log('🔍 BaseService.get - Token config:', tokenConfig);
+            
+            const response: AxiosResponse = await axios.get(getFullUrl(route), { ...tokenConfig, ...config });
             return response.data;
         } catch (error: any) {
+            console.error('🔍 BaseService.get - Erreur:', error);
             throw error.response ? error.response.data : error;
         }
     },
@@ -49,9 +66,23 @@ export const BaseService = {
     // Méthode POST avec config
     post: async (route: string, data: any, config: AxiosRequestConfig = {}): Promise<any> => {
         try {
-            const response: AxiosResponse = await axios.post(getFullUrl(route), data, { ...configToken, ...config });
+            const tokenConfig = getConfigWithToken();
+            const fullUrl = getFullUrl(route);
+            
+            console.log('🔍 BaseService.post - URL complète:', fullUrl);
+            console.log('🔍 BaseService.post - Route:', route);
+            console.log('🔍 BaseService.post - Data:', data);
+            console.log('🔍 BaseService.post - Token config:', tokenConfig);
+            console.log('🔍 BaseService.post - Headers:', tokenConfig.headers);
+            
+            const response: AxiosResponse = await axios.post(fullUrl, data, { ...tokenConfig, ...config });
+            console.log('🔍 BaseService.post - Réponse:', response.data);
             return response.data;
         } catch (error: any) {
+            console.error('🔍 BaseService.post - Erreur complète:', error);
+            console.error('🔍 BaseService.post - Status:', error.response?.status);
+            console.error('🔍 BaseService.post - Data d\'erreur:', error.response?.data);
+            console.error('🔍 BaseService.post - URL qui a échoué:', getFullUrl(route));
             throw error.response ? error.response.data : error;
         }
     },
@@ -94,10 +125,10 @@ export const BaseService = {
 
             const uploadConfig = {
                 headers: {
-                    ...configToken.headers,
+                    ...getConfigWithToken().headers,
                     'Content-Type': 'multipart/form-data', // Important pour l'upload de fichiers
                 },
-                timeout: configToken.timeout,
+                timeout: getConfigWithToken().timeout,
             };
 
             const response: AxiosResponse = await axios.post(getFullUrl(route), formData, { ...uploadConfig, ...config });

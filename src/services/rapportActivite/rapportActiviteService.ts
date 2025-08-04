@@ -8,9 +8,20 @@ class RapportActiviteService {
   async getAllRapports(): Promise<RapportActivite[]> {
     try {
       const response = await BaseService.get(this.endpoint);
-      return response;
+      console.log('🔍 RapportActiviteService.getAllRapports - Réponse complète:', response);
+      
+      // La structure de réponse est: { success: true, data: { docs: [...] } }
+      if (response && response.success && response.data && response.data.docs) {
+        console.log('🔍 RapportActiviteService.getAllRapports - Nombre de rapports:', response.data.totalDocs);
+        console.log('🔍 RapportActiviteService.getAllRapports - Message:', response.message);
+        return response.data.docs;
+      }
+      
+      console.log('🔍 RapportActiviteService.getAllRapports - Structure de réponse non reconnue');
+      return [];
     } catch (error) {
       console.error('Erreur lors de la récupération des rapports d\'activité:', error);
+      console.error('Erreur complète:', JSON.stringify(error, null, 2));
       throw error;
     }
   }
@@ -176,6 +187,122 @@ class RapportActiviteService {
       return response;
     } catch (error) {
       console.error('Erreur lors de l\'export Excel:', error);
+      throw error;
+    }
+  }
+
+  // Récupérer les statistiques des rapports d'activité
+  async getRapportStats(): Promise<{
+    totalRapports: number;
+    rapportsParStatut: { [key: string]: number };
+    totalEffectifs: number;
+    totalEcoles: number;
+    totalClasses: number;
+    totalPersonnel: number;
+    rapportsParAnnee: { [key: string]: number };
+    provincesRepresentees: number;
+    rapportsParProved: { [key: string]: number };
+  }> {
+    try {
+      const rapports = await this.getAllRapports();
+      
+      // Calculer les statistiques
+      const stats = {
+        totalRapports: rapports.length,
+        rapportsParStatut: {} as { [key: string]: number },
+        totalEffectifs: 0,
+        totalEcoles: 0,
+        totalClasses: 0,
+        totalPersonnel: 0,
+        rapportsParAnnee: {} as { [key: string]: number },
+        provincesRepresentees: new Set<string>().size,
+        rapportsParProved: {} as { [key: string]: number },
+      };
+
+      const provinces = new Set<string>();
+
+      rapports.forEach(rapport => {
+        // Statistiques par statut
+        const statut = rapport.statut || 'brouillon';
+        stats.rapportsParStatut[statut] = (stats.rapportsParStatut[statut] || 0) + 1;
+
+        // Statistiques par année
+        const annee = rapport.annee?.toString() || 'N/A';
+        stats.rapportsParAnnee[annee] = (stats.rapportsParAnnee[annee] || 0) + 1;
+
+        // Statistiques par PROVED
+        if (rapport.identificationProved?.provinceAdministrative) {
+          const proved = rapport.identificationProved.provinceAdministrative;
+          stats.rapportsParProved[proved] = (stats.rapportsParProved[proved] || 0) + 1;
+          provinces.add(proved);
+          console.log('🔍 Service - Ajout rapport pour PROVED:', proved, 'Total:', stats.rapportsParProved[proved]);
+        } else {
+          console.log('🔍 Service - PROVED manquant pour rapport:', rapport._id, 'identificationProved:', rapport.identificationProved);
+        }
+
+        // Total effectifs
+        stats.totalEffectifs += rapport.totalEffectifs || 0;
+
+        // Calculer les totaux des écoles et classes
+        if (rapport.parametresCles) {
+          // Écoles
+          const ecolesPrescolaire = 
+            (rapport.parametresCles.niveauPrescolaire?.espaceCommunautaireEveil?.nombreEcoles || 0) +
+            (rapport.parametresCles.niveauPrescolaire?.maternel?.nombreEcoles || 0) +
+            (rapport.parametresCles.niveauPrescolaire?.prePrimaire?.nombreEcoles || 0) +
+            (rapport.parametresCles.niveauPrescolaire?.special?.nombreEcoles || 0);
+          
+          const ecolesPrimaire = rapport.parametresCles.niveauPrimaire?.enseignementPrimaire?.nombreEcoles || 0;
+          
+          stats.totalEcoles += ecolesPrescolaire + ecolesPrimaire;
+
+          // Classes
+          const classesPrescolaire = 
+            (rapport.parametresCles.niveauPrescolaire?.espaceCommunautaireEveil?.nombreClasses || 0) +
+            (rapport.parametresCles.niveauPrescolaire?.maternel?.nombreClasses || 0) +
+            (rapport.parametresCles.niveauPrescolaire?.prePrimaire?.nombreClasses || 0) +
+            (rapport.parametresCles.niveauPrescolaire?.special?.nombreClasses || 0);
+          
+          const classesPrimaire = 
+            (rapport.parametresCles.niveauPrimaire?.enseignementSpecial?.nombreClasses || 0) +
+            (rapport.parametresCles.niveauPrimaire?.enseignementPrimaire?.nombreClasses || 0);
+          
+          const classesSecondaire = 
+            (rapport.parametresCles.niveauSecondaire?.enseignementSpecial?.nombreClasses || 0) +
+            (rapport.parametresCles.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes7emeCTEB || 0) +
+            (rapport.parametresCles.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes8emeCTEB || 0) +
+            (rapport.parametresCles.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.classesHumanites || 0);
+          
+          stats.totalClasses += classesPrescolaire + classesPrimaire + classesSecondaire;
+        }
+
+        // Calculer le personnel total
+        if (rapport.personnel) {
+          const personnelEnseignant = 
+            (rapport.personnel.personnelEnseignant?.prescolaire?.hommes || 0) +
+            (rapport.personnel.personnelEnseignant?.prescolaire?.femmes || 0) +
+            (rapport.personnel.personnelEnseignant?.primaire?.hommes || 0) +
+            (rapport.personnel.personnelEnseignant?.primaire?.femmes || 0) +
+            (rapport.personnel.personnelEnseignant?.secondaire?.hommes || 0) +
+            (rapport.personnel.personnelEnseignant?.secondaire?.femmes || 0);
+          
+          const personnelAdministratif = 
+            (rapport.personnel.personnelAdministratif?.directionProvinciale || 0) +
+            (rapport.personnel.personnelAdministratif?.inspectionPrincipale || 0) +
+            (rapport.personnel.personnelAdministratif?.coordinationProvinciale || 0) +
+            (rapport.personnel.personnelAdministratif?.sousDivision || 0);
+          
+          stats.totalPersonnel += personnelEnseignant + personnelAdministratif;
+        }
+      });
+
+      stats.provincesRepresentees = provinces.size;
+
+      console.log('🔍 Statistiques calculées:', stats);
+      console.log('🔍 Rapports par PROVED final:', stats.rapportsParProved);
+      return stats;
+    } catch (error) {
+      console.error('Erreur lors du calcul des statistiques:', error);
       throw error;
     }
   }

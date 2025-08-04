@@ -31,29 +31,6 @@ const Conclusion: React.FC<ConclusionProps> = ({ formData, handleInputChange }) 
           placeholder="Entrez votre conclusion..."
         />
       </div>
-
-      {/* NOTE EXPLICATIVE */}
-      <div className="mb-6">
-        <h4 className="font-bold mb-3">NOTE EXPLICATIVE</h4>
-        <div className="text-sm text-gray-700 space-y-3">
-          <p>
-            Ce template constitue un premier draft pour les discussions. Il servira à produire un rapport définitif par les "Proveds" 
-            qui sera soumis au Ministère de l'EPST.
-          </p>
-          <p>
-            Actuellement, il n'existe pas de cadre standard pour les rapports d'activité. Cette proposition vise à combler cette lacune 
-            et à harmoniser les rapports d'activité des provinces éducationnelles.
-          </p>
-          <p>
-            L'analyse permettra de supprimer les informations superflues et de ne garder que l'essentiel pour la prise de décision 
-            au niveau central.
-          </p>
-          <p>
-            Un panel d'experts sera mis en place pour valider ce template et le Conseiller Jacks sera chargé de la coordination 
-            de ce processus.
-          </p>
-        </div>
-      </div>
     </div>
   );
 };

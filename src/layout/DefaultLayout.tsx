@@ -6,12 +6,12 @@ const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Vérifier si l'utilisateur est connecté en vérifiant l'email et le mot de passe dans le localStorage
+  // Vérifier si l'utilisateur est connecté en vérifiant le téléphone et le mot de passe dans le localStorage
   useEffect(() => {
-    const email = localStorage.getItem('email');
+    const telephone = localStorage.getItem('telephone');
     const password = localStorage.getItem('password');
 
-    if (email && password) {
+    if (telephone && password) {
       setIsAuthenticated(true); // L'utilisateur est connecté
     }
   }, []);

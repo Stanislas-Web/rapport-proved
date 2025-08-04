@@ -9,8 +9,22 @@ const login = async (route: string, data: object) => {
 }
 
 const createUser = async (route: string, data: object) => {
-  const response = await BaseService.post(route, data);
-  return response;
+  console.log('🔍 UsersService.createUser - Route:', route);
+  console.log('🔍 UsersService.createUser - Data:', data);
+  console.log('🔍 UsersService.createUser - Token:', localStorage.getItem('token'));
+  
+  try {
+    const response = await BaseService.post(route, data);
+    console.log('🔍 UsersService.createUser - Réponse:', response);
+    return response;
+  } catch (error: any) {
+    console.error('🔍 UsersService.createUser - Erreur complète:', error);
+    console.error('🔍 UsersService.createUser - Message d\'erreur:', error.message);
+    console.error('🔍 UsersService.createUser - Status:', error.response?.status);
+    console.error('🔍 UsersService.createUser - Data d\'erreur:', error.response?.data);
+    console.error('🔍 UsersService.createUser - Headers:', error.response?.headers);
+    throw error;
+  }
 }
 
 
@@ -20,8 +34,25 @@ const uploadImage = async (route: string, imageFile: File | null) => {
 }
 
 const getAllUser = async (route: string) => {
-  const response = await BaseService.get(route);
-  return response;
+  console.log('🔍 UsersService.getAllUser - Route:', route);
+  console.log('🔍 UsersService.getAllUser - Token:', localStorage.getItem('token'));
+  
+  try {
+    const response = await BaseService.get(route);
+    console.log('🔍 UsersService.getAllUser - Réponse complète:', response);
+    
+    // Gérer la nouvelle structure de réponse avec message, count et data
+    if (response && response.data) {
+      console.log('🔍 UsersService.getAllUser - Nombre d\'utilisateurs:', response.count);
+      console.log('🔍 UsersService.getAllUser - Message:', response.message);
+      return response.data; // Retourner seulement le tableau data
+    }
+    
+    return response;
+  } catch (error) {
+    console.error('🔍 UsersService.getAllUser - Erreur:', error);
+    throw error;
+  }
 }
 
 

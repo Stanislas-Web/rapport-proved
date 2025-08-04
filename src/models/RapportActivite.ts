@@ -1,6 +1,22 @@
 export interface RapportActivite {
   _id?: string;
-  identificationProved: string; // ObjectId reference
+  id?: string; // Ajouté pour compatibilité avec la réponse API
+  identificationProved: {
+    role?: string;
+    _id?: string;
+    provinceAdministrative: string;
+    provinceEducationnelle: string;
+    chefLieuProved: string;
+    emailProfessionnel: string;
+    telephone: string;
+    statutOccupation: string;
+    nombreTerritoires: number;
+    nombreSousDivisions: number;
+    directeurProvincial: string;
+    isActive: boolean;
+    createdAt?: string;
+    updatedAt?: string;
+  };
   introduction?: string;
   
   parametresCles: {
@@ -146,11 +162,12 @@ export interface RapportActivite {
   updatedBy?: string; // ObjectId reference
   createdAt?: Date;
   updatedAt?: Date;
+  totalEffectifs?: number; // Ajouté pour la réponse API
 }
 
 // Interface pour la création d'un nouveau rapport
 export interface CreateRapportActiviteRequest {
-  identificationProved: string;
+  identificationProved: string; // ID de la PROVED pour la création
   introduction?: string;
   parametresCles: RapportActivite['parametresCles'];
   personnel: RapportActivite['personnel'];

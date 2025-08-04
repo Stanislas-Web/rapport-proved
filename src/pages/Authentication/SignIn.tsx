@@ -8,16 +8,16 @@ import { loginUser } from '../../features/users/usersSlice';
 
 const SignIn: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const [email, setEmail] = useState<string>('');
+  const [telephone, setTelephone] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false); // Nouvel état pour gérer le loader
   const navigate = useNavigate();
 
   useEffect(() => {
-    const email = localStorage.getItem('email');
+    const telephone = localStorage.getItem('telephone');
     const password = localStorage.getItem('password');
 
-    if (email && password) {
+    if (telephone && password) {
       navigate('/tableaubord');
       window.location.reload();
     }
@@ -26,15 +26,20 @@ const SignIn: React.FC = () => {
     e.preventDefault();
     setIsLoading(true); 
     let data: object = {
-      email: email,
-      password: password,
+      identifier:"+243" + telephone,
+      motDePasse: password,
     };
   
     try {
-      const result = await dispatch(loginUser({ route: 'login', data })).unwrap();
+      const result = await dispatch(loginUser({ route: 'proved/login', data })).unwrap();
       console.log('Login successful!', result);
+      console.log('User data:', result.data);
+      console.log('User data keys:', Object.keys(result.data));
+      console.log('Role:', result.data.role);
+      console.log('Nom:', result.data.nom);
+      console.log('Prenom:', result.data.prenom);
       setIsLoading(false);
-      localStorage.setItem('email', email);
+      localStorage.setItem('telephone', telephone);
       localStorage.setItem('password', password);
       localStorage.setItem('token', result.token);
       localStorage.setItem('data', JSON.stringify(result.data));
@@ -69,14 +74,18 @@ const SignIn: React.FC = () => {
               <form onSubmit={handleLogin}>
                 <div className="mb-4">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
-                    Email
+                    Numéro de téléphone
                   </label>
                   <div className="relative">
+                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2 flex items-center bg-gray-50 dark:bg-gray-800 px-2 py-1 rounded-l-md border-r border-gray-200 dark:border-gray-600 z-10">
+                      <span className="text-xl mr-2">🇨🇩</span>
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">+243</span>
+                    </div>
                     <input
-                      type="email"
-                      placeholder="Entrer votre adresse email"
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      type="tel"
+                      placeholder="Entrer votre numéro de téléphone"
+                      onChange={(e) => setTelephone(e.target.value)}
+                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-24 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                   </div>
                 </div>

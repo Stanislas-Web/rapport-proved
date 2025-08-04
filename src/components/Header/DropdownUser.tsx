@@ -5,48 +5,142 @@ import ClickOutside from '../ClickOutside';
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
-  const [data, setData] = useState<any>('');
-  const [photo, setPhoto] = useState<String>('');
-  
+  const [data, setData] = useState<any>({});
+
+  // Fonction pour obtenir le nom de la personne connectée
+  const getUserName = () => {
+    console.log('🔍 getUserName called with data:', data);
+    console.log('🔍 Type de data:', typeof data);
+    console.log('🔍 Clés disponibles dans data:', Object.keys(data));
+
+    // Nom complet avec prénom et nom
+    if (data.prenom && data.nom) {
+      console.log('🔍 Using prenom + nom:', `${data.prenom} ${data.nom}`);
+      return `${data.prenom} ${data.nom}`;
+    }
+
+    // Nom complet avec prénom, nom et postnom
+    if (data.prenom && data.nom && data.postnom) {
+      console.log('🔍 Using prenom + nom + postnom:', `${data.prenom} ${data.nom} ${data.postnom}`);
+      return `${data.prenom} ${data.nom} ${data.postnom}`;
+    }
+
+    // Nom complet avec nom et postnom
+    if (data.nom && data.postnom) {
+      console.log('🔍 Using nom + postnom:', `${data.nom} ${data.postnom}`);
+      return `${data.nom} ${data.postnom}`;
+    }
+
+    // Champs individuels
+    if (data.fullName) {
+      console.log('🔍 Using fullName:', data.fullName);
+      return data.fullName;
+    }
+    if (data.name) {
+      console.log('🔍 Using name:', data.name);
+      return data.name;
+    }
+    if (data.nom) {
+      console.log('🔍 Using nom only:', data.nom);
+      return data.nom;
+    }
+    if (data.prenom) {
+      console.log('🔍 Using prenom only:', data.prenom);
+      return data.prenom;
+    }
+    if (data.nomProved) {
+      console.log('🔍 Using nomProved:', data.nomProved);
+      return data.nomProved;
+    }
+
+    console.log('🔍 Using default: Utilisateur');
+    return 'Utilisateur';
+  };
+
+  // Fonction pour formater le rôle
+  const formatRole = (role: string) => {
+    console.log('🔍 formatRole appelé avec role:', role);
+    console.log('🔍 Type de role:', typeof role);
+
+    // Test spécifique pour directeurProvincial
+    if (role === 'directeurProvincial') {
+      console.log('🔍 Détecté directeurProvincial, retourne: Directeur Provincial');
+      return 'Directeur Provincial';
+    }
+
+    if (!role) {
+      console.log('🔍 Role vide, retourne: Directeur Provincial');
+      return 'Directeur Provincial';
+    }
+
+    // Convertir camelCase en texte lisible
+    const formatted = role
+      .replace(/([A-Z])/g, ' $1') // Ajouter un espace avant les majuscules
+      .replace(/^./, str => str.toUpperCase()) // Première lettre en majuscule
+      .trim();
+
+    console.log('🔍 Role formaté:', formatted);
+    return formatted;
+  };
+
 
   useEffect(() => {
-    const email = localStorage.getItem('email');
+    const telephone = localStorage.getItem('telephone');
     const password = localStorage.getItem('password');
+    const userData = localStorage.getItem('data');
 
-    
-    
+    console.log('🔍 localStorage.getItem("data"):', userData);
+    console.log('🔍 telephone:', telephone);
+    console.log('🔍 password:', password);
 
-    setData(JSON.parse(localStorage.getItem('data') || ''));
+    if (userData) {
+      try {
+        const parsedData = JSON.parse(userData);
+        console.log('🔍 Données parsées:', parsedData);
+        console.log('🔍 Clés disponibles:', Object.keys(parsedData));
+        console.log('🔍 nomProved:', parsedData.nomProved);
+        console.log('🔍 nom:', parsedData.nom);
+        console.log('🔍 prenom:', parsedData.prenom);
+        console.log('🔍 postnom:', parsedData.postnom);
+        console.log('🔍 fullName:', parsedData.fullName);
+        console.log('🔍 name:', parsedData.name);
+        console.log('🔍 directeurProvincial:', parsedData.directeurProvincial);
+        console.log('🔍 role:', parsedData.role);
+        console.log('🔍 fonction:', parsedData.fonction);
+        setData(parsedData);
+        console.log('User data loaded:', parsedData);
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        setData({});
+      }
+    } else {
+      console.log('🔍 Aucune donnée trouvée dans localStorage');
+    }
 
-    console.log("my "+data.nom+" "+data.prenom);
-    
-
-    if (!email || !password) {
+    if (!telephone || !password) {
       navigate('/signin');
     }
   }, [navigate]);
 
   useEffect(() => {
-    const email = localStorage.getItem('email');
+    const telephone = localStorage.getItem('telephone');
     const password = localStorage.getItem('password');
-    const dataUser = JSON.parse(localStorage.getItem('data') || '{}');
-    setPhoto(dataUser.photo);
-    console.log(photo);
 
-    if (!email || !password) {
+    if (!telephone || !password) {
       navigate('/signin');
     }
-    
+
   }, [data]);
 
-    const handleLogout = () => {
+  const handleLogout = () => {
     // Supprimer les informations utilisateur du localStorage
-    localStorage.removeItem('email');
+    localStorage.removeItem('telephone');
     localStorage.removeItem('password');
+    localStorage.removeItem('token');
+    localStorage.removeItem('data');
 
     // Rediriger l'utilisateur vers la page de connexion
     navigate('/signin');
-    window.location.reload();
   };
 
   return (
@@ -58,14 +152,37 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            {/* Christine NEPA NEPA KABALA */}
-            {data.prenom +" "+ data.nom}
+            {(() => {
+              console.log('🔍 Test directeurProvincial dans data:', data.directeurProvincial);
+              console.log('🔍 Test role dans data:', data.role);
+              console.log('🔍 Test fonction dans data:', data.fonction);
+
+              // Afficher directement la valeur de directeurProvincial
+              const directeurProvincial = data.directeurProvincial;
+              console.log('🔍 Affichage directeurProvincial:', directeurProvincial);
+              return directeurProvincial || 'Directeur Provincial';
+            })()}
           </span>
-          <span className="block text-xs">{data.role}</span>
+          <span className="block text-xs">
+            Proved
+          </span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
-          <img className='rounded-full border h-10 w-10 object-cover' src={"http://134.122.23.150"+photo} alt="User" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700">
+            <svg
+              className="h-6 w-6 text-gray-500 dark:text-gray-400"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
         </span>
 
         <svg

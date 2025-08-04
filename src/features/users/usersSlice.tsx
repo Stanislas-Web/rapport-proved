@@ -16,6 +16,13 @@ interface ValidationErrors {
   role?: string;
   fonction?: string;
   grade?: string;
+  provinceAdministrative?: string;
+  provinceEducationnelle?: string;
+  chefLieuProved?: string;
+  emailProfessionnel?: string;
+  telephone?: string;
+  directeurProvincial?: string;
+  motDePasse?: string;
 }
 
 interface UsersState {
@@ -28,7 +35,18 @@ interface UsersState {
 
 const initialUserState: User = {
   id: "",
-  password: "",
+  motDePasse: "",
+  provinceAdministrative: "",
+  provinceEducationnelle: "",
+  chefLieuProved: "",
+  emailProfessionnel: "",
+  telephone: "",
+  statutOccupation: "Propriétaire",
+  nombreTerritoires: 0,
+  nombreSousDivisions: 0,
+  directeurProvincial: "",
+  isActive: true,
+  // Champs optionnels pour compatibilité
   nom: "",
   postnom: "",
   prenom: "",
@@ -42,9 +60,9 @@ const initialUserState: User = {
   sousDirection: "",
   fileValue: null,
   visiblePhoto: false,
-  isActive: true,
   fonction: "",
-  grade: ""
+  grade: "",
+  password: ""
 };
 
 const initialState: UsersState = {
@@ -58,16 +76,33 @@ const initialState: UsersState = {
 // Fonction de validation
 const validateUser = (state: UsersState) => {
   const errors: ValidationErrors = {};
-  if (!state.user.nom) errors.nom = "Nom est requis";
-  if (!state.user.postnom) errors.postnom = "Post-nom est requis";
-  if (!state.user.prenom) errors.prenom = "Prénom est requis";
-  if (!state.user.direction) errors.direction = "Direction est requis";
-  if (!state.user.service) errors.service = "Service est requis";
-  if (!state.user.province) errors.province = "Province est requise";
-  if (!state.user.fonction) errors.fonction = "Fonction est requise";
-  if (!state.user.grade) errors.grade = "Grade est requise";
-  if (!state.user.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.user.email)) errors.email = "Email invalide";
-  if (!state.user.phone || !/^\+\d{1,3}\d{4,14}$/.test(state.user.phone)) {
+  
+  // Validation pour les nouveaux champs PROVED
+  if (!state.user.provinceAdministrative) errors.provinceAdministrative = "Province Administrative est requise";
+  if (!state.user.provinceEducationnelle) errors.provinceEducationnelle = "Province Educationnelle est requise";
+  if (!state.user.chefLieuProved) errors.chefLieuProved = "Chef Lieu PROVED est requis";
+  if (!state.user.emailProfessionnel) errors.emailProfessionnel = "Email Professionnel est requis";
+  if (!state.user.telephone) errors.telephone = "Téléphone est requis";
+  if (!state.user.directeurProvincial) errors.directeurProvincial = "Directeur Provincial est requis";
+  if (!state.user.motDePasse) errors.motDePasse = "Mot de passe est requis";
+  
+  // Validation pour les champs optionnels (compatibilité)
+  if (state.user.nom && !state.user.nom) errors.nom = "Nom est requis";
+  if (state.user.postnom && !state.user.postnom) errors.postnom = "Post-nom est requis";
+  if (state.user.prenom && !state.user.prenom) errors.prenom = "Prénom est requis";
+  if (state.user.direction && !state.user.direction) errors.direction = "Direction est requis";
+  if (state.user.service && !state.user.service) errors.service = "Service est requis";
+  if (state.user.province && !state.user.province) errors.province = "Province est requise";
+  if (state.user.fonction && !state.user.fonction) errors.fonction = "Fonction est requise";
+  if (state.user.grade && !state.user.grade) errors.grade = "Grade est requise";
+  
+  // Validation email avec format spécifique
+  if (state.user.email && (!state.user.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.user.email))) {
+    errors.email = "Email invalide";
+  }
+  
+  // Validation téléphone avec format spécifique
+  if (state.user.phone && (!state.user.phone || !/^\+\d{1,3}\d{4,14}$/.test(state.user.phone))) {
     errors.phone = "Téléphone invalide";
   }
 
@@ -184,14 +219,41 @@ export const createUser = createAsyncThunk(
   "create users",
   async ({ route, data }: { route: string; data: User }, thunkAPI) => {
     try {
+      // Validation côté client
       const errors: ValidationErrors = {};
-      if (!data.nom) errors.nom = "Nom est requis";
-      if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) errors.email = "Email invalide";
+      
+      // Validation pour les champs PROVED requis
+      if (!data.provinceAdministrative) errors.provinceAdministrative = "Province Administrative est requise";
+      if (!data.provinceEducationnelle) errors.provinceEducationnelle = "Province Educationnelle est requise";
+      if (!data.chefLieuProved) errors.chefLieuProved = "Chef Lieu PROVED est requis";
+      if (!data.emailProfessionnel) errors.emailProfessionnel = "Email Professionnel est requis";
+      if (!data.telephone) errors.telephone = "Téléphone est requis";
+      if (!data.directeurProvincial) errors.directeurProvincial = "Directeur Provincial est requis";
+      if (!data.motDePasse) errors.motDePasse = "Mot de passe est requis";
+      
+      // Validation pour les champs optionnels
+      if (data.nom && !data.nom) errors.nom = "Nom est requis";
+      if (data.email && (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email))) {
+        errors.email = "Email invalide";
+      }
+      
       if (Object.keys(errors).length > 0) {
         return thunkAPI.rejectWithValue(errors);
       }
+      
       return await UsersService.createUser(route, data);
     } catch (error: any) {
+      // Gestion des erreurs de validation de l'API
+      if (error.response && error.response.data) {
+        const apiErrors = error.response.data;
+        console.log('🔍 API Validation Errors:', apiErrors);
+        
+        // Si l'API retourne des erreurs de validation, les utiliser
+        if (typeof apiErrors === 'object' && Object.keys(apiErrors).length > 0) {
+          return thunkAPI.rejectWithValue(apiErrors);
+        }
+      }
+      
       return thunkAPI.rejectWithValue(error);
     }
   }

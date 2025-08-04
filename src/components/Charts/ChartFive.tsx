@@ -3,7 +3,7 @@ import { ApexOptions } from 'apexcharts';
 import ReactApexChart from 'react-apexcharts';
 import { rapportActiviteService } from '../../services/rapportActivite/rapportActiviteService';
 
-const ChartThree: React.FC = () => {
+const ChartFive: React.FC = () => {
   const [stats, setStats] = useState({
     totalEffectifs: 0,
     totalEcoles: 0,
@@ -14,7 +14,10 @@ const ChartThree: React.FC = () => {
   useEffect(() => {
     const loadStats = async () => {
       try {
+        console.log('🔍 ChartFive - Début du chargement des statistiques');
         const statsData = await rapportActiviteService.getRapportStats();
+        console.log('🔍 ChartFive - Données reçues:', statsData);
+        
         setStats({
           totalEffectifs: statsData.totalEffectifs,
           totalEcoles: statsData.totalEcoles,
@@ -36,40 +39,45 @@ const ChartThree: React.FC = () => {
       type: 'donut',
       height: 335,
     },
-    labels: ['Effectifs', 'Écoles', 'Classes', 'Personnel'],
-    legend: {
-      show: false,
-      position: 'bottom',
-    },
     plotOptions: {
       pie: {
         donut: {
           size: '65%',
           background: 'transparent',
         },
+        offsetY: 0,
       },
+    },
+    stroke: {
+      width: 0,
     },
     dataLabels: {
       enabled: false,
     },
-    responsive: [
-      {
-        breakpoint: 2600,
-        options: {
-          chart: {
-            width: 380,
-          },
-        },
+    legend: {
+      position: 'bottom',
+      fontFamily: 'Satoshi',
+      fontSize: '14px',
+      fontWeight: 500,
+      labels: {
+        colors: '#9ca3af',
       },
-      {
-        breakpoint: 640,
-        options: {
-          chart: {
-            width: 200,
-          },
-        },
+      markers: {
+        width: 6,
+        height: 6,
+        strokeWidth: 0,
+        strokeColor: 'transparent',
+        radius: 12,
       },
-    ],
+      itemMargin: {
+        horizontal: 10,
+        vertical: 5,
+      },
+    },
+    tooltip: {
+      theme: 'dark',
+      fillSeriesColor: false,
+    },
   };
 
   const series = [
@@ -79,9 +87,8 @@ const ChartThree: React.FC = () => {
     stats.totalPersonnel,
   ];
 
-  const formatNumber = (num: number) => {
-    return num.toLocaleString();
-  };
+  console.log('🔍 ChartFive - Rendu avec stats:', stats);
+  console.log('🔍 ChartFive - Series:', series);
 
   return (
     <div className="col-span-12 xl:col-span-6">
@@ -92,19 +99,46 @@ const ChartThree: React.FC = () => {
               Répartition Éducative
             </h4>
             <p className="text-sm text-bodydark2">
-              Effectifs, Écoles, Classes et Personnel
+              Répartition des effectifs, écoles, classes et personnel
             </p>
           </div>
         </div>
 
         <div>
-          <div id="chartThree" className="-ml-5">
+          <div id="chartFive" className="-ml-5">
             <ReactApexChart
               options={options}
               series={series}
               type="donut"
               height={350}
             />
+          </div>
+        </div>
+
+        <div className="mt-4 grid grid-cols-2 gap-4 text-center">
+          <div className="rounded-lg bg-gray-50 p-3 dark:bg-boxdark">
+            <h5 className="text-lg font-semibold text-black dark:text-white">
+              {stats.totalEffectifs.toLocaleString()}
+            </h5>
+            <p className="text-sm text-bodydark2">Effectifs</p>
+          </div>
+          <div className="rounded-lg bg-gray-50 p-3 dark:bg-boxdark">
+            <h5 className="text-lg font-semibold text-black dark:text-white">
+              {stats.totalEcoles.toLocaleString()}
+            </h5>
+            <p className="text-sm text-bodydark2">Écoles</p>
+          </div>
+          <div className="rounded-lg bg-gray-50 p-3 dark:bg-boxdark">
+            <h5 className="text-lg font-semibold text-black dark:text-white">
+              {stats.totalClasses.toLocaleString()}
+            </h5>
+            <p className="text-sm text-bodydark2">Classes</p>
+          </div>
+          <div className="rounded-lg bg-gray-50 p-3 dark:bg-boxdark">
+            <h5 className="text-lg font-semibold text-black dark:text-white">
+              {stats.totalPersonnel.toLocaleString()}
+            </h5>
+            <p className="text-sm text-bodydark2">Personnel</p>
           </div>
         </div>
 
@@ -118,4 +152,4 @@ const ChartThree: React.FC = () => {
   );
 };
 
-export default ChartThree;
+export default ChartFive; 

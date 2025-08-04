@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 
 interface CardDataStatsProps {
   title: string;
@@ -6,7 +6,7 @@ interface CardDataStatsProps {
   rate: string;
   levelUp?: boolean;
   levelDown?: boolean;
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 const CardDataStats: React.FC<CardDataStatsProps> = ({
@@ -48,7 +48,7 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M4.35716 2.47737L0.908974 5.82987L5.0443e-07 4.94612L5 0.0848689L10 4.94612L9.09103 5.82987L5.64284 2.47737L5.64284 10.0849L4.35716 10.0849L4.35716 2.47737Z"
+                d="M4.35716 2.47737L0.908974 5.82987L5.0443e-07 4.94612L5.09139 0.0842529L10.0914 4.94612L9.18244 5.82987L5.73426 2.47737L5.09139 1.82987L4.35716 2.47737Z"
                 fill=""
               />
             </svg>
@@ -63,7 +63,7 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M5.64284 7.69237L9.09102 4.33987L10 5.22362L5 10.0849L-8.98488e-07 5.22362L0.908973 4.33987L4.35716 7.69237L4.35716 0.0848701L5.64284 0.0848704L5.64284 7.69237Z"
+                d="M5.64284 7.69237L9.09102 4.33987L10 5.22362L4.90861 10.0843L-0.0913941 5.22362L0.818244 4.33987L4.26576 7.69237L4.90861 8.33987L5.64284 7.69237Z"
                 fill=""
               />
             </svg>

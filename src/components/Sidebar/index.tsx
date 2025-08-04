@@ -21,27 +21,30 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   );
 
   const navigate = useNavigate();
-  const [data, setData] = useState<any>('');
+  const [data, setData] = useState<any>({});
 
   useEffect(() => {
-    const email = localStorage.getItem('email');
+    const telephone = localStorage.getItem('telephone');
     const password = localStorage.getItem('password');
 
-    setData(JSON.parse(localStorage.getItem('data') || ''));
+    setData(JSON.parse(localStorage.getItem('data') || '{}'));
 
-    console.log("my " + data.nom + " " + data.prenom);
-
-
-    if (!email || !password) {
+    if (!telephone || !password) {
       navigate('/signin');
     }
   }, [navigate]);
 
+  // Log pour voir le rôle
   useEffect(() => {
-    const email = localStorage.getItem('email');
+    console.log('🔍 Sidebar - Role de l\'utilisateur:', data.role);
+    console.log('🔍 Sidebar - Données complètes:', data);
+  }, [data]);
+
+  useEffect(() => {
+    const telephone = localStorage.getItem('telephone');
     const password = localStorage.getItem('password');
 
-    if (!email || !password) {
+    if (!telephone || !password) {
       navigate('/signin');
     }
 
@@ -180,7 +183,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* <!-- Menu Item Utilisateurs --> */}
               <li>
                 {
-                  data.role === "Administrateur" ? <NavLink
+                  (data.role === "admin" || data.role === "Administrateur") ? <NavLink
                     to="/users"
                     className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-xs  text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('users') && 'bg-graydark dark:bg-meta-4'
                       }`}
@@ -202,13 +205,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         fill="#fff"
                       />
                       <path
-                        d="M15.9843 10.0313H15.6749C14.6437 10.0313 13.6468 10.3406 12.7874 10.8563C11.8593 9.61876 10.3812 8.79376 8.73115 8.79376H5.67178C2.85303 8.82814 0.618652 11.0625 0.618652 13.8469V16.3219C0.618652 16.975 1.13428 17.4906 1.7874 17.4906H20.2468C20.8999 17.4906 21.4499 16.9406 21.4499 16.2875V15.4625C21.4155 12.4719 18.9749 10.0313 15.9843 10.0313ZM2.16553 15.9438V13.8469C2.16553 11.9219 3.74678 10.3406 5.67178 10.3406H8.73115C10.6562 10.3406 12.2374 11.9219 12.2374 13.8469V15.9438H2.16553V15.9438ZM19.8687 15.9438H13.7499V13.8469C13.7499 13.2969 13.6468 12.7469 13.4749 12.2313C14.0937 11.7844 14.8499 11.5781 15.6405 11.5781H15.9499C18.0812 11.5781 19.8343 13.3313 19.8343 15.4625V15.9438H19.8687Z"
+                        d="M15.8124 10.9719C17.6687 10.9719 19.1468 12.4156 19.1468 14.2375C19.1468 15.9281 17.6687 17.3719 15.8124 17.3719C13.9905 17.3719 12.478 15.9281 12.478 14.2375C12.478 12.4156 13.9905 10.9719 15.8124 10.9719ZM15.8124 15.9719C16.8093 15.9719 17.5999 15.2156 17.5999 14.2531C17.5999 13.2906 16.8093 12.5344 15.8124 12.5344C14.8155 12.5344 14.0249 13.2906 14.0249 14.2531C14.0249 15.2156 14.8155 15.9719 15.8124 15.9719Z"
+                        fill="#fff"
+                      />
+                      <path
+                        d="M7.18418 9.6875C9.31543 9.6875 11.0686 11.3719 11.0686 13.4688C11.0686 15.5656 9.31543 17.25 7.18418 17.25C5.05293 17.25 3.2998 15.5656 3.2998 13.4688C3.2998 11.3719 5.05293 9.6875 7.18418 9.6875ZM7.18418 14.6875C8.45605 14.6875 9.52168 13.6906 9.52168 12.4531C9.52168 11.2156 8.49043 10.2188 7.18418 10.2188C5.87793 10.2188 4.84668 11.2156 4.84668 12.4531C4.84668 13.6906 5.9123 14.6875 7.18418 14.6875Z"
                         fill="#fff"
                       />
                     </svg>
                     Utilisateurs
-                  </NavLink> :
-                    <div></div>
+                  </NavLink> : null
                 }
               </li>
 

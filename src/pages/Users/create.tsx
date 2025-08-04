@@ -1,703 +1,398 @@
 
 import { useEffect, useState } from 'react';
-import DropFile from '../../common/Loader/dropfile';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
-import CustomSelect from '../../components/Forms/SelectGroup/customSelect';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../app/store';
-import { Province } from '../../types/province';
-import { getAllProvince } from '../../features/province/provinceSlice';
-import { getAllDirection, setCacheDirection, setSliceDirection } from '../../features/directions/directionSlice';
-import { getAllServiceDirections, setSliceServiceDirection, setSliceServiceSousDirection } from '../../features/servicedirection/servicedirectionSlice';
-import { createUser, resetUserState, updateFile, updateUserField, updateVisibilityPhoto, validateInputs } from '../../features/users/usersSlice';
-import CheckboxDirection from './components/checkBoxDirection';
-import { changeVisibility, setCacheSousDirection, setSliceSousDirection } from '../../features/sousdirection/sousDirectionSlice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../app/store';
+import { createUser } from '../../features/users/usersSlice';
 import toast, { Toaster } from 'react-hot-toast';
-
+import { User } from '../../types/user';
+import { useNavigate } from 'react-router-dom';
 
 const CreateUser = () => {
-
-  const { user, validationErrors } = useSelector((state: RootState) => state.users);
-  const { visible, sousDirections } = useSelector((state: RootState) => state.sousDirections);
-  const { directions } = useSelector((state: RootState) => state.direction);
-  const { roleDirection } = useSelector((state: RootState) => state.direction);
-
-  const { services } = useSelector((state: RootState) => state.services);
-
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState<User>({
+    id: '',
+    motDePasse: '',
+    provinceAdministrative: '',
+    provinceEducationnelle: '',
+    chefLieuProved: '',
+    emailProfessionnel: '',
+    telephone: '',
+    statutOccupation: 'Propriétaire',
+    nombreTerritoires: 0,
+    nombreSousDivisions: 0,
+    directeurProvincial: '',
+    isActive: true, // Par défaut activé
+  });
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const [provinces, setProvinces] = useState<Province[]>([]);
-  const [loading, setLoading] = useState(true);
+  // États pour la recherche des provinces
+  const [searchAdmin, setSearchAdmin] = useState('');
+  const [showAdminDropdown, setShowAdminDropdown] = useState(false);
 
-
-  const handleBlur = () => {
-    dispatch(validateInputs());
-  };
-
-
-  useEffect(() => {
-    const fetchProvinces = async () => {
-      const email = localStorage.getItem('email');
-      const password = localStorage.getItem('password');
-
-      if (email && password) {
-        try {
-          setLoading(true);
-          console.log(loading);
-          // Set loading to true before fetching
-          const result = await dispatch(getAllProvince({ route: 'provinces' })).unwrap();
-
-          // Format the response
-          const formattedProvinces = result.data.map((province: Province) => ({
-            value: province._id,
-            label: province.nom,
-          }));
-
-          setProvinces(formattedProvinces);
-        } catch (err) {
-          console.error('get all provinces:', err);
-        } finally {
-          setLoading(false); // Set loading to false once done
-        }
-      }
-    };
-
-
-    const fetchDirections = async () => {
-      const email = localStorage.getItem('email');
-      const password = localStorage.getItem('password');
-
-      if (email && password) {
-        try {
-          setLoading(true); // Set loading to true before fetching
-          const result = await dispatch(getAllDirection({ route: 'directions' })).unwrap();
-
-          dispatch(setCacheDirection(result.data));
-          dispatch(setSliceDirection(result.data));
-
-        } catch (err) {
-          console.error('get all directions:', err);
-        } finally {
-          setLoading(false); // Set loading to false once done
-        }
-      }
-    };
-
-    const fetchSousDirections = async () => {
-      const email = localStorage.getItem('email');
-      const password = localStorage.getItem('password');
-
-      if (email && password) {
-        try {
-          setLoading(true);
-          const result = await dispatch(getAllDirection({ route: 'sous-directions' })).unwrap();
-          dispatch(setCacheSousDirection(result.data));
-          dispatch(setSliceSousDirection(result.data));
-        } catch (err) {
-          console.error('get all sous directions:', err);
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-
-    const fetchServices = async () => {
-      const email = localStorage.getItem('email');
-      const password = localStorage.getItem('password');
-
-      if (email && password) {
-        try {
-          setLoading(true);
-          const result = await dispatch(getAllServiceDirections({ route: 'services' })).unwrap();
-
-          dispatch(setSliceServiceDirection(result.data.filter((e: any) => e.type === "direction")));
-          dispatch(setSliceServiceSousDirection(result.data.filter((e: any) => e.type === "sousDirection")));
-
-          // setServices(formattedServices);
-        } catch (err) {
-          console.error('get all directions:', err);
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-    dispatch(changeVisibility(false));
-    dispatch(updateVisibilityPhoto(false));
-    dispatch(updateFile(null));
-    fetchServices();
-    fetchProvinces();
-    fetchDirections();
-    fetchSousDirections();
-  }, [dispatch]);
-
-  const data = [
-    { value: 'Administrateur', label: 'Administrateur' },
-    { value: 'Utilisateur', label: 'Utilisateur' },
-    { value: 'Superviseur', label: 'Superviseur' },
-    { value: 'Inspecteur', label: 'Inspecteur' },
-    { value: 'Decideur', label: 'Decideur' }
+  // Liste des 26 provinces
+  const provinces = [
+    "Bas-Uele", "Équateur", "Haut-Katanga", "Haut-Lomami", "Haut-Uele",
+    "Ituri", "Kasaï", "Kasaï-Central", "Kasaï-Oriental", "Kinshasa",
+    "Kongo-Central", "Kwango", "Kwilu", "Lomami", "Lualaba",
+    "Mai-Ndombe", "Maniema", "Mongala", "Nord-Kivu", "Nord-Ubangi",
+    "Sankuru", "Sud-Kivu", "Sud-Ubangi", "Tanganyika", "Tshopo", "Tshuapa"
   ];
 
-  const handleSubmit = async () => {
-    setLoading(true);
-    dispatch(validateInputs());
-    const myPromise = new Promise((resolve) => setTimeout(resolve, 1000));
+  // Filtrer les provinces selon la recherche
+  const filteredAdminProvinces = provinces.filter(province =>
+    province.toLowerCase().includes(searchAdmin.toLowerCase())
+  );
 
-    let dataWithSousDirection: object = {
-      "password": "1234",
-      "nom": user.nom,
-      "postnom": user.postnom,
-      "prenom": user.prenom,
-      "photo": "string",
-      "email": user.email,
-      "role": user.role,
-      "provinces": user.province,
-      "direction": user.direction,
-      "sousDirection": user.sousDirection,
-      "service": user.service,
-      "grade": user.grade,
-      "fonction": user.fonction,
-      "phone": user.phone,
-      "isActive": user.isActive
-    }
-
-
-    let dataWithoutSousDirection: object = {
-      "password": "1234",
-      "nom": user.nom,
-      "postnom": user.postnom,
-      "prenom": user.prenom,
-      "photo": "string",
-      "email": user.email,
-      "role": user.role,
-      "provinces": user.province,
-      "direction": user.direction,
-      "service": user.service,
-      "grade": user.grade,
-      "fonction": user.fonction,
-      "phone": user.phone,
-      "isActive": user.isActive
-    };
-
-    const data: any = (visible === true ? dataWithSousDirection : dataWithoutSousDirection);
-
-
-    try {
-      const result = await dispatch(createUser({ route: 'signup', data })).unwrap();
-      console.log('create users successful!', result.data);
-
-      dispatch(updateVisibilityPhoto(true));
-      toast.promise(myPromise, {
-        loading: 'Chargement en cours...',
-        success: () => (
-          <div>
-            <p>Compte utilisateur créé avec succès 🤗!</p>
-            <p>Ajouter maintenant la photo</p>
-          </div>
-        ),
-        error: 'Error',
-      });
-
-      dispatch(resetUserState());
-      dispatch(updateVisibilityPhoto(true));
-      dispatch(updateUserField({ field: 'id', value: result.data._id }));
-      setLoading(false);
-
-    } catch (err) {
-      console.error('erreur data failed:', err);
-    }
-
+  const handleInputChange = (field: keyof User, value: any) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
 
+  // Fermer les dropdowns quand on clique ailleurs
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.province-dropdown')) {
+        setShowAdminDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Vérifier si l'utilisateur est connecté
+    const token = localStorage.getItem('token');
+    const telephone = localStorage.getItem('telephone');
+    
+    if (!token || !telephone) {
+      toast.error('Vous devez être connecté pour créer un utilisateur');
+      return;
+    }
+    
+    console.log('🔍 Token de l\'utilisateur connecté:', token);
+    console.log('🔍 Téléphone de l\'utilisateur connecté:', telephone);
+    
+    // Validation
+    if (!formData.provinceAdministrative || !formData.provinceEducationnelle || 
+        !formData.chefLieuProved || !formData.emailProfessionnel || 
+        !formData.telephone || !formData.directeurProvincial || !formData.motDePasse) {
+      toast.error('Veuillez remplir tous les champs obligatoires');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      
+      // Préparer les données avec le préfixe +243 pour le téléphone
+      const dataToSend = {
+        ...formData,
+        telephone: `+243${formData.telephone}` // Ajouter le préfixe +243
+      };
+      
+      console.log('🔍 Données à envoyer:', dataToSend);
+      
+      const result = await dispatch(createUser({ 
+        route: 'identification-proved', 
+        data: dataToSend 
+      })).unwrap();
+      
+      console.log('🔍 Résultat création:', result);
+      toast.success('Utilisateur créé avec succès!');
+      
+      // Redirection vers la page d'affichage des utilisateurs
+      setTimeout(() => {
+        navigate('/users');
+      }, 1500); // Attendre 1.5 secondes pour que l'utilisateur voie le message de succès
+      
+      // Reset form
+      setFormData({
+        id: '',
+        motDePasse: '',
+        provinceAdministrative: '',
+        provinceEducationnelle: '',
+        chefLieuProved: '',
+        emailProfessionnel: '',
+        telephone: '',
+        statutOccupation: 'Propriétaire',
+        nombreTerritoires: 0,
+        nombreSousDivisions: 0,
+        directeurProvincial: '',
+        isActive: true, // Par défaut activé
+      });
+      
+    } catch (error: any) {
+      console.error('🔍 Erreur création utilisateur:', error);
+      console.error('🔍 Message d\'erreur:', error.message);
+      console.error('🔍 Status:', error.response?.status);
+      console.error('🔍 Data d\'erreur:', error.response?.data);
+      
+      // Afficher le message d'erreur de l'API
+      let errorMessage = 'Erreur lors de la création de l\'utilisateur';
+      
+      // Gestion des erreurs de validation de l'API
+      if (error.response?.data && typeof error.response.data === 'object') {
+        const apiErrors = error.response.data;
+        console.log('🔍 Erreurs de validation API:', apiErrors);
+        
+        // Si c'est un objet avec des erreurs de validation
+        if (Object.keys(apiErrors).length > 0) {
+          // Afficher la première erreur dans le toast
+          const firstError = Object.values(apiErrors)[0];
+          errorMessage = Array.isArray(firstError) ? firstError[0] : firstError;
+          
+          // Afficher toutes les erreurs dans la console
+          console.log('🔍 Toutes les erreurs de validation:');
+          Object.entries(apiErrors).forEach(([field, message]) => {
+            console.log(`  - ${field}: ${message}`);
+          });
+          
+          // Afficher les erreurs dans l'interface
+          setErrorMessage(`Erreurs de validation: ${Object.values(apiErrors).join(', ')}`);
+        } else if (apiErrors.message) {
+          errorMessage = apiErrors.message;
+        } else if (apiErrors.error) {
+          errorMessage = apiErrors.error;
+        }
+      } else if (error.response?.data?.message) {
+        // Message direct de l'API
+        errorMessage = error.response.data.message;
+        console.log('🔍 Message API:', error.response.data.message);
+      } else if (error.response?.data?.error) {
+        // Autre format possible
+        errorMessage = error.response.data.error;
+        console.log('🔍 Error API:', error.response.data.error);
+      } else if (error.response?.data) {
+        // Si c'est une string directe
+        errorMessage = typeof error.response.data === 'string' ? error.response.data : JSON.stringify(error.response.data);
+        console.log('🔍 Data API:', error.response.data);
+      } else if (error.message) {
+        // Message d'erreur générique
+        errorMessage = error.message;
+        console.log('🔍 Message générique:', error.message);
+      }
+      
+      // Afficher le message dans un toast et dans la console
+      console.log('🔍 Message d\'erreur final:', errorMessage);
+      toast.error(errorMessage);
+      
+      // Afficher aussi dans l'interface
+      setErrorMessage(errorMessage);
+      
+      // Nettoyer le message d'erreur après 10 secondes
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 10000);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
       <div className="mx-auto max-w-270">
-        <Breadcrumb pageName="Créer un utilisateur" />
-        <div className="grid grid-cols-5 gap-8">
-          <div className="col-span-5 xl:col-span-3">
-            <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-              <div className="p-7">
-                <form action="#">
-                  <Toaster
-                    position="top-center"
-                    reverseOrder={false}
-                  />
-
-                  <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                    <div className="w-full sm:w-1/2">
-                      <label
-                        className="mb-3 block text-sm font-medium text-black dark:text-white"
-                        htmlFor="fullName"
-                      >
-                        Nom
-                      </label>
-                      <div className="relative">
-                        <span className="absolute left-4.5 top-4">
-                          <svg
-                            className="fill-current"
-                            width="20"
-                            height="20"
-                            viewBox="0 0 20 20"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <g opacity="0.8">
-                              <path
-                                fillRule="evenodd"
-                                clipRule="evenodd"
-                                d="M3.72039 12.887C4.50179 12.1056 5.5616 11.6666 6.66667 11.6666H13.3333C14.4384 11.6666 15.4982 12.1056 16.2796 12.887C17.061 13.6684 17.5 14.7282 17.5 15.8333V17.5C17.5 17.9602 17.1269 18.3333 16.6667 18.3333C16.2064 18.3333 15.8333 17.9602 15.8333 17.5V15.8333C15.8333 15.1703 15.5699 14.5344 15.1011 14.0655C14.6323 13.5967 13.9964 13.3333 13.3333 13.3333H6.66667C6.00363 13.3333 5.36774 13.5967 4.8989 14.0655C4.43006 14.5344 4.16667 15.1703 4.16667 15.8333V17.5C4.16667 17.9602 3.79357 18.3333 3.33333 18.3333C2.8731 18.3333 2.5 17.9602 2.5 17.5V15.8333C2.5 14.7282 2.93899 13.6684 3.72039 12.887Z"
-                                fill=""
-                              />
-                              <path
-                                fillRule="evenodd"
-                                clipRule="evenodd"
-                                d="M9.99967 3.33329C8.61896 3.33329 7.49967 4.45258 7.49967 5.83329C7.49967 7.214 8.61896 8.33329 9.99967 8.33329C11.3804 8.33329 12.4997 7.214 12.4997 5.83329C12.4997 4.45258 11.3804 3.33329 9.99967 3.33329ZM5.83301 5.83329C5.83301 3.53211 7.69849 1.66663 9.99967 1.66663C12.3009 1.66663 14.1663 3.53211 14.1663 5.83329C14.1663 8.13448 12.3009 9.99996 9.99967 9.99996C7.69849 9.99996 5.83301 8.13448 5.83301 5.83329Z"
-                                fill=""
-                              />
-                            </g>
-                          </svg>
-                        </span>
-                        <input
-                          className={`w-full rounded border bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none 
-    ${validationErrors.nom ? 'border-red-500 dark:border-red-500' : 'border-stroke dark:border-strokedark'}
-    dark:bg-meta-4 dark:text-white dark:focus:border-primary`}
-                          type="text"
-                          name="nom"
-                          id="nom"
-                          placeholder="Nom"
-                          value={user.nom}
-                          onBlur={handleBlur}
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            const value = event.target.value;
-                            dispatch(updateUserField({ field: 'nom', value: value.trim() as string }));
+        <Breadcrumb pageName="Créer un Utilisateur" />
+        
+        <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+          <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+            <h3 className="font-medium text-black dark:text-white">
+              Informations de l'utilisateur
+            </h3>
+          </div>
+          
+          <form onSubmit={handleSubmit} className="p-6.5">
+            <div className="mb-4.5">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Province Administrative <span className="text-red-500">*</span>
+              </label>
+              <div className="relative province-dropdown">
+                <input
+                  type="text"
+                  placeholder="Rechercher une province..."
+                  value={searchAdmin}
+                  onChange={(e) => setSearchAdmin(e.target.value)}
+                  onFocus={() => setShowAdminDropdown(true)}
+                  className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                />
+                {showAdminDropdown && (
+                  <div className="absolute z-50 w-full mt-1 bg-white dark:bg-boxdark border border-stroke dark:border-strokedark rounded-md shadow-lg max-h-60 overflow-y-auto">
+                    {filteredAdminProvinces.length > 0 ? (
+                      filteredAdminProvinces.map((province, index) => (
+                        <div
+                          key={index}
+                          className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-meta-4 cursor-pointer"
+                          onClick={() => {
+                            handleInputChange('provinceAdministrative', province);
+                            setSearchAdmin(province);
+                            setShowAdminDropdown(false);
                           }}
-                        />
-
-
-                        {validationErrors.nom && <span className="text-red-500 text-xs">{validationErrors.nom}</span>}
-                      </div>
-                    </div>
-
-
-                    <div className="w-full sm:w-1/2">
-                      <label
-                        className="mb-3 block text-sm font-medium text-black dark:text-white"
-                        htmlFor="fullName"
-                      >
-                        Postnom
-                      </label>
-                      <div className="relative">
-                        <span className="absolute left-4.5 top-4">
-                          <svg
-                            className="fill-current"
-                            width="20"
-                            height="20"
-                            viewBox="0 0 20 20"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <g opacity="0.8">
-                              <path
-                                fillRule="evenodd"
-                                clipRule="evenodd"
-                                d="M3.72039 12.887C4.50179 12.1056 5.5616 11.6666 6.66667 11.6666H13.3333C14.4384 11.6666 15.4982 12.1056 16.2796 12.887C17.061 13.6684 17.5 14.7282 17.5 15.8333V17.5C17.5 17.9602 17.1269 18.3333 16.6667 18.3333C16.2064 18.3333 15.8333 17.9602 15.8333 17.5V15.8333C15.8333 15.1703 15.5699 14.5344 15.1011 14.0655C14.6323 13.5967 13.9964 13.3333 13.3333 13.3333H6.66667C6.00363 13.3333 5.36774 13.5967 4.8989 14.0655C4.43006 14.5344 4.16667 15.1703 4.16667 15.8333V17.5C4.16667 17.9602 3.79357 18.3333 3.33333 18.3333C2.8731 18.3333 2.5 17.9602 2.5 17.5V15.8333C2.5 14.7282 2.93899 13.6684 3.72039 12.887Z"
-                                fill=""
-                              />
-                              <path
-                                fillRule="evenodd"
-                                clipRule="evenodd"
-                                d="M9.99967 3.33329C8.61896 3.33329 7.49967 4.45258 7.49967 5.83329C7.49967 7.214 8.61896 8.33329 9.99967 8.33329C11.3804 8.33329 12.4997 7.214 12.4997 5.83329C12.4997 4.45258 11.3804 3.33329 9.99967 3.33329ZM5.83301 5.83329C5.83301 3.53211 7.69849 1.66663 9.99967 1.66663C12.3009 1.66663 14.1663 3.53211 14.1663 5.83329C14.1663 8.13448 12.3009 9.99996 9.99967 9.99996C7.69849 9.99996 5.83301 8.13448 5.83301 5.83329Z"
-                                fill=""
-                              />
-                            </g>
-                          </svg>
-                        </span>
-                        <input
-                          className={`w-full rounded border bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none 
-                            ${validationErrors.postnom ? 'border-red-500 dark:border-red-500' : 'border-stroke dark:border-strokedark'}
-                            dark:bg-meta-4 dark:text-white dark:focus:border-primary`}
-                          type="text"
-                          name="postnom"
-                          id="postnom"
-                          value={user.postnom}
-                          placeholder="Postnom"
-                          onBlur={handleBlur}
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            const value = event.target.value;
-                            dispatch(updateUserField({ field: 'postnom', value: value.trim() as string }));
-                          }}
-
-                        />
-                        {validationErrors.postnom && <span className="text-red-500 text-xs">{validationErrors.postnom}</span>}
-                      </div>
-                    </div>
-                  </div>
-
-
-
-                  <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                    <div className="w-full sm:w-1/2">
-                      <label
-                        className="mb-3 block text-sm font-medium text-black dark:text-white"
-                        htmlFor="fullName"
-                      >
-                        Prénom
-                      </label>
-                      <div className="relative">
-                        <span className="absolute left-4.5 top-4">
-                          <svg
-                            className="fill-current"
-                            width="20"
-                            height="20"
-                            viewBox="0 0 20 20"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <g opacity="0.8">
-                              <path
-                                fillRule="evenodd"
-                                clipRule="evenodd"
-                                d="M3.72039 12.887C4.50179 12.1056 5.5616 11.6666 6.66667 11.6666H13.3333C14.4384 11.6666 15.4982 12.1056 16.2796 12.887C17.061 13.6684 17.5 14.7282 17.5 15.8333V17.5C17.5 17.9602 17.1269 18.3333 16.6667 18.3333C16.2064 18.3333 15.8333 17.9602 15.8333 17.5V15.8333C15.8333 15.1703 15.5699 14.5344 15.1011 14.0655C14.6323 13.5967 13.9964 13.3333 13.3333 13.3333H6.66667C6.00363 13.3333 5.36774 13.5967 4.8989 14.0655C4.43006 14.5344 4.16667 15.1703 4.16667 15.8333V17.5C4.16667 17.9602 3.79357 18.3333 3.33333 18.3333C2.8731 18.3333 2.5 17.9602 2.5 17.5V15.8333C2.5 14.7282 2.93899 13.6684 3.72039 12.887Z"
-                                fill=""
-                              />
-                              <path
-                                fillRule="evenodd"
-                                clipRule="evenodd"
-                                d="M9.99967 3.33329C8.61896 3.33329 7.49967 4.45258 7.49967 5.83329C7.49967 7.214 8.61896 8.33329 9.99967 8.33329C11.3804 8.33329 12.4997 7.214 12.4997 5.83329C12.4997 4.45258 11.3804 3.33329 9.99967 3.33329ZM5.83301 5.83329C5.83301 3.53211 7.69849 1.66663 9.99967 1.66663C12.3009 1.66663 14.1663 3.53211 14.1663 5.83329C14.1663 8.13448 12.3009 9.99996 9.99967 9.99996C7.69849 9.99996 5.83301 8.13448 5.83301 5.83329Z"
-                                fill=""
-                              />
-                            </g>
-                          </svg>
-                        </span>
-                        <input
-                          className={`w-full rounded border bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none 
-                                                      ${validationErrors.prenom ? 'border-red-500 dark:border-red-500' : 'border-stroke dark:border-strokedark'}
-                                                      dark:bg-meta-4 dark:text-white dark:focus:border-primary`}
-                          type="text"
-                          name="prenom"
-                          id="prenom"
-                          placeholder="Prénom"
-                          value={user.prenom}
-                          onBlur={handleBlur}
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            const value = event.target.value; // Extract the input value
-                            dispatch(updateUserField({ field: 'prenom', value: value.trim() as string }));
-                          }}
-
-                        />
-                        {validationErrors.prenom && <span className="text-red-500 text-xs">{validationErrors.prenom}</span>}
-                      </div>
-                    </div>
-
-
-                    <div className="w-full sm:w-1/2">
-                      <label
-                        className="mb-3 block text-sm font-medium text-black dark:text-white"
-                        htmlFor="phoneNumber"
-                      >
-                        Téléphone
-                      </label>
-                      <input
-                        className={`w-full rounded border bg-gray py-3 pl-3 pr-4.5 text-black focus:border-primary focus-visible:outline-none 
-                                                    ${validationErrors.phone ? 'border-red-500 dark:border-red-500' : 'border-stroke dark:border-strokedark'}
-                                                    dark:bg-meta-4 dark:text-white dark:focus:border-primary`}
-                        type="text"
-                        name="phoneNumber"
-                        id="phoneNumber"
-                        placeholder="+243826016607"
-                        defaultValue=""
-                        value={user.phone}
-                        onBlur={handleBlur}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                          const value = event.target.value; // Extract the input value
-                          dispatch(updateUserField({ field: 'phone', value: value.trim() as string }));
-                        }}
-                      />
-                      {validationErrors.phone && <span className="text-red-500 text-xs">{validationErrors.phone}</span>}
-                    </div>
-                  </div>
-
-
-                  <div className="mb-5.5">
-                    <label
-                      className="mb-3 block text-sm font-medium text-black dark:text-white"
-                      htmlFor="emailAddress"
-                    >
-                      Email
-                    </label>
-                    <div className="relative">
-                      <span className="absolute left-4.5 top-4">
-                        <svg
-                          className="fill-current"
-                          width="20"
-                          height="20"
-                          viewBox="0 0 20 20"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
                         >
-                          <g opacity="0.8">
-                            <path
-                              fillRule="evenodd"
-                              clipRule="evenodd"
-                              d="M3.33301 4.16667C2.87658 4.16667 2.49967 4.54357 2.49967 5V15C2.49967 15.4564 2.87658 15.8333 3.33301 15.8333H16.6663C17.1228 15.8333 17.4997 15.4564 17.4997 15V5C17.4997 4.54357 17.1228 4.16667 16.6663 4.16667H3.33301ZM0.833008 5C0.833008 3.6231 1.9561 2.5 3.33301 2.5H16.6663C18.0432 2.5 19.1663 3.6231 19.1663 5V15C19.1663 16.3769 18.0432 17.5 16.6663 17.5H3.33301C1.9561 17.5 0.833008 16.3769 0.833008 15V5Z"
-                              fill=""
-                            />
-                            <path
-                              fillRule="evenodd"
-                              clipRule="evenodd"
-                              d="M0.983719 4.52215C1.24765 4.1451 1.76726 4.05341 2.1443 4.31734L9.99975 9.81615L17.8552 4.31734C18.2322 4.05341 18.7518 4.1451 19.0158 4.52215C19.2797 4.89919 19.188 5.4188 18.811 5.68272L10.4776 11.5161C10.1907 11.7169 9.80879 11.7169 9.52186 11.5161L1.18853 5.68272C0.811486 5.4188 0.719791 4.89919 0.983719 4.52215Z"
-                              fill=""
-                            />
-                          </g>
-                        </svg>
-                      </span>
-                      <input
-                        className={`w-full rounded border bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none 
-                                                    ${validationErrors.email ? 'border-red-500 dark:border-red-500' : 'border-stroke dark:border-strokedark'}
-                                                    dark:bg-meta-4 dark:text-white dark:focus:border-primary`}
-                        type="email"
-                        name="emailAddress"
-                        id="emailAddress"
-                        placeholder="exemple@gmail.com"
-                        defaultValue=""
-                        value={user.email}
-                        onBlur={handleBlur}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                          const value = event.target.value; // Extract the input value
-                          dispatch(updateUserField({ field: 'email', value: value.trim() as string }));
-                        }}
-                      />
-                      {validationErrors.email && <span className="text-red-500 text-xs">{validationErrors.email}</span>}
-                    </div>
+                          {province}
+                        </div>
+                      ))
+                    ) : (
+                      <div className="px-4 py-2 text-gray-500">Aucune province trouvée</div>
+                    )}
                   </div>
-                  <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                    <div className="w-full sm:w-1/2">
-                      <label
-                        className="mb-3 block text-sm font-medium text-black dark:text-white"
-                        htmlFor="fullName"
-                      >
-
-                        {roleDirection.includes('Inspecteur') ? "Niveau/Discipline" : "Grade"}
-                      </label>
-                      <div className="relative">
-                        <span className="absolute left-4.5 top-4">
-                          <svg
-                            className="fill-current"
-                            width="20"
-                            height="20"
-                            viewBox="0 0 20 20"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <g opacity="0.8">
-                              <path
-                                fillRule="evenodd"
-                                clipRule="evenodd"
-                                d="M3.72039 12.887C4.50179 12.1056 5.5616 11.6666 6.66667 11.6666H13.3333C14.4384 11.6666 15.4982 12.1056 16.2796 12.887C17.061 13.6684 17.5 14.7282 17.5 15.8333V17.5C17.5 17.9602 17.1269 18.3333 16.6667 18.3333C16.2064 18.3333 15.8333 17.9602 15.8333 17.5V15.8333C15.8333 15.1703 15.5699 14.5344 15.1011 14.0655C14.6323 13.5967 13.9964 13.3333 13.3333 13.3333H6.66667C6.00363 13.3333 5.36774 13.5967 4.8989 14.0655C4.43006 14.5344 4.16667 15.1703 4.16667 15.8333V17.5C4.16667 17.9602 3.79357 18.3333 3.33333 18.3333C2.8731 18.3333 2.5 17.9602 2.5 17.5V15.8333C2.5 14.7282 2.93899 13.6684 3.72039 12.887Z"
-                                fill=""
-                              />
-                              <path
-                                fillRule="evenodd"
-                                clipRule="evenodd"
-                                d="M9.99967 3.33329C8.61896 3.33329 7.49967 4.45258 7.49967 5.83329C7.49967 7.214 8.61896 8.33329 9.99967 8.33329C11.3804 8.33329 12.4997 7.214 12.4997 5.83329C12.4997 4.45258 11.3804 3.33329 9.99967 3.33329ZM5.83301 5.83329C5.83301 3.53211 7.69849 1.66663 9.99967 1.66663C12.3009 1.66663 14.1663 3.53211 14.1663 5.83329C14.1663 8.13448 12.3009 9.99996 9.99967 9.99996C7.69849 9.99996 5.83301 8.13448 5.83301 5.83329Z"
-                                fill=""
-                              />
-                            </g>
-                          </svg>
-                        </span>
-                        <input
-                          className={`w-full rounded border bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none 
-    ${validationErrors.grade ? 'border-red-500 dark:border-red-500' : 'border-stroke dark:border-strokedark'}
-    dark:bg-meta-4 dark:text-white dark:focus:border-primary`}
-                          type="text"
-                          name="grade"
-                          id="grade"
-                          placeholder={roleDirection.includes('Inspecteur') ? "Niveau/Discipline" : "Grade"}
-                          value={user.grade}
-                          onBlur={handleBlur}
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            const value = event.target.value;
-                            dispatch(updateUserField({ field: 'grade', value: value.trim() as string }));
-                          }}
-                        />
-
-
-                        {validationErrors.grade && <div>
-
-                          {roleDirection.includes('Inspecteur') ? <span className="text-red-500 text-xs">Niveau/Discipine est requis</span> : <span className="text-red-500 text-xs">{validationErrors.grade}</span>}
-                        </div>}
-                      </div>
-                    </div>
-
-
-                    <div className="w-full sm:w-1/2">
-                      <label
-                        className="mb-3 block text-sm font-medium text-black dark:text-white"
-                        htmlFor="fullName"
-                      >
-                        {roleDirection.includes('Inspecteur') ? "Poste d'attache" : "Fonction"}
-
-                      </label>
-                      <div className="relative">
-                        <span className="absolute left-4.5 top-4">
-                          <svg
-                            className="fill-current"
-                            width="20"
-                            height="20"
-                            viewBox="0 0 20 20"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <g opacity="0.8">
-                              <path
-                                fillRule="evenodd"
-                                clipRule="evenodd"
-                                d="M3.72039 12.887C4.50179 12.1056 5.5616 11.6666 6.66667 11.6666H13.3333C14.4384 11.6666 15.4982 12.1056 16.2796 12.887C17.061 13.6684 17.5 14.7282 17.5 15.8333V17.5C17.5 17.9602 17.1269 18.3333 16.6667 18.3333C16.2064 18.3333 15.8333 17.9602 15.8333 17.5V15.8333C15.8333 15.1703 15.5699 14.5344 15.1011 14.0655C14.6323 13.5967 13.9964 13.3333 13.3333 13.3333H6.66667C6.00363 13.3333 5.36774 13.5967 4.8989 14.0655C4.43006 14.5344 4.16667 15.1703 4.16667 15.8333V17.5C4.16667 17.9602 3.79357 18.3333 3.33333 18.3333C2.8731 18.3333 2.5 17.9602 2.5 17.5V15.8333C2.5 14.7282 2.93899 13.6684 3.72039 12.887Z"
-                                fill=""
-                              />
-                              <path
-                                fillRule="evenodd"
-                                clipRule="evenodd"
-                                d="M9.99967 3.33329C8.61896 3.33329 7.49967 4.45258 7.49967 5.83329C7.49967 7.214 8.61896 8.33329 9.99967 8.33329C11.3804 8.33329 12.4997 7.214 12.4997 5.83329C12.4997 4.45258 11.3804 3.33329 9.99967 3.33329ZM5.83301 5.83329C5.83301 3.53211 7.69849 1.66663 9.99967 1.66663C12.3009 1.66663 14.1663 3.53211 14.1663 5.83329C14.1663 8.13448 12.3009 9.99996 9.99967 9.99996C7.69849 9.99996 5.83301 8.13448 5.83301 5.83329Z"
-                                fill=""
-                              />
-                            </g>
-                          </svg>
-                        </span>
-                        <input
-                          className={`w-full rounded border bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none 
-                            ${validationErrors.fonction ? 'border-red-500 dark:border-red-500' : 'border-stroke dark:border-strokedark'}
-                            dark:bg-meta-4 dark:text-white dark:focus:border-primary`}
-                          type="text"
-                          name="fonction"
-                          id="fonction"
-                          value={user.fonction}
-                          placeholder={roleDirection.includes('Inspecteur') ? "Poste d'attache" : "Fonction"}
-                          onBlur={handleBlur}
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            const value = event.target.value;
-                            dispatch(updateUserField({ field: 'fonction', value: value.trim() as string }));
-                          }}
-
-                        />
-                        {validationErrors.fonction && <div>
-                          {roleDirection.includes('Inspecteur') ? <span className="text-red-500 text-xs">Poste d'attache est requis</span> : <span className="text-red-500 text-xs">{validationErrors.fonction}</span>}
-                        </div>}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mb-5.5">
-                    <CustomSelect
-                      title="Rôle"
-                      data={data}
-                      placeholder='Selectionner un rôle'
-                    />
-                  </div>
-
-                  <div className="mb-5.5">
-                    <CustomSelect
-                      title="Province"
-                      data={provinces}
-                      placeholder='Selectionner la province'
-                    />
-                  </div>
-                  <div className="mb-5.5">
-                    <CustomSelect
-                      // title="Direction"
-                      title={roleDirection.includes('Inspecteur') ? 'Inspection Provinciale' : 'PROVED'}
-                      data={directions}
-                      placeholder={roleDirection.includes('Inspecteur') ? 'Selectionner une Inspection Provinciale' : 'Selectionner une PROVED'}
-                    />
-                  </div>
-                  <div className="mb-5.5">
-                    <CheckboxDirection
-                    />
-                  </div>
-                  {
-                    visible && <div className="mb-5.5">
-                      <CustomSelect
-
-                        // title="Sous-direction"
-                        title={roleDirection.includes('Inspecteur') ? 'Sous Inspection Provinciale ou Territoriale' : 'SOUS-DIVISION'}
-                        data={sousDirections}
-                        placeholder={roleDirection.includes('Inspecteur') ? 'Selectionner une Sous Inspection Provinciale ou Territoriale' : 'Selectionner une Sous-division'}
-                      />
-                    </div>
-                  }
-
-                  <div className="mb-5.5">
-                    <CustomSelect
-                      title="Service"
-                      data={services}
-                      placeholder='Selectionner un service'
-                    />
-                  </div>
-
-
-
-                  {
-                    user.visiblePhoto == false ? <div className="flex justify-end gap-4.5">
-                      {/* <div onClick={handleSubmit} className="cursor-pointer flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90">
-                        Enregistrer
-                      </div> */}
-                      <button
-                        onClick={handleSubmit}
-                        className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
-                        disabled={loading} // Désactive le bouton pendant le chargement
-                      >
-                        {loading ? (
-                          <svg
-                            className="animate-spin h-5 w-5 mx-auto"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                              strokeWidth="4"
-                            ></circle>
-                            <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                            ></path>
-                          </svg>
-                        ) : (
-                          'Enregistrer'
-                        )}
-                      </button>
-
-                    </div> : null
-                  }
-
-                </form>
+                )}
               </div>
             </div>
-          </div>
-          <div className="col-span-5 xl:col-span-2">
-            <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-              <div className="p-7">
-                {
-                  user.visiblePhoto ?
-                    <DropFile
-                      title="Ou glissez-déposez votre photo passeport (PNG, JPG, JPEG)"
-                    />
-                    : <div>
-                      <h1 className='text-center font-medium'>Veuillez d'abord soumettre le formulaire avant d'ajouter une photo.</h1>
-                    </div>
-                }
 
+            <div className="mb-4.5">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Province Educationnelle <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Entrez la province educationnelle"
+                value={formData.provinceEducationnelle}
+                onChange={(e) => handleInputChange('provinceEducationnelle', e.target.value)}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+
+            <div className="mb-4.5">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Chef Lieu PROVED <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Entrez le chef lieu PROVED"
+                value={formData.chefLieuProved}
+                onChange={(e) => handleInputChange('chefLieuProved', e.target.value)}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+
+            <div className="mb-4.5">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Email Professionnel <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="email"
+                placeholder="Entrez l'email professionnel"
+                value={formData.emailProfessionnel}
+                onChange={(e) => handleInputChange('emailProfessionnel', e.target.value)}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+
+            <div className="mb-4.5">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Téléphone <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <div className="absolute left-4 top-1/2 transform -translate-y-1/2 flex items-center bg-gray-50 dark:bg-gray-800 px-2 py-1 rounded-l-md border-r border-gray-200 dark:border-gray-600 z-10">
+                  <span className="text-xl mr-2">🇨🇩</span>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">+243</span>
+                </div>
+                <input
+                  type="tel"
+                  placeholder="Entrez le numéro de téléphone"
+                  value={formData.telephone}
+                  onChange={(e) => {
+                    // N'accepter que les chiffres
+                    const value = e.target.value.replace(/[^0-9]/g, '');
+                    handleInputChange('telephone', value);
+                  }}
+                  className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-24 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                />
               </div>
             </div>
-          </div>
+
+            <div className="mb-4.5">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Statut d'Occupation
+              </label>
+              <select
+                value={formData.statutOccupation}
+                onChange={(e) => handleInputChange('statutOccupation', e.target.value)}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              >
+                <option value="Propriétaire">Propriétaire</option>
+                <option value="Locataire">Locataire</option>
+              </select>
+            </div>
+
+            <div className="mb-4.5">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Nombre de Territoires
+              </label>
+              <input
+                type="number"
+                placeholder="0"
+                value={formData.nombreTerritoires}
+                onChange={(e) => handleInputChange('nombreTerritoires', parseInt(e.target.value) || 0)}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+
+            <div className="mb-4.5">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Nombre de Sous-Divisions
+              </label>
+              <input
+                type="number"
+                placeholder="0"
+                value={formData.nombreSousDivisions}
+                onChange={(e) => handleInputChange('nombreSousDivisions', parseInt(e.target.value) || 0)}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+
+            <div className="mb-4.5">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Directeur Provincial <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Entrez le nom du directeur provincial"
+                value={formData.directeurProvincial}
+                onChange={(e) => handleInputChange('directeurProvincial', e.target.value)}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+
+            <div className="mb-4.5">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Mot de Passe <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="password"
+                placeholder="Entrez le mot de passe"
+                value={formData.motDePasse}
+                onChange={(e) => handleInputChange('motDePasse', e.target.value)}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              />
+            </div>
+
+            {errorMessage && (
+              <div className="mb-4.5 text-red-500">
+                {errorMessage}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90 disabled:opacity-50"
+            >
+              {loading ? 'Création en cours...' : 'Créer l\'utilisateur'}
+            </button>
+          </form>
         </div>
       </div>
+      <Toaster />
     </>
   );
 };

@@ -9,26 +9,38 @@ const TableUser = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true); // Add loading state
+  const [error, setError] = useState<string | null>(null); // Add error state
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const email = localStorage.getItem('email');
+      const telephone = localStorage.getItem('telephone');
       const password = localStorage.getItem('password');
 
-      if (email && password) {
+      console.log('🔍 TableUser - telephone:', telephone);
+      console.log('🔍 TableUser - password:', password);
+
+      if (telephone && password) {
         try {
           setLoading(true); // Set loading to true before fetching
-          const result = await dispatch(getAllUser({ route: 'users' })).unwrap();
-          setUsers(result.data);
+          setError(null); // Clear any previous errors
+          console.log('🔍 TableUser - Début de la requête getAllUser');
+          const result = await dispatch(getAllUser({ route: 'proved/all' })).unwrap();
+          console.log('🔍 TableUser - Résultat:', result);
+          setUsers(result); // result est maintenant directement le tableau data
         } catch (err) {
-          console.error('get all users failed:', err);
+          console.error('🔍 TableUser - Erreur get all users:', err);
+          setError('Erreur lors du chargement des utilisateurs');
         } finally {
           setLoading(false); // Set loading to false once done
         }
+      } else {
+        console.log('🔍 TableUser - Pas de telephone ou password dans localStorage');
+        setError('Authentification requise');
+        setLoading(false);
       }
     };
     fetchUsers();
-  }, []); // Empty dependency array to avoid re-fetching
+  }, [dispatch]); // Add dispatch to dependency array
 
   // Loader component
   const Loader = () => (
@@ -61,43 +73,71 @@ const TableUser = () => {
       <div className="max-w-full overflow-x-auto">
         {loading ? (
           <Loader /> // Show the loader if loading is true
+        ) : error ? (
+          <div className="flex justify-center items-center h-32">
+            <div className="text-center">
+              <div className="text-red-500 text-lg font-medium mb-2">⚠️ Erreur</div>
+              <div className="text-gray-600 dark:text-gray-400">{error}</div>
+              <button 
+                onClick={() => window.location.reload()} 
+                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              >
+                Réessayer
+              </button>
+            </div>
+          </div>
+        ) : users.length === 0 ? (
+          <div className="flex justify-center items-center h-32">
+            <div className="text-center">
+              <div className="text-gray-500 text-lg font-medium mb-2">📭 Aucun utilisateur</div>
+              <div className="text-gray-400">Aucun utilisateur trouvé</div>
+            </div>
+          </div>
         ) : (
           <table className="w-full table-auto">
             <thead>
               <tr className="bg-gray-2 text-left dark:bg-meta-4">
-                <th className="min-w-[250px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">Photo</th>
-                <th className="min-w-[250px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">Nom</th>
-                <th className="min-w-[250px] py-4 px-4 font-medium text-black dark:text-white">Postnom</th>
-                <th className="min-w-[250px] py-4 px-4 font-medium text-black dark:text-white">Prénom</th>
-                <th className="min-w-[250px] py-4 px-4 font-medium text-black dark:text-white">Rôle</th>
+                <th className="min-w-[200px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">Province Administrative</th>
+                <th className="min-w-[200px] py-4 px-4 font-medium text-black dark:text-white">Province Educationnelle</th>
+                <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">Chef Lieu PROVED</th>
+                <th className="min-w-[200px] py-4 px-4 font-medium text-black dark:text-white">Email Professionnel</th>
+                <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">Téléphone</th>
+                <th className="min-w-[200px] py-4 px-4 font-medium text-black dark:text-white">Directeur Provincial</th>
+                <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">Rôle</th>
                 <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">Status</th>
                 <th className="py-4 px-4 font-medium text-black dark:text-white">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {users.map((usersItem, key) => (
+              {users.map((user, key) => (
                 <tr key={key}>
-                  <td className="border-b  border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                    <img className='w-14 h-14 border-2 rounded-full object-cover ' src={"http://134.122.23.150"+usersItem.photo} alt="" />
+                  <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                    <h5 className="font-medium text-black dark:text-white">{user.provinceAdministrative}</h5>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                    <h5 className="font-medium text-black dark:text-white ">{usersItem.nom}</h5>
-                  </td>
-                  <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11 ">
-                    <h5 className="font-medium text-black dark:text-white ">{usersItem.postnom}</h5>
+                    <h5 className="font-medium text-black dark:text-white">{user.provinceEducationnelle}</h5>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                    <h5 className="font-medium text-black dark:text-white">{usersItem.prenom}</h5>
+                    <h5 className="font-medium text-black dark:text-white">{user.chefLieuProved}</h5>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                    <h5 className="font-medium text-black dark:text-white">{usersItem.role}</h5>
+                    <h5 className="font-medium text-black dark:text-white">{user.emailProfessionnel}</h5>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                    <h5 className="font-medium text-black dark:text-white">{user.telephone}</h5>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                    <h5 className="font-medium text-black dark:text-white">{user.directeurProvincial}</h5>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                    <h5 className="font-medium text-black dark:text-white">{user.role || 'user'}</h5>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     <p
-                      className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${usersItem.isActive === true ? 'bg-success text-success' : 'bg-danger text-danger'
+                      className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${user.isActive === true ? 'bg-success text-success' : 'bg-danger text-danger'
                         }`}
                     >
-                      {usersItem.isActive === true ? 'Actif' : 'Inactif'}
+                      {user.isActive === true ? 'Actif' : 'Inactif'}
                     </p>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
