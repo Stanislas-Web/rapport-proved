@@ -138,7 +138,7 @@ const Personnel: React.FC<PersonnelProps> = ({ formData, setFormData }) => {
                     />
                     <input
                       type="number"
-                      value={formData.personnel.personnelAdministratif.directionProvinciale}
+                      value={formData.personnel.personnelAdministratif.inspectionPrincipale}
                       onChange={(e) => {
                         const newValue = parseInt(e.target.value) || 0;
                         setFormData(prev => ({
@@ -147,7 +147,7 @@ const Personnel: React.FC<PersonnelProps> = ({ formData, setFormData }) => {
                             ...prev.personnel,
                             personnelAdministratif: {
                               ...prev.personnel.personnelAdministratif,
-                              directionProvinciale: newValue
+                              inspectionPrincipale: newValue
                             }
                           }
                         }));

@@ -72,7 +72,7 @@ class RapportActiviteService {
   // Soumettre un rapport d'activité (changer le statut en 'soumis')
   async submitRapport(id: string): Promise<RapportActivite> {
     try {
-      const response = await BaseService.put(`${this.endpoint}/${id}/submit`, {});
+      const response = await BaseService.patch(`${this.endpoint}/${id}/statut`, { statut: 'soumis' });
       return response;
     } catch (error) {
       console.error('Erreur lors de la soumission du rapport d\'activité:', error);
@@ -83,7 +83,7 @@ class RapportActiviteService {
   // Approuver un rapport d'activité
   async approveRapport(id: string): Promise<RapportActivite> {
     try {
-      const response = await BaseService.put(`${this.endpoint}/${id}/approve`, {});
+      const response = await BaseService.patch(`${this.endpoint}/${id}/statut`, { statut: 'approuve' });
       return response;
     } catch (error) {
       console.error('Erreur lors de l\'approbation du rapport d\'activité:', error);
@@ -94,7 +94,10 @@ class RapportActiviteService {
   // Rejeter un rapport d'activité
   async rejectRapport(id: string, reason?: string): Promise<RapportActivite> {
     try {
-      const response = await BaseService.put(`${this.endpoint}/${id}/reject`, { reason });
+      const response = await BaseService.patch(`${this.endpoint}/${id}/statut`, { 
+        statut: 'rejete',
+        raison: reason 
+      });
       return response;
     } catch (error) {
       console.error('Erreur lors du rejet du rapport d\'activité:', error);
@@ -163,7 +166,7 @@ class RapportActiviteService {
   // Générer un rapport PDF
   async generatePDF(id: string): Promise<Blob> {
     try {
-      const response = await BaseService.get(`${this.endpoint}/${id}/pdf`);
+      const response = await BaseService.get(`${this.endpoint}/${id}/export`);
       return response;
     } catch (error) {
       console.error('Erreur lors de la génération du PDF:', error);

@@ -3,14 +3,14 @@ import { environment } from "../config/environnement";
 import { Environment } from "../models/Enums";
 
 // URL de base
-export const Base_Url = "http://134.122.23.150";
+export const Base_Url = "https://www.edu-nc.site";
 
 function devUrl(): string {
-    return "http://134.122.23.150/api/v1/";
+    return "https://www.edu-nc.site/api/v1/";
 }
 
 export function prodUrl(): string {
-    return "http://134.122.23.150/api/v1/";
+    return "https://www.edu-nc.site/api/v1/";
 }
 
 export const URL = environment === Environment.DEVELOPPEMENT ? devUrl() : prodUrl();
@@ -99,9 +99,47 @@ export const BaseService = {
     // Méthode PUT avec config
     put: async (route: string, data: any, config: AxiosRequestConfig = {}): Promise<any> => {
         try {
-            const response: AxiosResponse = await axios.put(getFullUrl(route), data, { ...defaultConfig, ...config });
+            const tokenConfig = getConfigWithToken();
+            const fullUrl = getFullUrl(route);
+            
+            console.log('🔍 BaseService.put - URL complète:', fullUrl);
+            console.log('🔍 BaseService.put - Route:', route);
+            console.log('🔍 BaseService.put - Data:', data);
+            console.log('🔍 BaseService.put - Token config:', tokenConfig);
+            console.log('🔍 BaseService.put - Headers:', tokenConfig.headers);
+            
+            const response: AxiosResponse = await axios.put(fullUrl, data, { ...tokenConfig, ...config });
+            console.log('🔍 BaseService.put - Réponse:', response.data);
             return response.data;
         } catch (error: any) {
+            console.error('🔍 BaseService.put - Erreur complète:', error);
+            console.error('🔍 BaseService.put - Status:', error.response?.status);
+            console.error('🔍 BaseService.put - Data d\'erreur:', error.response?.data);
+            console.error('🔍 BaseService.put - URL qui a échoué:', getFullUrl(route));
+            throw error.response ? error.response.data : error;
+        }
+    },
+
+    // Méthode PATCH avec config
+    patch: async (route: string, data: any, config: AxiosRequestConfig = {}): Promise<any> => {
+        try {
+            const tokenConfig = getConfigWithToken();
+            const fullUrl = getFullUrl(route);
+            
+            console.log('🔍 BaseService.patch - URL complète:', fullUrl);
+            console.log('🔍 BaseService.patch - Route:', route);
+            console.log('🔍 BaseService.patch - Data:', data);
+            console.log('🔍 BaseService.patch - Token config:', tokenConfig);
+            console.log('🔍 BaseService.patch - Headers:', tokenConfig.headers);
+            
+            const response: AxiosResponse = await axios.patch(fullUrl, data, { ...tokenConfig, ...config });
+            console.log('🔍 BaseService.patch - Réponse:', response.data);
+            return response.data;
+        } catch (error: any) {
+            console.error('🔍 BaseService.patch - Erreur complète:', error);
+            console.error('🔍 BaseService.patch - Status:', error.response?.status);
+            console.error('🔍 BaseService.patch - Data d\'erreur:', error.response?.data);
+            console.error('🔍 BaseService.patch - URL qui a échoué:', getFullUrl(route));
             throw error.response ? error.response.data : error;
         }
     },
@@ -109,9 +147,20 @@ export const BaseService = {
     // Méthode DELETE avec config
     delete: async (route: string, config: AxiosRequestConfig = {}): Promise<any> => {
         try {
-            const response: AxiosResponse = await axios.delete(getFullUrl(route), { ...defaultConfig, ...config });
+            const tokenConfig = getConfigWithToken();
+            const fullUrl = getFullUrl(route);
+            
+            console.log('🔍 BaseService.delete - URL complète:', fullUrl);
+            console.log('🔍 BaseService.delete - Route:', route);
+            console.log('🔍 BaseService.delete - Token config:', tokenConfig);
+            
+            const response: AxiosResponse = await axios.delete(fullUrl, { ...tokenConfig, ...config });
+            console.log('🔍 BaseService.delete - Réponse:', response.data);
             return response.data;
         } catch (error: any) {
+            console.error('🔍 BaseService.delete - Erreur complète:', error);
+            console.error('🔍 BaseService.delete - Status:', error.response?.status);
+            console.error('🔍 BaseService.delete - Data d\'erreur:', error.response?.data);
             throw error.response ? error.response.data : error;
         }
     },

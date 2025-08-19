@@ -105,7 +105,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                   <td className="border border-gray-300 px-3 py-2">
                     <input
                       type="text"
-                      value={formData.realisations.accesAccessibiliteEquite.nouvellesSallesClasses.sourceFinancement}
+                      value={formData.realisations.accesAccessibiliteEquite.gratuitéEnseignementPrimaire || ''}
                       onChange={(e) => {
                         setFormData(prev => ({
                           ...prev,
@@ -113,10 +113,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                             ...prev.realisations,
                             accesAccessibiliteEquite: {
                               ...prev.realisations.accesAccessibiliteEquite,
-                              nouvellesSallesClasses: {
-                                ...prev.realisations.accesAccessibiliteEquite.nouvellesSallesClasses,
-                                sourceFinancement: e.target.value
-                              }
+                              gratuitéEnseignementPrimaire: e.target.value
                             }
                           }
                         }));
@@ -154,7 +151,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                   <td className="border border-gray-300 px-3 py-2">
                     <input
                       type="text"
-                      value={formData.realisations.accesAccessibiliteEquite.nouvellesSallesClasses.sourceFinancement}
+                      value={formData.realisations.accesAccessibiliteEquite.cantinesScolaires.commentaire || ''}
                       onChange={(e) => {
                         setFormData(prev => ({
                           ...prev,
@@ -162,9 +159,9 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                             ...prev.realisations,
                             accesAccessibiliteEquite: {
                               ...prev.realisations.accesAccessibiliteEquite,
-                              nouvellesSallesClasses: {
-                                ...prev.realisations.accesAccessibiliteEquite.nouvellesSallesClasses,
-                                sourceFinancement: e.target.value
+                              cantinesScolaires: {
+                                ...prev.realisations.accesAccessibiliteEquite.cantinesScolaires,
+                                commentaire: e.target.value
                               }
                             }
                           }

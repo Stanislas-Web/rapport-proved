@@ -4,6 +4,9 @@ import { RapportActivite } from '../../models/RapportActivite';
 import DefaultLayout from '../../layout/DefaultLayout';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import toast from 'react-hot-toast';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import moment from 'moment';
 
 const RapportActivitePage: React.FC = () => {
   const [rapports, setRapports] = useState<RapportActivite[]>([]);
@@ -173,6 +176,27 @@ const RapportActivitePage: React.FC = () => {
     }
   };
 
+  const handleGeneratePDF = async (id: string) => {
+    try {
+      const pdfBlob = await rapportActiviteService.generatePDF(id);
+      
+      // Créer un lien de téléchargement
+      const url = window.URL.createObjectURL(pdfBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `rapport-activite-${id}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      toast.success('PDF généré et téléchargé avec succès');
+    } catch (error) {
+      console.error('Erreur lors de la génération du PDF:', error);
+      toast.error('Erreur lors de la génération du PDF');
+    }
+  };
+
   const handleViewDetail = (rapport: RapportActivite) => {
     setSelectedRapport(rapport);
     setShowDetailModal(true);
@@ -181,6 +205,167 @@ const RapportActivitePage: React.FC = () => {
   const closeDetailModal = () => {
     setShowDetailModal(false);
     setSelectedRapport(null);
+  };
+
+  const exportRapportsToExcel = () => {
+    const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const fileExtension = '.xlsx';
+    const data = JSON.parse(localStorage.getItem('data') || '{}');
+
+    // Fonction pour obtenir le nom de la personne connectée (même logique que DropdownUser)
+    const getUserName = () => {
+      // Nom complet avec prénom et nom
+      if (data.prenom && data.nom) {
+        return `${data.prenom} ${data.nom}`;
+      }
+
+      // Nom complet avec prénom, nom et postnom
+      if (data.prenom && data.nom && data.postnom) {
+        return `${data.prenom} ${data.nom} ${data.postnom}`;
+      }
+
+      // Nom complet avec nom et postnom
+      if (data.nom && data.postnom) {
+        return `${data.nom} ${data.postnom}`;
+      }
+
+      // Champs individuels
+      if (data.fullName) {
+        return data.fullName;
+      }
+      if (data.name) {
+        return data.name;
+      }
+      if (data.nom) {
+        return data.nom;
+      }
+      if (data.prenom) {
+        return data.prenom;
+      }
+      if (data.nomProved) {
+        return data.nomProved;
+      }
+
+      return 'Utilisateur';
+    };
+
+    const userName = getUserName();
+
+    // Formatage des données pour Excel
+    const formattedData = rapports.map((rapport: any, index: any) => {
+      // Calculer les totaux
+      const totalEcoles = 
+        (rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreEcoles || 0) +
+        (rapport.parametresCles?.niveauPrescolaire?.maternel?.nombreEcoles || 0) +
+        (rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.nombreEcoles || 0) +
+        (rapport.parametresCles?.niveauPrescolaire?.special?.nombreEcoles || 0) +
+        (rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.nombreEcoles || 0);
+
+      const totalClasses = 
+        (rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreClasses || 0) +
+        (rapport.parametresCles?.niveauPrescolaire?.maternel?.nombreClasses || 0) +
+        (rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.nombreClasses || 0) +
+        (rapport.parametresCles?.niveauPrescolaire?.special?.nombreClasses || 0) +
+        (rapport.parametresCles?.niveauPrimaire?.enseignementSpecial?.nombreClasses || 0) +
+        (rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.nombreClasses || 0) +
+        (rapport.parametresCles?.niveauSecondaire?.enseignementSpecial?.nombreClasses || 0) +
+        (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes7emeCTEB || 0) +
+        (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes8emeCTEB || 0) +
+        (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.classesHumanites || 0);
+
+      const totalPersonnel = 
+        (rapport.personnel?.personnelEnseignant?.prescolaire?.hommes || 0) +
+        (rapport.personnel?.personnelEnseignant?.prescolaire?.femmes || 0) +
+        (rapport.personnel?.personnelEnseignant?.primaire?.hommes || 0) +
+        (rapport.personnel?.personnelEnseignant?.primaire?.femmes || 0) +
+        (rapport.personnel?.personnelEnseignant?.secondaire?.hommes || 0) +
+        (rapport.personnel?.personnelEnseignant?.secondaire?.femmes || 0) +
+        (rapport.personnel?.personnelAdministratif?.directionProvinciale || 0) +
+        (rapport.personnel?.personnelAdministratif?.inspectionPrincipale || 0) +
+        (rapport.personnel?.personnelAdministratif?.coordinationProvinciale || 0) +
+        (rapport.personnel?.personnelAdministratif?.sousDivision || 0);
+
+      return {
+        N: index + 1,
+        "Année": rapport.annee,
+        "Province Administrative": rapport.identificationProved?.provinceAdministrative || '',
+        "Province Educationnelle": rapport.identificationProved?.provinceEducationnelle || '',
+        "Directeur Provincial": rapport.identificationProved?.directeurProvincial || '',
+        "Total Écoles": totalEcoles,
+        "Total Classes": totalClasses,
+        "Total Effectifs": rapport.totalEffectifs || 0,
+        "Total Personnel": totalPersonnel,
+        "Statut": rapport.statut,
+        "Créé le": rapport.createdAt ? moment(rapport.createdAt).format('DD/MM/YYYY') : '-',
+        "Modifié le": rapport.updatedAt ? moment(rapport.updatedAt).format('DD/MM/YYYY') : '-',
+      };
+    });
+
+    // Création de la feuille Excel
+    const ws = XLSX.utils.aoa_to_sheet([
+      ['RAPPORTS D\'ACTIVITÉ'], // Titre
+      [], // Ligne vide
+      ['Rapport généré par ' + userName + " le " + moment().format('DD/MM/YYYY à HH:mm')], // Date de génération
+      [], // Ligne vide
+      Object.keys(formattedData[0] || {}) // En-têtes
+    ]);
+
+    // Ajouter les données après les en-têtes
+    XLSX.utils.sheet_add_json(ws, formattedData, { origin: 5, skipHeader: true });
+
+    // Appliquer les styles
+    ws['A1'].s = {
+      font: { bold: true, color: { rgb: "FFFFFF" }, sz: 16 },
+      fill: { fgColor: { rgb: "2E7D32" } }, // Vert foncé
+      alignment: { horizontal: "center", vertical: "center" },
+    };
+    ws['A3'].s = {
+      font: { italic: true, color: { rgb: "666666" } },
+      alignment: { horizontal: "center" },
+    };
+
+    // Fusionner les cellules pour le titre et la date
+    ws['!merges'] = [
+      { s: { r: 0, c: 0 }, e: { r: 0, c: 11 } }, // Titre
+      { s: { r: 2, c: 0 }, e: { r: 2, c: 11 } }, // Date
+    ];
+
+    // Largeurs des colonnes
+    ws['!cols'] = [
+      { wch: 5 },   // N
+      { wch: 10 },  // Année
+      { wch: 25 },  // Province Administrative
+      { wch: 25 },  // Province Educationnelle
+      { wch: 25 },  // Directeur Provincial
+      { wch: 15 },  // Total Écoles
+      { wch: 15 },  // Total Classes
+      { wch: 15 },  // Total Effectifs
+      { wch: 15 },  // Total Personnel
+      { wch: 15 },  // Statut
+      { wch: 15 },  // Créé le
+      { wch: 15 },  // Modifié le
+    ];
+
+    // Hauteurs des lignes
+    ws['!rows'] = [
+      { hpt: 40 }, // Titre
+      { hpt: 20 }, // Ligne vide
+      { hpt: 25 }, // Date
+      { hpt: 20 }, // Ligne vide
+      { hpt: 35 }, // En-têtes
+      ...Array(formattedData.length).fill({ hpt: 30 }), // Données
+    ];
+
+    // Création du workbook
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Rapports d\'Activité');
+
+    // Conversion en buffer
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+    // Téléchargement du fichier
+    const dataBlob = new Blob([excelBuffer], { type: fileType });
+    saveAs(dataBlob, `Rapports-Activite${fileExtension}`);
   };
 
   const getStatusBadge = (status: string) => {
@@ -198,29 +383,41 @@ const RapportActivitePage: React.FC = () => {
     );
   };
 
-  const years = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i);
+  const years = [2025];
 
   return (
     <>
-      <Breadcrumb pageName="Rapports d'activité" />
+      {/* <Breadcrumb pageName="Rapports d'activité" /> */}
 
       <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-title-md2 font-semibold text-black dark:text-white">
             Rapports d'activité
           </h2>
-          {(() => {
-            console.log('🔍 userRole actuel:', userRole);
-            console.log('🔍 Condition bouton:', userRole !== 'admin' && userRole !== 'Administrateur' && userRole !== 'ADMIN');
-            return (userRole !== 'admin' && userRole !== 'Administrateur' && userRole !== 'ADMIN') && (
-              <button
-                onClick={() => window.location.href = '/rapport-activite/create'}
-                className="inline-flex items-center justify-center rounded-md bg-primary py-2 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
-              >
-                Nouveau rapport
-              </button>
-            );
-          })()}
+          <div className="flex items-center gap-3">
+            {(userRole === 'admin' || userRole === 'Administrateur' || userRole === 'ADMIN') && (
+              <div onClick={exportRapportsToExcel} className="cursor-pointer" title="Exporter en Excel">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48px" height="48px">
+                  <path fill="#4CAF50" d="M41,10H25v28h16c0.553,0,1-0.447,1-1V11C42,10.447,41.553,10,41,10z" />
+                  <path fill="#FFF" d="M32 15H39V18H32zM32 25H39V28H32zM32 30H39V33H32zM32 20H39V23H32zM25 15H30V18H25zM25 25H30V28H25zM25 30H30V33H25zM25 20H30V23H25z" />
+                  <path fill="#2E7D32" d="M27 42L6 38 6 10 27 6z" />
+                  <path fill="#FFF" d="M19.129,31l-2.411-4.561c-0.092-0.171-0.186-0.483-0.284-0.938h-0.037c-0.046,0.215-0.154,0.541-0.324,0.979L13.652,31H9.895l4.462-7.001L10.274,17h3.837l2.001,4.196c0.156,0.331,0.296,0.725,0.42,1.179h0.04c0.078-0.271,0.224-0.68,0.439-1.22L19.237,17h3.515l-4.199,6.939l4.316,7.059h-3.74V31z" />
+                </svg>
+              </div>
+            )}
+            {(() => {
+              console.log('🔍 userRole actuel:', userRole);
+              console.log('🔍 Condition bouton:', userRole !== 'admin' && userRole !== 'Administrateur' && userRole !== 'ADMIN');
+              return (userRole !== 'admin' && userRole !== 'Administrateur' && userRole !== 'ADMIN') && (
+                <button
+                  onClick={() => window.location.href = '/rapport-activite/create'}
+                  className="inline-flex items-center justify-center rounded-md bg-primary py-2 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+                >
+                  Nouveau rapport
+                </button>
+              );
+            })()}
+          </div>
         </div>
 
         {/* Message pour les utilisateurs normaux */}
@@ -232,21 +429,6 @@ const RapportActivitePage: React.FC = () => {
 
         {/* Filtres */}
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-          <div className="flex items-center gap-2">
-            <label className="text-sm font-medium text-black dark:text-white">Année:</label>
-            <select
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(Number(e.target.value))}
-              className="rounded border border-stroke bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-            >
-              {years.map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
-          </div>
-
           <div className="flex items-center gap-2">
             <label className="text-sm font-medium text-black dark:text-white">Statut:</label>
             <select
@@ -315,7 +497,15 @@ const RapportActivitePage: React.FC = () => {
                     </td>
                   </tr>
                 ) : (
-                  rapports.map((rapport) => {
+                  rapports
+                    .filter((rapport) => {
+                      // Filtre par statut uniquement
+                      if (selectedStatus !== 'all' && rapport.statut !== selectedStatus) {
+                        return false;
+                      }
+                      return true;
+                    })
+                    .map((rapport) => {
                     // Calculer les totaux
                     const totalEcoles = 
                       (rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreEcoles || 0) +
@@ -432,7 +622,7 @@ const RapportActivitePage: React.FC = () => {
                                 </svg>
                               </button>
                             )}
-                            {rapport.statut === 'soumis' && (
+                            {rapport.statut === 'soumis' && (userRole === 'admin' || userRole === 'Administrateur' || userRole === 'ADMIN') && (
                               <>
                                 <button
                                   onClick={() => handleApprove(rapport._id!)}
@@ -453,6 +643,21 @@ const RapportActivitePage: React.FC = () => {
                                   </svg>
                                 </button>
                               </>
+                            )}
+                            {(userRole === 'admin' || userRole === 'Administrateur' || userRole === 'ADMIN') && (
+                              <button
+                                onClick={() => handleGeneratePDF(rapport._id!)}
+                                className="hover:text-blue-600"
+                                title="Générer PDF"
+                              >
+                                <svg className="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M13.5 2.25H4.5C3.67157 2.25 3 2.92157 3 3.75V14.25C3 15.0784 3.67157 15.75 4.5 15.75H13.5C14.3284 15.75 15 15.0784 15 14.25V3.75C15 2.92157 14.3284 2.25 13.5 2.25Z" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                                  <path d="M6 6H12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                                  <path d="M6 9H12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                                  <path d="M6 12H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                                  <path d="M10.5 2.25V5.25C10.5 5.66421 10.8358 6 11.25 6H13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                              </button>
                             )}
                             <button
                               onClick={() => handleDelete(rapport._id!)}
