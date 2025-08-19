@@ -11,6 +11,7 @@ const SignIn: React.FC = () => {
   const [telephone, setTelephone] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false); // Nouvel état pour gérer le loader
+  const [errorMessage, setErrorMessage] = useState<string>(''); // État pour gérer les messages d'erreur
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,7 +25,8 @@ const SignIn: React.FC = () => {
   }, [navigate]);
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true); 
+    setIsLoading(true);
+    setErrorMessage(''); // Réinitialise le message d'erreur
     let data: object = {
       identifier:"+243" + telephone,
       motDePasse: password,
@@ -48,6 +50,7 @@ const SignIn: React.FC = () => {
     } catch (err) {
       console.error('Login failed:', err);
       setIsLoading(false); // Stops the loader on failure
+      setErrorMessage('Numéro de téléphone ou mot de passe incorrect. Veuillez réessayer.');
     }
   };
   
@@ -103,6 +106,13 @@ const SignIn: React.FC = () => {
                     />
                   </div>
                 </div>
+
+                {/* Affichage du message d'erreur */}
+                {errorMessage && (
+                  <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                    {errorMessage}
+                  </div>
+                )}
 
                 <div className="mb-5">
                   <button
