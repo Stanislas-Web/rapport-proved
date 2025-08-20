@@ -54,8 +54,15 @@ export const BaseService = {
             const tokenConfig = getConfigWithToken();
             console.log('🔍 BaseService.get - Route:', route);
             console.log('🔍 BaseService.get - Token config:', tokenConfig);
+            console.log('🔍 BaseService.get - Config:', config);
             
             const response: AxiosResponse = await axios.get(getFullUrl(route), { ...tokenConfig, ...config });
+            
+            // Si c'est un blob, retourner directement la réponse
+            if (config.responseType === 'blob') {
+                return response.data;
+            }
+            
             return response.data;
         } catch (error: any) {
             console.error('🔍 BaseService.get - Erreur:', error);

@@ -197,6 +197,8 @@ const RapportActivitePage: React.FC = () => {
     }
   };
 
+
+
   const handleViewDetail = (rapport: RapportActivite) => {
     setSelectedRapport(rapport);
     setShowDetailModal(true);
@@ -644,21 +646,19 @@ const RapportActivitePage: React.FC = () => {
                                 </button>
                               </>
                             )}
-                            {(userRole === 'admin' || userRole === 'Administrateur' || userRole === 'ADMIN') && (
-                              <button
-                                onClick={() => handleGeneratePDF(rapport._id!)}
-                                className="hover:text-blue-600"
-                                title="Générer PDF"
-                              >
-                                <svg className="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                  <path d="M13.5 2.25H4.5C3.67157 2.25 3 2.92157 3 3.75V14.25C3 15.0784 3.67157 15.75 4.5 15.75H13.5C14.3284 15.75 15 15.0784 15 14.25V3.75C15 2.92157 14.3284 2.25 13.5 2.25Z" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-                                  <path d="M6 6H12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                                  <path d="M6 9H12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                                  <path d="M6 12H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                                  <path d="M10.5 2.25V5.25C10.5 5.66421 10.8358 6 11.25 6H13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                </svg>
-                              </button>
-                            )}
+                            <button
+                              onClick={() => handleGeneratePDF(rapport._id!)}
+                              className="hover:text-blue-600"
+                              title="Exporter en PDF"
+                            >
+                              <svg className="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13.5 2.25H4.5C3.67157 2.25 3 2.92157 3 3.75V14.25C3 15.0784 3.67157 15.75 4.5 15.75H13.5C14.3284 15.75 15 15.0784 15 14.25V3.75C15 2.92157 14.3284 2.25 13.5 2.25Z" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                                <path d="M6 6H12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                                <path d="M6 9H12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                                <path d="M6 12H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                                <path d="M10.5 2.25V5.25C10.5 5.66421 10.8358 6 11.25 6H13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                            </button>
                             <button
                               onClick={() => handleDelete(rapport._id!)}
                               className="hover:text-danger"
@@ -917,6 +917,19 @@ const RapportActivitePage: React.FC = () => {
                 className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
               >
                 Fermer
+              </button>
+              <button
+                onClick={() => handleGeneratePDF(selectedRapport._id!)}
+                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 flex items-center gap-2"
+              >
+                <svg className="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 1.5H4C3.44772 1.5 3 1.94772 3 2.5V13.5C3 14.0523 3.44772 14.5 4 14.5H12C12.5523 14.5 13 14.0523 13 13.5V2.5C13 1.94772 12.5523 1.5 12 1.5Z" stroke="currentColor" strokeWidth="1" fill="none"/>
+                  <path d="M5 5H11" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
+                  <path d="M5 7H11" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
+                  <path d="M5 9H8" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
+                  <path d="M9 1.5V4C9 4.27614 9.22386 4.5 9.5 4.5H12" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Exporter PDF
               </button>
               <button
                 onClick={() => window.location.href = `/rapport-activite/edit/${selectedRapport._id}`}

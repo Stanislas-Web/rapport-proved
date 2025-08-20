@@ -166,7 +166,9 @@ class RapportActiviteService {
   // Générer un rapport PDF
   async generatePDF(id: string): Promise<Blob> {
     try {
-      const response = await BaseService.get(`${this.endpoint}/${id}/export`);
+      const response = await BaseService.get(`${this.endpoint}/${id}/export`, {
+        responseType: 'blob'
+      });
       return response;
     } catch (error) {
       console.error('Erreur lors de la génération du PDF:', error);
