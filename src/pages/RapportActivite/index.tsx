@@ -330,7 +330,7 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
         
         <!-- Titre principal -->
         <div class="main-title">
-          Rapport d'Activités ${rapport.annee}
+          Rapport d'Activités
         </div>
         
         <!-- Informations générales -->
