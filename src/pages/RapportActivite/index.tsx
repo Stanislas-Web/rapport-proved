@@ -7,6 +7,970 @@ import toast from 'react-hot-toast';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import moment from 'moment';
+import { generateAndDownloadPDF } from '../../utils/generateRapportPDF';
+
+// Fonction pour générer un PDF beau et impressionnant sans packages externes
+const generateBeautifulPDF = (rapport: RapportActivite) => {
+  // Créer un nouveau document
+  const printWindow = window.open('', '_blank');
+  if (!printWindow) {
+    toast.error('Impossible d\'ouvrir la fenêtre d\'impression');
+    return;
+  }
+
+  // Calculer les totaux
+  const totalEcoles = 
+    (rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreEcoles || 0) +
+    (rapport.parametresCles?.niveauPrescolaire?.maternel?.nombreEcoles || 0) +
+    (rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.nombreEcoles || 0) +
+    (rapport.parametresCles?.niveauPrescolaire?.special?.nombreEcoles || 0) +
+    (rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.nombreEcoles || 0);
+
+  const totalClasses = 
+    (rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreClasses || 0) +
+    (rapport.parametresCles?.niveauPrescolaire?.maternel?.nombreClasses || 0) +
+    (rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.nombreClasses || 0) +
+    (rapport.parametresCles?.niveauPrescolaire?.special?.nombreClasses || 0) +
+    (rapport.parametresCles?.niveauPrimaire?.enseignementSpecial?.nombreClasses || 0) +
+    (rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.nombreClasses || 0) +
+    (rapport.parametresCles?.niveauSecondaire?.enseignementSpecial?.nombreClasses || 0) +
+    (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes7emeCTEB || 0) +
+    (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes8emeCTEB || 0) +
+    (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.classesHumanites || 0);
+
+  const totalPersonnel = 
+    (rapport.personnel?.personnelEnseignant?.prescolaire?.hommes || 0) +
+    (rapport.personnel?.personnelEnseignant?.prescolaire?.femmes || 0) +
+    (rapport.personnel?.personnelEnseignant?.primaire?.hommes || 0) +
+    (rapport.personnel?.personnelEnseignant?.primaire?.femmes || 0) +
+    (rapport.personnel?.personnelEnseignant?.secondaire?.hommes || 0) +
+    (rapport.personnel?.personnelEnseignant?.secondaire?.femmes || 0) +
+    (rapport.personnel?.personnelAdministratif?.directionProvinciale || 0) +
+    (rapport.personnel?.personnelAdministratif?.inspectionPrincipale || 0) +
+    (rapport.personnel?.personnelAdministratif?.coordinationProvinciale || 0) +
+    (rapport.personnel?.personnelAdministratif?.sousDivision || 0);
+
+  // HTML pour le PDF
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Rapport d'Activités ${rapport.annee}</title>
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        
+        body {
+          font-family: 'Inter', sans-serif;
+          line-height: 1.6;
+          color: #333;
+          background: #fff;
+          font-size: 15px;
+        }
+        
+        .pdf-container {
+          max-width: 210mm;
+          margin: 0 auto;
+          padding: 20mm;
+          background: white;
+        }
+        
+                 .header {
+           text-align: center;
+           margin-bottom: 30px;
+           border-bottom: 3px solid #1e40af;
+           padding-bottom: 20px;
+         }
+         
+         .logo-center {
+           text-align: center;
+           margin: 15px 0;
+         }
+         
+         .header-logo {
+           width: 100px;
+           height: 100px;
+           object-fit: contain;
+         }
+        
+                         .republic {
+          font-size: 18px;
+          font-weight: 700;
+          color: #666;
+          margin-bottom: 10px;
+          text-align: center;
+        }
+        
+        .ministry {
+          font-size: 20px;
+          font-weight: 700;
+          text-transform: uppercase;
+          color: #1e40af;
+          margin-bottom: 5px;
+        }
+        
+        .direction {
+          font-size: 18px;
+          font-weight: 600;
+          text-transform: uppercase;
+          color: #374151;
+          margin-bottom: 10px;
+        }
+        
+        .main-title {
+          font-size: 26px;
+          font-weight: 700;
+          text-transform: uppercase;
+          color: #1e40af;
+          background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+          padding: 15px;
+          border-radius: 8px;
+          margin: 20px 0;
+          text-align: center;
+          border: 2px solid #1e40af;
+        }
+        
+        .info-section {
+          margin: 25px 0;
+        }
+        
+        .section-title {
+          font-size: 18px;
+          font-weight: 600;
+          color: #1e40af;
+          margin-bottom: 15px;
+          padding: 10px;
+          background: #f3f4f6;
+          border-left: 4px solid #1e40af;
+          border-radius: 4px;
+        }
+        
+        .info-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 15px;
+          margin-bottom: 20px;
+        }
+        
+        .info-card {
+          background: #f8fafc;
+          padding: 15px;
+          border-radius: 8px;
+          border: 1px solid #e2e8f0;
+        }
+        
+        .info-card h4 {
+          font-size: 16px;
+          font-weight: 600;
+          color: #374151;
+          margin-bottom: 8px;
+        }
+        
+        .info-card p {
+          font-size: 15px;
+          color: #6b7280;
+        }
+        
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 15px;
+          margin: 20px 0;
+        }
+        
+        .stat-card {
+          background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+          color: white;
+          padding: 20px;
+          border-radius: 12px;
+          text-align: center;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-number {
+          font-size: 26px;
+          font-weight: 700;
+          margin-bottom: 5px;
+        }
+        
+        .stat-label {
+          font-size: 14px;
+          opacity: 0.9;
+        }
+        
+        .table-container {
+          margin: 25px 0;
+          overflow-x: auto;
+        }
+        
+        .data-table {
+          width: 100%;
+          border-collapse: collapse;
+          background: white;
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .data-table th {
+          background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+          color: white;
+          padding: 12px;
+          text-align: left;
+          font-weight: 600;
+          font-size: 15px;
+        }
+        
+        .data-table td {
+          padding: 12px;
+          border-bottom: 1px solid #e5e7eb;
+          font-size: 15px;
+        }
+        
+        .data-table tr:nth-child(even) {
+          background: #f9fafb;
+        }
+        
+        .data-table tr:hover {
+          background: #f3f4f6;
+        }
+        
+        .footer {
+          margin-top: 40px;
+          padding-top: 20px;
+          border-top: 2px solid #e5e7eb;
+          text-align: center;
+          color: #6b7280;
+          font-size: 14px;
+        }
+        
+        .signature-section {
+          margin-top: 40px;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 40px;
+        }
+        
+        .signature-box {
+          text-align: center;
+          padding: 20px;
+          border: 2px solid #e5e7eb;
+          border-radius: 8px;
+        }
+        
+                 .signature-line {
+           width: 200px;
+           height: 2px;
+           background: #374151;
+           margin: 40px auto 10px;
+         }
+         
+         .personnel-details, .realisation-details, .resume-details {
+           display: flex;
+           flex-direction: column;
+           gap: 8px;
+         }
+         
+         .personnel-item, .realisation-item, .resume-item, .detail-item {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           padding: 6px 0;
+           border-bottom: 1px solid #f1f5f9;
+         }
+         
+         .personnel-item:last-child, .realisation-item:last-child, .resume-item:last-child, .detail-item:last-child {
+           border-bottom: none;
+         }
+         
+         .label {
+           font-weight: 500;
+           color: #374151;
+           font-size: 14px;
+         }
+         
+         .value {
+           font-weight: 600;
+           color: #1e40af;
+           font-size: 14px;
+         }
+        
+        @media print {
+          body {
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+          }
+          
+          .pdf-container {
+            max-width: none;
+            margin: 0;
+            padding: 15mm;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="pdf-container">
+        <!-- En-tête avec logo -->
+        <div class="header">
+          <div class="republic">République Démocratique du Congo</div>
+          <div class="logo-center">
+            <img src="/image.png" alt="Logo Ministère" class="header-logo" />
+          </div>
+          <div class="ministry">Ministère de l'Éducation Nationale et Nouvelle Citoyenneté</div>
+          <div class="direction">PROVINCE EDUCATIONNELLE ${rapport.identificationProved?.provinceEducationnelle || 'N/A'}</div>
+        </div>
+        
+        <!-- Titre principal -->
+        <div class="main-title">
+          Rapport d'Activités ${rapport.annee}
+        </div>
+        
+        <!-- Informations générales -->
+        <div class="info-section">
+          <div class="section-title">Informations Générales</div>
+          <div class="info-grid">
+            <div class="info-card">
+              <h4>Province Administrative</h4>
+              <p>${rapport.identificationProved?.provinceAdministrative || 'Non spécifié'}</p>
+            </div>
+            <div class="info-card">
+              <h4>Province Éducationnelle</h4>
+              <p>${rapport.identificationProved?.provinceEducationnelle || 'Non spécifié'}</p>
+            </div>
+            <div class="info-card">
+              <h4>Chef-lieu PROVED</h4>
+              <p>${rapport.identificationProved?.chefLieuProved || 'Non spécifié'}</p>
+            </div>
+            <div class="info-card">
+              <h4>Proved</h4>
+              <p>${rapport.identificationProved?.directeurProvincial || 'Non spécifié'}</p>
+            </div>
+            <div class="info-card">
+              <h4>Email Professionnel</h4>
+              <p>${rapport.identificationProved?.emailProfessionnel || 'Non spécifié'}</p>
+            </div>
+            <div class="info-card">
+              <h4>Téléphone</h4>
+              <p>${rapport.identificationProved?.telephone || 'Non spécifié'}</p>
+            </div>
+            <div class="info-card">
+              <h4>Statut d'Occupation</h4>
+              <p>${rapport.identificationProved?.statutOccupation || 'Non spécifié'}</p>
+            </div>
+            <div class="info-card">
+              <h4>Nombre de Territoires</h4>
+              <p>${rapport.identificationProved?.nombreTerritoires || 0}</p>
+            </div>
+            <div class="info-card">
+              <h4>Nombre de Sous-divisions</h4>
+              <p>${rapport.identificationProved?.nombreSousDivisions || 0}</p>
+            </div>
+            <div class="info-card">
+              <h4>Statut du Rapport</h4>
+              <p style="color: ${rapport.statut === 'approuve' ? '#059669' : rapport.statut === 'rejete' ? '#dc2626' : '#d97706'}; font-weight: 600;">
+                ${rapport.statut?.charAt(0).toUpperCase() + rapport.statut?.slice(1) || 'Brouillon'}
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Statistiques principales -->
+        <div class="info-section">
+          <div class="section-title">Statistiques Principales</div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-number">${totalEcoles.toLocaleString()}</div>
+              <div class="stat-label">Écoles</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">${totalClasses.toLocaleString()}</div>
+              <div class="stat-label">Classes</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">${rapport.totalEffectifs ? rapport.totalEffectifs.toLocaleString() : 'N/A'}</div>
+              <div class="stat-label">Effectifs</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">${totalPersonnel.toLocaleString()}</div>
+              <div class="stat-label">Personnel</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Détails par niveau -->
+        <div class="info-section">
+          <div class="section-title">Détails par Niveau d'Enseignement</div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Niveau</th>
+                  <th>Écoles</th>
+                  <th>Classes</th>
+                  <th>Personnel</th>
+                  <th>Effectifs</th>
+                  <th>Détails</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Préscolaire</strong></td>
+                  <td>${(rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreEcoles || 0) + (rapport.parametresCles?.niveauPrescolaire?.maternel?.nombreEcoles || 0) + (rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.nombreEcoles || 0)}</td>
+                  <td>${(rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreClasses || 0) + (rapport.parametresCles?.niveauPrescolaire?.maternel?.nombreClasses || 0) + (rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.nombreClasses || 0)}</td>
+                  <td>${(rapport.personnel?.personnelEnseignant?.prescolaire?.hommes || 0) + (rapport.personnel?.personnelEnseignant?.prescolaire?.femmes || 0)}</td>
+                  <td>${((rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.effectifGarcons || 0) + (rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.effectifFilles || 0) + (rapport.parametresCles?.niveauPrescolaire?.maternel?.effectifGarcons || 0) + (rapport.parametresCles?.niveauPrescolaire?.maternel?.effectifFilles || 0) + (rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.effectifGarcons || 0) + (rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.effectifFilles || 0)).toLocaleString()}</td>
+                  <td>Maternel, Pré-primaire, Spécial</td>
+                </tr>
+                <tr>
+                  <td><strong>Primaire</strong></td>
+                  <td>${rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.nombreEcoles || 0}</td>
+                  <td>${(rapport.parametresCles?.niveauPrimaire?.enseignementSpecial?.nombreClasses || 0) + (rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.nombreClasses || 0)}</td>
+                  <td>${(rapport.personnel?.personnelEnseignant?.primaire?.hommes || 0) + (rapport.personnel?.personnelEnseignant?.primaire?.femmes || 0)}</td>
+                  <td>${((rapport.parametresCles?.niveauPrimaire?.enseignementSpecial?.effectifGarcons || 0) + (rapport.parametresCles?.niveauPrimaire?.enseignementSpecial?.effectifFilles || 0) + (rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.effectifGarcons || 0) + (rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.effectifFilles || 0)).toLocaleString()}</td>
+                  <td>Primaire, Spécial</td>
+                </tr>
+                <tr>
+                  <td><strong>Secondaire</strong></td>
+                  <td>-</td>
+                  <td>${(rapport.parametresCles?.niveauSecondaire?.enseignementSpecial?.nombreClasses || 0) + (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes7emeCTEB || 0) + (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes8emeCTEB || 0) + (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.classesHumanites || 0)}</td>
+                  <td>${(rapport.personnel?.personnelEnseignant?.secondaire?.hommes || 0) + (rapport.personnel?.personnelEnseignant?.secondaire?.femmes || 0)}</td>
+                  <td>${((rapport.parametresCles?.niveauSecondaire?.enseignementSpecial?.effectifGarcons || 0) + (rapport.parametresCles?.niveauSecondaire?.enseignementSpecial?.effectifFilles || 0) + (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.effectifGarcons || 0) + (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.effectifFilles || 0) + (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.effectifGarcons || 0) + (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.effectifFilles || 0)).toLocaleString()}</td>
+                  <td>CTEB, Humanités, Spécial</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Détails Préscolaire -->
+        <div class="info-section">
+          <div class="section-title">Détails Préscolaire</div>
+          <div class="info-grid">
+            <div class="info-card">
+              <h4>Espace Communautaire d'Éveil</h4>
+              <div class="detail-item">
+                <span class="label">Écoles:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreEcoles || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Classes:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreClasses || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Garçons:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.effectifGarcons || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Filles:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.effectifFilles || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux d'accroissement:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.tauxAccroissement || 0}%</span>
+              </div>
+            </div>
+            <div class="info-card">
+              <h4>Maternel</h4>
+              <div class="detail-item">
+                <span class="label">Écoles:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.maternel?.nombreEcoles || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Classes:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.maternel?.nombreClasses || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Garçons:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.maternel?.effectifGarcons || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Filles:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.maternel?.effectifFilles || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux d'accroissement:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.maternel?.tauxAccroissement || 0}%</span>
+              </div>
+            </div>
+            <div class="info-card">
+              <h4>Pré-primaire</h4>
+              <div class="detail-item">
+                <span class="label">Écoles:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.nombreEcoles || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Classes:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.nombreClasses || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Garçons:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.effectifGarcons || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Filles:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.effectifFilles || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux d'accroissement:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.tauxAccroissement || 0}%</span>
+              </div>
+            </div>
+            <div class="info-card">
+              <h4>Spécial</h4>
+              <div class="detail-item">
+                <span class="label">Écoles:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.special?.nombreEcoles || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Classes:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.special?.nombreClasses || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Garçons:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.special?.effectifGarcons || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Filles:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.special?.effectifFilles || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux d'accroissement:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.special?.tauxAccroissement || 0}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Détails Primaire -->
+        <div class="info-section">
+          <div class="section-title">Détails Primaire</div>
+          <div class="info-grid">
+            <div class="info-card">
+              <h4>Enseignement Primaire</h4>
+              <div class="detail-item">
+                <span class="label">Écoles:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.nombreEcoles || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Classes:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.nombreClasses || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Classes Pléthoriques:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.classesPlethoriques || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Garçons:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.effectifGarcons || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Filles:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.effectifFilles || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux d'accroissement:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.tauxAccroissement || 0}%</span>
+              </div>
+            </div>
+            <div class="info-card">
+              <h4>Enseignement Spécial</h4>
+              <div class="detail-item">
+                <span class="label">Classes:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrimaire?.enseignementSpecial?.nombreClasses || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Garçons:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrimaire?.enseignementSpecial?.effectifGarcons || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Filles:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrimaire?.enseignementSpecial?.effectifFilles || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux d'accroissement:</span>
+                <span class="value">${rapport.parametresCles?.niveauPrimaire?.enseignementSpecial?.tauxAccroissement || 0}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Détails Secondaire -->
+        <div class="info-section">
+          <div class="section-title">Détails Secondaire</div>
+          <div class="info-grid">
+            <div class="info-card">
+              <h4>Enseignement Spécial</h4>
+              <div class="detail-item">
+                <span class="label">Classes:</span>
+                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSpecial?.nombreClasses || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Garçons:</span>
+                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSpecial?.effectifGarcons || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Filles:</span>
+                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSpecial?.effectifFilles || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux d'accroissement:</span>
+                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSpecial?.tauxAccroissement || 0}%</span>
+              </div>
+            </div>
+            <div class="info-card">
+              <h4>Premier Cycle (CTEB)</h4>
+              <div class="detail-item">
+                <span class="label">Classes 7ème CTEB:</span>
+                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes7emeCTEB || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Classes 8ème CTEB:</span>
+                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes8emeCTEB || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Garçons:</span>
+                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.effectifGarcons || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Filles:</span>
+                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.effectifFilles || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux d'accroissement:</span>
+                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.tauxAccroissement || 0}%</span>
+              </div>
+            </div>
+            <div class="info-card">
+              <h4>Deuxième Cycle (Humanités)</h4>
+              <div class="detail-item">
+                <span class="label">Classes Humanités:</span>
+                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.classesHumanites || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Garçons:</span>
+                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.effectifGarcons || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Filles:</span>
+                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.effectifFilles || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux d'accroissement:</span>
+                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.tauxAccroissement || 0}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Détails du Personnel -->
+        <div class="info-section">
+          <div class="section-title">Détails du Personnel</div>
+          <div class="info-grid">
+            <div class="info-card">
+              <h4>Personnel Enseignant</h4>
+              <div class="personnel-details">
+                <div class="personnel-item">
+                  <span class="label">Préscolaire:</span>
+                  <span class="value">${rapport.personnel?.personnelEnseignant?.prescolaire?.hommes || 0}H / ${rapport.personnel?.personnelEnseignant?.prescolaire?.femmes || 0}F</span>
+                </div>
+                <div class="personnel-item">
+                  <span class="label">Primaire:</span>
+                  <span class="value">${rapport.personnel?.personnelEnseignant?.primaire?.hommes || 0}H / ${rapport.personnel?.personnelEnseignant?.primaire?.femmes || 0}F</span>
+                </div>
+                <div class="personnel-item">
+                  <span class="label">Secondaire:</span>
+                  <span class="value">${rapport.personnel?.personnelEnseignant?.secondaire?.hommes || 0}H / ${rapport.personnel?.personnelEnseignant?.secondaire?.femmes || 0}F</span>
+                </div>
+              </div>
+            </div>
+            <div class="info-card">
+              <h4>Personnel Administratif</h4>
+              <div class="personnel-details">
+                <div class="personnel-item">
+                  <span class="label">Direction Provinciale:</span>
+                  <span class="value">${rapport.personnel?.personnelAdministratif?.directionProvinciale || 0}</span>
+                </div>
+                <div class="personnel-item">
+                  <span class="label">Inspection Principale:</span>
+                  <span class="value">${rapport.personnel?.personnelAdministratif?.inspectionPrincipale || 0}</span>
+                </div>
+                <div class="personnel-item">
+                  <span class="label">DINACOPE:</span>
+                  <span class="value">${rapport.personnel?.personnelAdministratif?.dinacope || 0}</span>
+                </div>
+                <div class="personnel-item">
+                  <span class="label">SERNIE:</span>
+                  <span class="value">${rapport.personnel?.personnelAdministratif?.sernie || 0}</span>
+                </div>
+                <div class="personnel-item">
+                  <span class="label">Coordination Provinciale:</span>
+                  <span class="value">${rapport.personnel?.personnelAdministratif?.coordinationProvinciale || 0}</span>
+                </div>
+                <div class="personnel-item">
+                  <span class="label">Sous-division:</span>
+                  <span class="value">${rapport.personnel?.personnelAdministratif?.sousDivision || 0}</span>
+                </div>
+                <div class="personnel-item">
+                  <span class="label">Pools Inspection Primaire:</span>
+                  <span class="value">${rapport.personnel?.personnelAdministratif?.poolsInspectionPrimaire || 0}</span>
+                </div>
+                <div class="personnel-item">
+                  <span class="label">Pools Inspection Secondaire:</span>
+                  <span class="value">${rapport.personnel?.personnelAdministratif?.poolsInspectionSecondaire || 0}</span>
+                </div>
+                <div class="personnel-item">
+                  <span class="label">Antenne DINACOPE:</span>
+                  <span class="value">${rapport.personnel?.personnelAdministratif?.antenneDinacope || 0}</span>
+                </div>
+                <div class="personnel-item">
+                  <span class="label">Antenne SERNIE:</span>
+                  <span class="value">${rapport.personnel?.personnelAdministratif?.antenneSernie || 0}</span>
+                </div>
+                <div class="personnel-item">
+                  <span class="label">Coordination Diocésaine:</span>
+                  <span class="value">${rapport.personnel?.personnelAdministratif?.coordinationDiocesaine || 0}</span>
+                </div>
+                <div class="personnel-item">
+                  <span class="label">Sous-coordination Conventionnées:</span>
+                  <span class="value">${rapport.personnel?.personnelAdministratif?.sousCoordinationConventionnees || 0}</span>
+                </div>
+                <div class="personnel-item">
+                  <span class="label">Conseillerie Résidente:</span>
+                  <span class="value">${rapport.personnel?.personnelAdministratif?.conseillerieResidente || 0}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Réalisations -->
+        <div class="info-section">
+          <div class="section-title">Réalisations et Infrastructures</div>
+          <div class="info-grid">
+            <div class="info-card">
+              <h4>Nouvelles Infrastructures</h4>
+              <div class="realisation-details">
+                <div class="realisation-item">
+                  <span class="label">Salles de classe (Préscolaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.prescolaire || 0}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Salles de classe (Primaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.primaire || 0}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Salles de classe (Secondaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.secondaire || 0}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Bancs et tables (Préscolaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.prescolaire || 0}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Bancs et tables (Primaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.primaire || 0}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Bancs et tables (Secondaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.secondaire || 0}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Latrines (Préscolaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.prescolaire || 0}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Latrines (Primaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.primaire || 0}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Latrines (Secondaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.secondaire || 0}</span>
+                </div>
+              </div>
+            </div>
+            <div class="info-card">
+              <h4>Autres Réalisations</h4>
+              <div class="realisation-details">
+                <div class="realisation-item">
+                  <span class="label">Gratuité Enseignement Primaire:</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.gratuitéEnseignementPrimaire || 'Non spécifié'}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Sensibilisation Filles:</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.sensibilisation?.filles ? 'Oui' : 'Non'}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Sensibilisation Enfants Hors École:</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.sensibilisation?.enfantsHorsEcole ? 'Oui' : 'Non'}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Sensibilisation Peuples Autochtones:</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.sensibilisation?.peuplesAutochtones ? 'Oui' : 'Non'}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Cantines Scolaires (Préscolaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.cantinesScolaires?.prescolaire || 0}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Cantines Scolaires (Primaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.cantinesScolaires?.primaire || 0}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Cantines Scolaires (Secondaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.cantinesScolaires?.secondaire || 0}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Commentaire Cantines:</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.cantinesScolaires?.commentaire || 'Aucun commentaire'}</span>
+                </div>
+              </div>
+            </div>
+            <div class="info-card">
+              <h4>Sources de Financement</h4>
+              <div class="realisation-details">
+                <div class="realisation-item">
+                  <span class="label">Salles de classe:</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.sourceFinancement || 'Non spécifié'}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Bancs et tables:</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.sourceFinancement || 'Non spécifié'}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Latrines:</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.sourceFinancement || 'Non spécifié'}</span>
+                </div>
+              </div>
+            </div>
+            <div class="info-card">
+              <h4>Indicateurs d'Accès</h4>
+              <div class="realisation-details">
+                <div class="realisation-item">
+                  <span class="label">Nouveaux inscrits:</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.indicateursAcces?.proportionNouveauxInscrits || 0}%</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Transition Primaire-CTEB:</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.indicateursAcces?.tauxTransitionPrimaireCTEB || 0}%</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Transition CTEB-Humanités:</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.indicateursAcces?.tauxTransitionCTEBHumanites || 0}%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+                         <!-- Résumé Exécutif -->
+        <div class="info-section">
+          <div class="section-title">Résumé Exécutif</div>
+           <div class="info-grid">
+             <div class="info-card">
+               <h4>Points Clés</h4>
+               <div class="resume-details">
+                 <div class="resume-item">
+                   <span class="label">Total Écoles:</span>
+                   <span class="value">${totalEcoles.toLocaleString()}</span>
+                 </div>
+                 <div class="resume-item">
+                   <span class="label">Total Classes:</span>
+                   <span class="value">${totalClasses.toLocaleString()}</span>
+                 </div>
+                 <div class="resume-item">
+                   <span class="label">Total Effectifs:</span>
+                   <span class="value">${rapport.totalEffectifs ? rapport.totalEffectifs.toLocaleString() : 'N/A'}</span>
+                 </div>
+                 <div class="resume-item">
+                   <span class="label">Total Personnel:</span>
+                   <span class="value">${totalPersonnel.toLocaleString()}</span>
+                 </div>
+               </div>
+             </div>
+             <div class="info-card">
+               <h4>Indicateurs de Performance</h4>
+               <div class="resume-details">
+                 <div class="resume-item">
+                   <span class="label">Ratio Élèves/Classe:</span>
+                   <span class="value">${rapport.totalEffectifs && totalClasses ? (rapport.totalEffectifs / totalClasses).toFixed(1) : 'N/A'}</span>
+                 </div>
+                 <div class="resume-item">
+                   <span class="label">Ratio Personnel/Élève:</span>
+                   <span class="value">${rapport.totalEffectifs && totalPersonnel ? (totalPersonnel / rapport.totalEffectifs * 100).toFixed(1) + '%' : 'N/A'}</span>
+                 </div>
+                 <div class="resume-item">
+                   <span class="label">Taux de Couverture:</span>
+                   <span class="value">${totalEcoles > 0 ? '100%' : '0%'}</span>
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
+        
+        <!-- Introduction -->
+        ${rapport.introduction ? `
+        <div class="info-section">
+          <div class="section-title">Introduction</div>
+          <div class="info-card">
+            <p>${rapport.introduction}</p>
+          </div>
+        </div>
+        ` : ''}
+        
+        <!-- Conclusion -->
+        ${rapport.conclusion ? `
+        <div class="info-section">
+          <div class="section-title">Conclusion</div>
+          <div class="info-card">
+            <p>${rapport.conclusion}</p>
+          </div>
+        </div>
+        ` : ''}
+        
+        <!-- Signatures -->
+        <div class="signature-section">
+          <div class="signature-box">
+            <div class="signature-line"></div>
+            <p><strong>Directeur Provincial</strong></p>
+            <p style="font-size: 12px; color: #6b7280;">Signature et cachet</p>
+          </div>
+          <div class="signature-box">
+            <div class="signature-line"></div>
+            <p><strong>Date</strong></p>
+            <p style="font-size: 12px; color: #6b7280;">${new Date().toLocaleDateString('fr-FR')}</p>
+          </div>
+        </div>
+        
+        <!-- Pied de page -->
+        <div class="footer">
+          <p>Rapport généré le ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR')}</p>
+          <p>Ministère de l'Éducation Nationale et Nouvelle Citoyenneté - RDC</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  // Écrire le contenu dans la nouvelle fenêtre
+  printWindow.document.write(htmlContent);
+  printWindow.document.close();
+
+  // Attendre que le contenu soit chargé puis imprimer
+  printWindow.onload = () => {
+    setTimeout(() => {
+      printWindow.print();
+      printWindow.close();
+    }, 500);
+  };
+};
 
 const RapportActivitePage: React.FC = () => {
   const [rapports, setRapports] = useState<RapportActivite[]>([]);
@@ -176,24 +1140,11 @@ const RapportActivitePage: React.FC = () => {
     }
   };
 
-  const handleGeneratePDF = async (id: string) => {
+  const handleGeneratePDF = async (rapport: RapportActivite) => {
     try {
-      const pdfBlob = await rapportActiviteService.generatePDF(id);
-      
-      // Créer un lien de téléchargement
-      const url = window.URL.createObjectURL(pdfBlob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `rapport-activite-${id}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-      
-      toast.success('PDF généré et téléchargé avec succès');
+      await generateAndDownloadPDF(rapport);
     } catch (error) {
       console.error('Erreur lors de la génération du PDF:', error);
-      toast.error('Erreur lors de la génération du PDF');
     }
   };
 
@@ -641,15 +1592,16 @@ const RapportActivitePage: React.FC = () => {
                                   title="Rejeter"
                                 >
                                   <svg className="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9 0.75C4.17188 0.75 0.375 4.54688 0.375 9.375C0.375 14.2031 4.17188 18 9 18C13.8281 18 17.625 14.2031 17.625 9.375C17.625 4.54688 13.8281 0.75 9 0.75ZM12.75 5.25L9 9L5.25 5.25L4.5 6L8.25 9.75L12 6L12.75 5.25Z" fill=""/>
+                                    <circle cx="9" cy="9" r="8.25" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                                    <text x="9" y="12" textAnchor="middle" fontSize="12" fontWeight="bold" fill="currentColor">-</text>
                                   </svg>
                                 </button>
                               </>
                             )}
                             <button
-                              onClick={() => handleGeneratePDF(rapport._id!)}
+                              onClick={() => generateBeautifulPDF(rapport)}
                               className="hover:text-blue-600"
-                              title="Exporter en PDF"
+                              title="Générer PDF Beau"
                             >
                               <svg className="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M13.5 2.25H4.5C3.67157 2.25 3 2.92157 3 3.75V14.25C3 15.0784 3.67157 15.75 4.5 15.75H13.5C14.3284 15.75 15 15.0784 15 14.25V3.75C15 2.92157 14.3284 2.25 13.5 2.25Z" stroke="currentColor" strokeWidth="1.5" fill="none"/>
@@ -919,7 +1871,7 @@ const RapportActivitePage: React.FC = () => {
                 Fermer
               </button>
               <button
-                onClick={() => handleGeneratePDF(selectedRapport._id!)}
+                onClick={() => generateBeautifulPDF(selectedRapport)}
                 className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 flex items-center gap-2"
               >
                 <svg className="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -929,7 +1881,7 @@ const RapportActivitePage: React.FC = () => {
                   <path d="M5 9H8" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
                   <path d="M9 1.5V4C9 4.27614 9.22386 4.5 9.5 4.5H12" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                Exporter PDF
+                Générer PDF Beau
               </button>
               <button
                 onClick={() => window.location.href = `/rapport-activite/edit/${selectedRapport._id}`}
