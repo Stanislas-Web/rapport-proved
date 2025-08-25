@@ -257,6 +257,34 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Rapport d'activité
                 </NavLink>
               </li>
+
+              {/* <!-- Menu Item Fiche Auto-évaluation --> */}
+              <li>
+                <NavLink
+                  to="/fiche-auto-evaluation"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-xs  text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('fiche-auto-evaluation') && 'bg-graydark dark:bg-meta-4'
+                    }`}
+                >
+                  <svg
+                    className="fill-current"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M9 0.75C4.17157 0.75 0.25 4.67157 0.25 9.5C0.25 14.3284 4.17157 18.25 9 18.25C13.8284 18.25 17.75 14.3284 17.75 9.5C17.75 4.67157 13.8284 0.75 9 0.75ZM9 16.75C5.13401 16.75 2 13.616 2 9.75C2 5.88401 5.13401 2.75 9 2.75C12.866 2.75 16 5.88401 16 9.75C16 13.616 12.866 16.75 9 16.75Z"
+                      fill=""
+                    />
+                    <path
+                      d="M9 4.75C6.51472 4.75 4.5 6.76472 4.5 9.25C4.5 11.7353 6.51472 13.75 9 13.75C11.4853 13.75 13.5 11.7353 13.5 9.25C13.5 6.76472 11.4853 4.75 9 4.75ZM9 11.75C7.61929 11.75 6.5 10.6307 6.5 9.25C6.5 7.86929 7.61929 6.75 9 6.75C10.3807 6.75 11.5 7.86929 11.5 9.25C11.5 10.6307 10.3807 11.75 9 11.75Z"
+                      fill=""
+                    />
+                  </svg>
+                  Fiche Auto-évaluation
+                </NavLink>
+              </li>
             </ul>
           </div>
         </nav>

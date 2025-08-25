@@ -29,7 +29,7 @@ const defaultConfig: AxiosRequestConfig = {
     headers: {
         'Content-Type': 'application/json',
     },
-    timeout: 5000, // Timeout de 5 secondes
+    timeout: 30000, // Timeout de 30 secondes
 };
 
 // Fonction pour obtenir la configuration avec token
@@ -42,7 +42,7 @@ const getConfigWithToken = (): AxiosRequestConfig => {
             'Content-Type': 'application/json',
             'Authorization': token ? `Bearer ${token}` : '',
         },
-        timeout: 5000, // Timeout de 5 secondes
+        timeout: 30000, // Timeout de 30 secondes
     };
 };
 

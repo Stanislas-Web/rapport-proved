@@ -28,6 +28,9 @@ import C1 from './pages/C1';
 import C3 from './pages/C3';
 import RapportActivitePage from './pages/RapportActivite';
 import CreateRapportActivite from './pages/RapportActivite/create';
+import FicheAutoEvaluationPage from './pages/FicheAutoEvaluation';
+import CreateFicheAutoEvaluation from './pages/FicheAutoEvaluation/create';
+import EditFicheAutoEvaluation from './pages/FicheAutoEvaluation/edit';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -311,6 +314,33 @@ function App() {
                   <>
                     <PageTitle title="Modifier le rapport d'activité | Ministère de l'EDU-NC" />
                     <CreateRapportActivite />
+                  </>
+                }
+              />
+              <Route
+                path="/fiche-auto-evaluation"
+                element={
+                  <>
+                    <PageTitle title="Fiches d'Auto-évaluation | Ministère de l'EDU-NC" />
+                    <FicheAutoEvaluationPage />
+                  </>
+                }
+              />
+              <Route
+                path="/fiche-auto-evaluation/create"
+                element={
+                  <>
+                    <PageTitle title="Créer une fiche d'auto-évaluation | Ministère de l'EDU-NC" />
+                    <CreateFicheAutoEvaluation />
+                  </>
+                }
+              />
+              <Route
+                path="/fiche-auto-evaluation/edit/:id"
+                element={
+                  <>
+                    <PageTitle title="Modifier la fiche d'auto-évaluation | Ministère de l'EDU-NC" />
+                    <EditFicheAutoEvaluation />
                   </>
                 }
               />
