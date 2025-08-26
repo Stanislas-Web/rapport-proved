@@ -663,7 +663,78 @@ const CreateRapportActivite: React.FC = () => {
     };
   };
 
-  const [formData, setFormData] = useState<RapportActivite>(loadDraft);
+  // Fonction pour s'assurer que toutes les propriétés sont initialisées
+  const ensureCompleteInitialization = (data: RapportActivite): RapportActivite => {
+    const defaultData = loadDraft();
+    
+    // Fusionner les données existantes avec les valeurs par défaut
+    const mergedData = {
+      ...defaultData,
+      ...data,
+      parametresCles: {
+        ...defaultData.parametresCles,
+        ...data.parametresCles,
+        nombreEcolesClasses: {
+          ...defaultData.parametresCles.nombreEcolesClasses,
+          ...data.parametresCles?.nombreEcolesClasses,
+          niveauPrescolaire: {
+            ...defaultData.parametresCles.nombreEcolesClasses.niveauPrescolaire,
+            ...data.parametresCles?.nombreEcolesClasses?.niveauPrescolaire,
+            espaceCommunautaireEveil: {
+              ...defaultData.parametresCles.nombreEcolesClasses.niveauPrescolaire.espaceCommunautaireEveil,
+              ...data.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.espaceCommunautaireEveil
+            },
+            maternel: {
+              ...defaultData.parametresCles.nombreEcolesClasses.niveauPrescolaire.maternel,
+              ...data.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.maternel
+            },
+            prePrimaire: {
+              ...defaultData.parametresCles.nombreEcolesClasses.niveauPrescolaire.prePrimaire,
+              ...data.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.prePrimaire
+            },
+            special: {
+              ...defaultData.parametresCles.nombreEcolesClasses.niveauPrescolaire.special,
+              ...data.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.special
+            }
+          },
+          niveauPrimaire: {
+            ...defaultData.parametresCles.nombreEcolesClasses.niveauPrimaire,
+            ...data.parametresCles?.nombreEcolesClasses?.niveauPrimaire,
+            enseignementSpecial: {
+              ...defaultData.parametresCles.nombreEcolesClasses.niveauPrimaire.enseignementSpecial,
+              ...data.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementSpecial
+            },
+            enseignementPrimaire: {
+              ...defaultData.parametresCles.nombreEcolesClasses.niveauPrimaire.enseignementPrimaire,
+              ...data.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire
+            }
+          },
+          niveauSecondaire: {
+            ...defaultData.parametresCles.nombreEcolesClasses.niveauSecondaire,
+            ...data.parametresCles?.nombreEcolesClasses?.niveauSecondaire
+          }
+        },
+        effectifScolaire: {
+          ...defaultData.parametresCles.effectifScolaire,
+          ...data.parametresCles?.effectifScolaire
+        }
+      },
+      personnel: {
+        ...defaultData.personnel,
+        ...data.personnel
+      }
+    };
+    
+    console.log('🔍 Données complètes après fusion:', mergedData);
+    return mergedData;
+  };
+
+  const [formData, setFormData] = useState<RapportActivite>(() => {
+    const initialData = loadDraft();
+    const completeData = ensureCompleteInitialization(initialData);
+    console.log('🔍 Données initiales complètes chargées:', completeData);
+    return completeData;
+  });
 
   // Sauvegarder automatiquement en brouillon toutes les 30 secondes
   useEffect(() => {

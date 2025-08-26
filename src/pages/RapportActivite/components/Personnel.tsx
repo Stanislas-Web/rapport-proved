@@ -7,6 +7,21 @@ interface PersonnelProps {
 }
 
 const Personnel: React.FC<PersonnelProps> = ({ formData, setFormData }) => {
+  // Vérification de sécurité pour s'assurer que les données sont initialisées
+  if (!formData || !formData.personnel || !formData.personnel.personnelEnseignant) {
+    console.log('🔍 Personnel: Données non initialisées, affichage du loader');
+    return (
+      <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+        <div className="flex items-center justify-center py-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-gray-500">Chargement des données...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const handleInputChange = (path: string, value: number) => {
     setFormData(prev => {
       const newData = { ...prev };

@@ -7,6 +7,39 @@ interface ParametresClesProps {
 }
 
 const ParametresCles: React.FC<ParametresClesProps> = ({ formData, setFormData }) => {
+  // Vérification de sécurité pour s'assurer que les données sont initialisées
+  if (!formData || !formData.parametresCles || !formData.parametresCles.nombreEcolesClasses) {
+    console.log('🔍 ParametresCles: Données non initialisées, affichage du loader');
+    return (
+      <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+        <div className="flex items-center justify-center py-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-gray-500">Chargement des données...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const handleInputChange = (path: string, value: number | string) => {
+    setFormData(prev => {
+      const newData = { ...prev };
+      const keys = path.split('.');
+      let current: any = newData;
+      
+      for (let i = 0; i < keys.length - 1; i++) {
+        if (!current[keys[i]]) {
+          current[keys[i]] = {};
+        }
+        current = current[keys[i]];
+      }
+      
+      current[keys[keys.length - 1]] = value;
+      return newData;
+    });
+  };
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <h3 className="text-lg font-medium mb-4 text-primary">I. LES QUATRE PARAMETRES CLES DU SYSTEME EDUCATIF</h3>
@@ -22,7 +55,7 @@ const ParametresCles: React.FC<ParametresClesProps> = ({ formData, setFormData }
                 <th className="border border-gray-300 px-3 py-2 text-left">Niveau d'Enseignement</th>
                 <th className="border border-gray-300 px-3 py-2 text-center">Nbre d'Ecole</th>
                 <th className="border border-gray-300 px-3 py-2 text-center">Nbre de Classe</th>
-                <th className="border border-gray-300 px-3 py-2 text-center">Effectif Garçons</th>
+                <th className="border border-gray-300 px-3 py-2 text-center">Effectif Garçons/Filles</th>
                 <th className="border border-gray-300 px-3 py-2 text-center">Effectif Filles</th>
                 <th className="border border-gray-300 px-3 py-2 text-center">Taux d'accroissement</th>
               </tr>
@@ -34,115 +67,41 @@ const ParametresCles: React.FC<ParametresClesProps> = ({ formData, setFormData }
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    value={formData.parametresCles.niveauPrescolaire.espaceCommunautaireEveil.nombreEcoles}
-                    onChange={(e) => {
-                      const newValue = parseInt(e.target.value) || 0;
-                      setFormData(prev => ({
-                        ...prev,
-                        parametresCles: {
-                          ...prev.parametresCles,
-                          niveauPrescolaire: {
-                            ...prev.parametresCles.niveauPrescolaire,
-                            espaceCommunautaireEveil: {
-                              ...prev.parametresCles.niveauPrescolaire.espaceCommunautaireEveil,
-                              nombreEcoles: newValue
-                            }
-                          }
-                        }
-                      }));
-                    }}
+                    value={formData.parametresCles.nombreEcolesClasses.niveauPrescolaire.espaceCommunautaireEveil.nombreEcoles || ''}
+                    onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauPrescolaire.espaceCommunautaireEveil.nombreEcoles', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    value={formData.parametresCles.niveauPrescolaire.espaceCommunautaireEveil.nombreClasses}
-                    onChange={(e) => {
-                      const newValue = parseInt(e.target.value) || 0;
-                      setFormData(prev => ({
-                        ...prev,
-                        parametresCles: {
-                          ...prev.parametresCles,
-                          niveauPrescolaire: {
-                            ...prev.parametresCles.niveauPrescolaire,
-                            espaceCommunautaireEveil: {
-                              ...prev.parametresCles.niveauPrescolaire.espaceCommunautaireEveil,
-                              nombreClasses: newValue
-                            }
-                          }
-                        }
-                      }));
-                    }}
+                    value={formData.parametresCles.nombreEcolesClasses.niveauPrescolaire.espaceCommunautaireEveil.nombreClasses || ''}
+                    onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauPrescolaire.espaceCommunautaireEveil.nombreClasses', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    value={formData.parametresCles.niveauPrescolaire.espaceCommunautaireEveil.effectifGarcons}
-                    onChange={(e) => {
-                      const newValue = parseInt(e.target.value) || 0;
-                      setFormData(prev => ({
-                        ...prev,
-                        parametresCles: {
-                          ...prev.parametresCles,
-                          niveauPrescolaire: {
-                            ...prev.parametresCles.niveauPrescolaire,
-                            espaceCommunautaireEveil: {
-                              ...prev.parametresCles.niveauPrescolaire.espaceCommunautaireEveil,
-                              effectifGarcons: newValue
-                            }
-                          }
-                        }
-                      }));
-                    }}
+                    value={formData.parametresCles.effectifScolaire.niveauPrescolaire.espaceCommunautaireEveil.effectifGarconsFilles || ''}
+                    onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.espaceCommunautaireEveil.effectifGarconsFilles', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    value={formData.parametresCles.niveauPrescolaire.espaceCommunautaireEveil.effectifFilles}
-                    onChange={(e) => {
-                      const newValue = parseInt(e.target.value) || 0;
-                      setFormData(prev => ({
-                        ...prev,
-                        parametresCles: {
-                          ...prev.parametresCles,
-                          niveauPrescolaire: {
-                            ...prev.parametresCles.niveauPrescolaire,
-                            espaceCommunautaireEveil: {
-                              ...prev.parametresCles.niveauPrescolaire.espaceCommunautaireEveil,
-                              effectifFilles: newValue
-                            }
-                          }
-                        }
-                      }));
-                    }}
+                    value={formData.parametresCles.effectifScolaire.niveauPrescolaire.espaceCommunautaireEveil.effectifFilles || ''}
+                    onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.espaceCommunautaireEveil.effectifFilles', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    value={formData.parametresCles.niveauPrescolaire.espaceCommunautaireEveil.tauxAccroissement}
-                    onChange={(e) => {
-                      const newValue = parseFloat(e.target.value) || 0;
-                      setFormData(prev => ({
-                        ...prev,
-                        parametresCles: {
-                          ...prev.parametresCles,
-                          niveauPrescolaire: {
-                            ...prev.parametresCles.niveauPrescolaire,
-                            espaceCommunautaireEveil: {
-                              ...prev.parametresCles.niveauPrescolaire.espaceCommunautaireEveil,
-                              tauxAccroissement: newValue
-                            }
-                          }
-                        }
-                      }));
-                    }}
+                    step="0.1"
+                    value={formData.parametresCles.effectifScolaire.niveauPrescolaire.espaceCommunautaireEveil.tauxAccroissementGarconsFilles || ''}
+                    onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.espaceCommunautaireEveil.tauxAccroissementGarconsFilles', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
                   />
                 </td>
@@ -154,115 +113,41 @@ const ParametresCles: React.FC<ParametresClesProps> = ({ formData, setFormData }
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    value={formData.parametresCles.niveauPrescolaire.maternel.nombreEcoles}
-                    onChange={(e) => {
-                      const newValue = parseInt(e.target.value) || 0;
-                      setFormData(prev => ({
-                        ...prev,
-                        parametresCles: {
-                          ...prev.parametresCles,
-                          niveauPrescolaire: {
-                            ...prev.parametresCles.niveauPrescolaire,
-                            maternel: {
-                              ...prev.parametresCles.niveauPrescolaire.maternel,
-                              nombreEcoles: newValue
-                            }
-                          }
-                        }
-                      }));
-                    }}
+                    value={formData.parametresCles.nombreEcolesClasses.niveauPrescolaire.maternel.nombreEcoles || ''}
+                    onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauPrescolaire.maternel.nombreEcoles', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    value={formData.parametresCles.niveauPrescolaire.maternel.nombreClasses}
-                    onChange={(e) => {
-                      const newValue = parseInt(e.target.value) || 0;
-                      setFormData(prev => ({
-                        ...prev,
-                        parametresCles: {
-                          ...prev.parametresCles,
-                          niveauPrescolaire: {
-                            ...prev.parametresCles.niveauPrescolaire,
-                            maternel: {
-                              ...prev.parametresCles.niveauPrescolaire.maternel,
-                              nombreClasses: newValue
-                            }
-                          }
-                        }
-                      }));
-                    }}
+                    value={formData.parametresCles.nombreEcolesClasses.niveauPrescolaire.maternel.nombreClasses || ''}
+                    onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauPrescolaire.maternel.nombreClasses', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    value={formData.parametresCles.niveauPrescolaire.maternel.effectifGarcons}
-                    onChange={(e) => {
-                      const newValue = parseInt(e.target.value) || 0;
-                      setFormData(prev => ({
-                        ...prev,
-                        parametresCles: {
-                          ...prev.parametresCles,
-                          niveauPrescolaire: {
-                            ...prev.parametresCles.niveauPrescolaire,
-                            maternel: {
-                              ...prev.parametresCles.niveauPrescolaire.maternel,
-                              effectifGarcons: newValue
-                            }
-                          }
-                        }
-                      }));
-                    }}
+                    value={formData.parametresCles.effectifScolaire.niveauPrescolaire.maternel.effectifGarconsFilles || ''}
+                    onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.maternel.effectifGarconsFilles', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    value={formData.parametresCles.niveauPrescolaire.maternel.effectifFilles}
-                    onChange={(e) => {
-                      const newValue = parseInt(e.target.value) || 0;
-                      setFormData(prev => ({
-                        ...prev,
-                        parametresCles: {
-                          ...prev.parametresCles,
-                          niveauPrescolaire: {
-                            ...prev.parametresCles.niveauPrescolaire,
-                            maternel: {
-                              ...prev.parametresCles.niveauPrescolaire.maternel,
-                              effectifFilles: newValue
-                            }
-                          }
-                        }
-                      }));
-                    }}
+                    value={formData.parametresCles.effectifScolaire.niveauPrescolaire.maternel.effectifFilles || ''}
+                    onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.maternel.effectifFilles', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    value={formData.parametresCles.niveauPrescolaire.maternel.tauxAccroissement}
-                    onChange={(e) => {
-                      const newValue = parseFloat(e.target.value) || 0;
-                      setFormData(prev => ({
-                        ...prev,
-                        parametresCles: {
-                          ...prev.parametresCles,
-                          niveauPrescolaire: {
-                            ...prev.parametresCles.niveauPrescolaire,
-                            maternel: {
-                              ...prev.parametresCles.niveauPrescolaire.maternel,
-                              tauxAccroissement: newValue
-                            }
-                          }
-                        }
-                      }));
-                    }}
+                    step="0.1"
+                    value={formData.parametresCles.effectifScolaire.niveauPrescolaire.maternel.tauxAccroissementGarconsFilles || ''}
+                    onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.maternel.tauxAccroissementGarconsFilles', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
                   />
                 </td>
@@ -274,235 +159,87 @@ const ParametresCles: React.FC<ParametresClesProps> = ({ formData, setFormData }
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    value={formData.parametresCles.niveauPrescolaire.prePrimaire.nombreEcoles}
-                    onChange={(e) => {
-                      const newValue = parseInt(e.target.value) || 0;
-                      setFormData(prev => ({
-                        ...prev,
-                        parametresCles: {
-                          ...prev.parametresCles,
-                          niveauPrescolaire: {
-                            ...prev.parametresCles.niveauPrescolaire,
-                            prePrimaire: {
-                              ...prev.parametresCles.niveauPrescolaire.prePrimaire,
-                              nombreEcoles: newValue
-                            }
-                          }
-                        }
-                      }));
-                    }}
+                    value={formData.parametresCles.nombreEcolesClasses.niveauPrescolaire.prePrimaire.nombreEcoles || ''}
+                    onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauPrescolaire.prePrimaire.nombreEcoles', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    value={formData.parametresCles.niveauPrescolaire.prePrimaire.nombreClasses}
-                    onChange={(e) => {
-                      const newValue = parseInt(e.target.value) || 0;
-                      setFormData(prev => ({
-                        ...prev,
-                        parametresCles: {
-                          ...prev.parametresCles,
-                          niveauPrescolaire: {
-                            ...prev.parametresCles.niveauPrescolaire,
-                            prePrimaire: {
-                              ...prev.parametresCles.niveauPrescolaire.prePrimaire,
-                              nombreClasses: newValue
-                            }
-                          }
-                        }
-                      }));
-                    }}
+                    value={formData.parametresCles.nombreEcolesClasses.niveauPrescolaire.prePrimaire.nombreClasses || ''}
+                    onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauPrescolaire.prePrimaire.nombreClasses', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    value={formData.parametresCles.niveauPrescolaire.prePrimaire.effectifGarcons}
-                    onChange={(e) => {
-                      const newValue = parseInt(e.target.value) || 0;
-                      setFormData(prev => ({
-                        ...prev,
-                        parametresCles: {
-                          ...prev.parametresCles,
-                          niveauPrescolaire: {
-                            ...prev.parametresCles.niveauPrescolaire,
-                            prePrimaire: {
-                              ...prev.parametresCles.niveauPrescolaire.prePrimaire,
-                              effectifGarcons: newValue
-                            }
-                          }
-                        }
-                      }));
-                    }}
+                    value={formData.parametresCles.effectifScolaire.niveauPrescolaire.prePrimaire.effectifGarconsFilles || ''}
+                    onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.prePrimaire.effectifGarconsFilles', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    value={formData.parametresCles.niveauPrescolaire.prePrimaire.effectifFilles}
-                    onChange={(e) => {
-                      const newValue = parseInt(e.target.value) || 0;
-                      setFormData(prev => ({
-                        ...prev,
-                        parametresCles: {
-                          ...prev.parametresCles,
-                          niveauPrescolaire: {
-                            ...prev.parametresCles.niveauPrescolaire,
-                            prePrimaire: {
-                              ...prev.parametresCles.niveauPrescolaire.prePrimaire,
-                              effectifFilles: newValue
-                            }
-                          }
-                        }
-                      }));
-                    }}
+                    value={formData.parametresCles.effectifScolaire.niveauPrescolaire.prePrimaire.effectifFilles || ''}
+                    onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.prePrimaire.effectifFilles', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    value={formData.parametresCles.niveauPrescolaire.prePrimaire.tauxAccroissement}
-                    onChange={(e) => {
-                      const newValue = parseFloat(e.target.value) || 0;
-                      setFormData(prev => ({
-                        ...prev,
-                        parametresCles: {
-                          ...prev.parametresCles,
-                          niveauPrescolaire: {
-                            ...prev.parametresCles.niveauPrescolaire,
-                            prePrimaire: {
-                              ...prev.parametresCles.niveauPrescolaire.prePrimaire,
-                              tauxAccroissement: newValue
-                            }
-                          }
-                        }
-                      }));
-                    }}
+                    step="0.1"
+                    value={formData.parametresCles.effectifScolaire.niveauPrescolaire.prePrimaire.tauxAccroissementGarconsFilles || ''}
+                    onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.prePrimaire.tauxAccroissementGarconsFilles', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
                   />
                 </td>
               </tr>
 
-              {/* d) Spécial (handicap) */}
+              {/* d) Spécial */}
               <tr>
-                <td className="border border-gray-300 px-3 py-2 font-medium">d) Spécial (handicap)</td>
+                <td className="border border-gray-300 px-3 py-2 font-medium">d) Spécial</td>
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    value={formData.parametresCles.niveauPrescolaire.special.nombreEcoles}
-                    onChange={(e) => {
-                      const newValue = parseInt(e.target.value) || 0;
-                      setFormData(prev => ({
-                        ...prev,
-                        parametresCles: {
-                          ...prev.parametresCles,
-                          niveauPrescolaire: {
-                            ...prev.parametresCles.niveauPrescolaire,
-                            special: {
-                              ...prev.parametresCles.niveauPrescolaire.special,
-                              nombreEcoles: newValue
-                            }
-                          }
-                        }
-                      }));
-                    }}
+                    value={formData.parametresCles.nombreEcolesClasses.niveauPrescolaire.special.nombreEcoles || ''}
+                    onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauPrescolaire.special.nombreEcoles', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    value={formData.parametresCles.niveauPrescolaire.special.nombreClasses}
-                    onChange={(e) => {
-                      const newValue = parseInt(e.target.value) || 0;
-                      setFormData(prev => ({
-                        ...prev,
-                        parametresCles: {
-                          ...prev.parametresCles,
-                          niveauPrescolaire: {
-                            ...prev.parametresCles.niveauPrescolaire,
-                            special: {
-                              ...prev.parametresCles.niveauPrescolaire.special,
-                              nombreClasses: newValue
-                            }
-                          }
-                        }
-                      }));
-                    }}
+                    value={formData.parametresCles.nombreEcolesClasses.niveauPrescolaire.special.nombreClasses || ''}
+                    onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauPrescolaire.special.nombreClasses', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    value={formData.parametresCles.niveauPrescolaire.special.effectifGarcons}
-                    onChange={(e) => {
-                      const newValue = parseInt(e.target.value) || 0;
-                      setFormData(prev => ({
-                        ...prev,
-                        parametresCles: {
-                          ...prev.parametresCles,
-                          niveauPrescolaire: {
-                            ...prev.parametresCles.niveauPrescolaire,
-                            special: {
-                              ...prev.parametresCles.niveauPrescolaire.special,
-                              effectifGarcons: newValue
-                            }
-                          }
-                        }
-                      }));
-                    }}
+                    value={formData.parametresCles.effectifScolaire.niveauPrescolaire.special.effectifGarconsFilles || ''}
+                    onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.special.effectifGarconsFilles', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    value={formData.parametresCles.niveauPrescolaire.special.effectifFilles}
-                    onChange={(e) => {
-                      const newValue = parseInt(e.target.value) || 0;
-                      setFormData(prev => ({
-                        ...prev,
-                        parametresCles: {
-                          ...prev.parametresCles,
-                          niveauPrescolaire: {
-                            ...prev.parametresCles.niveauPrescolaire,
-                            special: {
-                              ...prev.parametresCles.niveauPrescolaire.special,
-                              effectifFilles: newValue
-                            }
-                          }
-                        }
-                      }));
-                    }}
+                    value={formData.parametresCles.effectifScolaire.niveauPrescolaire.special.effectifFilles || ''}
+                    onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.special.effectifFilles', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    value={formData.parametresCles.niveauPrescolaire.special.tauxAccroissement}
-                    onChange={(e) => {
-                      const newValue = parseFloat(e.target.value) || 0;
-                      setFormData(prev => ({
-                        ...prev,
-                        parametresCles: {
-                          ...prev.parametresCles,
-                          niveauPrescolaire: {
-                            ...prev.parametresCles.niveauPrescolaire,
-                            special: {
-                              ...prev.parametresCles.niveauPrescolaire.special,
-                              tauxAccroissement: newValue
-                            }
-                          }
-                        }
-                      }));
-                    }}
+                    step="0.1"
+                    value={formData.parametresCles.effectifScolaire.niveauPrescolaire.special.tauxAccroissementGarconsFilles || ''}
+                    onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.special.tauxAccroissementGarconsFilles', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
                   />
                 </td>
@@ -511,8 +248,16 @@ const ParametresCles: React.FC<ParametresClesProps> = ({ formData, setFormData }
           </table>
         </div>
       </div>
+
+      {/* Message informatif */}
+      <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-6">
+        <p className="text-blue-800 text-sm">
+          <strong>Note :</strong> Ce composant affiche les données de base. Pour une saisie complète et détaillée, 
+          veuillez utiliser le composant "Paramètres Clés (Suite)" qui contient tous les niveaux d'enseignement.
+        </p>
+      </div>
     </div>
   );
 };
 
-export default ParametresCles; 
+export default ParametresCles;
