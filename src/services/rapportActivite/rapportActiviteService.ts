@@ -7,7 +7,7 @@ class RapportActiviteService {
   // Récupérer tous les rapports d'activité
   async getAllRapports(): Promise<RapportActivite[]> {
     try {
-      const response = await BaseService.get(this.endpoint);
+      const response = await BaseService.get(`${this.endpoint}?limit=1000&page=1`);
       console.log('🔍 RapportActiviteService.getAllRapports - Réponse complète:', response);
       
       // La structure de réponse est: { success: true, data: { docs: [...] } }
@@ -108,7 +108,7 @@ class RapportActiviteService {
   // Récupérer les rapports par année
   async getRapportsByYear(year: number): Promise<RapportActivite[]> {
     try {
-      const response = await BaseService.get(`${this.endpoint}/year/${year}`);
+      const response = await BaseService.get(`${this.endpoint}/year/${year}?limit=1000&page=1`);
       return response;
     } catch (error) {
       console.error('Erreur lors de la récupération des rapports par année:', error);
@@ -119,7 +119,7 @@ class RapportActiviteService {
   // Récupérer les rapports par statut
   async getRapportsByStatus(status: 'brouillon' | 'soumis' | 'approuve' | 'rejete'): Promise<RapportActivite[]> {
     try {
-      const response = await BaseService.get(`${this.endpoint}/status/${status}`);
+      const response = await BaseService.get(`${this.endpoint}/status/${status}?limit=1000&page=1`);
       return response;
     } catch (error) {
       console.error('Erreur lors de la récupération des rapports par statut:', error);
@@ -130,7 +130,7 @@ class RapportActiviteService {
   // Récupérer les rapports par PROVED
   async getRapportsByProved(provedId: string): Promise<RapportActivite[]> {
     try {
-      const response = await BaseService.get(`${this.endpoint}/proved/${provedId}`);
+      const response = await BaseService.get(`${this.endpoint}/proved/${provedId}?limit=1000&page=1`);
       return response;
     } catch (error) {
       console.error('Erreur lors de la récupération des rapports par PROVED:', error);

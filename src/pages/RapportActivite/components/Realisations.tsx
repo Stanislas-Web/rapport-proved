@@ -367,7 +367,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
           </div>
           <div className="mt-4">
             <label className="block text-sm font-medium mb-2">Total General Ecoles ayant des cantines Scolaires</label>
-            <input type="number" className="w-20 p-2 border border-gray-300 rounded-md" />
+            <input type="number" className="w-48 p-2 border border-gray-300 rounded-md" />
           </div>
         </div>
 

@@ -7,6 +7,24 @@ interface PersonnelProps {
 }
 
 const Personnel: React.FC<PersonnelProps> = ({ formData, setFormData }) => {
+  const handleInputChange = (path: string, value: number) => {
+    setFormData(prev => {
+      const newData = { ...prev };
+      const keys = path.split('.');
+      let current: any = newData;
+      
+      for (let i = 0; i < keys.length - 1; i++) {
+        if (!current[keys[i]]) {
+          current[keys[i]] = {};
+        }
+        current = current[keys[i]];
+      }
+      
+      current[keys[keys.length - 1]] = value;
+      return newData;
+    });
+  };
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <h3 className="text-lg font-medium mb-4 text-primary">II. PERSONNEL</h3>
@@ -34,52 +52,136 @@ const Personnel: React.FC<PersonnelProps> = ({ formData, setFormData }) => {
               </tr>
             </thead>
             <tbody>
+              {/* NIVEAU PRESCOLAIRE */}
               <tr>
-                <td className="border border-gray-300 px-3 py-2 font-medium">A. NIVEAU PRESCOLAIRE</td>
+                <td className="border border-gray-300 px-3 py-2 font-medium" rowSpan={2}>A. NIVEAU PRESCOLAIRE</td>
                 <td className="border border-gray-300 px-3 py-2">a) Enseignement Préscolaire Spécial (handicap)</td>
                 <td className="border border-gray-300 px-3 py-2">
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="number"
-                      value={formData.personnel.personnelEnseignant.prescolaire.hommes}
-                      onChange={(e) => {
-                        const newValue = parseInt(e.target.value) || 0;
-                        setFormData(prev => ({
-                          ...prev,
-                          personnel: {
-                            ...prev.personnel,
-                            personnelEnseignant: {
-                              ...prev.personnel.personnelEnseignant,
-                              prescolaire: {
-                                ...prev.personnel.personnelEnseignant.prescolaire,
-                                hommes: newValue
-                              }
-                            }
-                          }
-                        }));
-                      }}
+                      value={formData.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaireSpecial?.hommes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelEnseignant.niveauPrescolaire.enseignementPrescolaireSpecial.hommes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
                     />
                     <input
                       type="number"
-                      value={formData.personnel.personnelEnseignant.prescolaire.femmes}
-                      onChange={(e) => {
-                        const newValue = parseInt(e.target.value) || 0;
-                        setFormData(prev => ({
-                          ...prev,
-                          personnel: {
-                            ...prev.personnel,
-                            personnelEnseignant: {
-                              ...prev.personnel.personnelEnseignant,
-                              prescolaire: {
-                                ...prev.personnel.personnelEnseignant.prescolaire,
-                                femmes: newValue
-                              }
-                            }
-                          }
-                        }));
-                      }}
+                      value={formData.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaireSpecial?.femmes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelEnseignant.niveauPrescolaire.enseignementPrescolaireSpecial.femmes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2">b) Enseignement Préscolaire</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaire?.hommes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelEnseignant.niveauPrescolaire.enseignementPrescolaire.hommes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaire?.femmes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelEnseignant.niveauPrescolaire.enseignementPrescolaire.femmes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                  </div>
+                </td>
+              </tr>
+
+              {/* NIVEAU PRIMAIRE */}
+              <tr>
+                <td className="border border-gray-300 px-3 py-2 font-medium" rowSpan={2}>B. NIVEAU PRIMAIRE</td>
+                <td className="border border-gray-300 px-3 py-2">a) Enseignement Primaire Spécial (handicap)</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrescolaireSpecial?.hommes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelEnseignant.niveauPrimaire.enseignementPrescolaireSpecial.hommes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrescolaireSpecial?.femmes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelEnseignant.niveauPrimaire.enseignementPrescolaireSpecial.femmes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2">b) Enseignement Primaire</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrimaire?.hommes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelEnseignant.niveauPrimaire.enseignementPrimaire.hommes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrimaire?.femmes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelEnseignant.niveauPrimaire.enseignementPrimaire.femmes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                  </div>
+                </td>
+              </tr>
+
+              {/* NIVEAU SECONDAIRE */}
+              <tr>
+                <td className="border border-gray-300 px-3 py-2 font-medium" rowSpan={2}>C. NIVEAU SECONDAIRE</td>
+                <td className="border border-gray-300 px-3 py-2">a) Enseignement Secondaire Spécial (handicap)</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementPrescolaireSpecial?.hommes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelEnseignant.niveauSecondaire.enseignementPrescolaireSpecial.hommes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementPrescolaireSpecial?.femmes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelEnseignant.niveauSecondaire.enseignementPrescolaireSpecial.femmes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2">b) Enseignement Secondaire</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementSecondaire?.hommes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelEnseignant.niveauSecondaire.enseignementSecondaire.hommes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementSecondaire?.femmes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelEnseignant.niveauSecondaire.enseignementSecondaire.femmes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
                     />
                   </div>
                 </td>
@@ -120,39 +222,237 @@ const Personnel: React.FC<PersonnelProps> = ({ formData, setFormData }) => {
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="number"
-                      value={formData.personnel.personnelAdministratif.directionProvinciale}
-                      onChange={(e) => {
-                        const newValue = parseInt(e.target.value) || 0;
-                        setFormData(prev => ({
-                          ...prev,
-                          personnel: {
-                            ...prev.personnel,
-                            personnelAdministratif: {
-                              ...prev.personnel.personnelAdministratif,
-                              directionProvinciale: newValue
-                            }
-                          }
-                        }));
-                      }}
+                      value={formData.personnel?.personnelAdministratif?.directionProvinciale?.hommes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.directionProvinciale.hommes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
                     />
                     <input
                       type="number"
-                      value={formData.personnel.personnelAdministratif.inspectionPrincipale}
-                      onChange={(e) => {
-                        const newValue = parseInt(e.target.value) || 0;
-                        setFormData(prev => ({
-                          ...prev,
-                          personnel: {
-                            ...prev.personnel,
-                            personnelAdministratif: {
-                              ...prev.personnel.personnelAdministratif,
-                              inspectionPrincipale: newValue
-                            }
-                          }
-                        }));
-                      }}
+                      value={formData.personnel?.personnelAdministratif?.directionProvinciale?.femmes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.directionProvinciale.femmes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2 text-center">02</td>
+                <td className="border border-gray-300 px-3 py-2">Inspection Principale</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.inspectionPrincipale?.hommes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.inspectionPrincipale.hommes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.inspectionPrincipale?.femmes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.inspectionPrincipale.femmes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2 text-center">03</td>
+                <td className="border border-gray-300 px-3 py-2">DINACOPE</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.dinacope?.hommes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.dinacope.hommes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.dinacope?.femmes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.dinacope.femmes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2 text-center">04</td>
+                <td className="border border-gray-300 px-3 py-2">SERNIE</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.sernie?.hommes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.sernie.hommes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.sernie?.femmes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.sernie.femmes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2 text-center">05</td>
+                <td className="border border-gray-300 px-3 py-2">Coordination Provinciale</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.coordinationProvinciale?.hommes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.coordinationProvinciale.hommes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.coordinationProvinciale?.femmes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.coordinationProvinciale.femmes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2 text-center">06</td>
+                <td className="border border-gray-300 px-3 py-2">Sous-Division</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.sousDivision?.hommes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.sousDivision.hommes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.sousDivision?.femmes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.sousDivision.femmes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2 text-center">07</td>
+                <td className="border border-gray-300 px-3 py-2">Pools d'Inspection Primaire</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.poolsInspectionPrimaire?.hommes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.poolsInspectionPrimaire.hommes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.poolsInspectionPrimaire?.femmes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.poolsInspectionPrimaire.femmes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2 text-center">08</td>
+                <td className="border border-gray-300 px-3 py-2">Pools d'Inspection Secondaire</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.poolsInspectionSecondaire?.hommes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.poolsInspectionSecondaire.hommes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.poolsInspectionSecondaire?.femmes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.poolsInspectionSecondaire.femmes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2 text-center">09</td>
+                <td className="border border-gray-300 px-3 py-2">Antenne DINACOPE</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.antenneDinacope?.hommes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.antenneDinacope.hommes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.antenneDinacope?.femmes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.antenneDinacope.femmes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2 text-center">10</td>
+                <td className="border border-gray-300 px-3 py-2">Antenne SERNIE</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.antenneSernie?.hommes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.antenneSernie.hommes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.antenneSernie?.femmes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.antenneSernie.femmes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2 text-center">11</td>
+                <td className="border border-gray-300 px-3 py-2">Coordination Diocésaine</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.coordinationDiocesaine?.hommes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.coordinationDiocesaine.hommes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.coordinationDiocesaine?.femmes || ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.coordinationDiocesaine.femmes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
                     />
                   </div>
                 </td>

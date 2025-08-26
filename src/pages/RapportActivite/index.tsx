@@ -9,6 +9,50 @@ import { saveAs } from 'file-saver';
 import moment from 'moment';
 import { generateAndDownloadPDF } from '../../utils/generateRapportPDF';
 
+// Fonction helper pour formater l'affichage du personnel
+const formatPersonnelDisplay = (rapport: RapportActivite) => {
+  const prescolaireTotal = 
+    (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaireSpecial?.hommes || 0) +
+    (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaireSpecial?.femmes || 0) +
+    (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaire?.hommes || 0) +
+    (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaire?.femmes || 0);
+    
+  const primaireTotal = 
+    (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrescolaireSpecial?.hommes || 0) +
+    (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrescolaireSpecial?.femmes || 0) +
+    (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrimaire?.hommes || 0) +
+    (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrimaire?.femmes || 0);
+    
+  const secondaireTotal = 
+    (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementPrescolaireSpecial?.hommes || 0) +
+    (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementPrescolaireSpecial?.femmes || 0) +
+    (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementSecondaire?.hommes || 0) +
+    (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementSecondaire?.femmes || 0);
+    
+  return `${prescolaireTotal} / ${primaireTotal} / ${secondaireTotal}`;
+};
+
+// Fonction helper pour calculer le total du personnel enseignant par niveau
+const calculatePersonnelEnseignantTotal = (rapport: RapportActivite, niveau: 'prescolaire' | 'primaire' | 'secondaire') => {
+  if (niveau === 'prescolaire') {
+    return (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaireSpecial?.hommes || 0) +
+           (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaireSpecial?.femmes || 0) +
+           (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaire?.hommes || 0) +
+           (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaire?.femmes || 0);
+  } else if (niveau === 'primaire') {
+    return (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrescolaireSpecial?.hommes || 0) +
+           (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrescolaireSpecial?.femmes || 0) +
+           (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrimaire?.hommes || 0) +
+           (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrimaire?.femmes || 0);
+  } else if (niveau === 'secondaire') {
+    return (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementPrescolaireSpecial?.hommes || 0) +
+           (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementPrescolaireSpecial?.femmes || 0) +
+           (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementSecondaire?.hommes || 0) +
+           (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementSecondaire?.femmes || 0);
+  }
+  return 0;
+};
+
 // Fonction pour générer un PDF beau et impressionnant sans packages externes
 const generateBeautifulPDF = (rapport: RapportActivite) => {
   // Créer un nouveau document
@@ -20,35 +64,50 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
 
   // Calculer les totaux
   const totalEcoles = 
-    (rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreEcoles || 0) +
-    (rapport.parametresCles?.niveauPrescolaire?.maternel?.nombreEcoles || 0) +
-    (rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.nombreEcoles || 0) +
-    (rapport.parametresCles?.niveauPrescolaire?.special?.nombreEcoles || 0) +
-    (rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.nombreEcoles || 0);
+    (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreEcoles || 0) +
+    (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.maternel?.nombreEcoles || 0) +
+    (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.prePrimaire?.nombreEcoles || 0) +
+    (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.special?.nombreEcoles || 0) +
+    (rapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.nombreEcoles || 0) +
+    (rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.nombreEcoles || 0);
 
   const totalClasses = 
-    (rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreClasses || 0) +
-    (rapport.parametresCles?.niveauPrescolaire?.maternel?.nombreClasses || 0) +
-    (rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.nombreClasses || 0) +
-    (rapport.parametresCles?.niveauPrescolaire?.special?.nombreClasses || 0) +
-    (rapport.parametresCles?.niveauPrimaire?.enseignementSpecial?.nombreClasses || 0) +
-    (rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.nombreClasses || 0) +
-    (rapport.parametresCles?.niveauSecondaire?.enseignementSpecial?.nombreClasses || 0) +
-    (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes7emeCTEB || 0) +
-    (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes8emeCTEB || 0) +
-    (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.classesHumanites || 0);
+    (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreClasses || 0) +
+    (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.maternel?.nombreClasses || 0) +
+    (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.prePrimaire?.nombreClasses || 0) +
+    (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.special?.nombreClasses || 0) +
+    (rapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementSpecial?.totalClassesSpecialesPrim || 0) +
+    (rapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.totalClassesPrimaire || 0) +
+    (rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSpecial?.totalClassesSpecialesSec || 0) +
+    (rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes7emeCTEB || 0) +
+    (rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes8emeCTEB || 0) +
+    (rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.totalClassesHumanites || 0);
 
   const totalPersonnel = 
-    (rapport.personnel?.personnelEnseignant?.prescolaire?.hommes || 0) +
-    (rapport.personnel?.personnelEnseignant?.prescolaire?.femmes || 0) +
-    (rapport.personnel?.personnelEnseignant?.primaire?.hommes || 0) +
-    (rapport.personnel?.personnelEnseignant?.primaire?.femmes || 0) +
-    (rapport.personnel?.personnelEnseignant?.secondaire?.hommes || 0) +
-    (rapport.personnel?.personnelEnseignant?.secondaire?.femmes || 0) +
-    (rapport.personnel?.personnelAdministratif?.directionProvinciale || 0) +
-    (rapport.personnel?.personnelAdministratif?.inspectionPrincipale || 0) +
-    (rapport.personnel?.personnelAdministratif?.coordinationProvinciale || 0) +
-    (rapport.personnel?.personnelAdministratif?.sousDivision || 0);
+    // Personnel Enseignant - Niveau Prescolaire
+    (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaireSpecial?.hommes || 0) +
+    (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaireSpecial?.femmes || 0) +
+    (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaire?.hommes || 0) +
+    (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaire?.femmes || 0) +
+    // Personnel Enseignant - Niveau Primaire
+    (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrescolaireSpecial?.hommes || 0) +
+    (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrescolaireSpecial?.femmes || 0) +
+    (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrimaire?.hommes || 0) +
+    (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrimaire?.femmes || 0) +
+    // Personnel Enseignant - Niveau Secondaire
+    (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementPrescolaireSpecial?.hommes || 0) +
+    (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementPrescolaireSpecial?.femmes || 0) +
+    (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementSecondaire?.hommes || 0) +
+    (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementSecondaire?.femmes || 0) +
+    // Personnel Administratif
+    (rapport.personnel?.personnelAdministratif?.directionProvinciale?.hommes || 0) +
+    (rapport.personnel?.personnelAdministratif?.directionProvinciale?.femmes || 0) +
+    (rapport.personnel?.personnelAdministratif?.inspectionPrincipale?.hommes || 0) +
+    (rapport.personnel?.personnelAdministratif?.inspectionPrincipale?.femmes || 0) +
+    (rapport.personnel?.personnelAdministratif?.coordinationProvinciale?.hommes || 0) +
+    (rapport.personnel?.personnelAdministratif?.coordinationProvinciale?.femmes || 0) +
+    (rapport.personnel?.personnelAdministratif?.sousDivision?.hommes || 0) +
+    (rapport.personnel?.personnelAdministratif?.sousDivision?.femmes || 0);
 
   // HTML pour le PDF
   const htmlContent = `
@@ -1461,35 +1520,50 @@ const RapportActivitePage: React.FC = () => {
                     .map((rapport) => {
                     // Calculer les totaux
                     const totalEcoles = 
-                      (rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreEcoles || 0) +
-                      (rapport.parametresCles?.niveauPrescolaire?.maternel?.nombreEcoles || 0) +
-                      (rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.nombreEcoles || 0) +
-                      (rapport.parametresCles?.niveauPrescolaire?.special?.nombreEcoles || 0) +
-                      (rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.nombreEcoles || 0);
+                      (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreEcoles || 0) +
+                      (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.maternel?.nombreEcoles || 0) +
+                      (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.prePrimaire?.nombreEcoles || 0) +
+                      (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.special?.nombreEcoles || 0) +
+                      (rapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.nombreEcoles || 0) +
+                      (rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.nombreEcoles || 0);
 
                     const totalClasses = 
-                      (rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreClasses || 0) +
-                      (rapport.parametresCles?.niveauPrescolaire?.maternel?.nombreClasses || 0) +
-                      (rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.nombreClasses || 0) +
-                      (rapport.parametresCles?.niveauPrescolaire?.special?.nombreClasses || 0) +
-                      (rapport.parametresCles?.niveauPrimaire?.enseignementSpecial?.nombreClasses || 0) +
-                      (rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.nombreClasses || 0) +
-                      (rapport.parametresCles?.niveauSecondaire?.enseignementSpecial?.nombreClasses || 0) +
-                      (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes7emeCTEB || 0) +
-                      (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes8emeCTEB || 0) +
-                      (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.classesHumanites || 0);
+                      (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreClasses || 0) +
+                      (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.maternel?.nombreClasses || 0) +
+                      (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.prePrimaire?.nombreClasses || 0) +
+                      (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.special?.nombreClasses || 0) +
+                      (rapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementSpecial?.totalClassesSpecialesPrim || 0) +
+                      (rapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.totalClassesPrimaire || 0) +
+                      (rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSpecial?.totalClassesSpecialesSec || 0) +
+                      (rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes7emeCTEB || 0) +
+                      (rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes8emeCTEB || 0) +
+                      (rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.totalClassesHumanites || 0);
 
                     const totalPersonnel = 
-                      (rapport.personnel?.personnelEnseignant?.prescolaire?.hommes || 0) +
-                      (rapport.personnel?.personnelEnseignant?.prescolaire?.femmes || 0) +
-                      (rapport.personnel?.personnelEnseignant?.primaire?.hommes || 0) +
-                      (rapport.personnel?.personnelEnseignant?.primaire?.femmes || 0) +
-                      (rapport.personnel?.personnelEnseignant?.secondaire?.hommes || 0) +
-                      (rapport.personnel?.personnelEnseignant?.secondaire?.femmes || 0) +
-                      (rapport.personnel?.personnelAdministratif?.directionProvinciale || 0) +
-                      (rapport.personnel?.personnelAdministratif?.inspectionPrincipale || 0) +
-                      (rapport.personnel?.personnelAdministratif?.coordinationProvinciale || 0) +
-                      (rapport.personnel?.personnelAdministratif?.sousDivision || 0);
+                      // Personnel Enseignant - Niveau Prescolaire
+                      (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaireSpecial?.hommes || 0) +
+                      (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaireSpecial?.femmes || 0) +
+                      (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaire?.hommes || 0) +
+                      (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaire?.femmes || 0) +
+                      // Personnel Enseignant - Niveau Primaire
+                      (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrescolaireSpecial?.hommes || 0) +
+                      (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrescolaireSpecial?.femmes || 0) +
+                      (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrimaire?.hommes || 0) +
+                      (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrimaire?.femmes || 0) +
+                      // Personnel Enseignant - Niveau Secondaire
+                      (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementPrescolaireSpecial?.hommes || 0) +
+                      (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementPrescolaireSpecial?.femmes || 0) +
+                      (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementSecondaire?.hommes || 0) +
+                      (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementSecondaire?.femmes || 0) +
+                      // Personnel Administratif
+                      (rapport.personnel?.personnelAdministratif?.directionProvinciale?.hommes || 0) +
+                      (rapport.personnel?.personnelAdministratif?.directionProvinciale?.femmes || 0) +
+                      (rapport.personnel?.personnelAdministratif?.inspectionPrincipale?.hommes || 0) +
+                      (rapport.personnel?.personnelAdministratif?.inspectionPrincipale?.femmes || 0) +
+                      (rapport.personnel?.personnelAdministratif?.coordinationProvinciale?.hommes || 0) +
+                      (rapport.personnel?.personnelAdministratif?.coordinationProvinciale?.femmes || 0) +
+                      (rapport.personnel?.personnelAdministratif?.sousDivision?.hommes || 0) +
+                      (rapport.personnel?.personnelAdministratif?.sousDivision?.femmes || 0);
 
                     return (
                       <tr key={rapport._id} className="border-b border-[#eee] dark:border-strokedark">
@@ -1683,26 +1757,31 @@ const RapportActivitePage: React.FC = () => {
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <h3 className="font-semibold text-lg mb-3 text-blue-800">Résumé des Écoles</h3>
                   <div className="space-y-2 text-sm">
-                    <div><span className="font-medium">Préscolaire:</span> {selectedRapport.parametresCles.niveauPrescolaire.espaceCommunautaireEveil.nombreEcoles + selectedRapport.parametresCles.niveauPrescolaire.maternel.nombreEcoles + selectedRapport.parametresCles.niveauPrescolaire.prePrimaire.nombreEcoles + selectedRapport.parametresCles.niveauPrescolaire.special.nombreEcoles} écoles</div>
-                    <div><span className="font-medium">Primaire:</span> {selectedRapport.parametresCles.niveauPrimaire.enseignementPrimaire.nombreEcoles} écoles</div>
-                    <div><span className="font-medium">Secondaire:</span> Classes 7ème/8ème + Humanités</div>
+                    <div><span className="font-medium">Préscolaire:</span> {(selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreEcoles || 0) + (selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.maternel?.nombreEcoles || 0) + (selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.prePrimaire?.nombreEcoles || 0) + (selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.special?.nombreEcoles || 0)} écoles</div>
+                    <div><span className="font-medium">Primaire:</span> {selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.nombreEcoles || 0} écoles</div>
+                    <div><span className="font-medium">Secondaire:</span> {selectedRapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.nombreEcoles || 0} écoles</div>
                   </div>
                 </div>
 
                 <div className="bg-green-50 p-4 rounded-lg">
                   <h3 className="font-semibold text-lg mb-3 text-green-800">Résumé des Classes</h3>
                   <div className="space-y-2 text-sm">
-                    <div><span className="font-medium">Préscolaire:</span> {selectedRapport.parametresCles.niveauPrescolaire.espaceCommunautaireEveil.nombreClasses + selectedRapport.parametresCles.niveauPrescolaire.maternel.nombreClasses + selectedRapport.parametresCles.niveauPrescolaire.prePrimaire.nombreClasses + selectedRapport.parametresCles.niveauPrescolaire.special.nombreClasses} classes</div>
-                    <div><span className="font-medium">Primaire:</span> {selectedRapport.parametresCles.niveauPrimaire.enseignementPrimaire.nombreClasses + selectedRapport.parametresCles.niveauPrimaire.enseignementSpecial.nombreClasses} classes</div>
-                    <div><span className="font-medium">Secondaire:</span> {selectedRapport.parametresCles.niveauSecondaire.enseignementSecondaire.premierCycle.classes7emeCTEB + selectedRapport.parametresCles.niveauSecondaire.enseignementSecondaire.premierCycle.classes8emeCTEB + selectedRapport.parametresCles.niveauSecondaire.enseignementSecondaire.deuxiemeCycle.classesHumanites + selectedRapport.parametresCles.niveauSecondaire.enseignementSpecial.nombreClasses} classes</div>
+                    <div><span className="font-medium">Préscolaire:</span> {(selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreClasses || 0) + (selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.maternel?.nombreClasses || 0) + (selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.prePrimaire?.nombreClasses || 0) + (selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.special?.nombreClasses || 0)} classes</div>
+                    <div><span className="font-medium">Primaire:</span> {(selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementSpecial?.totalClassesSpecialesPrim || 0) + (selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.totalClassesPrimaire || 0)} classes</div>
+                    <div><span className="font-medium">Secondaire:</span> {(selectedRapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSpecial?.totalClassesSpecialesSec || 0) + (selectedRapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes7emeCTEB || 0) + (selectedRapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes8emeCTEB || 0) + (selectedRapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.totalClassesHumanites || 0)} classes</div>
                   </div>
                 </div>
 
                 <div className="bg-purple-50 p-4 rounded-lg">
                   <h3 className="font-semibold text-lg mb-3 text-purple-800">Personnel</h3>
                   <div className="space-y-2 text-sm">
-                    <div><span className="font-medium">Enseignants:</span> {selectedRapport.personnel.personnelEnseignant.prescolaire.hommes + selectedRapport.personnel.personnelEnseignant.prescolaire.femmes + selectedRapport.personnel.personnelEnseignant.primaire.hommes + selectedRapport.personnel.personnelEnseignant.primaire.femmes + selectedRapport.personnel.personnelEnseignant.secondaire.hommes + selectedRapport.personnel.personnelEnseignant.secondaire.femmes} personnes</div>
-                    <div><span className="font-medium">Administratifs:</span> {selectedRapport.personnel.personnelAdministratif.directionProvinciale + selectedRapport.personnel.personnelAdministratif.inspectionPrincipale + selectedRapport.personnel.personnelAdministratif.coordinationProvinciale + selectedRapport.personnel.personnelAdministratif.sousDivision} personnes</div>
+                    <div><span className="font-medium">Enseignants:</span> {formatPersonnelDisplay(selectedRapport)}</div>
+                    <div><span className="font-medium">Administratifs:</span> {Object.values(selectedRapport.personnel?.personnelAdministratif || {}).reduce((total: number, current: any) => {
+                      if (typeof current === 'object' && current.hommes !== undefined && current.femmes !== undefined) {
+                        return total + (current.hommes || 0) + (current.femmes || 0);
+                      }
+                      return total + (current || 0);
+                    }, 0)} personnes</div>
                   </div>
                 </div>
               </div>
@@ -1715,35 +1794,35 @@ const RapportActivitePage: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
                   <div className="bg-white p-3 rounded">
                     <h4 className="font-medium text-indigo-700 mb-2">Espace Communautaire Éveil</h4>
-                    <div>Écoles: {selectedRapport.parametresCles.niveauPrescolaire.espaceCommunautaireEveil.nombreEcoles}</div>
-                    <div>Classes: {selectedRapport.parametresCles.niveauPrescolaire.espaceCommunautaireEveil.nombreClasses}</div>
-                    <div>Garçons: {selectedRapport.parametresCles.niveauPrescolaire.espaceCommunautaireEveil.effectifGarcons}</div>
-                    <div>Filles: {selectedRapport.parametresCles.niveauPrescolaire.espaceCommunautaireEveil.effectifFilles}</div>
-                    <div>Taux: {selectedRapport.parametresCles.niveauPrescolaire.espaceCommunautaireEveil.tauxAccroissement}%</div>
+                    <div>Écoles: {selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreEcoles || 0}</div>
+                    <div>Classes: {selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreClasses || 0}</div>
+                    <div>Garçons: {selectedRapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.espaceCommunautaireEveil?.effectifGarconsFilles || 0}</div>
+                    <div>Filles: {selectedRapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.espaceCommunautaireEveil?.effectifFilles || 0}</div>
+                    <div>Taux: {selectedRapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.espaceCommunautaireEveil?.tauxAccroissementGarconsFilles || 0}%</div>
                   </div>
                   <div className="bg-white p-3 rounded">
                     <h4 className="font-medium text-indigo-700 mb-2">Maternel</h4>
-                    <div>Écoles: {selectedRapport.parametresCles.niveauPrescolaire.maternel.nombreEcoles}</div>
-                    <div>Classes: {selectedRapport.parametresCles.niveauPrescolaire.maternel.nombreClasses}</div>
-                    <div>Garçons: {selectedRapport.parametresCles.niveauPrescolaire.maternel.effectifGarcons}</div>
-                    <div>Filles: {selectedRapport.parametresCles.niveauPrescolaire.maternel.effectifFilles}</div>
-                    <div>Taux: {selectedRapport.parametresCles.niveauPrescolaire.maternel.tauxAccroissement}%</div>
+                    <div>Écoles: {selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.maternel?.nombreEcoles || 0}</div>
+                    <div>Classes: {selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.maternel?.nombreClasses || 0}</div>
+                    <div>Garçons: {selectedRapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.maternel?.effectifGarconsFilles || 0}</div>
+                    <div>Filles: {selectedRapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.maternel?.effectifFilles || 0}</div>
+                    <div>Taux: {selectedRapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.maternel?.tauxAccroissementGarconsFilles || 0}%</div>
                   </div>
                   <div className="bg-white p-3 rounded">
                     <h4 className="font-medium text-indigo-700 mb-2">Pré-primaire</h4>
-                    <div>Écoles: {selectedRapport.parametresCles.niveauPrescolaire.prePrimaire.nombreEcoles}</div>
-                    <div>Classes: {selectedRapport.parametresCles.niveauPrescolaire.prePrimaire.nombreClasses}</div>
-                    <div>Garçons: {selectedRapport.parametresCles.niveauPrescolaire.prePrimaire.effectifGarcons}</div>
-                    <div>Filles: {selectedRapport.parametresCles.niveauPrescolaire.prePrimaire.effectifFilles}</div>
-                    <div>Taux: {selectedRapport.parametresCles.niveauPrescolaire.prePrimaire.tauxAccroissement}%</div>
+                    <div>Écoles: {selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.prePrimaire?.nombreEcoles || 0}</div>
+                    <div>Classes: {selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.prePrimaire?.nombreClasses || 0}</div>
+                    <div>Garçons: {selectedRapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.prePrimaire?.effectifGarconsFilles || 0}</div>
+                    <div>Filles: {selectedRapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.prePrimaire?.effectifFilles || 0}</div>
+                    <div>Taux: {selectedRapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.prePrimaire?.tauxAccroissementGarconsFilles || 0}%</div>
                   </div>
                   <div className="bg-white p-3 rounded">
                     <h4 className="font-medium text-indigo-700 mb-2">Spécial</h4>
-                    <div>Écoles: {selectedRapport.parametresCles.niveauPrescolaire.special.nombreEcoles}</div>
-                    <div>Classes: {selectedRapport.parametresCles.niveauPrescolaire.special.nombreClasses}</div>
-                    <div>Garçons: {selectedRapport.parametresCles.niveauPrescolaire.special.effectifGarcons}</div>
-                    <div>Filles: {selectedRapport.parametresCles.niveauPrescolaire.special.effectifFilles}</div>
-                    <div>Taux: {selectedRapport.parametresCles.niveauPrescolaire.special.tauxAccroissement}%</div>
+                    <div>Écoles: {selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.special?.nombreEcoles || 0}</div>
+                    <div>Classes: {selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.special?.nombreClasses || 0}</div>
+                    <div>Garçons: {selectedRapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.special?.effectifGarconsFilles || 0}</div>
+                    <div>Filles: {selectedRapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.special?.effectifFilles || 0}</div>
+                    <div>Taux: {selectedRapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.special?.tauxAccroissementGarconsFilles || 0}%</div>
                   </div>
                 </div>
               </div>
@@ -1753,19 +1832,19 @@ const RapportActivitePage: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div className="bg-white p-3 rounded">
                     <h4 className="font-medium text-green-700 mb-2">Enseignement Spécial</h4>
-                    <div>Classes: {selectedRapport.parametresCles.niveauPrimaire.enseignementSpecial.nombreClasses}</div>
-                    <div>Garçons: {selectedRapport.parametresCles.niveauPrimaire.enseignementSpecial.effectifGarcons}</div>
-                    <div>Filles: {selectedRapport.parametresCles.niveauPrimaire.enseignementSpecial.effectifFilles}</div>
-                    <div>Taux: {selectedRapport.parametresCles.niveauPrimaire.enseignementSpecial.tauxAccroissement}%</div>
+                    <div>Classes: {selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementSpecial?.totalClassesSpecialesPrim || 0}</div>
+                    <div>Garçons: {selectedRapport.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.effectifGarconsFilles || 0}</div>
+                    <div>Filles: {selectedRapport.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.effectifFilles || 0}</div>
+                    <div>Taux: {selectedRapport.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.tauxAccroissementGarconsFilles || 0}%</div>
                   </div>
                   <div className="bg-white p-3 rounded">
                     <h4 className="font-medium text-green-700 mb-2">Enseignement Primaire</h4>
-                    <div>Écoles: {selectedRapport.parametresCles.niveauPrimaire.enseignementPrimaire.nombreEcoles}</div>
-                    <div>Classes: {selectedRapport.parametresCles.niveauPrimaire.enseignementPrimaire.nombreClasses}</div>
-                    <div>Classes Pléthoriques: {selectedRapport.parametresCles.niveauPrimaire.enseignementPrimaire.classesPlethoriques}</div>
-                    <div>Garçons: {selectedRapport.parametresCles.niveauPrimaire.enseignementPrimaire.effectifGarcons}</div>
-                    <div>Filles: {selectedRapport.parametresCles.niveauPrimaire.enseignementPrimaire.effectifFilles}</div>
-                    <div>Taux: {selectedRapport.parametresCles.niveauPrimaire.enseignementPrimaire.tauxAccroissement}%</div>
+                    <div>Écoles: {selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.nombreEcoles || 0}</div>
+                    <div>Classes: {selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.totalClassesPrimaire || 0}</div>
+                    <div>Classes Pléthoriques: {selectedRapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.classesPlethoriques || 0}</div>
+                    <div>Garçons: {selectedRapport.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.effectifGarconsFilles || 0}</div>
+                    <div>Filles: {selectedRapport.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.effectifFilles || 0}</div>
+                    <div>Taux: {selectedRapport.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.tauxAccroissementGarconsFilles || 0}%</div>
                   </div>
                 </div>
               </div>
@@ -1775,25 +1854,25 @@ const RapportActivitePage: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                   <div className="bg-white p-3 rounded">
                     <h4 className="font-medium text-blue-700 mb-2">Enseignement Spécial</h4>
-                    <div>Classes: {selectedRapport.parametresCles.niveauSecondaire.enseignementSpecial.nombreClasses}</div>
-                    <div>Garçons: {selectedRapport.parametresCles.niveauSecondaire.enseignementSpecial.effectifGarcons}</div>
-                    <div>Filles: {selectedRapport.parametresCles.niveauSecondaire.enseignementSpecial.effectifFilles}</div>
-                    <div>Taux: {selectedRapport.parametresCles.niveauSecondaire.enseignementSpecial.tauxAccroissement}%</div>
+                    <div>Classes: {selectedRapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSpecial?.totalClassesSpecialesSec || 0}</div>
+                    <div>Garçons: {selectedRapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.effectifGarcons || 0}</div>
+                    <div>Filles: {selectedRapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.effectifFilles || 0}</div>
+                    <div>Taux: {selectedRapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.tauxGarcons || 0}%</div>
                   </div>
                   <div className="bg-white p-3 rounded">
                     <h4 className="font-medium text-blue-700 mb-2">Premier Cycle</h4>
-                    <div>Classes 7ème CTEB: {selectedRapport.parametresCles.niveauSecondaire.enseignementSecondaire.premierCycle.classes7emeCTEB}</div>
-                    <div>Classes 8ème CTEB: {selectedRapport.parametresCles.niveauSecondaire.enseignementSecondaire.premierCycle.classes8emeCTEB}</div>
-                    <div>Garçons: {selectedRapport.parametresCles.niveauSecondaire.enseignementSecondaire.premierCycle.effectifGarcons}</div>
-                    <div>Filles: {selectedRapport.parametresCles.niveauSecondaire.enseignementSecondaire.premierCycle.effectifFilles}</div>
-                    <div>Taux: {selectedRapport.parametresCles.niveauSecondaire.enseignementSecondaire.premierCycle.tauxAccroissement}%</div>
+                    <div>Classes 7ème CTEB: {selectedRapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes7emeCTEB || 0}</div>
+                    <div>Classes 8ème CTEB: {selectedRapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes8emeCTEB || 0}</div>
+                    <div>Garçons: {selectedRapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.effectifGarcons || 0}</div>
+                    <div>Filles: {selectedRapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.effectifFilles || 0}</div>
+                    <div>Taux: {selectedRapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.tauxGarcons || 0}%</div>
                   </div>
                   <div className="bg-white p-3 rounded">
                     <h4 className="font-medium text-blue-700 mb-2">Deuxième Cycle</h4>
-                    <div>Classes Humanités: {selectedRapport.parametresCles.niveauSecondaire.enseignementSecondaire.deuxiemeCycle.classesHumanites}</div>
-                    <div>Garçons: {selectedRapport.parametresCles.niveauSecondaire.enseignementSecondaire.deuxiemeCycle.effectifGarcons}</div>
-                    <div>Filles: {selectedRapport.parametresCles.niveauSecondaire.enseignementSecondaire.deuxiemeCycle.effectifFilles}</div>
-                    <div>Taux: {selectedRapport.parametresCles.niveauSecondaire.enseignementSecondaire.deuxiemeCycle.tauxAccroissement}%</div>
+                    <div>Classes Humanités: {selectedRapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.totalClassesHumanites || 0}</div>
+                    <div>Garçons: {selectedRapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.effectifGarcons || 0}</div>
+                    <div>Filles: {selectedRapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.effectifFilles || 0}</div>
+                    <div>Taux: {selectedRapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.tauxGarcons || 0}%</div>
                   </div>
                 </div>
               </div>
@@ -1804,19 +1883,19 @@ const RapportActivitePage: React.FC = () => {
                   <div className="bg-white p-3 rounded">
                     <h4 className="font-medium text-purple-700 mb-2">Personnel Enseignant</h4>
                     <div className="space-y-1">
-                      <div><span className="font-medium">Préscolaire:</span> {selectedRapport.personnel.personnelEnseignant.prescolaire.hommes}H / {selectedRapport.personnel.personnelEnseignant.prescolaire.femmes}F</div>
-                      <div><span className="font-medium">Primaire:</span> {selectedRapport.personnel.personnelEnseignant.primaire.hommes}H / {selectedRapport.personnel.personnelEnseignant.primaire.femmes}F</div>
-                      <div><span className="font-medium">Secondaire:</span> {selectedRapport.personnel.personnelEnseignant.secondaire.hommes}H / {selectedRapport.personnel.personnelEnseignant.secondaire.femmes}F</div>
+                      <div><span className="font-medium">Préscolaire:</span> {formatPersonnelDisplay(selectedRapport)}</div>
+                      <div><span className="font-medium">Primaire:</span> {formatPersonnelDisplay(selectedRapport)}</div>
+                      <div><span className="font-medium">Secondaire:</span> {formatPersonnelDisplay(selectedRapport)}</div>
                     </div>
                   </div>
                   <div className="bg-white p-3 rounded">
                     <h4 className="font-medium text-purple-700 mb-2">Personnel Administratif</h4>
                     <div className="space-y-1">
-                      <div>Direction Provinciale: {selectedRapport.personnel.personnelAdministratif.directionProvinciale}</div>
-                      <div>Inspection Principale: {selectedRapport.personnel.personnelAdministratif.inspectionPrincipale}</div>
-                      <div>Coordination Provinciale: {selectedRapport.personnel.personnelAdministratif.coordinationProvinciale}</div>
-                      <div>Sous-division: {selectedRapport.personnel.personnelAdministratif.sousDivision}</div>
-                      <div>Pools Inspection: {selectedRapport.personnel.personnelAdministratif.poolsInspectionPrimaire + selectedRapport.personnel.personnelAdministratif.poolsInspectionSecondaire}</div>
+                      <div>Direction Provinciale: {(selectedRapport.personnel?.personnelAdministratif?.directionProvinciale?.hommes || 0) + (selectedRapport.personnel?.personnelAdministratif?.directionProvinciale?.femmes || 0)}</div>
+                      <div>Inspection Principale: {(selectedRapport.personnel?.personnelAdministratif?.inspectionPrincipale?.hommes || 0) + (selectedRapport.personnel?.personnelAdministratif?.inspectionPrincipale?.femmes || 0)}</div>
+                      <div>Coordination Provinciale: {(selectedRapport.personnel?.personnelAdministratif?.coordinationProvinciale?.hommes || 0) + (selectedRapport.personnel?.personnelAdministratif?.coordinationProvinciale?.femmes || 0)}</div>
+                      <div>Sous-division: {(selectedRapport.personnel?.personnelAdministratif?.sousDivision?.hommes || 0) + (selectedRapport.personnel?.personnelAdministratif?.sousDivision?.femmes || 0)}</div>
+                      <div>Pools Inspection: {(selectedRapport.personnel?.personnelAdministratif?.poolsInspectionPrimaire?.hommes || 0) + (selectedRapport.personnel?.personnelAdministratif?.poolsInspectionPrimaire?.femmes || 0) + (selectedRapport.personnel?.personnelAdministratif?.poolsInspectionSecondaire?.hommes || 0) + (selectedRapport.personnel?.personnelAdministratif?.poolsInspectionSecondaire?.femmes || 0)}</div>
                     </div>
                   </div>
                 </div>

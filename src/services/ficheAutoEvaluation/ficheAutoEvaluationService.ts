@@ -11,7 +11,7 @@ class FicheAutoEvaluationService {
       const token = localStorage.getItem('token');
       console.log('🔒 FicheAutoEvaluationService.getAllFiches - Token présent:', !!token);
       
-      const response = await BaseService.get(`${this.endpoint}?limit=1000`);
+      const response = await BaseService.get(`${this.endpoint}?limit=1000&page=1`);
       console.log('🔍 FicheAutoEvaluationService.getAllFiches - Réponse complète:', response);
       
       if (response && response.success && response.data && response.data.docs) {

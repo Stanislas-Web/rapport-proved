@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { RapportActivite } from '../../../models/RapportActivite';
 
 interface RealisationsCompleteProps {
@@ -7,6 +7,50 @@ interface RealisationsCompleteProps {
 }
 
 const RealisationsComplete: React.FC<RealisationsCompleteProps> = () => {
+  // États pour les valeurs des bureaux
+  const [bureauValues, setBureauValues] = useState({
+    directionProvinciale: { proprietaire: 0, locataire: 0 },
+    inspectionPrincipale: { proprietaire: 0, locataire: 0 },
+    dinacope: { proprietaire: 0, locataire: 0 },
+    sernie: { proprietaire: 0, locataire: 0 },
+    coordinationProvinciale: { proprietaire: 0, locataire: 0 },
+    sousDivision: { proprietaire: 0, locataire: 0 },
+    poolsInspectionPrimaire: { proprietaire: 0, locataire: 0 },
+    poolsInspectionSecondaire: { proprietaire: 0, locataire: 0 },
+    antenneDinacope: { proprietaire: 0, locataire: 0 },
+    antenneSernie: { proprietaire: 0, locataire: 0 },
+    coordinationDiocesaine: { proprietaire: 0, locataire: 0 },
+    sousCoordinationConventionnees: { proprietaire: 0, locataire: 0 },
+    conseillerieResidente: { proprietaire: 0, locataire: 0 },
+  });
+
+  // États pour les totaux
+  const [totals, setTotals] = useState({
+    totalProprietaire: 0,
+    totalLocataire: 0,
+  });
+
+  // Fonction pour mettre à jour les valeurs d'un bureau
+  const updateBureauValue = (bureau: string, type: 'proprietaire' | 'locataire', value: number) => {
+    setBureauValues(prev => ({
+      ...prev,
+      [bureau]: {
+        ...prev[bureau as keyof typeof prev],
+        [type]: value
+      }
+    }));
+  };
+
+  // Calcul automatique des totaux
+  useEffect(() => {
+    const totalProprietaire = Object.values(bureauValues).reduce((sum, bureau) => sum + bureau.proprietaire, 0);
+    const totalLocataire = Object.values(bureauValues).reduce((sum, bureau) => sum + bureau.locataire, 0);
+    
+    setTotals({
+      totalProprietaire,
+      totalLocataire,
+    });
+  }, [bureauValues]);
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <h3 className="text-lg font-medium mb-4 text-primary">IV. REALISATIONS (SUITE)</h3>
@@ -227,9 +271,8 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = () => {
               <tr className="bg-gray-100">
                 <th className="border border-gray-300 px-3 py-2 text-left">Code</th>
                 <th className="border border-gray-300 px-3 py-2 text-left">BUREAU GESTIONNAIRE (BG)</th>
-                <th className="border border-gray-300 px-3 py-2 text-center">Propriétaire</th>
-                <th className="border border-gray-300 px-3 py-2 text-center">Locataire</th>
-                <th className="border border-gray-300 px-3 py-2 text-center">STATUT D'OCCUPATION (Nombre/Chiffre)</th>
+                <th className="border border-gray-300 px-3 py-2 text-center">Nombre Propriétaire</th>
+                <th className="border border-gray-300 px-3 py-2 text-center">Nombre Locataire</th>
               </tr>
             </thead>
             <tbody>
@@ -237,125 +280,316 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = () => {
                 <td className="border border-gray-300 px-3 py-2">01</td>
                 <td className="border border-gray-300 px-3 py-2">Direction Provinciale EDU-NC</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="status_01" className="mx-auto block" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.directionProvinciale.proprietaire}
+                    onChange={(e) => updateBureauValue('directionProvinciale', 'proprietaire', parseInt(e.target.value) || 0)}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="status_01" className="mx-auto block" />
-                </td>
-                <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.directionProvinciale.locataire}
+                    onChange={(e) => updateBureauValue('directionProvinciale', 'locataire', parseInt(e.target.value) || 0)}
+                  />
                 </td>
               </tr>
               <tr>
                 <td className="border border-gray-300 px-3 py-2">02</td>
                 <td className="border border-gray-300 px-3 py-2">Inspection Principale Provinciale</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="status_02" className="mx-auto block" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.inspectionPrincipale.proprietaire}
+                    onChange={(e) => updateBureauValue('inspectionPrincipale', 'proprietaire', parseInt(e.target.value) || 0)}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="status_02" className="mx-auto block" />
-                </td>
-                <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.inspectionPrincipale.locataire}
+                    onChange={(e) => updateBureauValue('inspectionPrincipale', 'locataire', parseInt(e.target.value) || 0)}
+                  />
                 </td>
               </tr>
               <tr>
                 <td className="border border-gray-300 px-3 py-2">03</td>
                 <td className="border border-gray-300 px-3 py-2">Direction Provinciale DINACOPE</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="status_03" className="mx-auto block" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.dinacope.proprietaire}
+                    onChange={(e) => updateBureauValue('dinacope', 'proprietaire', parseInt(e.target.value) || 0)}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="status_03" className="mx-auto block" />
-                </td>
-                <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.dinacope.locataire}
+                    onChange={(e) => updateBureauValue('dinacope', 'locataire', parseInt(e.target.value) || 0)}
+                  />
                 </td>
               </tr>
               <tr>
                 <td className="border border-gray-300 px-3 py-2">04</td>
                 <td className="border border-gray-300 px-3 py-2">Division SERNIE</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="status_04" className="mx-auto block" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.sernie.proprietaire}
+                    onChange={(e) => updateBureauValue('sernie', 'proprietaire', parseInt(e.target.value) || 0)}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="status_04" className="mx-auto block" />
-                </td>
-                <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.sernie.locataire}
+                    onChange={(e) => updateBureauValue('sernie', 'locataire', parseInt(e.target.value) || 0)}
+                  />
                 </td>
               </tr>
               <tr>
                 <td className="border border-gray-300 px-3 py-2">05</td>
                 <td className="border border-gray-300 px-3 py-2">Coordination Provinciale</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="status_05" className="mx-auto block" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.coordinationProvinciale.proprietaire}
+                    onChange={(e) => updateBureauValue('coordinationProvinciale', 'proprietaire', parseInt(e.target.value) || 0)}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="status_05" className="mx-auto block" />
-                </td>
-                <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.coordinationProvinciale.locataire}
+                    onChange={(e) => updateBureauValue('coordinationProvinciale', 'locataire', parseInt(e.target.value) || 0)}
+                  />
                 </td>
               </tr>
               <tr>
                 <td className="border border-gray-300 px-3 py-2">06</td>
                 <td className="border border-gray-300 px-3 py-2">Sous-Division</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="status_06" className="mx-auto block" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.sousDivision.proprietaire}
+                    onChange={(e) => updateBureauValue('sousDivision', 'proprietaire', parseInt(e.target.value) || 0)}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="status_06" className="mx-auto block" />
-                </td>
-                <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.sousDivision.locataire}
+                    onChange={(e) => updateBureauValue('sousDivision', 'locataire', parseInt(e.target.value) || 0)}
+                  />
                 </td>
               </tr>
               <tr>
                 <td className="border border-gray-300 px-3 py-2">07</td>
                 <td className="border border-gray-300 px-3 py-2">Pools D'inspection Primaire</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="status_07" className="mx-auto block" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.poolsInspectionPrimaire.proprietaire}
+                    onChange={(e) => updateBureauValue('poolsInspectionPrimaire', 'proprietaire', parseInt(e.target.value) || 0)}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="status_07" className="mx-auto block" />
-                </td>
-                <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.poolsInspectionPrimaire.locataire}
+                    onChange={(e) => updateBureauValue('poolsInspectionPrimaire', 'locataire', parseInt(e.target.value) || 0)}
+                  />
                 </td>
               </tr>
               <tr>
                 <td className="border border-gray-300 px-3 py-2">08</td>
                 <td className="border border-gray-300 px-3 py-2">Pools D'inspection Secondaire</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="status_08" className="mx-auto block" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.poolsInspectionSecondaire.proprietaire}
+                    onChange={(e) => updateBureauValue('poolsInspectionSecondaire', 'proprietaire', parseInt(e.target.value) || 0)}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="status_08" className="mx-auto block" />
-                </td>
-                <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.poolsInspectionSecondaire.locataire}
+                    onChange={(e) => updateBureauValue('poolsInspectionSecondaire', 'locataire', parseInt(e.target.value) || 0)}
+                  />
                 </td>
               </tr>
               <tr>
                 <td className="border border-gray-300 px-3 py-2">09</td>
                 <td className="border border-gray-300 px-3 py-2">Antenne DINACOPE</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="status_09" className="mx-auto block" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.antenneDinacope.proprietaire}
+                    onChange={(e) => updateBureauValue('antenneDinacope', 'proprietaire', parseInt(e.target.value) || 0)}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="status_09" className="mx-auto block" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.antenneDinacope.locataire}
+                    onChange={(e) => updateBureauValue('antenneDinacope', 'locataire', parseInt(e.target.value) || 0)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2">10</td>
+                <td className="border border-gray-300 px-3 py-2">Antenne SERNIE</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.antenneSernie.proprietaire}
+                    onChange={(e) => updateBureauValue('antenneSernie', 'proprietaire', parseInt(e.target.value) || 0)}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.antenneSernie.locataire}
+                    onChange={(e) => updateBureauValue('antenneSernie', 'locataire', parseInt(e.target.value) || 0)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2">11</td>
+                <td className="border border-gray-300 px-3 py-2">Coordination Diocésaine</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.coordinationDiocesaine.proprietaire}
+                    onChange={(e) => updateBureauValue('coordinationDiocesaine', 'proprietaire', parseInt(e.target.value) || 0)}
+                  />
+                </td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.coordinationDiocesaine.locataire}
+                    onChange={(e) => updateBureauValue('coordinationDiocesaine', 'locataire', parseInt(e.target.value) || 0)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2">12</td>
+                <td className="border border-gray-300 px-3 py-2">Sous-Coordination Conventionnées</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.sousCoordinationConventionnees.proprietaire}
+                    onChange={(e) => updateBureauValue('sousCoordinationConventionnees', 'proprietaire', parseInt(e.target.value) || 0)}
+                  />
+                </td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.sousCoordinationConventionnees.locataire}
+                    onChange={(e) => updateBureauValue('sousCoordinationConventionnees', 'locataire', parseInt(e.target.value) || 0)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2">13</td>
+                <td className="border border-gray-300 px-3 py-2">Conseillerie Résidente</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.conseillerieResidente.proprietaire}
+                    onChange={(e) => updateBureauValue('conseillerieResidente', 'proprietaire', parseInt(e.target.value) || 0)}
+                  />
+                </td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    value={bureauValues.conseillerieResidente.locataire}
+                    onChange={(e) => updateBureauValue('conseillerieResidente', 'locataire', parseInt(e.target.value) || 0)}
+                  />
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
+        
+        {/* Totaux */}
+        <div className="mt-4 grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Total Propriétaire</label>
+            <input 
+              type="number" 
+              className="w-full p-2 border border-gray-300 rounded-md bg-gray-50" 
+              value={totals.totalProprietaire}
+              readOnly
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Total Locataire</label>
+            <input 
+              type="number" 
+              className="w-full p-2 border border-gray-300 rounded-md bg-gray-50" 
+              value={totals.totalLocataire}
+              readOnly
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
-};
-
-export default RealisationsComplete; 
+  };
+ 
+ export default RealisationsComplete; 

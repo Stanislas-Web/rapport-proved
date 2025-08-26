@@ -51,96 +51,218 @@ const CreateRapportActivite: React.FC = () => {
       annee: new Date().getFullYear(),
       introduction: '',
       parametresCles: {
-        niveauPrescolaire: {
-          espaceCommunautaireEveil: {
-            nombreEcoles: 0,
-            nombreClasses: 0,
-            effectifGarcons: 0,
-            effectifFilles: 0,
-            tauxAccroissement: 0
-          },
-          maternel: {
-            nombreEcoles: 0,
-            nombreClasses: 0,
-            effectifGarcons: 0,
-            effectifFilles: 0,
-            tauxAccroissement: 0
-          },
-          prePrimaire: {
-            nombreEcoles: 0,
-            nombreClasses: 0,
-            effectifGarcons: 0,
-            effectifFilles: 0,
-            tauxAccroissement: 0
-          },
-          special: {
-            nombreEcoles: 0,
-            nombreClasses: 0,
-            effectifGarcons: 0,
-            effectifFilles: 0,
-            tauxAccroissement: 0
-          }
-        },
-        niveauPrimaire: {
-          enseignementSpecial: {
-            nombreClasses: 0,
-            effectifGarcons: 0,
-            effectifFilles: 0,
-            tauxAccroissement: 0
-          },
-          enseignementPrimaire: {
-            nombreEcoles: 0,
-            nombreClasses: 0,
-            classesPlethoriques: 0,
-            effectifGarcons: 0,
-            effectifFilles: 0,
-            tauxAccroissement: 0
-          }
-        },
-        niveauSecondaire: {
-          enseignementSpecial: {
-            nombreClasses: 0,
-            effectifGarcons: 0,
-            effectifFilles: 0,
-            tauxAccroissement: 0
-          },
-          enseignementSecondaire: {
-            premierCycle: {
-              classes7emeCTEB: 0,
-              classes8emeCTEB: 0,
-              effectifGarcons: 0,
-              effectifFilles: 0,
-              tauxAccroissement: 0
+        nombreEcolesClasses: {
+          niveauPrescolaire: {
+            espaceCommunautaireEveil: {
+              nombreEcoles: 0,
+              nombreClasses: 0
             },
-            deuxiemeCycle: {
-              classesHumanites: 0,
+            maternel: {
+              nombreEcoles: 0,
+              nombreClasses: 0
+            },
+            prePrimaire: {
+              nombreEcoles: 0,
+              nombreClasses: 0
+            },
+            special: {
+              nombreEcoles: 0,
+              nombreClasses: 0
+            }
+          },
+          niveauPrimaire: {
+            enseignementSpecial: {
+              nombreEcoles: 0,
+              totalClassesSpecialesPrim: 0,
+              classesPlethoriques: 0
+            },
+            enseignementPrimaire: {
+              nombreEcoles: 0,
+              totalClassesPrimaire: 0,
+              classesPlethoriques: '-'
+            }
+          },
+          niveauSecondaire: {
+            enseignementSpecial: {
+              nombreEcoles: 0,
+              totalClassesSpecialesSec: 0
+            },
+            enseignementSecondaire: {
+              nombreEcoles: 0,
+              premierCycle: {
+                classes7emeCTEB: 0,
+                classes8emeCTEB: 0
+              },
+              deuxiemeCycle: {
+                totalClassesHumanites: 0
+              },
+              totalClasses1er2emeCycle: 0
+            }
+          }
+        },
+        effectifScolaire: {
+          niveauPrescolaire: {
+            espaceCommunautaireEveil: {
+              effectifGarconsFilles: 0,
+              effectifFilles: 0,
+              tauxAccroissementGarconsFilles: 0,
+              tauxAccroissementFilles: 0
+            },
+            maternel: {
+              effectifGarconsFilles: 0,
+              effectifFilles: 0,
+              tauxAccroissementGarconsFilles: 0,
+              tauxAccroissementFilles: 0
+            },
+            prePrimaire: {
+              effectifGarconsFilles: 0,
+              effectifFilles: 0,
+              tauxAccroissementGarconsFilles: 0,
+              tauxAccroissementFilles: 0
+            },
+            special: {
+              effectifGarconsFilles: 0,
+              effectifFilles: 0,
+              tauxAccroissementGarconsFilles: 0,
+              tauxAccroissementFilles: 0
+            }
+          },
+          niveauPrimaire: {
+            enseignementSpecial: {
+              effectifGarconsFilles: 0,
+              effectifFilles: 0,
+              tauxAccroissementGarconsFilles: 0,
+              tauxAccroissementFilles: 0
+            },
+            enseignementPrimaire: {
+              effectifGarconsFilles: 0,
+              effectifFilles: 0,
+              tauxAccroissementGarconsFilles: 0,
+              tauxAccroissementFilles: 0
+            }
+          },
+          niveauSecondaire: {
+            enseignementSpecial: {
               effectifGarcons: 0,
               effectifFilles: 0,
-              tauxAccroissement: 0
+              tauxGarcons: 0,
+              tauxFilles: 0
+            },
+            enseignementSecondaire: {
+              septiemeCTEB: {
+                effectifGarcons: 0,
+                effectifFilles: 0,
+                tauxGarcons: 0,
+                tauxFilles: 0
+              },
+              huitiemeCTEB: {
+                effectifGarcons: 0,
+                effectifFilles: 0,
+                tauxGarcons: 0,
+                tauxFilles: 0
+              },
+              premiereHumanite: {
+                effectifGarcons: 0,
+                effectifFilles: 0,
+                tauxGarcons: 0,
+                tauxFilles: 0
+              },
+              quatriemeHumanite: {
+                effectifGarcons: 0,
+                effectifFilles: 0,
+                tauxGarcons: 0,
+                tauxFilles: 0
+              }
             }
           }
         }
       },
       personnel: {
         personnelEnseignant: {
-          prescolaire: { hommes: 0, femmes: 0 },
-          primaire: { hommes: 0, femmes: 0 },
-          secondaire: { hommes: 0, femmes: 0 }
+          niveauPrescolaire: {
+            enseignementPrescolaireSpecial: {
+              hommes: 0,
+              femmes: 0
+            },
+            enseignementPrescolaire: {
+              hommes: 0,
+              femmes: 0
+            }
+          },
+          niveauPrimaire: {
+            enseignementPrescolaireSpecial: {
+              hommes: 0,
+              femmes: 0
+            },
+            enseignementPrimaire: {
+              hommes: 0,
+              femmes: 0
+            }
+          },
+          niveauSecondaire: {
+            enseignementPrescolaireSpecial: {
+              hommes: 0,
+              femmes: 0
+            },
+            enseignementSecondaire: {
+              hommes: 0,
+              femmes: 0
+            }
+          }
         },
         personnelAdministratif: {
-          directionProvinciale: 0,
-          inspectionPrincipale: 0,
-          dinacope: 0,
-          sernie: 0,
-          coordinationProvinciale: 0,
-          sousDivision: 0,
-          poolsInspectionPrimaire: 0,
-          poolsInspectionSecondaire: 0,
-          antenneDinacope: 0,
-          antenneSernie: 0,
-          coordinationDiocesaine: 0,
-          sousCoordinationConventionnees: 0,
-          conseillerieResidente: 0
+          directionProvinciale: {
+            hommes: 0,
+            femmes: 0
+          },
+          inspectionPrincipale: {
+            hommes: 0,
+            femmes: 0
+          },
+          dinacope: {
+            hommes: 0,
+            femmes: 0
+          },
+          sernie: {
+            hommes: 0,
+            femmes: 0
+          },
+          coordinationProvinciale: {
+            hommes: 0,
+            femmes: 0
+          },
+          sousDivision: {
+            hommes: 0,
+            femmes: 0
+          },
+          poolsInspectionPrimaire: {
+            hommes: 0,
+            femmes: 0
+          },
+          poolsInspectionSecondaire: {
+            hommes: 0,
+            femmes: 0
+          },
+          antenneDinacope: {
+            hommes: 0,
+            femmes: 0
+          },
+          antenneSernie: {
+            hommes: 0,
+            femmes: 0
+          },
+          coordinationDiocesaine: {
+            hommes: 0,
+            femmes: 0
+          },
+          sousCoordinationConventionnees: {
+            hommes: 0,
+            femmes: 0
+          },
+          conseillerieResidente: {
+            hommes: 0,
+            femmes: 0
+          }
         }
       },
       realisations: {
@@ -181,6 +303,360 @@ const CreateRapportActivite: React.FC = () => {
             tauxTransitionCTEBHumanites: 0
           }
         }
+      },
+      ameliorationQualite: {
+        disponibiliteMoyensEnseignement: {
+          programmesScolaires: {
+            prescolaire: 'BON',
+            primaire: 'BON',
+            secondaire: 'BON'
+          },
+          manuelsScolaires: {
+            prescolaire: 'BON',
+            primaire: 'BON',
+            secondaire: 'BON'
+          },
+          materielsDidactiques: {
+            prescolaire: 'BON',
+            primaire: 'BON',
+            secondaire: 'BON'
+          },
+          laboratoires: {
+            chimie: 'BON',
+            biologie: 'BON',
+            physique: 'BON'
+          },
+          equipementsAteliers: {
+            humanitesTechniques: 'BON'
+          }
+        },
+        visitesEtReunions: {
+          visitesClasses: {
+            prescolaire: 'BON',
+            primaire: 'BON',
+            secondaire: 'BON',
+            special: 'BON'
+          },
+          reunionsPedagogiques: {
+            prescolaire: 'BON',
+            primaire: 'BON',
+            secondaire: 'BON'
+          },
+          fonctionnementCelluleBase: {
+            prescolaire: 'BON',
+            primaire: 'BON',
+            secondaire: 'BON',
+            special: 'BON'
+          }
+        },
+        activitesInspectorales: {
+          inspectionsPedagogiquesC3: {
+            prescolaire: {
+              nombrePrevu: 0,
+              nombreRealise: 0,
+              pourcentageRealisation: 0
+            },
+            primaire: {
+              nombrePrevu: 0,
+              nombreRealise: 0,
+              pourcentageRealisation: 0
+            },
+            secondaire: {
+              nombrePrevu: 0,
+              nombreRealise: 0,
+              pourcentageRealisation: 0
+            },
+            special: {
+              nombrePrevu: 0,
+              nombreRealise: 0,
+              pourcentageRealisation: 0
+            }
+          },
+          inspectionsFormation: {
+            prescolaire: {
+              nombrePrevu: 0,
+              nombreRealise: 0,
+              pourcentageRealisation: 0
+            },
+            primaire: {
+              nombrePrevu: 0,
+              nombreRealise: 0,
+              pourcentageRealisation: 0
+            },
+            secondaire: {
+              nombrePrevu: 0,
+              nombreRealise: 0,
+              pourcentageRealisation: 0
+            },
+            special: {
+              nombrePrevu: 0,
+              nombreRealise: 0,
+              pourcentageRealisation: 0
+            }
+          },
+          formationContinue: {
+            prescolaire: 'BON',
+            primaire: 'BON',
+            secondaire: 'BON',
+            special: 'BON'
+          }
+        },
+        indicateursRendement: {
+          rendementInterne: {
+            prescolaire: {
+              tauxAbandon: 0,
+              tauxReussite: 0,
+              tauxEchec: 0
+            },
+            primaire: {
+              tauxAbandon: 0,
+              tauxReussite: 0,
+              tauxEchec: 0
+            },
+            secondaire: {
+              tauxAbandon: 0,
+              tauxReussite: 0,
+              tauxEchec: 0
+            }
+          },
+          rendementExterne: {
+            examensCertificatifs: {
+              tauxDiplomes: 0,
+              tauxHumanitesScientifiques: 0,
+              tauxHumanitesTechniques: 0
+            }
+          }
+        }
+      },
+      gouvernance: {
+        miseEnOeuvreSSEF: {
+          niveauProvinceEducationnelle: {
+            elaborationPAO: '',
+            miseEnOeuvre: '',
+            evaluationMiParcours: '',
+            evaluationFinale: ''
+          },
+          niveauProvinceAdministrative: {
+            elaborationPAO: '',
+            miseEnOeuvre: '',
+            evaluationMiParcours: '',
+            evaluationFinale: ''
+          }
+        },
+        inspectionsAdministrativesC2B: {
+          prescolaire: {
+            nombrePrevu: 0,
+            nombreRealise: 0,
+            pourcentageRealisation: 0
+          },
+          primaire: {
+            nombrePrevu: 0,
+            nombreRealise: 0,
+            pourcentageRealisation: 0
+          },
+          secondaire: {
+            nombrePrevu: 0,
+            nombreRealise: 0,
+            pourcentageRealisation: 0
+          },
+          special: {
+            nombrePrevu: 0,
+            nombreRealise: 0,
+            pourcentageRealisation: 0
+          }
+        },
+        comitesProvinciaux: {
+          comiteEDUNC: {
+            frequenceReunions: '',
+            pointsTraites: ''
+          },
+          comiteENAFP: {
+            frequenceReunions: '',
+            pointsTraites: ''
+          },
+          comiteTENASOSP: {
+            frequenceReunions: '',
+            pointsTraites: ''
+          },
+          comiteExamenEtat: {
+            frequenceReunions: '',
+            pointsTraites: ''
+          }
+        },
+        remunerationPersonnel: {
+          directionProvinciale: {
+            totalAgents: 0,
+            nonPayes: 0
+          },
+          inspectionPrincipale: {
+            totalAgents: 0,
+            nonPayes: 0
+          },
+          dinacope: {
+            totalAgents: 0,
+            nonPayes: 0
+          },
+          sernie: {
+            totalAgents: 0,
+            nonPayes: 0
+          },
+          coordinationProvinciale: {
+            totalAgents: 0,
+            nonPayes: 0
+          },
+          sousDivision: {
+            totalAgents: 0,
+            nonPayes: 0
+          },
+          poolsInspectionPrimaire: {
+            totalAgents: 0,
+            nonPayes: 0
+          },
+          poolsInspectionSecondaire: {
+            totalAgents: 0,
+            nonPayes: 0
+          },
+          antenneDinacope: {
+            totalAgents: 0,
+            nonPayes: 0
+          },
+          antenneSernie: {
+            totalAgents: 0,
+            nonPayes: 0
+          },
+          coordinationDiocesaine: {
+            totalAgents: 0,
+            nonPayes: 0
+          },
+          sousCoordinationConventionnees: {
+            totalAgents: 0,
+            nonPayes: 0
+          },
+          conseillerieResidente: {
+            totalAgents: 0,
+            nonPayes: 0
+          }
+        },
+        vulgarisationInstructions: {
+          instructionsOfficielles: '',
+          nouvelleCitoyennete: ''
+        },
+        groupesAidesPsychopedagogiques: {
+          nombreGAPMisEnPlace: 0,
+          nombreGAPOperationnel: 0,
+          nombreCasPrisEnCharge: 0,
+          problemesIdentifies: '',
+          solutionsPreconisees: ''
+        },
+        acquisitionsMateriels: {
+          ecoles: {
+            nature: '',
+            sourceFinancement: {
+              gvt: 0,
+              projet: 0,
+              ptfs: 0,
+              ong: 0
+            }
+          },
+          bureauxGestionnaires: {
+            nature: '',
+            sourceFinancement: {
+              gvt: 0,
+              projet: 0,
+              ptfs: 0,
+              ong: 0
+            }
+          }
+        },
+        infrastructureBureaux: {
+          directionProvinciale: {
+            proprietaire: 0,
+            locataire: 0
+          },
+          inspectionPrincipale: {
+            proprietaire: 0,
+            locataire: 0
+          },
+          dinacope: {
+            proprietaire: 0,
+            locataire: 0
+          },
+          sernie: {
+            proprietaire: 0,
+            locataire: 0
+          },
+          coordinationProvinciale: {
+            proprietaire: 0,
+            locataire: 0
+          },
+          sousDivision: {
+            proprietaire: 0,
+            locataire: 0
+          },
+          poolsInspectionPrimaire: {
+            proprietaire: 0,
+            locataire: 0
+          },
+          poolsInspectionSecondaire: {
+            proprietaire: 0,
+            locataire: 0
+          },
+          antenneDinacope: {
+            proprietaire: 0,
+            locataire: 0
+          },
+          antenneSernie: {
+            proprietaire: 0,
+            locataire: 0
+          },
+          coordinationDiocesaine: {
+            proprietaire: 0,
+            locataire: 0
+          },
+          sousCoordinationConventionnees: {
+            proprietaire: 0,
+            locataire: 0
+          },
+          conseillerieResidente: {
+            proprietaire: 0,
+            locataire: 0
+          }
+        },
+        totalInfrastructureBureaux: {
+          totalProprietaire: 0,
+          totalLocataire: 0
+        }
+      },
+      educationUrgence: {
+        planStockContingence: {
+          plan: '',
+          stock: ''
+        },
+        catastrophesNaturelles: {
+          nature: '',
+          effetsNegatifs: ''
+        },
+        destructionSDC: {
+          forcesNegatives: ''
+        },
+        solutionsLocales: '',
+        reunionsClusterEducation: {
+          frequence: '',
+          pointsTraites: ''
+        },
+        recommandations: {
+          espacesTemporairesApprentissage: {
+            nombre: 0,
+            couts: ''
+          },
+          apprenantsScolarises: {
+            cible: 0
+          },
+          formationEnseignantsESU: ''
+        }
+      },
+      autresProblemes: {
+        problemesSpecifiques: ''
       },
       conclusion: '',
       statut: 'brouillon'

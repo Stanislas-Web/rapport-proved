@@ -885,7 +885,7 @@ const EvaluationQualitativeComplete: React.FC = () => {
 
         {/* B. NIVEAU SECONDAIRE */}
         <div className="mb-4">
-          <h5 className="font-medium mb-2">B. NIVEAU SECONDAIRE (Secondary Level)</h5>
+          <h5 className="font-medium mb-2">B. NIVEAU SECONDAIRE</h5>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse border border-gray-300">
               <thead>
@@ -906,7 +906,7 @@ const EvaluationQualitativeComplete: React.FC = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-300 px-3 py-2">2) TAUX D'ABANDON</td>
+                  <td className="border border-gray-300 px-3 py-2">2) TAUX DE REUSSITE %</td>
                   <td className="border border-gray-300 px-3 py-2">
                     <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
                   </td>
@@ -923,35 +923,26 @@ const EvaluationQualitativeComplete: React.FC = () => {
                     <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
                   </td>
                 </tr>
-                <tr>
-                  <td className="border border-gray-300 px-3 py-2">TAUX D'ECHEC %</td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
-                  </td>
-                </tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        {/* TAUX DISPLOMES DE FINALISTES (OCDE) */}
+        {/* TAUX DIPLÔMES DE FINALISTES (OCDE) */}
         <div className="mb-4">
-          <h5 className="font-medium mb-2">TAUX DISPLOMES DE FINALISTES (OCDE)</h5>
+          <h5 className="font-medium mb-2">TAUX DIPLÔMES DE FINALISTES (OCDE)</h5>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-gray-100">
-                  <th className="border border-gray-300 px-3 py-2 text-left">Type</th>
+                  <th className="border border-gray-300 px-3 py-2 text-left">Type de Diplôme</th>
                   <th className="border border-gray-300 px-3 py-2 text-center">Taux (GF)</th>
                   <th className="border border-gray-300 px-3 py-2 text-center">(F)</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className="border border-gray-300 px-3 py-2">OCDE AUX HUMANITES SCIENTIFIQUES</td>
+                  <td className="border border-gray-300 px-3 py-2">HUMANITES SCIENTIFIQUES</td>
                   <td className="border border-gray-300 px-3 py-2">
                     <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
                   </td>
@@ -960,7 +951,7 @@ const EvaluationQualitativeComplete: React.FC = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-300 px-3 py-2">OCDE AUX HUMANITES TECHNIQUES</td>
+                  <td className="border border-gray-300 px-3 py-2">HUMANITES TECHNIQUES</td>
                   <td className="border border-gray-300 px-3 py-2">
                     <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
                   </td>
@@ -970,10 +961,6 @@ const EvaluationQualitativeComplete: React.FC = () => {
                 </tr>
               </tbody>
             </table>
-          </div>
-          <div className="mt-4">
-            <label className="block text-sm font-medium mb-2">OCDE =</label>
-            <input type="number" className="w-32 p-2 border border-gray-300 rounded-md" />
           </div>
         </div>
       </div>
