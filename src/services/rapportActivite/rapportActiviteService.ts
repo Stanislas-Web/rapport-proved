@@ -284,18 +284,31 @@ class RapportActiviteService {
         // Calculer le personnel total
         if (rapport.personnel) {
           const personnelEnseignant = 
-            (rapport.personnel.personnelEnseignant?.prescolaire?.hommes || 0) +
-            (rapport.personnel.personnelEnseignant?.prescolaire?.femmes || 0) +
-            (rapport.personnel.personnelEnseignant?.primaire?.hommes || 0) +
-            (rapport.personnel.personnelEnseignant?.primaire?.femmes || 0) +
-            (rapport.personnel.personnelEnseignant?.secondaire?.hommes || 0) +
-            (rapport.personnel.personnelEnseignant?.secondaire?.femmes || 0);
+            // Personnel Enseignant - Niveau Prescolaire
+            (rapport.personnel.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaireSpecial?.hommes || 0) +
+            (rapport.personnel.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaireSpecial?.femmes || 0) +
+            (rapport.personnel.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaire?.hommes || 0) +
+            (rapport.personnel.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaire?.femmes || 0) +
+            // Personnel Enseignant - Niveau Primaire
+            (rapport.personnel.personnelEnseignant?.niveauPrimaire?.enseignementPrescolaireSpecial?.hommes || 0) +
+            (rapport.personnel.personnelEnseignant?.niveauPrimaire?.enseignementPrescolaireSpecial?.femmes || 0) +
+            (rapport.personnel.personnelEnseignant?.niveauPrimaire?.enseignementPrimaire?.hommes || 0) +
+            (rapport.personnel.personnelEnseignant?.niveauPrimaire?.enseignementPrimaire?.femmes || 0) +
+            // Personnel Enseignant - Niveau Secondaire
+            (rapport.personnel.personnelEnseignant?.niveauSecondaire?.enseignementPrescolaireSpecial?.hommes || 0) +
+            (rapport.personnel.personnelEnseignant?.niveauSecondaire?.enseignementPrescolaireSpecial?.femmes || 0) +
+            (rapport.personnel.personnelEnseignant?.niveauSecondaire?.enseignementSecondaire?.hommes || 0) +
+            (rapport.personnel.personnelEnseignant?.niveauSecondaire?.enseignementSecondaire?.femmes || 0);
           
           const personnelAdministratif = 
-            (rapport.personnel.personnelAdministratif?.directionProvinciale || 0) +
-            (rapport.personnel.personnelAdministratif?.inspectionPrincipale || 0) +
-            (rapport.personnel.personnelAdministratif?.coordinationProvinciale || 0) +
-            (rapport.personnel.personnelAdministratif?.sousDivision || 0);
+            (rapport.personnel.personnelAdministratif?.directionProvinciale?.hommes || 0) +
+            (rapport.personnel.personnelAdministratif?.directionProvinciale?.femmes || 0) +
+            (rapport.personnel.personnelAdministratif?.inspectionPrincipale?.hommes || 0) +
+            (rapport.personnel.personnelAdministratif?.inspectionPrincipale?.femmes || 0) +
+            (rapport.personnel.personnelAdministratif?.coordinationProvinciale?.hommes || 0) +
+            (rapport.personnel.personnelAdministratif?.coordinationProvinciale?.femmes || 0) +
+            (rapport.personnel.personnelAdministratif?.sousDivision?.hommes || 0) +
+            (rapport.personnel.personnelAdministratif?.sousDivision?.femmes || 0);
           
           stats.totalPersonnel += personnelEnseignant + personnelAdministratif;
         }
