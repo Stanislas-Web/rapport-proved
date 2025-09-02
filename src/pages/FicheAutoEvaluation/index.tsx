@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import moment from 'moment';
+import { generateAndShowFichePDF } from '../../utils/generateFicheAutoEvaluationPDF';
 
 const FicheAutoEvaluationPage: React.FC = () => {
   const [fiches, setFiches] = useState<FicheAutoEvaluation[]>([]);
@@ -188,6 +189,7 @@ const FicheAutoEvaluationPage: React.FC = () => {
       { wch: 15 },  // Modifié le
     ];
 
+    // Appliquer les largeurs des colonnes
     ws['!cols'] = columnWidths;
 
     const wb = XLSX.utils.book_new();
@@ -197,6 +199,15 @@ const FicheAutoEvaluationPage: React.FC = () => {
     const dataBlob = new Blob([excelBuffer], { type: fileType });
     saveAs(dataBlob, `fiches-auto-evaluation-${moment().format('YYYY-MM-DD')}.xlsx`);
     toast.success('Export Excel réussi');
+  };
+
+  const handleGeneratePDF = async (fiche: FicheAutoEvaluation) => {
+    try {
+      await generateAndShowFichePDF(fiche);
+    } catch (error) {
+      console.error('Erreur lors de la génération du PDF:', error);
+      toast.error('Erreur lors de la génération du PDF');
+    }
   };
 
   const openDetailModal = (fiche: FicheAutoEvaluation) => {
@@ -365,10 +376,24 @@ const FicheAutoEvaluationPage: React.FC = () => {
                         <button
                           onClick={() => openDetailModal(fiche)}
                           className="hover:text-primary"
+                          title="Voir le détail"
                         >
                           <svg className="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M8.99981 14.8219C3.43106 14.8219 0.674805 9.50624 0.562305 9.28124C0.47793 9.11249 0.47793 8.88749 0.562305 8.71874C0.674805 8.49374 3.43106 3.17812 8.99981 3.17812C14.5686 3.17812 17.3248 8.49374 17.4373 8.71874C17.5217 8.88749 17.5217 9.11249 17.4373 9.28124C17.3248 9.50624 14.5686 14.8219 8.99981 14.8219ZM1.85605 9.00001C2.4748 10.0406 4.89356 13.5562 8.99981 13.5562C13.1061 13.5562 15.5248 10.0406 16.1436 9.00001C15.5248 7.95936 13.1061 4.44374 8.99981 4.44374C4.89356 4.44374 2.4748 7.95936 1.85605 9.00001Z" fill=""/>
                             <path d="M9 11.3906C7.67812 11.3906 6.60938 10.3219 6.60938 9C6.60938 7.67813 7.67812 6.60938 9 6.60938C10.3219 6.60938 11.3906 7.67813 11.3906 9C11.3906 10.3219 10.3219 11.3906 9 11.3906ZM9 7.875C8.38125 7.875 7.875 8.38125 7.875 9C7.875 9.61875 8.38125 10.125 9 10.125C9.61875 10.125 10.125 9.61875 10.125 9C10.125 8.38125 9.61875 7.875 9 7.875Z" fill=""/>
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() => handleGeneratePDF(fiche)}
+                          className="hover:text-blue-600 text-gray-600"
+                          title="Générer PDF"
+                        >
+                          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13.5 2.25H4.5C3.67157 2.25 3 2.92157 3 3.75V14.25C3 15.0784 3.67157 15.75 4.5 15.75H13.5C14.3284 15.75 15 15.0784 15 14.25V3.75C15 2.92157 14.3284 2.25 13.5 2.25Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                            <path d="M6 6H12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                            <path d="M6 9H12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                            <path d="M6 12H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                            <path d="M10.5 2.25V5.25C10.5 5.66421 10.8358 6 11.25 6H13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
                         </button>
                         {fiche.statut === 'soumis' && (userRole === 'admin' || userRole === 'Administrateur' || userRole === 'ADMIN') && (
@@ -430,14 +455,30 @@ const FicheAutoEvaluationPage: React.FC = () => {
               <h3 className="text-xl font-semibold text-black dark:text-white">
                 Détails de la Fiche d'Auto-évaluation
               </h3>
-              <button
-                onClick={closeDetailModal}
-                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+              <div className="flex items-center gap-3">
+                                  <button
+                    onClick={() => handleGeneratePDF(selectedFiche)}
+                    className="inline-flex items-center justify-center rounded-md bg-blue-600 py-2 px-4 text-center font-medium text-white hover:bg-blue-700"
+                    title="Générer PDF"
+                  >
+                    <svg className="w-4 h-4 mr-2" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M13.5 2.25H4.5C3.67157 2.25 3 2.92157 3 3.75V14.25C3 15.0784 3.67157 15.75 4.5 15.75H13.5C14.3284 15.75 15 15.0784 15 14.25V3.75C15 2.92157 14.3284 2.25 13.5 2.25Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                      <path d="M6 6H12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                      <path d="M6 9H12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                      <path d="M6 12H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                      <path d="M10.5 2.25V5.25C10.5 5.66421 10.8358 6 11.25 6H13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    PDF
+                  </button>
+                <button
+                  onClick={closeDetailModal}
+                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             <div className="space-y-6">
