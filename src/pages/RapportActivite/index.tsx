@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import moment from 'moment';
-import { generateAndDownloadPDF } from '../../utils/generateRapportPDF';
+import { generateAndShowPDF } from '../../utils/generateRapportPDF';
 
 // Fonction helper pour formater l'affichage du personnel
 const formatPersonnelDisplay = (rapport: RapportActivite) => {
@@ -755,55 +755,55 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
               <div class="personnel-details">
                 <div class="personnel-item">
                   <span class="label">Direction Provinciale:</span>
-                  <span class="value">${rapport.personnel?.personnelAdministratif?.directionProvinciale || 0}</span>
+                  <span class="value">${(rapport.personnel?.personnelAdministratif?.directionProvinciale?.hommes || 0) + (rapport.personnel?.personnelAdministratif?.directionProvinciale?.femmes || 0)}</span>
                 </div>
                 <div class="personnel-item">
                   <span class="label">Inspection Principale:</span>
-                  <span class="value">${rapport.personnel?.personnelAdministratif?.inspectionPrincipale || 0}</span>
+                  <span class="value">${(rapport.personnel?.personnelAdministratif?.inspectionPrincipale?.hommes || 0) + (rapport.personnel?.personnelAdministratif?.inspectionPrincipale?.femmes || 0)}</span>
                 </div>
                 <div class="personnel-item">
                   <span class="label">DINACOPE:</span>
-                  <span class="value">${rapport.personnel?.personnelAdministratif?.dinacope || 0}</span>
+                  <span class="value">${(rapport.personnel?.personnelAdministratif?.dinacope?.hommes || 0) + (rapport.personnel?.personnelAdministratif?.dinacope?.femmes || 0)}</span>
                 </div>
                 <div class="personnel-item">
                   <span class="label">SERNIE:</span>
-                  <span class="value">${rapport.personnel?.personnelAdministratif?.sernie || 0}</span>
+                  <span class="value">${(rapport.personnel?.personnelAdministratif?.sernie?.hommes || 0) + (rapport.personnel?.personnelAdministratif?.sernie?.femmes || 0)}</span>
                 </div>
                 <div class="personnel-item">
                   <span class="label">Coordination Provinciale:</span>
-                  <span class="value">${rapport.personnel?.personnelAdministratif?.coordinationProvinciale || 0}</span>
+                  <span class="value">${(rapport.personnel?.personnelAdministratif?.coordinationProvinciale?.hommes || 0) + (rapport.personnel?.personnelAdministratif?.coordinationProvinciale?.femmes || 0)}</span>
                 </div>
                 <div class="personnel-item">
                   <span class="label">Sous-division:</span>
-                  <span class="value">${rapport.personnel?.personnelAdministratif?.sousDivision || 0}</span>
+                  <span class="value">${(rapport.personnel?.personnelAdministratif?.sousDivision?.hommes || 0) + (rapport.personnel?.personnelAdministratif?.sousDivision?.femmes || 0)}</span>
                 </div>
                 <div class="personnel-item">
                   <span class="label">Pools Inspection Primaire:</span>
-                  <span class="value">${rapport.personnel?.personnelAdministratif?.poolsInspectionPrimaire || 0}</span>
+                  <span class="value">${(rapport.personnel?.personnelAdministratif?.poolsInspectionPrimaire?.hommes || 0) + (rapport.personnel?.personnelAdministratif?.poolsInspectionPrimaire?.femmes || 0)}</span>
                 </div>
                 <div class="personnel-item">
                   <span class="label">Pools Inspection Secondaire:</span>
-                  <span class="value">${rapport.personnel?.personnelAdministratif?.poolsInspectionSecondaire || 0}</span>
+                  <span class="value">${(rapport.personnel?.personnelAdministratif?.poolsInspectionSecondaire?.hommes || 0) + (rapport.personnel?.personnelAdministratif?.poolsInspectionSecondaire?.femmes || 0)}</span>
                 </div>
                 <div class="personnel-item">
                   <span class="label">Antenne DINACOPE:</span>
-                  <span class="value">${rapport.personnel?.personnelAdministratif?.antenneDinacope || 0}</span>
+                  <span class="value">${(rapport.personnel?.personnelAdministratif?.antenneDinacope?.hommes || 0) + (rapport.personnel?.personnelAdministratif?.antenneDinacope?.femmes || 0)}</span>
                 </div>
                 <div class="personnel-item">
                   <span class="label">Antenne SERNIE:</span>
-                  <span class="value">${rapport.personnel?.personnelAdministratif?.antenneSernie || 0}</span>
+                  <span class="value">${(rapport.personnel?.personnelAdministratif?.antenneSernie?.hommes || 0) + (rapport.personnel?.personnelAdministratif?.antenneSernie?.femmes || 0)}</span>
                 </div>
                 <div class="personnel-item">
                   <span class="label">Coordination Diocésaine:</span>
-                  <span class="value">${rapport.personnel?.personnelAdministratif?.coordinationDiocesaine || 0}</span>
+                  <span class="value">${(rapport.personnel?.personnelAdministratif?.coordinationDiocesaine?.hommes || 0) + (rapport.personnel?.personnelAdministratif?.coordinationDiocesaine?.femmes || 0)}</span>
                 </div>
                 <div class="personnel-item">
                   <span class="label">Sous-coordination Conventionnées:</span>
-                  <span class="value">${rapport.personnel?.personnelAdministratif?.sousCoordinationConventionnees || 0}</span>
+                  <span class="value">${(rapport.personnel?.personnelAdministratif?.sousCoordinationConventionnees?.hommes || 0) + (rapport.personnel?.personnelAdministratif?.sousCoordinationConventionnees?.femmes || 0)}</span>
                 </div>
                 <div class="personnel-item">
                   <span class="label">Conseillerie Résidente:</span>
-                  <span class="value">${rapport.personnel?.personnelAdministratif?.conseillerieResidente || 0}</span>
+                  <span class="value">${(rapport.personnel?.personnelAdministratif?.conseillerieResidente?.hommes || 0) + (rapport.personnel?.personnelAdministratif?.conseillerieResidente?.femmes || 0)}</span>
                 </div>
               </div>
             </div>
@@ -1201,7 +1201,8 @@ const RapportActivitePage: React.FC = () => {
 
   const handleGeneratePDF = async (rapport: RapportActivite) => {
     try {
-      await generateAndDownloadPDF(rapport);
+      // Utiliser la génération côté frontend au lieu du backend
+      await generateAndShowPDF(rapport);
     } catch (error) {
       console.error('Erreur lors de la génération du PDF:', error);
     }
