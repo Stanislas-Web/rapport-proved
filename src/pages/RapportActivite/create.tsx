@@ -1248,15 +1248,6 @@ const CreateRapportActivite: React.FC = () => {
                   Les taux d'accroissement seront calculés automatiquement lorsque vous saisirez les effectifs de l'année en cours.
                 </p>
               </div>
-              <button
-                onClick={() => {
-                  console.log('🧪 Test manuel du calcul des taux');
-                  updateGrowthRates();
-                }}
-                className="px-3 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
-              >
-                Test Calcul
-              </button>
             </div>
           </div>
         )}

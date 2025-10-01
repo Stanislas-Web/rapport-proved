@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RapportActivite } from '../../../models/RapportActivite';
 
 interface RealisationsProps {
@@ -7,6 +7,99 @@ interface RealisationsProps {
 }
 
 const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) => {
+  // État pour le modal de calcul des indicateurs d'accès
+  const [showCalculModalAcces, setShowCalculModalAcces] = useState(false);
+
+  // État pour les indicateurs d'accès
+  const [indicateursAcces, setIndicateursAcces] = useState({
+    nouveauxInscritsPrimaire: { tauxGF: 0, tauxFilles: 0 },
+    transitionPrimaireCTEB: { tauxGF: 0, tauxFilles: 0 },
+    transitionCTEBHumanites: { tauxGF: 0, tauxFilles: 0 }
+  });
+
+  // État pour les données brutes de calcul des indicateurs d'accès
+  const [calculDataAcces, setCalculDataAcces] = useState({
+    nouveauxInscritsPrimaire: { candidats: 0, admis: 0, garcons: 0, filles: 0 },
+    transitionPrimaireCTEB: { finissantsPrimaire: 0, inscritsCTEB: 0, garcons: 0, filles: 0 },
+    transitionCTEBHumanites: { finissantsCTEB: 0, inscritsHumanites: 0, garcons: 0, filles: 0 }
+  });
+
+  // Fonction pour ouvrir le modal de calcul d'accès
+  const openCalculModalAcces = () => {
+    setShowCalculModalAcces(true);
+  };
+
+  // Fonction pour mettre à jour les données de calcul d'accès
+  const updateCalculDataAcces = (indicateur: string, field: string, value: number) => {
+    setCalculDataAcces(prev => ({
+      ...prev,
+      [indicateur]: {
+        ...prev[indicateur as keyof typeof prev],
+        [field]: value
+      }
+    }));
+  };
+
+  // Fonction pour mettre à jour les indicateurs d'accès
+  const updateIndicateursAcces = (indicateur: string, field: 'tauxGF' | 'tauxFilles', value: number) => {
+    setIndicateursAcces(prev => {
+      const updated = { ...prev };
+      const currentIndicateur = updated[indicateur as keyof typeof updated];
+      currentIndicateur[field] = Math.max(0, Math.min(100, value)); // Limiter entre 0 et 100
+      return updated;
+    });
+  };
+
+  // Fonction pour calculer les taux d'accès à partir des nombres
+  const calculerTauxAcces = () => {
+    const nouveauxTaux: any = {};
+    
+    // Nouveaux inscrits au primaire
+    const dataNouveauxInscrits = calculDataAcces.nouveauxInscritsPrimaire;
+    const candidats = dataNouveauxInscrits.candidats || 0;
+    if (candidats > 0) {
+      const tauxGF = Math.round((dataNouveauxInscrits.admis / candidats) * 100 * 100) / 100;
+      const tauxFilles = Math.round((dataNouveauxInscrits.filles / candidats) * 100 * 100) / 100;
+      nouveauxTaux.nouveauxInscritsPrimaire = {
+        tauxGF: tauxGF,
+        tauxFilles: tauxFilles
+      };
+    } else {
+      nouveauxTaux.nouveauxInscritsPrimaire = { tauxGF: 0, tauxFilles: 0 };
+    }
+
+    // Transition Primaire vers CTEB
+    const dataTransitionPrimaire = calculDataAcces.transitionPrimaireCTEB;
+    const finissantsPrimaire = dataTransitionPrimaire.finissantsPrimaire || 0;
+    if (finissantsPrimaire > 0) {
+      const tauxGF = Math.round((dataTransitionPrimaire.inscritsCTEB / finissantsPrimaire) * 100 * 100) / 100;
+      const tauxFilles = Math.round((dataTransitionPrimaire.filles / finissantsPrimaire) * 100 * 100) / 100;
+      nouveauxTaux.transitionPrimaireCTEB = {
+        tauxGF: tauxGF,
+        tauxFilles: tauxFilles
+      };
+    } else {
+      nouveauxTaux.transitionPrimaireCTEB = { tauxGF: 0, tauxFilles: 0 };
+    }
+
+    // Transition CTEB vers Humanités
+    const dataTransitionCTEB = calculDataAcces.transitionCTEBHumanites;
+    const finissantsCTEB = dataTransitionCTEB.finissantsCTEB || 0;
+    if (finissantsCTEB > 0) {
+      const tauxGF = Math.round((dataTransitionCTEB.inscritsHumanites / finissantsCTEB) * 100 * 100) / 100;
+      const tauxFilles = Math.round((dataTransitionCTEB.filles / finissantsCTEB) * 100 * 100) / 100;
+      nouveauxTaux.transitionCTEBHumanites = {
+        tauxGF: tauxGF,
+        tauxFilles: tauxFilles
+      };
+    } else {
+      nouveauxTaux.transitionCTEBHumanites = { tauxGF: 0, tauxFilles: 0 };
+    }
+    
+    setIndicateursAcces(nouveauxTaux);
+    setShowCalculModalAcces(false);
+  };
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <h3 className="text-lg font-medium mb-4 text-primary">IV. REALISATIONS DE LA PROVINCE EDUCATIONELLE PAR AXE STRATEGIQUE DE LA STRATEGIE SECTORIELLE DE L'EDUCATION ET DE LA FORMATION (SSEF) AINSI QUE DE L'EDUCATION EN SITUATION D'URGENCE (ESU)</h3>
@@ -373,7 +466,19 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
 
         {/* IV.7. Indicateurs d'accès */}
         <div className="mb-4">
-          <h5 className="font-medium mb-2">IV.7. Indicateurs d'accès: Proportion & Transition</h5>
+          <div className="flex justify-between items-center mb-2">
+            <h5 className="font-medium">IV.7. Indicateurs d'accès: Proportion & Transition</h5>
+            <button
+              type="button"
+              onClick={openCalculModalAcces}
+              className="px-4 py-2 text-sm bg-teal-500 text-white rounded-md hover:bg-teal-600 transition-colors flex items-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+              Calculer les taux
+            </button>
+          </div>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse border border-gray-300">
               <thead>
@@ -387,28 +492,76 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">a) % d'Elèves admis au primaire (Nouveaux Inscrits)</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      min="0"
+                      max="100"
+                      step="0.1"
+                      value={indicateursAcces.nouveauxInscritsPrimaire.tauxGF || ''}
+                      onChange={(e) => updateIndicateursAcces('nouveauxInscritsPrimaire', 'tauxGF', Number(e.target.value))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      min="0"
+                      max="100"
+                      step="0.1"
+                      value={indicateursAcces.nouveauxInscritsPrimaire.tauxFilles || ''}
+                      onChange={(e) => updateIndicateursAcces('nouveauxInscritsPrimaire', 'tauxFilles', Number(e.target.value))}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">b) Taux de Transition du Primaire au CTEB</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      min="0"
+                      max="100"
+                      step="0.1"
+                      value={indicateursAcces.transitionPrimaireCTEB.tauxGF || ''}
+                      onChange={(e) => updateIndicateursAcces('transitionPrimaireCTEB', 'tauxGF', Number(e.target.value))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      min="0"
+                      max="100"
+                      step="0.1"
+                      value={indicateursAcces.transitionPrimaireCTEB.tauxFilles || ''}
+                      onChange={(e) => updateIndicateursAcces('transitionPrimaireCTEB', 'tauxFilles', Number(e.target.value))}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">c) Taux de Transition du CTEB aux Humanités (8eme en 1ere Hum)</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      min="0"
+                      max="100"
+                      step="0.1"
+                      value={indicateursAcces.transitionCTEBHumanites.tauxGF || ''}
+                      onChange={(e) => updateIndicateursAcces('transitionCTEBHumanites', 'tauxGF', Number(e.target.value))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      min="0"
+                      max="100"
+                      step="0.1"
+                      value={indicateursAcces.transitionCTEBHumanites.tauxFilles || ''}
+                      onChange={(e) => updateIndicateursAcces('transitionCTEBHumanites', 'tauxFilles', Number(e.target.value))}
+                    />
                   </td>
                 </tr>
               </tbody>
@@ -421,6 +574,202 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
           <strong>NB:</strong> Spécifier la dénomination du Projet, du PTF ou de l'ONG ayant appuyé le financement des réalisations.
         </p>
       </div>
+
+      {/* Modal de calcul des indicateurs d'accès */}
+      {showCalculModalAcces && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999] p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+              <h3 className="text-xl font-bold text-gray-900">Calculer les indicateurs d'accès et de transition</h3>
+              <button
+                onClick={() => setShowCalculModalAcces(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="px-6 py-4">
+              <p className="text-sm text-gray-600 mb-6">
+                Saisissez les nombres d'élèves pour chaque indicateur. Les pourcentages seront calculés automatiquement.
+              </p>
+
+              {/* a) % d'Elèves admis au primaire (Nouveaux Inscrits) */}
+              <div className="mb-6 border border-gray-200 rounded-lg p-4">
+                <h4 className="font-semibold text-lg mb-4 text-teal-700">a) % d'Elèves admis au primaire (Nouveaux Inscrits)</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Candidats</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      value={calculDataAcces.nouveauxInscritsPrimaire.candidats || ''}
+                      onChange={(e) => updateCalculDataAcces('nouveauxInscritsPrimaire', 'candidats', Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Admis</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                      value={calculDataAcces.nouveauxInscritsPrimaire.admis || ''}
+                      onChange={(e) => updateCalculDataAcces('nouveauxInscritsPrimaire', 'admis', Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Garçons</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      value={calculDataAcces.nouveauxInscritsPrimaire.garcons || ''}
+                      onChange={(e) => updateCalculDataAcces('nouveauxInscritsPrimaire', 'garcons', Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Filles</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                      value={calculDataAcces.nouveauxInscritsPrimaire.filles || ''}
+                      onChange={(e) => updateCalculDataAcces('nouveauxInscritsPrimaire', 'filles', Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* b) Taux de Transition du Primaire au CTEB */}
+              <div className="mb-6 border border-gray-200 rounded-lg p-4">
+                <h4 className="font-semibold text-lg mb-4 text-teal-700">b) Taux de Transition du Primaire au CTEB</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Finissants Primaire</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      value={calculDataAcces.transitionPrimaireCTEB.finissantsPrimaire || ''}
+                      onChange={(e) => updateCalculDataAcces('transitionPrimaireCTEB', 'finissantsPrimaire', Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Inscrits CTEB</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                      value={calculDataAcces.transitionPrimaireCTEB.inscritsCTEB || ''}
+                      onChange={(e) => updateCalculDataAcces('transitionPrimaireCTEB', 'inscritsCTEB', Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Garçons</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      value={calculDataAcces.transitionPrimaireCTEB.garcons || ''}
+                      onChange={(e) => updateCalculDataAcces('transitionPrimaireCTEB', 'garcons', Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Filles</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                      value={calculDataAcces.transitionPrimaireCTEB.filles || ''}
+                      onChange={(e) => updateCalculDataAcces('transitionPrimaireCTEB', 'filles', Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* c) Taux de Transition du CTEB aux Humanités */}
+              <div className="mb-6 border border-gray-200 rounded-lg p-4">
+                <h4 className="font-semibold text-lg mb-4 text-teal-700">c) Taux de Transition du CTEB aux Humanités (8ème en 1ère Hum)</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Finissants CTEB</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      value={calculDataAcces.transitionCTEBHumanites.finissantsCTEB || ''}
+                      onChange={(e) => updateCalculDataAcces('transitionCTEBHumanites', 'finissantsCTEB', Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Inscrits Humanités</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                      value={calculDataAcces.transitionCTEBHumanites.inscritsHumanites || ''}
+                      onChange={(e) => updateCalculDataAcces('transitionCTEBHumanites', 'inscritsHumanites', Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Garçons</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      value={calculDataAcces.transitionCTEBHumanites.garcons || ''}
+                      onChange={(e) => updateCalculDataAcces('transitionCTEBHumanites', 'garcons', Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Filles</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                      value={calculDataAcces.transitionCTEBHumanites.filles || ''}
+                      onChange={(e) => updateCalculDataAcces('transitionCTEBHumanites', 'filles', Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-4 flex justify-end gap-3">
+              <button
+                onClick={() => setShowCalculModalAcces(false)}
+                className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition-colors"
+              >
+                Annuler
+              </button>
+              <button
+                onClick={calculerTauxAcces}
+                className="px-6 py-2 bg-teal-500 text-white rounded-md hover:bg-teal-600 transition-colors flex items-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Calculer les pourcentages
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
