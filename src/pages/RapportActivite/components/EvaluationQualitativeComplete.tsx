@@ -1,6 +1,88 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const EvaluationQualitativeComplete: React.FC = () => {
+interface EvaluationQualitativeCompleteProps {
+  formData?: any;
+  setFormData?: React.Dispatch<React.SetStateAction<any>>;
+}
+
+const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps> = () => {
+  // État pour les inspections pédagogiques C3
+  const [inspectionsC3, setInspectionsC3] = useState({
+    maternel: { prevu: 0, realise: 0, pourcentage: 0 },
+    primaire: { prevu: 0, realise: 0, pourcentage: 0 },
+    secondaire: { prevu: 0, realise: 0, pourcentage: 0 },
+    special: { prevu: 0, realise: 0, pourcentage: 0 }
+  });
+
+  // État pour les inspections de formation
+  const [inspectionsFormation, setInspectionsFormation] = useState({
+    maternel: { prevu: 0, realise: 0, pourcentage: 0 },
+    primaire: { prevu: 0, realise: 0, pourcentage: 0 },
+    secondaire: { prevu: 0, realise: 0, pourcentage: 0 },
+    special: { prevu: 0, realise: 0, pourcentage: 0 }
+  });
+
+  // Fonction pour calculer le pourcentage
+  const calculatePercentage = (realise: number, prevu: number): number => {
+    if (prevu === 0) return 0;
+    return Math.round((realise / prevu) * 100 * 100) / 100;
+  };
+
+  // Fonction pour mettre à jour les valeurs des inspections C3
+  const updateInspection = (niveau: string, field: 'prevu' | 'realise', value: number) => {
+    setInspectionsC3(prev => {
+      const updated = { ...prev };
+      const currentNiveau = updated[niveau as keyof typeof updated];
+      
+      if (field === 'prevu') {
+        // Si on met à jour le nombre prévu
+        currentNiveau.prevu = value;
+        // Vérifier que le réalisé ne dépasse pas le prévu
+        if (currentNiveau.realise > value) {
+          currentNiveau.realise = value;
+        }
+      } else if (field === 'realise') {
+        // Si on met à jour le nombre réalisé
+        const prevuValue = currentNiveau.prevu;
+        // Limiter le réalisé au maximum du prévu
+        currentNiveau.realise = Math.min(value, prevuValue);
+      }
+      
+      // Recalculer le pourcentage
+      currentNiveau.pourcentage = 
+        calculatePercentage(currentNiveau.realise, currentNiveau.prevu);
+      
+      return updated;
+    });
+  };
+
+  // Fonction pour mettre à jour les valeurs des inspections de formation
+  const updateInspectionFormation = (niveau: string, field: 'prevu' | 'realise', value: number) => {
+    setInspectionsFormation(prev => {
+      const updated = { ...prev };
+      const currentNiveau = updated[niveau as keyof typeof updated];
+      
+      if (field === 'prevu') {
+        // Si on met à jour le nombre prévu
+        currentNiveau.prevu = value;
+        // Vérifier que le réalisé ne dépasse pas le prévu
+        if (currentNiveau.realise > value) {
+          currentNiveau.realise = value;
+        }
+      } else if (field === 'realise') {
+        // Si on met à jour le nombre réalisé
+        const prevuValue = currentNiveau.prevu;
+        // Limiter le réalisé au maximum du prévu
+        currentNiveau.realise = Math.min(value, prevuValue);
+      }
+      
+      // Recalculer le pourcentage
+      currentNiveau.pourcentage = 
+        calculatePercentage(currentNiveau.realise, currentNiveau.prevu);
+      
+      return updated;
+    });
+  };
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <h3 className="text-lg font-medium mb-4 text-primary">III. EVALUATION QUALITATIVE (SUITE)</h3>
@@ -433,49 +515,114 @@ const EvaluationQualitativeComplete: React.FC = () => {
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">Maternel</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      value={inspectionsC3.maternel.prevu || ''}
+                      onChange={(e) => updateInspection('maternel', 'prevu', Number(e.target.value))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      min="0"
+                      max={inspectionsC3.maternel.prevu || undefined}
+                      value={inspectionsC3.maternel.realise || ''}
+                      onChange={(e) => updateInspection('maternel', 'realise', Number(e.target.value))}
+                    />
                   </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <td className="border border-gray-300 px-3 py-2 bg-gray-50">
+                    <span className="w-full text-center font-medium text-blue-600">
+                      {inspectionsC3.maternel.pourcentage}%
+                    </span>
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">Primaire</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      value={inspectionsC3.primaire.prevu || ''}
+                      onChange={(e) => updateInspection('primaire', 'prevu', Number(e.target.value))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      min="0"
+                      max={inspectionsC3.primaire.prevu || undefined}
+                      value={inspectionsC3.primaire.realise || ''}
+                      onChange={(e) => updateInspection('primaire', 'realise', Number(e.target.value))}
+                    />
                   </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <td className="border border-gray-300 px-3 py-2 bg-gray-50">
+                    <span className="w-full text-center font-medium text-blue-600">
+                      {inspectionsC3.primaire.pourcentage}%
+                    </span>
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">Secondaire</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      value={inspectionsC3.secondaire.prevu || ''}
+                      onChange={(e) => updateInspection('secondaire', 'prevu', Number(e.target.value))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      min="0"
+                      max={inspectionsC3.secondaire.prevu || undefined}
+                      value={inspectionsC3.secondaire.realise || ''}
+                      onChange={(e) => updateInspection('secondaire', 'realise', Number(e.target.value))}
+                    />
                   </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <td className="border border-gray-300 px-3 py-2 bg-gray-50">
+                    <span className="w-full text-center font-medium text-blue-600">
+                      {inspectionsC3.secondaire.pourcentage}%
+                    </span>
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">Spécial (handicap: Tout niveau confondu)</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      min="0"
+                      value={inspectionsC3.special.prevu || ''}
+                      onChange={(e) => updateInspection('special', 'prevu', Number(e.target.value))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      min="0"
+                      max={inspectionsC3.special.prevu || undefined}
+                      value={inspectionsC3.special.realise || ''}
+                      onChange={(e) => updateInspection('special', 'realise', Number(e.target.value))}
+                    />
                   </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <td className="border border-gray-300 px-3 py-2 bg-gray-50">
+                    <span className="w-full text-center font-medium text-blue-600">
+                      {inspectionsC3.special.pourcentage}%
+                    </span>
                   </td>
                 </tr>
               </tbody>
@@ -500,49 +647,117 @@ const EvaluationQualitativeComplete: React.FC = () => {
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">Maternel</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      min="0"
+                      value={inspectionsFormation.maternel.prevu || ''}
+                      onChange={(e) => updateInspectionFormation('maternel', 'prevu', Number(e.target.value))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      min="0"
+                      max={inspectionsFormation.maternel.prevu || undefined}
+                      value={inspectionsFormation.maternel.realise || ''}
+                      onChange={(e) => updateInspectionFormation('maternel', 'realise', Number(e.target.value))}
+                    />
                   </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <td className="border border-gray-300 px-3 py-2 bg-gray-50">
+                    <span className="w-full text-center font-medium text-blue-600">
+                      {inspectionsFormation.maternel.pourcentage}%
+                    </span>
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">Primaire</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      min="0"
+                      value={inspectionsFormation.primaire.prevu || ''}
+                      onChange={(e) => updateInspectionFormation('primaire', 'prevu', Number(e.target.value))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      min="0"
+                      max={inspectionsFormation.primaire.prevu || undefined}
+                      value={inspectionsFormation.primaire.realise || ''}
+                      onChange={(e) => updateInspectionFormation('primaire', 'realise', Number(e.target.value))}
+                    />
                   </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <td className="border border-gray-300 px-3 py-2 bg-gray-50">
+                    <span className="w-full text-center font-medium text-blue-600">
+                      {inspectionsFormation.primaire.pourcentage}%
+                    </span>
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">Secondaire</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      min="0"
+                      value={inspectionsFormation.secondaire.prevu || ''}
+                      onChange={(e) => updateInspectionFormation('secondaire', 'prevu', Number(e.target.value))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      min="0"
+                      max={inspectionsFormation.secondaire.prevu || undefined}
+                      value={inspectionsFormation.secondaire.realise || ''}
+                      onChange={(e) => updateInspectionFormation('secondaire', 'realise', Number(e.target.value))}
+                    />
                   </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <td className="border border-gray-300 px-3 py-2 bg-gray-50">
+                    <span className="w-full text-center font-medium text-blue-600">
+                      {inspectionsFormation.secondaire.pourcentage}%
+                    </span>
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">Spécial (handicap: Tout niveau confondu)</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      min="0"
+                      value={inspectionsFormation.special.prevu || ''}
+                      onChange={(e) => updateInspectionFormation('special', 'prevu', Number(e.target.value))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      min="0"
+                      max={inspectionsFormation.special.prevu || undefined}
+                      value={inspectionsFormation.special.realise || ''}
+                      onChange={(e) => updateInspectionFormation('special', 'realise', Number(e.target.value))}
+                    />
                   </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <td className="border border-gray-300 px-3 py-2 bg-gray-50">
+                    <span className="w-full text-center font-medium text-blue-600">
+                      {inspectionsFormation.special.pourcentage}%
+                    </span>
                   </td>
                 </tr>
               </tbody>

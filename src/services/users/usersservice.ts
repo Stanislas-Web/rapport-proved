@@ -55,12 +55,32 @@ const getAllUser = async (route: string) => {
   }
 }
 
+const updateUser = async (id: string, data: object) => {
+  console.log('🔍 UsersService.updateUser - ID:', id);
+  console.log('🔍 UsersService.updateUser - Data:', data);
+  console.log('🔍 UsersService.updateUser - Token:', localStorage.getItem('token'));
+  
+  try {
+    // Utiliser le bon endpoint pour la modification du profil
+    const response = await BaseService.put(`identification-proved/${id}`, data);
+    console.log('🔍 UsersService.updateUser - Réponse:', response);
+    return response;
+  } catch (error: any) {
+    console.error('🔍 UsersService.updateUser - Erreur complète:', error);
+    console.error('🔍 UsersService.updateUser - Message d\'erreur:', error.message);
+    console.error('🔍 UsersService.updateUser - Status:', error.response?.status);
+    console.error('🔍 UsersService.updateUser - Data d\'erreur:', error.response?.data);
+    throw error;
+  }
+}
+
 
 const UsersService = {
   login,
   createUser,
   getAllUser,
-  uploadImage
+  uploadImage,
+  updateUser
 }
 
 export default UsersService

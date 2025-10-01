@@ -30,6 +30,20 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = () => {
     totalLocataire: 0,
   });
 
+  // État pour les inspections administratives C2B
+  const [inspectionsC2B, setInspectionsC2B] = useState({
+    maternel: { prevu: 0, realise: 0, pourcentage: 0 },
+    primaire: { prevu: 0, realise: 0, pourcentage: 0 },
+    secondaire: { prevu: 0, realise: 0, pourcentage: 0 },
+    special: { prevu: 0, realise: 0, pourcentage: 0 }
+  });
+
+  // Fonction pour calculer le pourcentage
+  const calculatePercentage = (realise: number, prevu: number): number => {
+    if (prevu === 0) return 0;
+    return Math.round((realise / prevu) * 100 * 100) / 100;
+  };
+
   // Fonction pour mettre à jour les valeurs d'un bureau
   const updateBureauValue = (bureau: string, type: 'proprietaire' | 'locataire', value: number) => {
     setBureauValues(prev => ({
@@ -39,6 +53,34 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = () => {
         [type]: value
       }
     }));
+  };
+
+  // Fonction pour mettre à jour les valeurs des inspections C2B
+  const updateInspectionC2B = (niveau: string, field: 'prevu' | 'realise', value: number) => {
+    setInspectionsC2B(prev => {
+      const updated = { ...prev };
+      const currentNiveau = updated[niveau as keyof typeof updated];
+      
+      if (field === 'prevu') {
+        // Si on met à jour le nombre prévu
+        currentNiveau.prevu = value;
+        // Vérifier que le réalisé ne dépasse pas le prévu
+        if (currentNiveau.realise > value) {
+          currentNiveau.realise = value;
+        }
+      } else if (field === 'realise') {
+        // Si on met à jour le nombre réalisé
+        const prevuValue = currentNiveau.prevu;
+        // Limiter le réalisé au maximum du prévu
+        currentNiveau.realise = Math.min(value, prevuValue);
+      }
+      
+      // Recalculer le pourcentage
+      currentNiveau.pourcentage = 
+        calculatePercentage(currentNiveau.realise, currentNiveau.prevu);
+      
+      return updated;
+    });
   };
 
   // Calcul automatique des totaux
@@ -71,49 +113,117 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = () => {
               <tr>
                 <td className="border border-gray-300 px-3 py-2">Maternel</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    min="0"
+                    value={inspectionsC2B.maternel.prevu || ''}
+                    onChange={(e) => updateInspectionC2B('maternel', 'prevu', Number(e.target.value))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    min="0"
+                    max={inspectionsC2B.maternel.prevu || undefined}
+                    value={inspectionsC2B.maternel.realise || ''}
+                    onChange={(e) => updateInspectionC2B('maternel', 'realise', Number(e.target.value))}
+                  />
                 </td>
-                <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                <td className="border border-gray-300 px-3 py-2 bg-gray-50">
+                  <span className="w-full text-center font-medium text-blue-600">
+                    {inspectionsC2B.maternel.pourcentage}%
+                  </span>
                 </td>
               </tr>
               <tr>
                 <td className="border border-gray-300 px-3 py-2">Primaire</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    min="0"
+                    value={inspectionsC2B.primaire.prevu || ''}
+                    onChange={(e) => updateInspectionC2B('primaire', 'prevu', Number(e.target.value))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    min="0"
+                    max={inspectionsC2B.primaire.prevu || undefined}
+                    value={inspectionsC2B.primaire.realise || ''}
+                    onChange={(e) => updateInspectionC2B('primaire', 'realise', Number(e.target.value))}
+                  />
                 </td>
-                <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                <td className="border border-gray-300 px-3 py-2 bg-gray-50">
+                  <span className="w-full text-center font-medium text-blue-600">
+                    {inspectionsC2B.primaire.pourcentage}%
+                  </span>
                 </td>
               </tr>
               <tr>
                 <td className="border border-gray-300 px-3 py-2">Secondaire</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    min="0"
+                    value={inspectionsC2B.secondaire.prevu || ''}
+                    onChange={(e) => updateInspectionC2B('secondaire', 'prevu', Number(e.target.value))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    min="0"
+                    max={inspectionsC2B.secondaire.prevu || undefined}
+                    value={inspectionsC2B.secondaire.realise || ''}
+                    onChange={(e) => updateInspectionC2B('secondaire', 'realise', Number(e.target.value))}
+                  />
                 </td>
-                <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                <td className="border border-gray-300 px-3 py-2 bg-gray-50">
+                  <span className="w-full text-center font-medium text-blue-600">
+                    {inspectionsC2B.secondaire.pourcentage}%
+                  </span>
                 </td>
               </tr>
               <tr>
                 <td className="border border-gray-300 px-3 py-2">Spécial (handicap: Tout niveau confondu)</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    min="0"
+                    value={inspectionsC2B.special.prevu || ''}
+                    onChange={(e) => updateInspectionC2B('special', 'prevu', Number(e.target.value))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                    placeholder="0"
+                    min="0"
+                    max={inspectionsC2B.special.prevu || undefined}
+                    value={inspectionsC2B.special.realise || ''}
+                    onChange={(e) => updateInspectionC2B('special', 'realise', Number(e.target.value))}
+                  />
                 </td>
-                <td className="border border-gray-300 px-3 py-2">
-                  <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                <td className="border border-gray-300 px-3 py-2 bg-gray-50">
+                  <span className="w-full text-center font-medium text-blue-600">
+                    {inspectionsC2B.special.pourcentage}%
+                  </span>
                 </td>
               </tr>
             </tbody>

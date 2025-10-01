@@ -510,8 +510,8 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.maternel?.tauxAccroissementGarconsFilles ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.maternel.tauxAccroissementGarconsFilles', Number(e.target.value))}
+                      value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.maternel?.effectifGarconsFilles ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.maternel.effectifGarconsFilles', Number(e.target.value))}
                     />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -549,8 +549,8 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.prePrimaire?.tauxAccroissementGarconsFilles ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.prePrimaire.tauxAccroissementGarconsFilles', Number(e.target.value))}
+                      value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.prePrimaire?.effectifGarconsFilles ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.prePrimaire.effectifGarconsFilles', Number(e.target.value))}
                     />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -588,8 +588,8 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.special?.tauxAccroissementGarconsFilles ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.special.tauxAccroissementGarconsFilles', Number(e.target.value))}
+                      value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.special?.effectifGarconsFilles ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.special.effectifGarconsFilles', Number(e.target.value))}
                     />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">

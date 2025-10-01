@@ -28,6 +28,15 @@ const CreateRapportActivite: React.FC = () => {
       try {
         const draft = JSON.parse(savedDraft);
         console.log('🔍 Brouillon chargé:', draft);
+        
+        // Nettoyer les anciennes valeurs "-" qui causent des erreurs
+        if (draft.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.classesPlethoriques === '-') {
+          draft.parametresCles.nombreEcolesClasses.niveauPrimaire.enseignementPrimaire.classesPlethoriques = 0;
+        }
+        if (draft.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementSpecial?.classesPlethoriques === '-') {
+          draft.parametresCles.nombreEcolesClasses.niveauPrimaire.enseignementSpecial.classesPlethoriques = 0;
+        }
+        
         return draft;
       } catch (error) {
         console.error('Erreur lors du chargement du brouillon:', error);
@@ -79,7 +88,7 @@ const CreateRapportActivite: React.FC = () => {
             enseignementPrimaire: {
               nombreEcoles: 0,
               totalClassesPrimaire: 0,
-              classesPlethoriques: '-'
+              classesPlethoriques: 0
             }
           },
           niveauSecondaire: {
@@ -736,15 +745,94 @@ const CreateRapportActivite: React.FC = () => {
     return completeData;
   });
 
-  // Sauvegarder automatiquement en brouillon toutes les 30 secondes
-  useEffect(() => {
-    const interval = setInterval(() => {
-      localStorage.setItem('rapportActiviteDraft', JSON.stringify(formData));
-      console.log('🔍 Brouillon sauvegardé automatiquement');
-    }, 30000); // 30 secondes
+  // État pour stocker les effectifs de l'année précédente
+  const [previousYearEffectifs, setPreviousYearEffectifs] = useState<any>(null);
 
-    return () => clearInterval(interval);
+  // Fonction pour récupérer les effectifs de l'année précédente
+  const fetchPreviousYearData = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const userData = localStorage.getItem('data');
+      
+      if (!token || !userData) {
+        console.log('❌ Token ou données utilisateur manquants');
+        return;
+      }
+
+      const user = JSON.parse(userData);
+      const provedId = user._id;
+      const currentYear = new Date().getFullYear();
+      const anneeActuelle = `${currentYear}-${currentYear + 1}`;
+
+      console.log('🔍 Récupération des effectifs de l\'année précédente...');
+      console.log('🔍 PROVED ID:', provedId);
+      console.log('🔍 Année actuelle:', anneeActuelle);
+
+      const response = await fetch(
+        `http://localhost:3000/api/v1/effectif-annuel/previous/${provedId}/${anneeActuelle}`,
+        {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }
+      );
+
+      if (!response.ok) {
+        console.log('❌ Erreur lors de la récupération des effectifs:', response.status);
+        return;
+      }
+
+      const data = await response.json();
+      console.log('✅ Effectifs de l\'année précédente récupérés:', data);
+
+      // Stocker les effectifs de l'année précédente
+      if (data.success && data.data?.effectifs) {
+        setPreviousYearEffectifs(data.data.effectifs);
+        toast.success('📊 Effectifs de l\'année précédente chargés avec succès !');
+      }
+    } catch (error) {
+      console.error('❌ Erreur lors de la récupération des effectifs:', error);
+      toast.error('Erreur lors du chargement des effectifs de l\'année précédente');
+    }
+  };
+
+  // Charger les effectifs de l'année précédente au montage du composant
+  useEffect(() => {
+    fetchPreviousYearData();
+  }, []);
+
+  // Calculer automatiquement les taux d'accroissement quand les effectifs changent
+  useEffect(() => {
+    console.log('🔍 useEffect calcul taux - previousYearEffectifs:', previousYearEffectifs);
+    console.log('🔍 useEffect calcul taux - effectifScolaire changé:', formData.parametresCles?.effectifScolaire);
+    
+    if (previousYearEffectifs) {
+      // Délai pour s'assurer que setFormData a fini de s'exécuter
+      setTimeout(() => {
+        updateGrowthRates();
+      }, 50);
+    }
+  }, [formData.parametresCles?.effectifScolaire, previousYearEffectifs]);
+
+  // Surveiller TOUS les changements de formData pour détecter les modifications d'effectifs
+  useEffect(() => {
+    if (previousYearEffectifs) {
+      // Délai pour éviter les boucles infinies
+      const timeoutId = setTimeout(() => {
+        updateGrowthRates();
+      }, 100);
+      
+      return () => clearTimeout(timeoutId);
+    }
   }, [formData]);
+
+  // Sauvegarder automatiquement en brouillon toutes les 30 secondes (TEMPORAIREMENT DÉSACTIVÉ)
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     localStorage.setItem('rapportActiviteDraft', JSON.stringify(formData));
+  //     console.log('🔍 Brouillon sauvegardé automatiquement');
+  //   }, 30000); // 30 secondes
+
+  //   return () => clearInterval(interval);
+  // }, [formData]);
 
   // Sauvegarder en brouillon manuellement
   const saveDraft = async () => {
@@ -812,11 +900,261 @@ const CreateRapportActivite: React.FC = () => {
     console.log('🔍 Fin de l\'effacement du brouillon');
   };
 
+  // Fonction globale pour mettre à jour les taux d'accroissement
+  const updateGrowthRates = () => {
+    if (!previousYearEffectifs) {
+      console.log('❌ Pas de données année précédente pour le calcul');
+      return;
+    }
+
+    console.log('🔄 Mise à jour des taux d\'accroissement...');
+    console.log('🔍 Données année précédente COMPLÈTES:', previousYearEffectifs);
+    console.log('🔍 Structure niveauPrescolaire:', previousYearEffectifs.niveauPrescolaire);
+    console.log('🔍 Structure niveauPrimaire:', previousYearEffectifs.niveauPrimaire);
+    console.log('🔍 Structure niveauSecondaire:', previousYearEffectifs.niveauSecondaire);
+
+    setFormData(prev => {
+      const updated = JSON.parse(JSON.stringify(prev)); // Deep clone
+      let hasChanges = false;
+      let changesCount = 0;
+
+      // Niveau Préscolaire (y compris enseignement spécial)
+      ['espaceCommunautaireEveil', 'maternel', 'prePrimaire', 'special'].forEach((niveau: string) => {
+        const prevData = (previousYearEffectifs.niveauPrescolaire as any)?.[niveau];
+        const currentData = (updated.parametresCles?.effectifScolaire?.niveauPrescolaire as any)?.[niveau];
+
+        // Log spécial pour l'enseignement spécial
+        if (niveau === 'special') {
+          console.log('🎯 ENSEIGNEMENT SPÉCIAL PRÉSCOLAIRE DEBUG:');
+          console.log('🔍 prevData:', prevData);
+          console.log('🔍 currentData:', currentData);
+          console.log('🔍 prevData exists:', !!prevData);
+          console.log('🔍 currentData exists:', !!currentData);
+        }
+
+        if (prevData && currentData) {
+          console.log(`🔍 Préscolaire ${niveau} - Prev:`, prevData, 'Current:', currentData);
+          
+          const prevGF = prevData.effectifGarconsFilles || 0;
+          const currentGF = currentData.effectifGarconsFilles || 0;
+          const prevF = prevData.effectifFilles || 0;
+          const currentF = currentData.effectifFilles || 0;
+
+          if (niveau === 'special') {
+            console.log(`🎯 SPÉCIAL - prevGF: ${prevGF}, currentGF: ${currentGF}`);
+            console.log(`🎯 SPÉCIAL - prevF: ${prevF}, currentF: ${currentF}`);
+          }
+
+          // Taux G+F
+          if (prevGF > 0 && currentGF > 0) {
+            const taux = Math.round(((currentGF - prevGF) / prevGF) * 100 * 100) / 100;
+            if (currentData.tauxAccroissementGarconsFilles !== taux) {
+              console.log(`✅ Préscolaire ${niveau} - Taux G+F: ${currentData.tauxAccroissementGarconsFilles}% → ${taux}% (${prevGF} → ${currentGF})`);
+              currentData.tauxAccroissementGarconsFilles = taux;
+              hasChanges = true;
+              changesCount++;
+            } else if (niveau === 'special') {
+              console.log(`⚠️ SPÉCIAL - Taux G+F déjà correct: ${taux}%`);
+            }
+          } else if (niveau === 'special') {
+            console.log(`⚠️ SPÉCIAL - Conditions non remplies: prevGF=${prevGF}, currentGF=${currentGF}`);
+          }
+          
+          // Taux F
+          if (prevF > 0 && currentF > 0) {
+            const taux = Math.round(((currentF - prevF) / prevF) * 100 * 100) / 100;
+            if (currentData.tauxAccroissementFilles !== taux) {
+              console.log(`✅ Préscolaire ${niveau} - Taux F: ${currentData.tauxAccroissementFilles}% → ${taux}% (${prevF} → ${currentF})`);
+              currentData.tauxAccroissementFilles = taux;
+              hasChanges = true;
+              changesCount++;
+            } else if (niveau === 'special') {
+              console.log(`⚠️ SPÉCIAL - Taux F déjà correct: ${taux}%`);
+            }
+          } else if (niveau === 'special') {
+            console.log(`⚠️ SPÉCIAL - Conditions Taux F non remplies: prevF=${prevF}, currentF=${currentF}`);
+          }
+        } else {
+          console.log(`❌ Préscolaire ${niveau} - Données manquantes - Prev:`, !!prevData, 'Current:', !!currentData);
+          if (niveau === 'special') {
+            console.log('❌ SPÉCIAL PRÉSCOLAIRE - Données manquantes!');
+          }
+        }
+      });
+
+      // Niveau Primaire (y compris enseignement spécial)
+      ['enseignementSpecial', 'enseignementPrimaire'].forEach((niveau: string) => {
+        const prevData = (previousYearEffectifs.niveauPrimaire as any)?.[niveau];
+        const currentData = (updated.parametresCles?.effectifScolaire?.niveauPrimaire as any)?.[niveau];
+
+        // Log spécial pour l'enseignement spécial primaire
+        if (niveau === 'enseignementSpecial') {
+          console.log('🎯 ENSEIGNEMENT SPÉCIAL PRIMAIRE DEBUG:');
+          console.log('🔍 prevData:', prevData);
+          console.log('🔍 currentData:', currentData);
+          console.log('🔍 prevData exists:', !!prevData);
+          console.log('🔍 currentData exists:', !!currentData);
+        }
+
+        if (prevData && currentData) {
+          console.log(`🔍 Primaire ${niveau} - Prev:`, prevData, 'Current:', currentData);
+          
+          const prevGF = prevData.effectifGarconsFilles || 0;
+          const currentGF = currentData.effectifGarconsFilles || 0;
+          const prevF = prevData.effectifFilles || 0;
+          const currentF = currentData.effectifFilles || 0;
+
+          if (niveau === 'enseignementSpecial') {
+            console.log(`🎯 SPÉCIAL PRIMAIRE - prevGF: ${prevGF}, currentGF: ${currentGF}`);
+            console.log(`🎯 SPÉCIAL PRIMAIRE - prevF: ${prevF}, currentF: ${currentF}`);
+          }
+
+          // Taux G+F
+          if (prevGF > 0 && currentGF > 0) {
+            const taux = Math.round(((currentGF - prevGF) / prevGF) * 100 * 100) / 100;
+            if (currentData.tauxAccroissementGarconsFilles !== taux) {
+              console.log(`✅ Primaire ${niveau} - Taux G+F: ${currentData.tauxAccroissementGarconsFilles}% → ${taux}% (${prevGF} → ${currentGF})`);
+              currentData.tauxAccroissementGarconsFilles = taux;
+              hasChanges = true;
+              changesCount++;
+            } else if (niveau === 'enseignementSpecial') {
+              console.log(`⚠️ SPÉCIAL PRIMAIRE - Taux G+F déjà correct: ${taux}%`);
+            }
+          } else if (niveau === 'enseignementSpecial') {
+            console.log(`⚠️ SPÉCIAL PRIMAIRE - Conditions non remplies: prevGF=${prevGF}, currentGF=${currentGF}`);
+          }
+          
+          // Taux F
+          if (prevF > 0 && currentF > 0) {
+            const taux = Math.round(((currentF - prevF) / prevF) * 100 * 100) / 100;
+            if (currentData.tauxAccroissementFilles !== taux) {
+              console.log(`✅ Primaire ${niveau} - Taux F: ${currentData.tauxAccroissementFilles}% → ${taux}% (${prevF} → ${currentF})`);
+              currentData.tauxAccroissementFilles = taux;
+              hasChanges = true;
+              changesCount++;
+            } else if (niveau === 'enseignementSpecial') {
+              console.log(`⚠️ SPÉCIAL PRIMAIRE - Taux F déjà correct: ${taux}%`);
+            }
+          } else if (niveau === 'enseignementSpecial') {
+            console.log(`⚠️ SPÉCIAL PRIMAIRE - Conditions Taux F non remplies: prevF=${prevF}, currentF=${currentF}`);
+          }
+        } else {
+          console.log(`❌ Primaire ${niveau} - Données manquantes - Prev:`, !!prevData, 'Current:', !!currentData);
+          if (niveau === 'enseignementSpecial') {
+            console.log('❌ SPÉCIAL PRIMAIRE - Données manquantes!');
+          }
+        }
+      });
+
+      // Niveau Secondaire - Enseignement Spécial
+      const prevSecSpecial = previousYearEffectifs.niveauSecondaire?.enseignementSpecial;
+      const currentSecSpecial = updated.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial;
+
+      console.log('🎯 ENSEIGNEMENT SPÉCIAL SECONDAIRE DEBUG:');
+      console.log('🔍 prevSecSpecial:', prevSecSpecial);
+      console.log('🔍 currentSecSpecial:', currentSecSpecial);
+      console.log('🔍 prevSecSpecial exists:', !!prevSecSpecial);
+      console.log('🔍 currentSecSpecial exists:', !!currentSecSpecial);
+
+      if (prevSecSpecial && currentSecSpecial) {
+        console.log(`🔍 Secondaire Enseignement Spécial - Prev:`, prevSecSpecial, 'Current:', currentSecSpecial);
+        
+        const prevG = prevSecSpecial.effectifGarcons || 0;
+        const currentG = currentSecSpecial.effectifGarcons || 0;
+        const prevF = prevSecSpecial.effectifFilles || 0;
+        const currentF = currentSecSpecial.effectifFilles || 0;
+
+        console.log(`🎯 SPÉCIAL SECONDAIRE - prevG: ${prevG}, currentG: ${currentG}`);
+        console.log(`🎯 SPÉCIAL SECONDAIRE - prevF: ${prevF}, currentF: ${currentF}`);
+
+        // Taux Garçons
+        if (prevG > 0 && currentG > 0) {
+          const taux = Math.round(((currentG - prevG) / prevG) * 100 * 100) / 100;
+          if (currentSecSpecial.tauxGarcons !== taux) {
+            console.log(`✅ Secondaire Enseignement Spécial - Taux G: ${currentSecSpecial.tauxGarcons}% → ${taux}% (${prevG} → ${currentG})`);
+            currentSecSpecial.tauxGarcons = taux;
+            hasChanges = true;
+            changesCount++;
+          } else {
+            console.log(`⚠️ SPÉCIAL SECONDAIRE - Taux G déjà correct: ${taux}%`);
+          }
+        } else {
+          console.log(`⚠️ SPÉCIAL SECONDAIRE - Conditions Taux G non remplies: prevG=${prevG}, currentG=${currentG}`);
+        }
+        
+        // Taux Filles
+        if (prevF > 0 && currentF > 0) {
+          const taux = Math.round(((currentF - prevF) / prevF) * 100 * 100) / 100;
+          if (currentSecSpecial.tauxFilles !== taux) {
+            console.log(`✅ Secondaire Enseignement Spécial - Taux F: ${currentSecSpecial.tauxFilles}% → ${taux}% (${prevF} → ${currentF})`);
+            currentSecSpecial.tauxFilles = taux;
+            hasChanges = true;
+            changesCount++;
+          } else {
+            console.log(`⚠️ SPÉCIAL SECONDAIRE - Taux F déjà correct: ${taux}%`);
+          }
+        } else {
+          console.log(`⚠️ SPÉCIAL SECONDAIRE - Conditions Taux F non remplies: prevF=${prevF}, currentF=${currentF}`);
+        }
+      } else {
+        console.log(`❌ Secondaire Enseignement Spécial - Données manquantes - Prev:`, !!prevSecSpecial, 'Current:', !!currentSecSpecial);
+        console.log('❌ SPÉCIAL SECONDAIRE - Données manquantes!');
+      }
+
+      // Niveau Secondaire - Enseignement Secondaire
+      ['septiemeCTEB', 'huitiemeCTEB', 'premiereHumanite', 'quatriemeHumanite'].forEach((classe: string) => {
+        const prevData = (previousYearEffectifs.niveauSecondaire?.enseignementSecondaire as any)?.[classe];
+        const currentData = (updated.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire as any)?.[classe];
+
+        if (prevData && currentData) {
+          const prevG = prevData.effectifGarcons || 0;
+          const currentG = currentData.effectifGarcons || 0;
+          const prevF = prevData.effectifFilles || 0;
+          const currentF = currentData.effectifFilles || 0;
+
+          if (prevG > 0 && currentG > 0) {
+            const taux = Math.round(((currentG - prevG) / prevG) * 100 * 100) / 100;
+            if (currentData.tauxGarcons !== taux) {
+              console.log(`✅ ${classe} - Taux G: ${currentData.tauxGarcons}% → ${taux}%`);
+              currentData.tauxGarcons = taux;
+              hasChanges = true;
+              changesCount++;
+            }
+          }
+          if (prevF > 0 && currentF > 0) {
+            const taux = Math.round(((currentF - prevF) / prevF) * 100 * 100) / 100;
+            if (currentData.tauxFilles !== taux) {
+              console.log(`✅ ${classe} - Taux F: ${currentData.tauxFilles}% → ${taux}%`);
+              currentData.tauxFilles = taux;
+              hasChanges = true;
+              changesCount++;
+            }
+          }
+        }
+      });
+
+      console.log(`🎯 Calcul terminé - ${changesCount} taux mis à jour`);
+      return hasChanges ? updated : prev;
+    });
+  };
+
   const handleInputChange = (field: string, value: any) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+    setFormData(prev => {
+      const updated = { ...prev };
+      
+      // Mettre à jour la valeur
+      const keys = field.split('.');
+      let current: any = updated;
+      for (let i = 0; i < keys.length - 1; i++) {
+        current = current[keys[i]];
+      }
+      current[keys[keys.length - 1]] = value;
+      
+      return updated;
+    });
+    
+    // Recalculer les taux après mise à jour
+    setTimeout(() => updateGrowthRates(), 100);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -894,6 +1232,34 @@ const CreateRapportActivite: React.FC = () => {
         </div>
 
         <AutoFillBanner formData={formData} setFormData={setFormData} />
+
+        {/* Bannière des effectifs de l'année précédente */}
+        {previousYearEffectifs && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <h3 className="text-green-800 font-semibold">Effectifs de l'année précédente chargés</h3>
+                </div>
+                <p className="text-green-700 text-sm">
+                  Les taux d'accroissement seront calculés automatiquement lorsque vous saisirez les effectifs de l'année en cours.
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  console.log('🧪 Test manuel du calcul des taux');
+                  updateGrowthRates();
+                }}
+                className="px-3 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
+              >
+                Test Calcul
+              </button>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
                         <BasicInfo formData={formData} handleInputChange={handleInputChange} />
