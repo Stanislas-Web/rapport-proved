@@ -2,7 +2,7 @@ import { BaseService } from '../baseservice';
 import { RapportActivite, CreateRapportActiviteRequest, UpdateRapportActiviteRequest } from '../../models/RapportActivite';
 
 class RapportActiviteService {
-  private endpoint = '/rapport-activite';
+  private endpoint = 'rapport-activite';
 
   // Récupérer tous les rapports d'activité
   async getAllRapports(): Promise<RapportActivite[]> {

@@ -31,11 +31,13 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
 
   // Fonction pour mettre à jour les données de calcul d'accès
   const updateCalculDataAcces = (indicateur: string, field: string, value: number) => {
+    // Empêcher les valeurs négatives
+    const validatedValue = Math.max(0, value);
     setCalculDataAcces(prev => ({
       ...prev,
       [indicateur]: {
         ...prev[indicateur as keyof typeof prev],
-        [field]: value
+        [field]: validatedValue
       }
     }));
   };

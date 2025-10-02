@@ -1,6 +1,9 @@
 import React, { useState, ReactNode, useEffect } from 'react';
 import Header from '../components/Header/index';
 import Sidebar from '../components/Sidebar/index';
+import { useAutoLogout } from '../hooks/useAutoLogout';
+import { useAutoLogoutNotification } from '../hooks/useAutoLogoutNotification';
+import AutoLogoutWarning from '../components/Notification/AutoLogoutWarning';
 
 const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -16,8 +19,28 @@ const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
     }
   }, []);
 
+  // Système de déconnexion automatique après 23h de session
+  useAutoLogout({ 
+    sessionDurationHours: 23, // 23 heures après la connexion
+    checkInterval: 60000 // Vérification toutes les minutes
+  });
+
+  // Notification d'avertissement avant déconnexion
+  const { showWarning, timeLeft, dismissWarning } = useAutoLogoutNotification({
+    sessionDurationHours: 23, // 23 heures après la connexion
+    warningMinutes: 5, // Avertir 5 minutes avant
+    checkInterval: 60000 // Vérification toutes les minutes
+  });
+
   return (
     <div className="dark:bg-boxdark-2 dark:text-bodydark">
+      {/* Notification d'avertissement de déconnexion automatique */}
+      <AutoLogoutWarning 
+        show={showWarning && isAuthenticated} 
+        timeLeft={timeLeft} 
+        onDismiss={dismissWarning} 
+      />
+      
       {/* ===== Page Wrapper Start ===== */}
       <div className="flex h-screen overflow-hidden">
         {isAuthenticated && (

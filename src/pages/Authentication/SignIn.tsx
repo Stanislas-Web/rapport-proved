@@ -46,6 +46,7 @@ const SignIn: React.FC = () => {
       localStorage.setItem('password', password);
       localStorage.setItem('token', result.token);
       localStorage.setItem('data', JSON.stringify(result.data));
+      localStorage.setItem('loginTime', new Date().toISOString()); // Enregistrer l'heure de connexion
       navigate('/tableaubord');
       window.location.reload(); // Stops the loader after success
     } catch (err) {

@@ -138,6 +138,7 @@ const DropdownUser = () => {
     localStorage.removeItem('password');
     localStorage.removeItem('token');
     localStorage.removeItem('data');
+    localStorage.removeItem('loginTime'); // Supprimer aussi l'heure de connexion
 
     // Rediriger l'utilisateur vers la page de connexion
     navigate('/signin');

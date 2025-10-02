@@ -42,11 +42,13 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData }) => {
 
   // Fonction pour mettre à jour les données de calcul des formations
   const updateCalculDataFormations = (formation: string, field: string, value: number) => {
+    // Empêcher les valeurs négatives
+    const validatedValue = Math.max(0, value);
     setCalculDataFormations(prev => ({
       ...prev,
       [formation]: {
         ...prev[formation as keyof typeof prev],
-        [field]: value
+        [field]: validatedValue
       }
     }));
   };

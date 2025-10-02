@@ -194,11 +194,13 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
 
   // Fonction pour mettre à jour les données de calcul
   const updateCalculData = (niveau: string, field: string, value: number) => {
+    // Empêcher les valeurs négatives
+    const validatedValue = Math.max(0, value);
     setCalculData(prev => ({
       ...prev,
       [niveau]: {
         ...prev[niveau as keyof typeof prev],
-        [field]: value
+        [field]: validatedValue
       }
     }));
   };
@@ -237,11 +239,13 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
 
   // Fonction pour mettre à jour les données de calcul externe
   const updateCalculDataExternes = (niveau: string, field: string, value: number) => {
+    // Empêcher les valeurs négatives
+    const validatedValue = Math.max(0, value);
     setCalculDataExternes(prev => ({
       ...prev,
       [niveau]: {
         ...prev[niveau as keyof typeof prev],
-        [field]: value
+        [field]: validatedValue
       }
     }));
   };
@@ -289,11 +293,13 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
 
   // Fonction pour mettre à jour les données de calcul primaire
   const updateCalculDataPrimaire = (indicateur: string, field: string, value: number) => {
+    // Empêcher les valeurs négatives
+    const validatedValue = Math.max(0, value);
     setCalculDataPrimaire(prev => ({
       ...prev,
       [indicateur]: {
         ...prev[indicateur as keyof typeof prev],
-        [field]: value
+        [field]: validatedValue
       }
     }));
   };
@@ -365,11 +371,13 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
 
   // Fonction pour mettre à jour les données de calcul secondaire
   const updateCalculDataSecondaire = (indicateur: string, field: string, value: number) => {
+    // Empêcher les valeurs négatives
+    const validatedValue = Math.max(0, value);
     setCalculDataSecondaire(prev => ({
       ...prev,
       [indicateur]: {
         ...prev[indicateur as keyof typeof prev],
-        [field]: value
+        [field]: validatedValue
       }
     }));
   };
@@ -441,11 +449,13 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
 
   // Fonction pour mettre à jour les données de calcul OCDE
   const updateCalculDataOCDE = (diplome: string, field: string, value: number) => {
+    // Empêcher les valeurs négatives
+    const validatedValue = Math.max(0, value);
     setCalculDataOCDE(prev => ({
       ...prev,
       [diplome]: {
         ...prev[diplome as keyof typeof prev],
-        [field]: value
+        [field]: validatedValue
       }
     }));
   };
