@@ -196,6 +196,17 @@ class RapportActiviteService {
     }
   }
 
+  // Récupérer les effectifs de l'année précédente
+  async getPreviousYearEffectifs(provedId: string, anneeActuelle: string): Promise<any> {
+    try {
+      const response = await BaseService.get(`effectif-annuel/previous/${provedId}/${anneeActuelle}`);
+      return response;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des effectifs de l\'année précédente:', error);
+      throw error;
+    }
+  }
+
   // Récupérer les statistiques des rapports d'activité
   async getRapportStats(): Promise<{
     totalRapports: number;

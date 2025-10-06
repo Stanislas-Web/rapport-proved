@@ -751,11 +751,10 @@ const CreateRapportActivite: React.FC = () => {
   // Fonction pour récupérer les effectifs de l'année précédente
   const fetchPreviousYearData = async () => {
     try {
-      const token = localStorage.getItem('token');
       const userData = localStorage.getItem('data');
       
-      if (!token || !userData) {
-        console.log('❌ Token ou données utilisateur manquants');
+      if (!userData) {
+        console.log('❌ Données utilisateur manquantes');
         return;
       }
 
@@ -768,19 +767,7 @@ const CreateRapportActivite: React.FC = () => {
       console.log('🔍 PROVED ID:', provedId);
       console.log('🔍 Année actuelle:', anneeActuelle);
 
-      const response = await fetch(
-        `http://localhost:3000/api/v1/effectif-annuel/previous/${provedId}/${anneeActuelle}`,
-        {
-          headers: { 'Authorization': `Bearer ${token}` }
-        }
-      );
-
-      if (!response.ok) {
-        console.log('❌ Erreur lors de la récupération des effectifs:', response.status);
-        return;
-      }
-
-      const data = await response.json();
+      const data = await rapportActiviteService.getPreviousYearEffectifs(provedId, anneeActuelle);
       console.log('✅ Effectifs de l\'année précédente récupérés:', data);
 
       // Stocker les effectifs de l'année précédente
