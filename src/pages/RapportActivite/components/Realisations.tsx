@@ -25,7 +25,12 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
   });
 
   // Fonction pour ouvrir le modal de calcul d'accès
-  const openCalculModalAcces = () => {
+  const openCalculModalAcces = (e?: React.MouseEvent<HTMLButtonElement>) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    console.log('Modal ouverture - Indicateurs accès');
     setShowCalculModalAcces(true);
   };
 
@@ -467,13 +472,16 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
         </div>
 
         {/* IV.7. Indicateurs d'accès */}
-        <div className="mb-4">
-          <div className="flex justify-between items-center mb-2">
-            <h5 className="font-medium">IV.7. Indicateurs d'accès: Proportion & Transition</h5>
+        <div className="mb-6">
+          <div className="flex justify-between items-center mb-3">
+            <h4 className="font-bold">IV.7. Indicateurs d'accès: Proportion & Transition</h4>
             <button
               type="button"
-              onClick={openCalculModalAcces}
-              className="px-4 py-2 text-sm bg-teal-500 text-white rounded-md hover:bg-teal-600 transition-colors flex items-center gap-2"
+              onClick={(e) => {
+                console.log('CLIC DÉTECTÉ sur Calculer les taux');
+                openCalculModalAcces(e);
+              }}
+              className="px-4 py-2 text-sm bg-teal-500 text-white rounded-md hover:bg-teal-600 transition-colors flex items-center gap-2 cursor-pointer"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />

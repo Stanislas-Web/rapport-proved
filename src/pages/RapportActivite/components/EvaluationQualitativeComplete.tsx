@@ -37,6 +37,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
   const [showCalculModalPrimaire, setShowCalculModalPrimaire] = useState(false);
   const [showCalculModalSecondaire, setShowCalculModalSecondaire] = useState(false);
   const [showCalculModalOCDE, setShowCalculModalOCDE] = useState(false);
+  const [showCalculModalAcces, setShowCalculModalAcces] = useState(false);
   // Fonction pour vérifier si le rendement interne a des données
   const hasRendementInterneData = () => {
     const data = rendementInterne;
@@ -169,6 +170,13 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     humanitesTechniques: { finalistes: 0, diplomes: 0, garcons: 0, filles: 0 }
   });
 
+  // État pour les données brutes de calcul des indicateurs d'accès
+  const [calculDataAcces, setCalculDataAcces] = useState({
+    proportionGarcons: { total: 0, garcons: 0 },
+    proportionFilles: { total: 0, filles: 0 },
+    transitionPrimaireSecondaire: { finissantsPrimaire: 0, inscritsSecondaire: 0, garcons: 0, filles: 0 }
+  });
+
   // Fonction pour calculer le pourcentage
   const calculatePercentage = (realise: number, prevu: number): number => {
     if (prevu === 0) return 0;
@@ -244,6 +252,69 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
   // Fonction pour ouvrir le modal de calcul
   const openCalculModal = () => {
     setShowCalculModal(true);
+  };
+
+  // Fonction pour ouvrir le modal de calcul des indicateurs d'accès
+  const openCalculModalAcces = () => {
+    setShowCalculModalAcces(true);
+  };
+
+  // Fonction pour mettre à jour les données de calcul d'accès
+  const updateCalculDataAcces = (indicateur: string, field: string, value: number) => {
+    const validatedValue = Math.max(0, value);
+    setCalculDataAcces(prev => ({
+      ...prev,
+      [indicateur]: {
+        ...prev[indicateur as keyof typeof prev],
+        [field]: validatedValue
+      }
+    }));
+  };
+
+  // Fonction pour mettre à jour les indicateurs d'accès
+  const updateIndicateursAcces = (indicateur: string, field: 'tauxGF' | 'tauxFilles', value: number) => {
+    setIndicateursAcces(prev => {
+      const updated = { ...prev };
+      const currentIndicateur = updated[indicateur as keyof typeof updated];
+      currentIndicateur[field] = Math.max(0, Math.min(100, value));
+      return updated;
+    });
+  };
+
+  // Fonction pour calculer les taux d'accès
+  const calculerTauxAcces = () => {
+    const nouveauxTaux: any = {};
+    
+    // Proportion Garçons
+    const dataGarcons = calculDataAcces.proportionGarcons;
+    if (dataGarcons.total > 0) {
+      const tauxGF = Math.round((dataGarcons.garcons / dataGarcons.total) * 100 * 100) / 100;
+      nouveauxTaux.proportionGarcons = { tauxGF, tauxFilles: 0 };
+    } else {
+      nouveauxTaux.proportionGarcons = { tauxGF: 0, tauxFilles: 0 };
+    }
+
+    // Proportion Filles
+    const dataFilles = calculDataAcces.proportionFilles;
+    if (dataFilles.total > 0) {
+      const tauxFilles = Math.round((dataFilles.filles / dataFilles.total) * 100 * 100) / 100;
+      nouveauxTaux.proportionFilles = { tauxGF: 0, tauxFilles };
+    } else {
+      nouveauxTaux.proportionFilles = { tauxGF: 0, tauxFilles: 0 };
+    }
+
+    // Transition Primaire vers Secondaire
+    const dataTransition = calculDataAcces.transitionPrimaireSecondaire;
+    if (dataTransition.finissantsPrimaire > 0) {
+      const tauxGF = Math.round((dataTransition.inscritsSecondaire / dataTransition.finissantsPrimaire) * 100 * 100) / 100;
+      const tauxFilles = Math.round((dataTransition.filles / dataTransition.finissantsPrimaire) * 100 * 100) / 100;
+      nouveauxTaux.transitionPrimaireSecondaire = { tauxGF, tauxFilles };
+    } else {
+      nouveauxTaux.transitionPrimaireSecondaire = { tauxGF: 0, tauxFilles: 0 };
+    }
+    
+    setIndicateursAcces(nouveauxTaux);
+    setShowCalculModalAcces(false);
   };
 
   // Fonction pour mettre à jour les données de calcul avec validation intelligente
@@ -883,23 +954,17 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     });
   };
 
-  // Fonction pour mettre à jour les indicateurs d'accès
-  const updateIndicateursAcces = (indicateur: string, field: 'tauxGF' | 'tauxFilles', value: number) => {
-    setIndicateursAcces(prev => ({
-      ...prev,
-      [indicateur]: {
-        ...prev[indicateur as keyof typeof prev],
-        [field]: value
-      }
-    }));
-  };
-
   // Fonction pour réinitialiser les indicateurs d'accès
   const resetIndicateursAcces = () => {
     setIndicateursAcces({
       proportionGarcons: { tauxGF: 0, tauxFilles: 0 },
       proportionFilles: { tauxGF: 0, tauxFilles: 0 },
       transitionPrimaireSecondaire: { tauxGF: 0, tauxFilles: 0 }
+    });
+    setCalculDataAcces({
+      proportionGarcons: { total: 0, garcons: 0 },
+      proportionFilles: { total: 0, filles: 0 },
+      transitionPrimaireSecondaire: { finissantsPrimaire: 0, inscritsSecondaire: 0, garcons: 0, filles: 0 }
     });
   };
 
@@ -2863,6 +2928,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
             )}
             <button
               type="button"
+              onClick={openCalculModalAcces}
               className="px-4 py-2 text-sm bg-teal-500 text-white rounded-md hover:bg-teal-600 transition-colors flex items-center gap-2"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -4922,6 +4988,158 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
               <button
                 onClick={calculerTauxOCDE}
                 className="px-6 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition-colors flex items-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Calculer les pourcentages
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de calcul des indicateurs d'accès */}
+      {showCalculModalAcces && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999] p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+              <h3 className="text-xl font-bold text-gray-900">Calculer les indicateurs d'accès et de transition</h3>
+              <button
+                onClick={() => setShowCalculModalAcces(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="px-6 py-4">
+              <p className="text-sm text-gray-600 mb-6">
+                Saisissez les nombres d'élèves pour chaque indicateur. Les pourcentages seront calculés automatiquement.
+              </p>
+
+              {/* a) Proportion de Garçons */}
+              <div className="mb-6 border border-gray-200 rounded-lg p-4">
+                <h4 className="font-semibold text-lg mb-4 text-blue-700">a) Proportion de Garçons</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Total Élèves</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      value={calculDataAcces.proportionGarcons.total || ''}
+                      onChange={(e) => updateCalculDataAcces('proportionGarcons', 'total', Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Garçons</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      value={calculDataAcces.proportionGarcons.garcons || ''}
+                      onChange={(e) => updateCalculDataAcces('proportionGarcons', 'garcons', Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* b) Proportion de Filles */}
+              <div className="mb-6 border border-gray-200 rounded-lg p-4">
+                <h4 className="font-semibold text-lg mb-4 text-pink-700">b) Proportion de Filles</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Total Élèves</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                      value={calculDataAcces.proportionFilles.total || ''}
+                      onChange={(e) => updateCalculDataAcces('proportionFilles', 'total', Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Filles</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                      value={calculDataAcces.proportionFilles.filles || ''}
+                      onChange={(e) => updateCalculDataAcces('proportionFilles', 'filles', Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* c) Transition Primaire vers Secondaire */}
+              <div className="mb-6 border border-gray-200 rounded-lg p-4">
+                <h4 className="font-semibold text-lg mb-4 text-teal-700">c) Taux de Transition (Primaire → Secondaire)</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Finissants Primaire</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                      value={calculDataAcces.transitionPrimaireSecondaire.finissantsPrimaire || ''}
+                      onChange={(e) => updateCalculDataAcces('transitionPrimaireSecondaire', 'finissantsPrimaire', Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Inscrits Secondaire</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                      value={calculDataAcces.transitionPrimaireSecondaire.inscritsSecondaire || ''}
+                      onChange={(e) => updateCalculDataAcces('transitionPrimaireSecondaire', 'inscritsSecondaire', Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Garçons</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      value={calculDataAcces.transitionPrimaireSecondaire.garcons || ''}
+                      onChange={(e) => updateCalculDataAcces('transitionPrimaireSecondaire', 'garcons', Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Filles</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                      value={calculDataAcces.transitionPrimaireSecondaire.filles || ''}
+                      onChange={(e) => updateCalculDataAcces('transitionPrimaireSecondaire', 'filles', Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-4 flex justify-end gap-3">
+              <button
+                onClick={() => setShowCalculModalAcces(false)}
+                className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100 transition-colors"
+              >
+                Annuler
+              </button>
+              <button
+                onClick={calculerTauxAcces}
+                className="px-6 py-2 bg-teal-500 text-white rounded-md hover:bg-teal-600 transition-colors flex items-center gap-2"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
