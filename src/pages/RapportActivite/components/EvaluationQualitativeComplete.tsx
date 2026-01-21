@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface EvaluationQualitativeCompleteProps {
   formData?: any;
   setFormData?: React.Dispatch<React.SetStateAction<any>>;
 }
 
-const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps> = () => {
+const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps> = ({ formData, setFormData }) => {
   // État pour les inspections pédagogiques C3
   const [inspectionsC3, setInspectionsC3] = useState({
     maternel: { prevu: 0, realise: 0, pourcentage: 0 },
@@ -81,7 +81,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
   // Fonction pour vérifier si les indicateurs d'accès ont des données
   const hasIndicateursAccesData = () => {
     const data = indicateursAcces;
-    return Object.values(data).some(indicateur => 
+    return Object.values(data).some((indicateur: any) => 
       indicateur.tauxGF > 0 || indicateur.tauxFilles > 0
     );
   };
@@ -158,11 +158,26 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
   });
 
   // État pour les indicateurs d'accès (Proportion & Transition)
-  const [indicateursAcces, setIndicateursAcces] = useState({
-    proportionGarcons: { tauxGF: 0, tauxFilles: 0 },
-    proportionFilles: { tauxGF: 0, tauxFilles: 0 },
-    transitionPrimaireSecondaire: { tauxGF: 0, tauxFilles: 0 }
-  });
+  const [indicateursAcces, setIndicateursAcces] = useState(() => 
+    formData?.evaluationQualitativeComplete?.indicateursAcces || {
+      proportionGarcons: { tauxGF: 0, tauxFilles: 0 },
+      proportionFilles: { tauxGF: 0, tauxFilles: 0 },
+      transitionPrimaireSecondaire: { tauxGF: 0, tauxFilles: 0 }
+    }
+  );
+
+  // Synchroniser indicateursAcces avec formData
+  useEffect(() => {
+    if (setFormData) {
+      setFormData((prev: any) => ({
+        ...prev,
+        evaluationQualitativeComplete: {
+          ...prev.evaluationQualitativeComplete,
+          indicateursAcces
+        }
+      }));
+    }
+  }, [indicateursAcces]);
 
   // État pour les données brutes de calcul OCDE
   const [calculDataOCDE, setCalculDataOCDE] = useState({
@@ -273,7 +288,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
 
   // Fonction pour mettre à jour les indicateurs d'accès
   const updateIndicateursAcces = (indicateur: string, field: 'tauxGF' | 'tauxFilles', value: number) => {
-    setIndicateursAcces(prev => {
+    setIndicateursAcces((prev: any) => {
       const updated = { ...prev };
       const currentIndicateur = updated[indicateur as keyof typeof updated];
       currentIndicateur[field] = Math.max(0, Math.min(100, value));

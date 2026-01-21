@@ -15,19 +15,40 @@ import EducationUrgence from './components/EducationUrgence';
 import EvaluationQualitativeComplete from './components/EvaluationQualitativeComplete';
 import RealisationsComplete from './components/RealisationsComplete';
 import Conclusion from './components/Conclusion';
+import { useAutoSave } from '../../hooks/useAutoSave';
+import DraftIndicator from '../../components/DraftIndicator';
+import DraftRecoveryModal from '../../components/DraftRecoveryModal';
+import { 
+  loadDraft as loadDraftUtil, 
+  saveDraft, 
+  deleteDraft, 
+  hasDraft,
+  calculateCompletionPercentage 
+} from '../../utils/draftUtils';
 
 const CreateRapportActivite: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [savingDraft, setSavingDraft] = useState(false);
+  const [showDraftModal, setShowDraftModal] = useState(false);
+  const [existingDraft, setExistingDraft] = useState<any>(null);
+  const [currentSection, setCurrentSection] = useState('I');
   
   // Charger les données du brouillon local au démarrage
   const loadDraft = (): RapportActivite => {
+    // D'abord essayer avec le nouveau système
+    const newDraft = loadDraftUtil();
+    if (newDraft && newDraft.formData) {
+      console.log('🔍 Nouveau brouillon chargé:', newDraft);
+      return newDraft.formData;
+    }
+
+    // Sinon, essayer l'ancien système pour rétrocompatibilité
     const savedDraft = localStorage.getItem('rapportActiviteDraft');
     if (savedDraft) {
       try {
         const draft = JSON.parse(savedDraft);
-        console.log('🔍 Brouillon chargé:', draft);
+        console.log('🔍 Ancien brouillon chargé:', draft);
         
         // Nettoyer les anciennes valeurs "-" qui causent des erreurs
         if (draft.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.classesPlethoriques === '-') {
@@ -739,9 +760,16 @@ const CreateRapportActivite: React.FC = () => {
   };
 
   const [formData, setFormData] = useState<RapportActivite>(() => {
+    console.log('🎯 INITIALISATION DU STATE formData');
     const initialData = loadDraft();
+    console.log('🔍 Données chargées depuis loadDraft():', initialData);
     const completeData = ensureCompleteInitialization(initialData);
-    console.log('🔍 Données initiales complètes chargées:', completeData);
+    console.log('🔍 Données complètes après fusion:', {
+      hasIdentification: !!completeData.identificationProved,
+      hasParametres: !!completeData.parametresCles?.nombreEcolesClasses,
+      hasIntroduction: !!completeData.introduction,
+      firstField: completeData.identificationProved
+    });
     return completeData;
   });
 
@@ -786,6 +814,93 @@ const CreateRapportActivite: React.FC = () => {
     fetchPreviousYearData();
   }, []);
 
+  // Vérifier l'existence d'un brouillon au montage
+  useEffect(() => {
+    const draft = loadDraftUtil();
+    if (draft && draft.metadata) {
+      console.log('🔍 Vérification du brouillon au montage:', {
+        draftExists: !!draft,
+        draftTimestamp: draft.metadata.lastSavedAt,
+        formDataHasContent: !!(formData.identificationProved || formData.parametresCles?.nombreEcolesClasses || formData.introduction)
+      });
+      
+      // Ne montrer le modal que si le brouillon n'a pas déjà été chargé
+      // On vérifie si formData est encore la valeur par défaut
+      const isDefaultData = !formData.identificationProved && 
+                            !formData.parametresCles?.nombreEcolesClasses &&
+                            !formData.introduction;
+      
+      // Si les données sont encore par défaut alors qu'on a un brouillon, afficher le modal
+      if (isDefaultData) {
+        console.log('⚠️ Données par défaut détectées malgré brouillon, affichage du modal');
+        setExistingDraft(draft);
+        setShowDraftModal(true);
+      } else {
+        console.log('✅ Brouillon déjà chargé dans formData');
+      }
+    }
+  }, []); // Exécuter une seule fois au montage
+
+  // Auto-save avec le hook personnalisé
+  const autoSave = useAutoSave({
+    key: 'rapport_draft',
+    data: formData,
+    delay: 30000, // 30 secondes
+    enabled: true,
+    customSave: (data) => {
+      // Utiliser saveDraft pour maintenir la structure avec métadonnées
+      saveDraft(data, currentSection);
+    },
+    onSave: () => {
+      console.log('✅ Brouillon sauvegardé automatiquement');
+    },
+    onError: (error) => {
+      console.error('❌ Erreur de sauvegarde:', error);
+      toast.error('Erreur lors de la sauvegarde automatique');
+    }
+  });
+
+  // Calculer le pourcentage de complétion
+  const completionPercentage = calculateCompletionPercentage(formData);
+
+  // Debug: afficher l'état du hook
+  useEffect(() => {
+    console.log('🔍 État AutoSave:', {
+      lastSaved: autoSave.lastSaved,
+      isSaving: autoSave.isSaving,
+      hasUnsavedChanges: autoSave.hasUnsavedChanges,
+      completionPercentage
+    });
+  }, [autoSave.lastSaved, autoSave.isSaving, autoSave.hasUnsavedChanges, completionPercentage]);
+
+  // Debug: surveiller les changements de formData
+  useEffect(() => {
+    console.log('🔄 formData a changé:', {
+      hasIdentification: !!formData.identificationProved,
+      hasParametres: !!formData.parametresCles?.nombreEcolesClasses,
+      hasIntroduction: !!formData.introduction,
+      firstIdentificationField: formData.identificationProved,
+      timestamp: new Date().toISOString()
+    });
+  }, [formData]);
+
+  // Sauvegarder avant de quitter la page
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (autoSave.hasUnsavedChanges) {
+        // Sauvegarder rapidement
+        saveDraft(formData, currentSection);
+        
+        // Afficher le warning
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [formData, currentSection, autoSave.hasUnsavedChanges]);
+
   // Calculer automatiquement les taux d'accroissement quand les effectifs changent
   useEffect(() => {
     console.log('🔍 useEffect calcul taux - previousYearEffectifs:', previousYearEffectifs);
@@ -822,7 +937,7 @@ const CreateRapportActivite: React.FC = () => {
   // }, [formData]);
 
   // Sauvegarder en brouillon manuellement
-  const saveDraft = async () => {
+  const saveDraftManually = async () => {
     console.log('🔍 Début de la sauvegarde du brouillon');
     setSavingDraft(true);
     
@@ -1144,6 +1259,68 @@ const CreateRapportActivite: React.FC = () => {
     setTimeout(() => updateGrowthRates(), 100);
   };
 
+  // Fonctions de gestion du brouillon
+  const handleRestoreDraft = () => {
+    if (existingDraft) {
+      setFormData(existingDraft.formData);
+      setCurrentSection(existingDraft.metadata.currentSection);
+      setShowDraftModal(false);
+      toast.success('Brouillon restauré avec succès !');
+    }
+  };
+
+  const handleDiscardDraft = () => {
+    deleteDraft();
+    setShowDraftModal(false);
+    setExistingDraft(null);
+    toast.success('Brouillon supprimé');
+  };
+
+  const handleCancelDraftModal = () => {
+    setShowDraftModal(false);
+    // Ne pas charger le brouillon, continuer avec un formulaire vide
+  };
+
+  // DEBUG: Afficher le contenu du localStorage
+  const debugLocalStorage = () => {
+    console.log('=== DEBUG LOCALSTORAGE ===');
+    const draft = localStorage.getItem('rapport_draft');
+    const timestamp = localStorage.getItem('rapport_draft_timestamp');
+    const oldDraft = localStorage.getItem('rapportActiviteDraft');
+    
+    console.log('rapport_draft existe:', !!draft);
+    console.log('rapport_draft_timestamp:', timestamp);
+    console.log('rapportActiviteDraft existe:', !!oldDraft);
+    
+    if (draft) {
+      try {
+        const parsed = JSON.parse(draft);
+        console.log('Structure rapport_draft:', {
+          hasFormData: !!parsed.formData,
+          hasMetadata: !!parsed.metadata,
+          formDataKeys: parsed.formData ? Object.keys(parsed.formData) : [],
+          metadataKeys: parsed.metadata ? Object.keys(parsed.metadata) : []
+        });
+        console.log('Premier champ identificationProved:', parsed.formData?.identificationProved);
+      } catch (e) {
+        console.error('Erreur parsing rapport_draft:', e);
+      }
+    }
+    
+    console.log('=== FIN DEBUG ===');
+  };
+
+  const handleSaveDraftButton = () => {
+    try {
+      saveDraft(formData, currentSection);
+      toast.success('Brouillon enregistré !');
+      navigate('/rapport-activite');
+    } catch (error) {
+      console.error('Erreur lors de la sauvegarde du brouillon:', error);
+      toast.error('Erreur lors de la sauvegarde');
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -1178,7 +1355,8 @@ const CreateRapportActivite: React.FC = () => {
       await rapportActiviteService.createRapport(createRequest);
       
       // Effacer le brouillon après envoi réussi
-      localStorage.removeItem('rapportActiviteDraft');
+      deleteDraft();
+      autoSave.clearDraft();
       
       toast.success('Rapport d\'activité créé avec succès !');
       navigate('/rapport-activite');
@@ -1192,6 +1370,35 @@ const CreateRapportActivite: React.FC = () => {
 
   return (
     <>
+      {/* Modal de récupération de brouillon */}
+      {showDraftModal && existingDraft && (
+        <DraftRecoveryModal
+          draft={existingDraft}
+          onRestore={handleRestoreDraft}
+          onDiscard={handleDiscardDraft}
+          onCancel={handleCancelDraftModal}
+        />
+      )}
+
+      {/* Indicateur de brouillon */}
+      <DraftIndicator
+        lastSaved={autoSave?.lastSaved || null}
+        isSaving={autoSave?.isSaving || false}
+        hasUnsavedChanges={autoSave?.hasUnsavedChanges || false}
+        completionPercentage={completionPercentage || 0}
+        onForceSave={autoSave?.forceSave}
+        error={autoSave?.error || null}
+      />
+
+      {/* DEBUG BUTTON - À SUPPRIMER EN PRODUCTION */}
+      <button
+        onClick={debugLocalStorage}
+        className="fixed bottom-4 left-4 z-999 bg-yellow-500 text-white px-4 py-2 rounded shadow-lg hover:bg-yellow-600"
+        title="Debug localStorage"
+      >
+        🐛 Debug
+      </button>
+
       <div className="mx-auto max-w-7xl">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-title-md2 font-semibold text-black dark:text-white">
@@ -1199,14 +1406,17 @@ const CreateRapportActivite: React.FC = () => {
           </h2>
           
           {/* Boutons de brouillon en haut */}
-          <div className="flex gap-2">
+          {/* <div className="flex gap-2">
             <button
               type="button"
-              onClick={saveDraft}
+              onClick={handleSaveDraftButton}
               disabled={savingDraft}
-              className="inline-flex items-center justify-center rounded-md border border-blue-500 bg-blue-50 py-2 px-4 text-center font-medium text-blue-600 hover:bg-blue-100 disabled:opacity-50"
+              className="inline-flex items-center justify-center rounded-md border border-blue-500 bg-blue-50 py-2 px-4 text-center font-medium text-blue-600 hover:bg-blue-100 disabled:opacity-50 gap-2"
             >
-              {savingDraft ? 'Sauvegarde...' : 'Sauvegarder brouillon'}
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+              </svg>
+              {savingDraft ? 'Sauvegarde...' : 'Continuer plus tard'}
             </button>
             <button
               type="button"
@@ -1215,10 +1425,10 @@ const CreateRapportActivite: React.FC = () => {
             >
               Effacer brouillon
             </button>
-          </div>
+          </div> */}
         </div>
 
-        <AutoFillBanner formData={formData} setFormData={setFormData} />
+        {/* <AutoFillBanner formData={formData} setFormData={setFormData} /> */}
 
         {/* Bannière des effectifs de l'année précédente */}
         {previousYearEffectifs && (
@@ -1261,6 +1471,7 @@ const CreateRapportActivite: React.FC = () => {
             >
               Annuler
             </button>
+      
             <button
               type="submit"
               disabled={loading}

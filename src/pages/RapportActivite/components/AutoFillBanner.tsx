@@ -15,6 +15,31 @@ const AutoFillBanner: React.FC<AutoFillBannerProps> = ({ formData, setFormData }
       introduction: "Ce rapport présente l'activité éducative de la PROVED pour l'année " + new Date().getFullYear() + ". La province connaît une croissance démographique importante avec une forte demande en services éducatifs.",
       conclusion: "L'année " + new Date().getFullYear() + " a été marquée par des progrès significatifs dans l'accès à l'éducation, avec une augmentation des effectifs et une amélioration des infrastructures. Des défis persistent notamment dans les zones rurales.",
       parametresCles: {
+        nombreEcolesClasses: {
+          prescolaire: 15 + 25 + 30 + 3,
+          primaire: 120,
+          secondaire: 45 + 42 + 38 + 8,
+          niveauPrescolaire: {
+            espaceCommunautaireEveil: { nombreEcoles: 15, nombreClasses: 45 },
+            maternel: { nombreEcoles: 25, nombreClasses: 75 },
+            prePrimaire: { nombreEcoles: 30, nombreClasses: 90 },
+            special: { nombreEcoles: 3, nombreClasses: 9 }
+          },
+          niveauPrimaire: {
+            enseignementSpecial: { nombreEcoles: 0, nombreClasses: 12 },
+            enseignementPrimaire: { nombreEcoles: 120, nombreClasses: 480 }
+          },
+          niveauSecondaire: {
+            enseignementSpecial: { nombreEcoles: 0, nombreClasses: 8 },
+            premierCycle: { nombreEcoles: 45 + 42, nombreClasses: 45 + 42 },
+            deuxiemeCycle: { nombreEcoles: 38 + 8, nombreClasses: 38 + 8 }
+          }
+        },
+        effectifScolaire: {
+          prescolaire: 450 + 420 + 750 + 720 + 900 + 870 + 45 + 42,
+          primaire: 12000 + 11800 + 180 + 165,
+          secondaire: 2250 + 2100 + 1900 + 1800 + 120 + 110,
+        },
         niveauPrescolaire: {
           espaceCommunautaireEveil: {
             nombreEcoles: 15,
