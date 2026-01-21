@@ -20,10 +20,10 @@ const AutoFillBanner: React.FC<AutoFillBannerProps> = ({ formData, setFormData }
           primaire: 120,
           secondaire: 45 + 42 + 38 + 8,
           niveauPrescolaire: {
-            espaceCommunautaireEveil: { nombreEcoles: 15, nombreClasses: 45 },
-            maternel: { nombreEcoles: 25, nombreClasses: 75 },
-            prePrimaire: { nombreEcoles: 30, nombreClasses: 90 },
-            special: { nombreEcoles: 3, nombreClasses: 9 }
+            espaceCommunautaireEveil: 15,
+            maternel: 25,
+            prePrimaire: 30,
+            special: 3
           },
           niveauPrimaire: {
             enseignementSpecial: { nombreEcoles: 0, nombreClasses: 12 },
