@@ -1049,7 +1049,7 @@ const CreateRapportActivite: React.FC = () => {
 
           // Taux G+F
           if (prevGF > 0 && currentGF > 0) {
-            const taux = Math.round(((currentGF - prevGF) / prevGF) * 100 * 100) / 100;
+            const taux = Math.round(((currentGF - prevGF) / prevGF) * 100 * 1000) / 1000;
             if (currentData.tauxAccroissementGarconsFilles !== taux) {
               console.log(`✅ Préscolaire ${niveau} - Taux G+F: ${currentData.tauxAccroissementGarconsFilles}% → ${taux}% (${prevGF} → ${currentGF})`);
               currentData.tauxAccroissementGarconsFilles = taux;
@@ -1064,7 +1064,7 @@ const CreateRapportActivite: React.FC = () => {
           
           // Taux F
           if (prevF > 0 && currentF > 0) {
-            const taux = Math.round(((currentF - prevF) / prevF) * 100 * 100) / 100;
+            const taux = Math.round(((currentF - prevF) / prevF) * 100 * 1000) / 1000;
             if (currentData.tauxAccroissementFilles !== taux) {
               console.log(`✅ Préscolaire ${niveau} - Taux F: ${currentData.tauxAccroissementFilles}% → ${taux}% (${prevF} → ${currentF})`);
               currentData.tauxAccroissementFilles = taux;
@@ -1113,7 +1113,7 @@ const CreateRapportActivite: React.FC = () => {
 
           // Taux G+F
           if (prevGF > 0 && currentGF > 0) {
-            const taux = Math.round(((currentGF - prevGF) / prevGF) * 100 * 100) / 100;
+            const taux = Math.round(((currentGF - prevGF) / prevGF) * 100 * 1000) / 1000;
             if (currentData.tauxAccroissementGarconsFilles !== taux) {
               console.log(`✅ Primaire ${niveau} - Taux G+F: ${currentData.tauxAccroissementGarconsFilles}% → ${taux}% (${prevGF} → ${currentGF})`);
               currentData.tauxAccroissementGarconsFilles = taux;
@@ -1128,7 +1128,7 @@ const CreateRapportActivite: React.FC = () => {
           
           // Taux F
           if (prevF > 0 && currentF > 0) {
-            const taux = Math.round(((currentF - prevF) / prevF) * 100 * 100) / 100;
+            const taux = Math.round(((currentF - prevF) / prevF) * 100 * 1000) / 1000;
             if (currentData.tauxAccroissementFilles !== taux) {
               console.log(`✅ Primaire ${niveau} - Taux F: ${currentData.tauxAccroissementFilles}% → ${taux}% (${prevF} → ${currentF})`);
               currentData.tauxAccroissementFilles = taux;
@@ -1171,7 +1171,7 @@ const CreateRapportActivite: React.FC = () => {
 
         // Taux Garçons
         if (prevG > 0 && currentG > 0) {
-          const taux = Math.round(((currentG - prevG) / prevG) * 100 * 100) / 100;
+          const taux = Math.round(((currentG - prevG) / prevG) * 100 * 1000) / 1000;
           if (currentSecSpecial.tauxGarcons !== taux) {
             console.log(`✅ Secondaire Enseignement Spécial - Taux G: ${currentSecSpecial.tauxGarcons}% → ${taux}% (${prevG} → ${currentG})`);
             currentSecSpecial.tauxGarcons = taux;
@@ -1186,7 +1186,7 @@ const CreateRapportActivite: React.FC = () => {
         
         // Taux Filles
         if (prevF > 0 && currentF > 0) {
-          const taux = Math.round(((currentF - prevF) / prevF) * 100 * 100) / 100;
+          const taux = Math.round(((currentF - prevF) / prevF) * 100 * 1000) / 1000;
           if (currentSecSpecial.tauxFilles !== taux) {
             console.log(`✅ Secondaire Enseignement Spécial - Taux F: ${currentSecSpecial.tauxFilles}% → ${taux}% (${prevF} → ${currentF})`);
             currentSecSpecial.tauxFilles = taux;
@@ -1215,7 +1215,7 @@ const CreateRapportActivite: React.FC = () => {
           const currentF = currentData.effectifFilles || 0;
 
           if (prevG > 0 && currentG > 0) {
-            const taux = Math.round(((currentG - prevG) / prevG) * 100 * 100) / 100;
+            const taux = Math.round(((currentG - prevG) / prevG) * 100 * 1000) / 1000;
             if (currentData.tauxGarcons !== taux) {
               console.log(`✅ ${classe} - Taux G: ${currentData.tauxGarcons}% → ${taux}%`);
               currentData.tauxGarcons = taux;
@@ -1224,7 +1224,7 @@ const CreateRapportActivite: React.FC = () => {
             }
           }
           if (prevF > 0 && currentF > 0) {
-            const taux = Math.round(((currentF - prevF) / prevF) * 100 * 100) / 100;
+            const taux = Math.round(((currentF - prevF) / prevF) * 100 * 1000) / 1000;
             if (currentData.tauxFilles !== taux) {
               console.log(`✅ ${classe} - Taux F: ${currentData.tauxFilles}% → ${taux}%`);
               currentData.tauxFilles = taux;
@@ -1389,15 +1389,6 @@ const CreateRapportActivite: React.FC = () => {
         onForceSave={autoSave?.forceSave}
         error={autoSave?.error || null}
       />
-
-      {/* DEBUG BUTTON - À SUPPRIMER EN PRODUCTION */}
-      <button
-        onClick={debugLocalStorage}
-        className="fixed bottom-4 left-4 z-999 bg-yellow-500 text-white px-4 py-2 rounded shadow-lg hover:bg-yellow-600"
-        title="Debug localStorage"
-      >
-        🐛 Debug
-      </button>
 
       <div className="mx-auto max-w-7xl">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

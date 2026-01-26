@@ -99,7 +99,8 @@ const ParametresCles: React.FC<ParametresClesProps> = ({ formData, setFormData }
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    step="0.1"
+                    step="0.001"
+                    min="0"
                     value={formData.parametresCles.effectifScolaire.niveauPrescolaire.espaceCommunautaireEveil.tauxAccroissementGarconsFilles ?? ''}
                     onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.espaceCommunautaireEveil.tauxAccroissementGarconsFilles', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
@@ -145,7 +146,8 @@ const ParametresCles: React.FC<ParametresClesProps> = ({ formData, setFormData }
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    step="0.1"
+                    step="0.001"
+                    min="0"
                     value={formData.parametresCles.effectifScolaire.niveauPrescolaire.maternel.tauxAccroissementGarconsFilles ?? ''}
                     onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.maternel.tauxAccroissementGarconsFilles', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
@@ -191,7 +193,8 @@ const ParametresCles: React.FC<ParametresClesProps> = ({ formData, setFormData }
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    step="0.1"
+                    step="0.001"
+                    min="0"
                     value={formData.parametresCles.effectifScolaire.niveauPrescolaire.prePrimaire.tauxAccroissementGarconsFilles ?? ''}
                     onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.prePrimaire.tauxAccroissementGarconsFilles', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"
@@ -237,7 +240,8 @@ const ParametresCles: React.FC<ParametresClesProps> = ({ formData, setFormData }
                 <td className="border border-gray-300 px-3 py-2">
                   <input
                     type="number"
-                    step="0.1"
+                    step="0.001"
+                    min="0"
                     value={formData.parametresCles.effectifScolaire.niveauPrescolaire.special.tauxAccroissementGarconsFilles ?? ''}
                     onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrescolaire.special.tauxAccroissementGarconsFilles', Number(e.target.value))}
                     className="w-full text-center border-none focus:outline-none focus:ring-0"

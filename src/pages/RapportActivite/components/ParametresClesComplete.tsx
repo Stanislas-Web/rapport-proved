@@ -487,6 +487,8 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
+                      step="0.001"
+                      min="0"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.espaceCommunautaireEveil?.tauxAccroissementGarconsFilles ?? ''}
@@ -496,6 +498,8 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
+                      step="0.001"
+                      min="0"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.espaceCommunautaireEveil?.tauxAccroissementFilles ?? ''}
@@ -526,6 +530,8 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
+                      step="0.001"
+                      min="0"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.maternel?.tauxAccroissementGarconsFilles ?? ''}
@@ -535,6 +541,8 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
+                      step="0.001"
+                      min="0"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.maternel?.tauxAccroissementFilles ?? ''}
@@ -565,6 +573,8 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
+                      step="0.001"
+                      min="0"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.prePrimaire?.tauxAccroissementGarconsFilles ?? ''}
@@ -574,6 +584,8 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
+                      step="0.001"
+                      min="0"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.prePrimaire?.tauxAccroissementFilles ?? ''}
@@ -604,6 +616,8 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
+                      step="0.001"
+                      min="0"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.special?.tauxAccroissementGarconsFilles ?? ''}
@@ -613,6 +627,8 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
+                      step="0.001"
+                      min="0"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.special?.tauxAccroissementFilles ?? ''}
@@ -663,6 +679,8 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
+                      step="0.001"
+                      min="0"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.tauxAccroissementGarconsFilles || ''}
@@ -672,6 +690,8 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
+                      step="0.001"
+                      min="0"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.tauxAccroissementFilles || ''}
@@ -702,6 +722,8 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
+                      step="0.001"
+                      min="0"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.tauxAccroissementGarconsFilles || ''}
@@ -711,6 +733,8 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
+                      step="0.001"
+                      min="0"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.tauxAccroissementFilles || ''}
