@@ -497,7 +497,6 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={indicateursAcces.nouveauxInscritsPrimaire.tauxGF || ''}
@@ -508,7 +507,6 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={indicateursAcces.nouveauxInscritsPrimaire.tauxFilles || ''}
@@ -522,7 +520,6 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={indicateursAcces.transitionPrimaireCTEB.tauxGF || ''}
@@ -533,7 +530,6 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={indicateursAcces.transitionPrimaireCTEB.tauxFilles || ''}
@@ -547,7 +543,6 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={indicateursAcces.transitionCTEBHumanites.tauxGF || ''}
@@ -558,7 +553,6 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={indicateursAcces.transitionCTEBHumanites.tauxFilles || ''}
@@ -606,7 +600,6 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Candidats</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataAcces.nouveauxInscritsPrimaire.candidats || ''}
                       onChange={(e) => updateCalculDataAcces('nouveauxInscritsPrimaire', 'candidats', Number(e.target.value))}
@@ -617,7 +610,6 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Admis</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculDataAcces.nouveauxInscritsPrimaire.admis || ''}
                       onChange={(e) => updateCalculDataAcces('nouveauxInscritsPrimaire', 'admis', Number(e.target.value))}
@@ -628,7 +620,6 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Garçons</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataAcces.nouveauxInscritsPrimaire.garcons || ''}
                       onChange={(e) => updateCalculDataAcces('nouveauxInscritsPrimaire', 'garcons', Number(e.target.value))}
@@ -639,7 +630,6 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Filles</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataAcces.nouveauxInscritsPrimaire.filles || ''}
                       onChange={(e) => updateCalculDataAcces('nouveauxInscritsPrimaire', 'filles', Number(e.target.value))}
@@ -657,7 +647,6 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Finissants Primaire</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataAcces.transitionPrimaireCTEB.finissantsPrimaire || ''}
                       onChange={(e) => updateCalculDataAcces('transitionPrimaireCTEB', 'finissantsPrimaire', Number(e.target.value))}
@@ -668,7 +657,6 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Inscrits CTEB</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculDataAcces.transitionPrimaireCTEB.inscritsCTEB || ''}
                       onChange={(e) => updateCalculDataAcces('transitionPrimaireCTEB', 'inscritsCTEB', Number(e.target.value))}
@@ -679,7 +667,6 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Garçons</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataAcces.transitionPrimaireCTEB.garcons || ''}
                       onChange={(e) => updateCalculDataAcces('transitionPrimaireCTEB', 'garcons', Number(e.target.value))}
@@ -690,7 +677,6 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Filles</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataAcces.transitionPrimaireCTEB.filles || ''}
                       onChange={(e) => updateCalculDataAcces('transitionPrimaireCTEB', 'filles', Number(e.target.value))}
@@ -708,7 +694,6 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Finissants CTEB</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataAcces.transitionCTEBHumanites.finissantsCTEB || ''}
                       onChange={(e) => updateCalculDataAcces('transitionCTEBHumanites', 'finissantsCTEB', Number(e.target.value))}
@@ -719,7 +704,6 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Inscrits Humanités</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculDataAcces.transitionCTEBHumanites.inscritsHumanites || ''}
                       onChange={(e) => updateCalculDataAcces('transitionCTEBHumanites', 'inscritsHumanites', Number(e.target.value))}
@@ -730,7 +714,6 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Garçons</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataAcces.transitionCTEBHumanites.garcons || ''}
                       onChange={(e) => updateCalculDataAcces('transitionCTEBHumanites', 'garcons', Number(e.target.value))}
@@ -741,7 +724,6 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Filles</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataAcces.transitionCTEBHumanites.filles || ''}
                       onChange={(e) => updateCalculDataAcces('transitionCTEBHumanites', 'filles', Number(e.target.value))}

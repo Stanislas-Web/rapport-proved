@@ -22,7 +22,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
     );
   }
 
-  const handleInputChange = (path: string, value: number) => {
+  const handleInputChange = (path: string, value: number | string) => {
     setFormData(prev => {
       const newData = { ...prev };
       const keys = path.split('.');
@@ -35,7 +35,9 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
         current = current[keys[i]];
       }
       
-      current[keys[keys.length - 1]] = value;
+      // Arrondir les nombres à 2 décimales, laisser les strings telles quelles
+      const finalValue = typeof value === 'number' ? Math.round(value * 100) / 100 : value;
+      current[keys[keys.length - 1]] = finalValue;
       return newData;
     });
   };
@@ -487,8 +489,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
-                      step="0.001"
-                      min="0"
+                      step="0.01"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.espaceCommunautaireEveil?.tauxAccroissementGarconsFilles ?? ''}
@@ -498,8 +499,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
-                      step="0.001"
-                      min="0"
+                      step="0.01"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.espaceCommunautaireEveil?.tauxAccroissementFilles ?? ''}
@@ -530,8 +530,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
-                      step="0.001"
-                      min="0"
+                      step="0.01"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.maternel?.tauxAccroissementGarconsFilles ?? ''}
@@ -541,8 +540,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
-                      step="0.001"
-                      min="0"
+                      step="0.01"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.maternel?.tauxAccroissementFilles ?? ''}
@@ -573,8 +571,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
-                      step="0.001"
-                      min="0"
+                      step="0.01"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.prePrimaire?.tauxAccroissementGarconsFilles ?? ''}
@@ -584,8 +581,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
-                      step="0.001"
-                      min="0"
+                      step="0.01"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.prePrimaire?.tauxAccroissementFilles ?? ''}
@@ -616,8 +612,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
-                      step="0.001"
-                      min="0"
+                      step="0.01"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.special?.tauxAccroissementGarconsFilles ?? ''}
@@ -627,8 +622,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
-                      step="0.001"
-                      min="0"
+                      step="0.01"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrescolaire?.special?.tauxAccroissementFilles ?? ''}
@@ -679,8 +673,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
-                      step="0.001"
-                      min="0"
+                      step="0.01"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.tauxAccroissementGarconsFilles || ''}
@@ -690,8 +683,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
-                      step="0.001"
-                      min="0"
+                      step="0.01"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.tauxAccroissementFilles || ''}
@@ -722,8 +714,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
-                      step="0.001"
-                      min="0"
+                      step="0.01"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.tauxAccroissementGarconsFilles || ''}
@@ -733,8 +724,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
-                      step="0.001"
-                      min="0"
+                      step="0.01"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.tauxAccroissementFilles || ''}

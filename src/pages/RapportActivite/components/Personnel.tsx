@@ -22,7 +22,7 @@ const Personnel: React.FC<PersonnelProps> = ({ formData, setFormData }) => {
     );
   }
 
-  const handleInputChange = (path: string, value: number) => {
+  const handleInputChange = (path: string, value: number | string) => {
     setFormData(prev => {
       const newData = { ...prev };
       const keys = path.split('.');
@@ -35,7 +35,9 @@ const Personnel: React.FC<PersonnelProps> = ({ formData, setFormData }) => {
         current = current[keys[i]];
       }
       
-      current[keys[keys.length - 1]] = value;
+      // Arrondir les nombres à 2 décimales, laisser les strings telles quelles
+      const finalValue = typeof value === 'number' ? Math.round(value * 100) / 100 : value;
+      current[keys[keys.length - 1]] = finalValue;
       return newData;
     });
   };

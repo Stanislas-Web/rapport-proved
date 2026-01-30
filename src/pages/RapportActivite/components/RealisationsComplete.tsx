@@ -117,7 +117,6 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = () => {
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     placeholder="0"
-                    min="0"
                     value={inspectionsC2B.maternel.prevu || ''}
                     onChange={(e) => updateInspectionC2B('maternel', 'prevu', Number(e.target.value))}
                   />
@@ -127,7 +126,6 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = () => {
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     placeholder="0"
-                    min="0"
                     max={inspectionsC2B.maternel.prevu || undefined}
                     value={inspectionsC2B.maternel.realise || ''}
                     onChange={(e) => updateInspectionC2B('maternel', 'realise', Number(e.target.value))}
@@ -146,7 +144,6 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = () => {
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     placeholder="0"
-                    min="0"
                     value={inspectionsC2B.primaire.prevu || ''}
                     onChange={(e) => updateInspectionC2B('primaire', 'prevu', Number(e.target.value))}
                   />
@@ -156,7 +153,6 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = () => {
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     placeholder="0"
-                    min="0"
                     max={inspectionsC2B.primaire.prevu || undefined}
                     value={inspectionsC2B.primaire.realise || ''}
                     onChange={(e) => updateInspectionC2B('primaire', 'realise', Number(e.target.value))}
@@ -175,7 +171,6 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = () => {
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     placeholder="0"
-                    min="0"
                     value={inspectionsC2B.secondaire.prevu || ''}
                     onChange={(e) => updateInspectionC2B('secondaire', 'prevu', Number(e.target.value))}
                   />
@@ -185,7 +180,6 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = () => {
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     placeholder="0"
-                    min="0"
                     max={inspectionsC2B.secondaire.prevu || undefined}
                     value={inspectionsC2B.secondaire.realise || ''}
                     onChange={(e) => updateInspectionC2B('secondaire', 'realise', Number(e.target.value))}
@@ -204,7 +198,6 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = () => {
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     placeholder="0"
-                    min="0"
                     value={inspectionsC2B.special.prevu || ''}
                     onChange={(e) => updateInspectionC2B('special', 'prevu', Number(e.target.value))}
                   />
@@ -214,7 +207,6 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = () => {
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     placeholder="0"
-                    min="0"
                     max={inspectionsC2B.special.prevu || undefined}
                     value={inspectionsC2B.special.realise || ''}
                     onChange={(e) => updateInspectionC2B('special', 'realise', Number(e.target.value))}

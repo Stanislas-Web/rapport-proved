@@ -1564,7 +1564,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      min="0"
                       max={inspectionsC3.maternel.prevu || undefined}
                       value={inspectionsC3.maternel.realise || ''}
                       onChange={(e) => updateInspection('maternel', 'realise', Number(e.target.value))}
@@ -1592,7 +1591,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      min="0"
                       max={inspectionsC3.primaire.prevu || undefined}
                       value={inspectionsC3.primaire.realise || ''}
                       onChange={(e) => updateInspection('primaire', 'realise', Number(e.target.value))}
@@ -1620,7 +1618,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      min="0"
                       max={inspectionsC3.secondaire.prevu || undefined}
                       value={inspectionsC3.secondaire.realise || ''}
                       onChange={(e) => updateInspection('secondaire', 'realise', Number(e.target.value))}
@@ -1639,7 +1636,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      min="0"
                       value={inspectionsC3.special.prevu || ''}
                       onChange={(e) => updateInspection('special', 'prevu', Number(e.target.value))}
                     />
@@ -1649,7 +1645,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      min="0"
                       max={inspectionsC3.special.prevu || undefined}
                       value={inspectionsC3.special.realise || ''}
                       onChange={(e) => updateInspection('special', 'realise', Number(e.target.value))}
@@ -1687,7 +1682,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      min="0"
                       value={inspectionsFormation.maternel.prevu || ''}
                       onChange={(e) => updateInspectionFormation('maternel', 'prevu', Number(e.target.value))}
                     />
@@ -1697,7 +1691,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      min="0"
                       max={inspectionsFormation.maternel.prevu || undefined}
                       value={inspectionsFormation.maternel.realise || ''}
                       onChange={(e) => updateInspectionFormation('maternel', 'realise', Number(e.target.value))}
@@ -1716,7 +1709,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      min="0"
                       value={inspectionsFormation.primaire.prevu || ''}
                       onChange={(e) => updateInspectionFormation('primaire', 'prevu', Number(e.target.value))}
                     />
@@ -1726,7 +1718,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      min="0"
                       max={inspectionsFormation.primaire.prevu || undefined}
                       value={inspectionsFormation.primaire.realise || ''}
                       onChange={(e) => updateInspectionFormation('primaire', 'realise', Number(e.target.value))}
@@ -1745,7 +1736,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      min="0"
                       value={inspectionsFormation.secondaire.prevu || ''}
                       onChange={(e) => updateInspectionFormation('secondaire', 'prevu', Number(e.target.value))}
                     />
@@ -1755,7 +1745,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      min="0"
                       max={inspectionsFormation.secondaire.prevu || undefined}
                       value={inspectionsFormation.secondaire.realise || ''}
                       onChange={(e) => updateInspectionFormation('secondaire', 'realise', Number(e.target.value))}
@@ -1774,7 +1763,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      min="0"
                       value={inspectionsFormation.special.prevu || ''}
                       onChange={(e) => updateInspectionFormation('special', 'prevu', Number(e.target.value))}
                     />
@@ -1784,7 +1772,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      min="0"
                       max={inspectionsFormation.special.prevu || undefined}
                       value={inspectionsFormation.special.realise || ''}
                       onChange={(e) => updateInspectionFormation('special', 'realise', Number(e.target.value))}
@@ -1982,7 +1969,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementInterne.sixiemePrimaire.abandon || ''}
@@ -1993,7 +1979,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementInterne.sixiemePrimaire.reussite || ''}
@@ -2004,7 +1989,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementInterne.sixiemePrimaire.echec || ''}
@@ -2018,7 +2002,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementInterne.huitiemeCETB.abandon || ''}
@@ -2029,7 +2012,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementInterne.huitiemeCETB.reussite || ''}
@@ -2040,7 +2022,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementInterne.huitiemeCETB.echec || ''}
@@ -2054,7 +2035,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementInterne.quatriemeHumanite.abandon || ''}
@@ -2065,7 +2045,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementInterne.quatriemeHumanite.reussite || ''}
@@ -2076,7 +2055,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementInterne.quatriemeHumanite.echec || ''}
@@ -2090,7 +2068,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementInterne.diplomesMathematiques.abandon || ''}
@@ -2101,7 +2078,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementInterne.diplomesMathematiques.reussite || ''}
@@ -2112,7 +2088,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementInterne.diplomesMathematiques.echec || ''}
@@ -2126,7 +2101,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementInterne.diplomesFiliereTechniques.abandon || ''}
@@ -2137,7 +2111,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementInterne.diplomesFiliereTechniques.reussite || ''}
@@ -2148,7 +2121,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementInterne.diplomesFiliereTechniques.echec || ''}
@@ -2248,7 +2220,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementExterne.prescolaire.tauxGF || ''}
@@ -2259,7 +2230,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementExterne.prescolaire.tauxFilles || ''}
@@ -2273,7 +2243,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementExterne.espaceCommunautaireEveil.tauxGF || ''}
@@ -2284,7 +2253,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementExterne.espaceCommunautaireEveil.tauxFilles || ''}
@@ -2298,7 +2266,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementExterne.classePreprimaire.tauxGF || ''}
@@ -2309,7 +2276,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementExterne.classePreprimaire.tauxFilles || ''}
@@ -2323,7 +2289,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementExterne.maternel.tauxGF || ''}
@@ -2334,7 +2299,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementExterne.maternel.tauxFilles || ''}
@@ -2348,7 +2312,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementExterne.primaire.tauxGF || ''}
@@ -2359,7 +2322,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementExterne.primaire.tauxFilles || ''}
@@ -2373,7 +2335,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementExterne.enseignementSpecialPrimaire.tauxGF || ''}
@@ -2384,7 +2345,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementExterne.enseignementSpecialPrimaire.tauxFilles || ''}
@@ -2398,7 +2358,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementExterne.enseignementPrimaire.tauxGF || ''}
@@ -2409,7 +2368,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementExterne.enseignementPrimaire.tauxFilles || ''}
@@ -2423,7 +2381,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementExterne.secondaire.tauxGF || ''}
@@ -2434,7 +2391,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementExterne.secondaire.tauxFilles || ''}
@@ -2448,7 +2404,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementExterne.enseignementSpecialSecondaire.tauxGF || ''}
@@ -2459,7 +2414,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementExterne.enseignementSpecialSecondaire.tauxFilles || ''}
@@ -2473,7 +2427,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementExterne.enseignementSecondaireNormal.tauxGF || ''}
@@ -2484,7 +2437,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <input 
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                    min="0"
                     max="100"
                     step="0.1"
                     value={rendementExterne.enseignementSecondaireNormal.tauxFilles || ''}
@@ -2581,7 +2533,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={efficacitePrimaire.tauxAbandon.tauxGF || ''}
@@ -2592,7 +2543,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={efficacitePrimaire.tauxAbandon.tauxFilles || ''}
@@ -2606,7 +2556,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={efficacitePrimaire.tauxReussite.tauxGF || ''}
@@ -2617,7 +2566,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={efficacitePrimaire.tauxReussite.tauxFilles || ''}
@@ -2631,7 +2579,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={efficacitePrimaire.tauxEchec.tauxGF || ''}
@@ -2642,7 +2589,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={efficacitePrimaire.tauxEchec.tauxFilles || ''}
@@ -2735,7 +2681,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={efficaciteSecondaire.tauxAbandon.tauxGF || ''}
@@ -2746,7 +2691,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={efficaciteSecondaire.tauxAbandon.tauxFilles || ''}
@@ -2760,7 +2704,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={efficaciteSecondaire.tauxReussite.tauxGF || ''}
@@ -2771,7 +2714,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={efficaciteSecondaire.tauxReussite.tauxFilles || ''}
@@ -2785,7 +2727,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={efficaciteSecondaire.tauxEchec.tauxGF || ''}
@@ -2796,7 +2737,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={efficaciteSecondaire.tauxEchec.tauxFilles || ''}
@@ -2873,7 +2813,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={tauxDiplomesOCDE.humanitesScientifiques.tauxGF || ''}
@@ -2884,7 +2823,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={tauxDiplomesOCDE.humanitesScientifiques.tauxFilles || ''}
@@ -2898,7 +2836,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={tauxDiplomesOCDE.humanitesTechniques.tauxGF || ''}
@@ -2909,7 +2846,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={tauxDiplomesOCDE.humanitesTechniques.tauxFilles || ''}
@@ -2988,7 +2924,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={indicateursAcces.proportionGarcons.tauxGF || ''}
@@ -2999,7 +2934,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={indicateursAcces.proportionGarcons.tauxFilles || ''}
@@ -3013,7 +2947,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={indicateursAcces.proportionFilles.tauxGF || ''}
@@ -3024,7 +2957,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={indicateursAcces.proportionFilles.tauxFilles || ''}
@@ -3038,7 +2970,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={indicateursAcces.transitionPrimaireSecondaire.tauxGF || ''}
@@ -3049,7 +2980,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      min="0"
                       max="100"
                       step="0.1"
                       value={indicateursAcces.transitionPrimaireSecondaire.tauxFilles || ''}
@@ -3117,7 +3047,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Inscrits</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculData.sixiemePrimaire.inscrits || ''}
                       onChange={(e) => updateCalculData('sixiemePrimaire', 'inscrits', Number(e.target.value))}
@@ -3135,7 +3064,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValue('sixiemePrimaire', 'abandons')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-red-500"
                       value={calculData.sixiemePrimaire.abandons || ''}
@@ -3154,7 +3082,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValue('sixiemePrimaire', 'reussites')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculData.sixiemePrimaire.reussites || ''}
@@ -3173,7 +3100,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValue('sixiemePrimaire', 'echecs')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                       value={calculData.sixiemePrimaire.echecs || ''}
@@ -3204,7 +3130,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Inscrits</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculData.huitiemeCETB.inscrits || ''}
                       onChange={(e) => updateCalculData('huitiemeCETB', 'inscrits', Number(e.target.value))}
@@ -3222,7 +3147,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValue('huitiemeCETB', 'abandons')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-red-500"
                       value={calculData.huitiemeCETB.abandons || ''}
@@ -3241,7 +3165,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValue('huitiemeCETB', 'reussites')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculData.huitiemeCETB.reussites || ''}
@@ -3260,7 +3183,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValue('huitiemeCETB', 'echecs')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                       value={calculData.huitiemeCETB.echecs || ''}
@@ -3291,7 +3213,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Inscrits</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculData.quatriemeHumanite.inscrits || ''}
                       onChange={(e) => updateCalculData('quatriemeHumanite', 'inscrits', Number(e.target.value))}
@@ -3309,7 +3230,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValue('quatriemeHumanite', 'abandons')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-red-500"
                       value={calculData.quatriemeHumanite.abandons || ''}
@@ -3328,7 +3248,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValue('quatriemeHumanite', 'reussites')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculData.quatriemeHumanite.reussites || ''}
@@ -3347,7 +3266,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValue('quatriemeHumanite', 'echecs')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                       value={calculData.quatriemeHumanite.echecs || ''}
@@ -3378,7 +3296,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Inscrits</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculData.diplomesMathematiques.inscrits || ''}
                       onChange={(e) => updateCalculData('diplomesMathematiques', 'inscrits', Number(e.target.value))}
@@ -3396,7 +3313,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValue('diplomesMathematiques', 'abandons')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-red-500"
                       value={calculData.diplomesMathematiques.abandons || ''}
@@ -3415,7 +3331,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValue('diplomesMathematiques', 'reussites')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculData.diplomesMathematiques.reussites || ''}
@@ -3434,7 +3349,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValue('diplomesMathematiques', 'echecs')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                       value={calculData.diplomesMathematiques.echecs || ''}
@@ -3465,7 +3379,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Inscrits</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculData.diplomesFiliereTechniques.inscrits || ''}
                       onChange={(e) => updateCalculData('diplomesFiliereTechniques', 'inscrits', Number(e.target.value))}
@@ -3483,7 +3396,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValue('diplomesFiliereTechniques', 'abandons')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-red-500"
                       value={calculData.diplomesFiliereTechniques.abandons || ''}
@@ -3502,7 +3414,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValue('diplomesFiliereTechniques', 'reussites')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculData.diplomesFiliereTechniques.reussites || ''}
@@ -3521,7 +3432,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValue('diplomesFiliereTechniques', 'echecs')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                       value={calculData.diplomesFiliereTechniques.echecs || ''}
@@ -3639,7 +3549,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Total (GF)</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculDataExternes.prescolaire.total || ''}
                       onChange={(e) => updateCalculDataExternes('prescolaire', 'total', Number(e.target.value))}
@@ -3657,7 +3566,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueExterne('prescolaire', 'garcons')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataExternes.prescolaire.garcons || ''}
@@ -3676,7 +3584,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueExterne('prescolaire', 'filles')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataExternes.prescolaire.filles || ''}
@@ -3707,7 +3614,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Total (GF)</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculDataExternes.espaceCommunautaireEveil.total || ''}
                       onChange={(e) => updateCalculDataExternes('espaceCommunautaireEveil', 'total', Number(e.target.value))}
@@ -3725,7 +3631,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueExterne('espaceCommunautaireEveil', 'garcons')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataExternes.espaceCommunautaireEveil.garcons || ''}
@@ -3744,7 +3649,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueExterne('espaceCommunautaireEveil', 'filles')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataExternes.espaceCommunautaireEveil.filles || ''}
@@ -3775,7 +3679,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Total (GF)</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculDataExternes.classePreprimaire.total || ''}
                       onChange={(e) => updateCalculDataExternes('classePreprimaire', 'total', Number(e.target.value))}
@@ -3793,7 +3696,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueExterne('classePreprimaire', 'garcons')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataExternes.classePreprimaire.garcons || ''}
@@ -3812,7 +3714,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueExterne('classePreprimaire', 'filles')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataExternes.classePreprimaire.filles || ''}
@@ -3843,7 +3744,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Total (GF)</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculDataExternes.maternel.total || ''}
                       onChange={(e) => updateCalculDataExternes('maternel', 'total', Number(e.target.value))}
@@ -3861,7 +3761,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueExterne('maternel', 'garcons')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataExternes.maternel.garcons || ''}
@@ -3880,7 +3779,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueExterne('maternel', 'filles')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataExternes.maternel.filles || ''}
@@ -3911,7 +3809,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Total (GF)</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculDataExternes.primaire.total || ''}
                       onChange={(e) => updateCalculDataExternes('primaire', 'total', Number(e.target.value))}
@@ -3929,7 +3826,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueExterne('primaire', 'garcons')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataExternes.primaire.garcons || ''}
@@ -3948,7 +3844,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueExterne('primaire', 'filles')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataExternes.primaire.filles || ''}
@@ -3979,7 +3874,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Total (GF)</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculDataExternes.enseignementSpecialPrimaire.total || ''}
                       onChange={(e) => updateCalculDataExternes('enseignementSpecialPrimaire', 'total', Number(e.target.value))}
@@ -3997,7 +3891,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueExterne('enseignementSpecialPrimaire', 'garcons')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataExternes.enseignementSpecialPrimaire.garcons || ''}
@@ -4016,7 +3909,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueExterne('enseignementSpecialPrimaire', 'filles')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataExternes.enseignementSpecialPrimaire.filles || ''}
@@ -4047,7 +3939,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Total (GF)</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculDataExternes.enseignementPrimaire.total || ''}
                       onChange={(e) => updateCalculDataExternes('enseignementPrimaire', 'total', Number(e.target.value))}
@@ -4065,7 +3956,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueExterne('enseignementPrimaire', 'garcons')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataExternes.enseignementPrimaire.garcons || ''}
@@ -4084,7 +3974,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueExterne('enseignementPrimaire', 'filles')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataExternes.enseignementPrimaire.filles || ''}
@@ -4115,7 +4004,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Total (GF)</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculDataExternes.secondaire.total || ''}
                       onChange={(e) => updateCalculDataExternes('secondaire', 'total', Number(e.target.value))}
@@ -4133,7 +4021,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueExterne('secondaire', 'garcons')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataExternes.secondaire.garcons || ''}
@@ -4152,7 +4039,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueExterne('secondaire', 'filles')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataExternes.secondaire.filles || ''}
@@ -4183,7 +4069,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Total (GF)</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculDataExternes.enseignementSpecialSecondaire.total || ''}
                       onChange={(e) => updateCalculDataExternes('enseignementSpecialSecondaire', 'total', Number(e.target.value))}
@@ -4201,7 +4086,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueExterne('enseignementSpecialSecondaire', 'garcons')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataExternes.enseignementSpecialSecondaire.garcons || ''}
@@ -4220,7 +4104,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueExterne('enseignementSpecialSecondaire', 'filles')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataExternes.enseignementSpecialSecondaire.filles || ''}
@@ -4251,7 +4134,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Total (GF)</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculDataExternes.enseignementSecondaireNormal.total || ''}
                       onChange={(e) => updateCalculDataExternes('enseignementSecondaireNormal', 'total', Number(e.target.value))}
@@ -4269,7 +4151,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueExterne('enseignementSecondaireNormal', 'garcons')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataExternes.enseignementSecondaireNormal.garcons || ''}
@@ -4288,7 +4169,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueExterne('enseignementSecondaireNormal', 'filles')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataExternes.enseignementSecondaireNormal.filles || ''}
@@ -4374,7 +4254,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Inscrits</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataPrimaire.tauxAbandon.inscrits || ''}
                       onChange={(e) => updateCalculDataPrimaire('tauxAbandon', 'inscrits', Number(e.target.value))}
@@ -4392,7 +4271,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValuePrimaire('tauxAbandon', 'abandons')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-red-500"
                       value={calculDataPrimaire.tauxAbandon.abandons || ''}
@@ -4404,7 +4282,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Garçons</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataPrimaire.tauxAbandon.garcons || ''}
                       onChange={(e) => updateCalculDataPrimaire('tauxAbandon', 'garcons', Number(e.target.value))}
@@ -4415,7 +4292,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Filles</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataPrimaire.tauxAbandon.filles || ''}
                       onChange={(e) => updateCalculDataPrimaire('tauxAbandon', 'filles', Number(e.target.value))}
@@ -4445,7 +4321,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Inscrits</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataPrimaire.tauxReussite.inscrits || ''}
                       onChange={(e) => updateCalculDataPrimaire('tauxReussite', 'inscrits', Number(e.target.value))}
@@ -4463,7 +4338,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValuePrimaire('tauxReussite', 'reussites')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculDataPrimaire.tauxReussite.reussites || ''}
@@ -4475,7 +4349,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Garçons</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataPrimaire.tauxReussite.garcons || ''}
                       onChange={(e) => updateCalculDataPrimaire('tauxReussite', 'garcons', Number(e.target.value))}
@@ -4486,7 +4359,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Filles</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataPrimaire.tauxReussite.filles || ''}
                       onChange={(e) => updateCalculDataPrimaire('tauxReussite', 'filles', Number(e.target.value))}
@@ -4516,7 +4388,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Inscrits</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataPrimaire.tauxEchec.inscrits || ''}
                       onChange={(e) => updateCalculDataPrimaire('tauxEchec', 'inscrits', Number(e.target.value))}
@@ -4534,7 +4405,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValuePrimaire('tauxEchec', 'echecs')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                       value={calculDataPrimaire.tauxEchec.echecs || ''}
@@ -4546,7 +4416,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Garçons</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataPrimaire.tauxEchec.garcons || ''}
                       onChange={(e) => updateCalculDataPrimaire('tauxEchec', 'garcons', Number(e.target.value))}
@@ -4557,7 +4426,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Filles</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataPrimaire.tauxEchec.filles || ''}
                       onChange={(e) => updateCalculDataPrimaire('tauxEchec', 'filles', Number(e.target.value))}
@@ -4625,7 +4493,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Inscrits</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataSecondaire.tauxAbandon.inscrits || ''}
                       onChange={(e) => updateCalculDataSecondaire('tauxAbandon', 'inscrits', Number(e.target.value))}
@@ -4636,7 +4503,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Abandons</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-red-500"
                       value={calculDataSecondaire.tauxAbandon.abandons || ''}
                       onChange={(e) => updateCalculDataSecondaire('tauxAbandon', 'abandons', Number(e.target.value))}
@@ -4647,7 +4513,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Garçons</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataSecondaire.tauxAbandon.garcons || ''}
                       onChange={(e) => updateCalculDataSecondaire('tauxAbandon', 'garcons', Number(e.target.value))}
@@ -4658,7 +4523,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Filles</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataSecondaire.tauxAbandon.filles || ''}
                       onChange={(e) => updateCalculDataSecondaire('tauxAbandon', 'filles', Number(e.target.value))}
@@ -4676,7 +4540,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Inscrits</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataSecondaire.tauxReussite.inscrits || ''}
                       onChange={(e) => updateCalculDataSecondaire('tauxReussite', 'inscrits', Number(e.target.value))}
@@ -4687,7 +4550,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Réussites</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculDataSecondaire.tauxReussite.reussites || ''}
                       onChange={(e) => updateCalculDataSecondaire('tauxReussite', 'reussites', Number(e.target.value))}
@@ -4698,7 +4560,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Garçons</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataSecondaire.tauxReussite.garcons || ''}
                       onChange={(e) => updateCalculDataSecondaire('tauxReussite', 'garcons', Number(e.target.value))}
@@ -4709,7 +4570,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Filles</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataSecondaire.tauxReussite.filles || ''}
                       onChange={(e) => updateCalculDataSecondaire('tauxReussite', 'filles', Number(e.target.value))}
@@ -4727,7 +4587,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Inscrits</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataSecondaire.tauxEchec.inscrits || ''}
                       onChange={(e) => updateCalculDataSecondaire('tauxEchec', 'inscrits', Number(e.target.value))}
@@ -4738,7 +4597,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Échecs</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                       value={calculDataSecondaire.tauxEchec.echecs || ''}
                       onChange={(e) => updateCalculDataSecondaire('tauxEchec', 'echecs', Number(e.target.value))}
@@ -4749,7 +4607,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Garçons</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataSecondaire.tauxEchec.garcons || ''}
                       onChange={(e) => updateCalculDataSecondaire('tauxEchec', 'garcons', Number(e.target.value))}
@@ -4760,7 +4617,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Filles</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataSecondaire.tauxEchec.filles || ''}
                       onChange={(e) => updateCalculDataSecondaire('tauxEchec', 'filles', Number(e.target.value))}
@@ -4838,7 +4694,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Finalistes</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataOCDE.humanitesScientifiques.finalistes || ''}
                       onChange={(e) => updateCalculDataOCDE('humanitesScientifiques', 'finalistes', Number(e.target.value))}
@@ -4856,7 +4711,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueOCDE('humanitesScientifiques', 'diplomes')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculDataOCDE.humanitesScientifiques.diplomes || ''}
@@ -4875,7 +4729,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={calculDataOCDE.humanitesScientifiques.diplomes - (calculDataOCDE.humanitesScientifiques.filles || 0)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataOCDE.humanitesScientifiques.garcons || ''}
@@ -4894,7 +4747,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={calculDataOCDE.humanitesScientifiques.diplomes - (calculDataOCDE.humanitesScientifiques.garcons || 0)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataOCDE.humanitesScientifiques.filles || ''}
@@ -4925,7 +4777,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Finalistes</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataOCDE.humanitesTechniques.finalistes || ''}
                       onChange={(e) => updateCalculDataOCDE('humanitesTechniques', 'finalistes', Number(e.target.value))}
@@ -4943,7 +4794,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={getMaxValueOCDE('humanitesTechniques', 'diplomes')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculDataOCDE.humanitesTechniques.diplomes || ''}
@@ -4962,7 +4812,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={calculDataOCDE.humanitesTechniques.diplomes - (calculDataOCDE.humanitesTechniques.filles || 0)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataOCDE.humanitesTechniques.garcons || ''}
@@ -4981,7 +4830,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     </label>
                     <input
                       type="number"
-                      min="0"
                       max={calculDataOCDE.humanitesTechniques.diplomes - (calculDataOCDE.humanitesTechniques.garcons || 0)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataOCDE.humanitesTechniques.filles || ''}
@@ -5043,7 +4891,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Total Élèves</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataAcces.proportionGarcons.total || ''}
                       onChange={(e) => updateCalculDataAcces('proportionGarcons', 'total', Number(e.target.value))}
@@ -5054,7 +4901,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Garçons</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataAcces.proportionGarcons.garcons || ''}
                       onChange={(e) => updateCalculDataAcces('proportionGarcons', 'garcons', Number(e.target.value))}
@@ -5072,7 +4918,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Total Élèves</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataAcces.proportionFilles.total || ''}
                       onChange={(e) => updateCalculDataAcces('proportionFilles', 'total', Number(e.target.value))}
@@ -5083,7 +4928,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Filles</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataAcces.proportionFilles.filles || ''}
                       onChange={(e) => updateCalculDataAcces('proportionFilles', 'filles', Number(e.target.value))}
@@ -5101,7 +4945,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Finissants Primaire</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                       value={calculDataAcces.transitionPrimaireSecondaire.finissantsPrimaire || ''}
                       onChange={(e) => updateCalculDataAcces('transitionPrimaireSecondaire', 'finissantsPrimaire', Number(e.target.value))}
@@ -5112,7 +4955,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Inscrits Secondaire</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={calculDataAcces.transitionPrimaireSecondaire.inscritsSecondaire || ''}
                       onChange={(e) => updateCalculDataAcces('transitionPrimaireSecondaire', 'inscritsSecondaire', Number(e.target.value))}
@@ -5123,7 +4965,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Garçons</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       value={calculDataAcces.transitionPrimaireSecondaire.garcons || ''}
                       onChange={(e) => updateCalculDataAcces('transitionPrimaireSecondaire', 'garcons', Number(e.target.value))}
@@ -5134,7 +4975,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     <label className="block text-sm font-medium text-gray-700 mb-2">Filles</label>
                     <input
                       type="number"
-                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                       value={calculDataAcces.transitionPrimaireSecondaire.filles || ''}
                       onChange={(e) => updateCalculDataAcces('transitionPrimaireSecondaire', 'filles', Number(e.target.value))}

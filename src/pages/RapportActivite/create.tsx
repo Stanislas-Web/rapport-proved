@@ -78,7 +78,7 @@ const CreateRapportActivite: React.FC = () => {
         directeurProvincial: '',
         isActive: true
       },
-      annee: new Date().getFullYear(),
+      annee: `${new Date().getFullYear()}-${new Date().getFullYear() + 1}`,
       introduction: '',
       parametresCles: {
         nombreEcolesClasses: {
@@ -1244,13 +1244,16 @@ const CreateRapportActivite: React.FC = () => {
     setFormData(prev => {
       const updated = { ...prev };
       
+      // Arrondir les valeurs numériques à 2 décimales
+      const finalValue = typeof value === 'number' ? Math.round(value * 100) / 100 : value;
+      
       // Mettre à jour la valeur
       const keys = field.split('.');
       let current: any = updated;
       for (let i = 0; i < keys.length - 1; i++) {
         current = current[keys[i]];
       }
-      current[keys[keys.length - 1]] = value;
+      current[keys[keys.length - 1]] = finalValue;
       
       return updated;
     });
@@ -1262,7 +1265,15 @@ const CreateRapportActivite: React.FC = () => {
   // Fonctions de gestion du brouillon
   const handleRestoreDraft = () => {
     if (existingDraft) {
-      setFormData(existingDraft.formData);
+      const restoredData = existingDraft.formData;
+      
+      // Corriger le format de l'année si nécessaire
+      if (restoredData.annee && !restoredData.annee.toString().includes('-')) {
+        const year = parseInt(restoredData.annee.toString());
+        restoredData.annee = `${year}-${year + 1}`;
+      }
+      
+      setFormData(restoredData);
       setCurrentSection(existingDraft.metadata.currentSection);
       setShowDraftModal(false);
       toast.success('Brouillon restauré avec succès !');
@@ -1340,9 +1351,16 @@ const CreateRapportActivite: React.FC = () => {
         }
       }
 
+      // Corriger le format de l'année si nécessaire
+      let anneeCorrigee = formData.annee;
+      if (anneeCorrigee && !anneeCorrigee.toString().includes('-')) {
+        const year = parseInt(anneeCorrigee.toString());
+        anneeCorrigee = `${year}-${year + 1}`;
+      }
+
       const createRequest = {
         identificationProved: provedId, // Envoyer l'ID comme string
-        annee: formData.annee,
+        annee: anneeCorrigee,
         introduction: formData.introduction,
         parametresCles: formData.parametresCles,
         personnel: formData.personnel,
