@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RapportActivite } from '../../../models/RapportActivite';
 
 interface RealisationsProps {
@@ -9,6 +9,36 @@ interface RealisationsProps {
 const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) => {
   // État pour le modal de calcul des indicateurs d'accès
   const [showCalculModalAcces, setShowCalculModalAcces] = useState(false);
+
+  // État pour les cantines scolaires (4 sources de financement)
+  const [cantines, setCantines] = useState(() => ({
+    prescolaire: { gvt: 0, projet: 0, ptfs: 0, ong: 0 },
+    primaire: { gvt: 0, projet: 0, ptfs: 0, ong: 0 },
+    secondaire: { gvt: 0, projet: 0, ptfs: 0, ong: 0 }
+  }));
+
+  // Sync cantines to formData (total par niveau)
+  useEffect(() => {
+    const prescolaireTotal = cantines.prescolaire.gvt + cantines.prescolaire.projet + cantines.prescolaire.ptfs + cantines.prescolaire.ong;
+    const primaireTotal = cantines.primaire.gvt + cantines.primaire.projet + cantines.primaire.ptfs + cantines.primaire.ong;
+    const secondaireTotal = cantines.secondaire.gvt + cantines.secondaire.projet + cantines.secondaire.ptfs + cantines.secondaire.ong;
+
+    setFormData(prev => ({
+      ...prev,
+      realisations: {
+        ...prev.realisations,
+        accesAccessibiliteEquite: {
+          ...prev.realisations.accesAccessibiliteEquite,
+          cantinesScolaires: {
+            ...prev.realisations.accesAccessibiliteEquite.cantinesScolaires,
+            prescolaire: prescolaireTotal,
+            primaire: primaireTotal,
+            secondaire: secondaireTotal
+          }
+        }
+      }
+    }));
+  }, [cantines, setFormData]);
 
   // État pour les indicateurs d'accès
   const [indicateursAcces, setIndicateursAcces] = useState({
@@ -151,7 +181,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                   <td className="border border-gray-300 px-3 py-2">
                     <input
                       type="text"
-                      value={formData.realisations.accesAccessibiliteEquite.nouvellesSallesClasses.sourceFinancement}
+                      value={formData.realisations.accesAccessibiliteEquite.nouvellesSallesClasses.sourceFinancementPrescolaire || ''}
                       onChange={(e) => {
                         setFormData(prev => ({
                           ...prev,
@@ -161,7 +191,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                               ...prev.realisations.accesAccessibiliteEquite,
                               nouvellesSallesClasses: {
                                 ...prev.realisations.accesAccessibiliteEquite.nouvellesSallesClasses,
-                                sourceFinancement: e.target.value
+                                sourceFinancementPrescolaire: e.target.value
                               }
                             }
                           }
@@ -200,7 +230,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                   <td className="border border-gray-300 px-3 py-2">
                     <input
                       type="text"
-                      value={formData.realisations.accesAccessibiliteEquite.gratuitéEnseignementPrimaire || ''}
+                      value={formData.realisations.accesAccessibiliteEquite.nouvellesSallesClasses.sourceFinancementPrimaire || ''}
                       onChange={(e) => {
                         setFormData(prev => ({
                           ...prev,
@@ -208,7 +238,10 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                             ...prev.realisations,
                             accesAccessibiliteEquite: {
                               ...prev.realisations.accesAccessibiliteEquite,
-                              gratuitéEnseignementPrimaire: e.target.value
+                              nouvellesSallesClasses: {
+                                ...prev.realisations.accesAccessibiliteEquite.nouvellesSallesClasses,
+                                sourceFinancementPrimaire: e.target.value
+                              }
                             }
                           }
                         }));
@@ -246,7 +279,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                   <td className="border border-gray-300 px-3 py-2">
                     <input
                       type="text"
-                      value={formData.realisations.accesAccessibiliteEquite.cantinesScolaires.commentaire || ''}
+                      value={formData.realisations.accesAccessibiliteEquite.nouvellesSallesClasses.sourceFinancementSecondaire || ''}
                       onChange={(e) => {
                         setFormData(prev => ({
                           ...prev,
@@ -254,9 +287,9 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                             ...prev.realisations,
                             accesAccessibiliteEquite: {
                               ...prev.realisations.accesAccessibiliteEquite,
-                              cantinesScolaires: {
-                                ...prev.realisations.accesAccessibiliteEquite.cantinesScolaires,
-                                commentaire: e.target.value
+                              nouvellesSallesClasses: {
+                                ...prev.realisations.accesAccessibiliteEquite.nouvellesSallesClasses,
+                                sourceFinancementSecondaire: e.target.value
                               }
                             }
                           }
@@ -288,28 +321,148 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2 font-medium">A. NIVEAU PRESCOLAIRE</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      value={formData.realisations.accesAccessibiliteEquite.nouveauxBancsTables.prescolaire}
+                      onChange={(e) => {
+                        const newValue = parseInt(e.target.value) || 0;
+                        setFormData(prev => ({
+                          ...prev,
+                          realisations: {
+                            ...prev.realisations,
+                            accesAccessibiliteEquite: {
+                              ...prev.realisations.accesAccessibiliteEquite,
+                              nouveauxBancsTables: {
+                                ...prev.realisations.accesAccessibiliteEquite.nouveauxBancsTables,
+                                prescolaire: newValue
+                              }
+                            }
+                          }
+                        }));
+                      }}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="text" className="w-full text-center border-none focus:outline-none focus:ring-0" placeholder="GVT, Projet, PTFS, ONG..." />
+                    <input 
+                      type="text" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="GVT, Projet, PTFS, ONG..." 
+                      value={formData.realisations.accesAccessibiliteEquite.nouveauxBancsTables.sourceFinancementPrescolaire || ''}
+                      onChange={(e) => {
+                        setFormData(prev => ({
+                          ...prev,
+                          realisations: {
+                            ...prev.realisations,
+                            accesAccessibiliteEquite: {
+                              ...prev.realisations.accesAccessibiliteEquite,
+                              nouveauxBancsTables: {
+                                ...prev.realisations.accesAccessibiliteEquite.nouveauxBancsTables,
+                                sourceFinancementPrescolaire: e.target.value
+                              }
+                            }
+                          }
+                        }));
+                      }}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2 font-medium">B. NIVEAU PRIMAIRE</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      value={formData.realisations.accesAccessibiliteEquite.nouveauxBancsTables.primaire}
+                      onChange={(e) => {
+                        const newValue = parseInt(e.target.value) || 0;
+                        setFormData(prev => ({
+                          ...prev,
+                          realisations: {
+                            ...prev.realisations,
+                            accesAccessibiliteEquite: {
+                              ...prev.realisations.accesAccessibiliteEquite,
+                              nouveauxBancsTables: {
+                                ...prev.realisations.accesAccessibiliteEquite.nouveauxBancsTables,
+                                primaire: newValue
+                              }
+                            }
+                          }
+                        }));
+                      }}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="text" className="w-full text-center border-none focus:outline-none focus:ring-0" placeholder="GVT, Projet, PTFS, ONG..." />
+                    <input 
+                      type="text" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="GVT, Projet, PTFS, ONG..." 
+                      value={formData.realisations.accesAccessibiliteEquite.nouveauxBancsTables.sourceFinancementPrimaire || ''}
+                      onChange={(e) => {
+                        setFormData(prev => ({
+                          ...prev,
+                          realisations: {
+                            ...prev.realisations,
+                            accesAccessibiliteEquite: {
+                              ...prev.realisations.accesAccessibiliteEquite,
+                              nouveauxBancsTables: {
+                                ...prev.realisations.accesAccessibiliteEquite.nouveauxBancsTables,
+                                sourceFinancementPrimaire: e.target.value
+                              }
+                            }
+                          }
+                        }));
+                      }}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2 font-medium">C. NIVEAU SECONDAIRE</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      value={formData.realisations.accesAccessibiliteEquite.nouveauxBancsTables.secondaire}
+                      onChange={(e) => {
+                        const newValue = parseInt(e.target.value) || 0;
+                        setFormData(prev => ({
+                          ...prev,
+                          realisations: {
+                            ...prev.realisations,
+                            accesAccessibiliteEquite: {
+                              ...prev.realisations.accesAccessibiliteEquite,
+                              nouveauxBancsTables: {
+                                ...prev.realisations.accesAccessibiliteEquite.nouveauxBancsTables,
+                                secondaire: newValue
+                              }
+                            }
+                          }
+                        }));
+                      }}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="text" className="w-full text-center border-none focus:outline-none focus:ring-0" placeholder="GVT, Projet, PTFS, ONG..." />
+                    <input 
+                      type="text" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="GVT, Projet, PTFS, ONG..." 
+                      value={formData.realisations.accesAccessibiliteEquite.nouveauxBancsTables.sourceFinancementSecondaire || ''}
+                      onChange={(e) => {
+                        setFormData(prev => ({
+                          ...prev,
+                          realisations: {
+                            ...prev.realisations,
+                            accesAccessibiliteEquite: {
+                              ...prev.realisations.accesAccessibiliteEquite,
+                              nouveauxBancsTables: {
+                                ...prev.realisations.accesAccessibiliteEquite.nouveauxBancsTables,
+                                sourceFinancementSecondaire: e.target.value
+                              }
+                            }
+                          }
+                        }));
+                      }}
+                    />
                   </td>
                 </tr>
               </tbody>
@@ -333,28 +486,148 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2 font-medium">A. NIVEAU PRESCOLAIRE</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      value={formData.realisations.accesAccessibiliteEquite.nouvellesLatrines.prescolaire}
+                      onChange={(e) => {
+                        const newValue = parseInt(e.target.value) || 0;
+                        setFormData(prev => ({
+                          ...prev,
+                          realisations: {
+                            ...prev.realisations,
+                            accesAccessibiliteEquite: {
+                              ...prev.realisations.accesAccessibiliteEquite,
+                              nouvellesLatrines: {
+                                ...prev.realisations.accesAccessibiliteEquite.nouvellesLatrines,
+                                prescolaire: newValue
+                              }
+                            }
+                          }
+                        }));
+                      }}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="text" className="w-full text-center border-none focus:outline-none focus:ring-0" placeholder="GVT, Projet, PTFS, ONG..." />
+                    <input 
+                      type="text" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="GVT, Projet, PTFS, ONG..." 
+                      value={formData.realisations.accesAccessibiliteEquite.nouvellesLatrines.sourceFinancementPrescolaire || ''}
+                      onChange={(e) => {
+                        setFormData(prev => ({
+                          ...prev,
+                          realisations: {
+                            ...prev.realisations,
+                            accesAccessibiliteEquite: {
+                              ...prev.realisations.accesAccessibiliteEquite,
+                              nouvellesLatrines: {
+                                ...prev.realisations.accesAccessibiliteEquite.nouvellesLatrines,
+                                sourceFinancementPrescolaire: e.target.value
+                              }
+                            }
+                          }
+                        }));
+                      }}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2 font-medium">B. NIVEAU PRIMAIRE</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      value={formData.realisations.accesAccessibiliteEquite.nouvellesLatrines.primaire}
+                      onChange={(e) => {
+                        const newValue = parseInt(e.target.value) || 0;
+                        setFormData(prev => ({
+                          ...prev,
+                          realisations: {
+                            ...prev.realisations,
+                            accesAccessibiliteEquite: {
+                              ...prev.realisations.accesAccessibiliteEquite,
+                              nouvellesLatrines: {
+                                ...prev.realisations.accesAccessibiliteEquite.nouvellesLatrines,
+                                primaire: newValue
+                              }
+                            }
+                          }
+                        }));
+                      }}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="text" className="w-full text-center border-none focus:outline-none focus:ring-0" placeholder="GVT, Projet, PTFS, ONG..." />
+                    <input 
+                      type="text" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="GVT, Projet, PTFS, ONG..." 
+                      value={formData.realisations.accesAccessibiliteEquite.nouvellesLatrines.sourceFinancementPrimaire || ''}
+                      onChange={(e) => {
+                        setFormData(prev => ({
+                          ...prev,
+                          realisations: {
+                            ...prev.realisations,
+                            accesAccessibiliteEquite: {
+                              ...prev.realisations.accesAccessibiliteEquite,
+                              nouvellesLatrines: {
+                                ...prev.realisations.accesAccessibiliteEquite.nouvellesLatrines,
+                                sourceFinancementPrimaire: e.target.value
+                              }
+                            }
+                          }
+                        }));
+                      }}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2 font-medium">C. NIVEAU SECONDAIRE</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      value={formData.realisations.accesAccessibiliteEquite.nouvellesLatrines.secondaire}
+                      onChange={(e) => {
+                        const newValue = parseInt(e.target.value) || 0;
+                        setFormData(prev => ({
+                          ...prev,
+                          realisations: {
+                            ...prev.realisations,
+                            accesAccessibiliteEquite: {
+                              ...prev.realisations.accesAccessibiliteEquite,
+                              nouvellesLatrines: {
+                                ...prev.realisations.accesAccessibiliteEquite.nouvellesLatrines,
+                                secondaire: newValue
+                              }
+                            }
+                          }
+                        }));
+                      }}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="text" className="w-full text-center border-none focus:outline-none focus:ring-0" placeholder="GVT, Projet, PTFS, ONG..." />
+                    <input 
+                      type="text" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="GVT, Projet, PTFS, ONG..." 
+                      value={formData.realisations.accesAccessibiliteEquite.nouvellesLatrines.sourceFinancementSecondaire || ''}
+                      onChange={(e) => {
+                        setFormData(prev => ({
+                          ...prev,
+                          realisations: {
+                            ...prev.realisations,
+                            accesAccessibiliteEquite: {
+                              ...prev.realisations.accesAccessibiliteEquite,
+                              nouvellesLatrines: {
+                                ...prev.realisations.accesAccessibiliteEquite.nouvellesLatrines,
+                                sourceFinancementSecondaire: e.target.value
+                              }
+                            }
+                          }
+                        }));
+                      }}
+                    />
                   </td>
                 </tr>
               </tbody>
@@ -368,6 +641,19 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
           <textarea
             className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Décrivez l'état de la gratuité de l'enseignement primaire public..."
+            value={formData.realisations.accesAccessibiliteEquite.gratuitéEnseignementPrimaire || ''}
+            onChange={(e) => {
+              setFormData(prev => ({
+                ...prev,
+                realisations: {
+                  ...prev.realisations,
+                  accesAccessibiliteEquite: {
+                    ...prev.realisations.accesAccessibiliteEquite,
+                    gratuitéEnseignementPrimaire: e.target.value
+                  }
+                }
+              }));
+            }}
           />
         </div>
 
@@ -376,15 +662,72 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
           <h5 className="font-medium mb-2">IV.5. Sensibilisation pour la scolarisation des:</h5>
           <div className="space-y-3">
             <div className="flex items-center">
-              <input type="checkbox" className="mr-2" />
+              <input 
+                type="checkbox" 
+                className="mr-2" 
+                checked={formData.realisations.accesAccessibiliteEquite.sensibilisation.filles}
+                onChange={(e) => {
+                  setFormData(prev => ({
+                    ...prev,
+                    realisations: {
+                      ...prev.realisations,
+                      accesAccessibiliteEquite: {
+                        ...prev.realisations.accesAccessibiliteEquite,
+                        sensibilisation: {
+                          ...prev.realisations.accesAccessibiliteEquite.sensibilisation,
+                          filles: e.target.checked
+                        }
+                      }
+                    }
+                  }));
+                }}
+              />
               <label>Filles</label>
             </div>
             <div className="flex items-center">
-              <input type="checkbox" className="mr-2" />
+              <input 
+                type="checkbox" 
+                className="mr-2" 
+                checked={formData.realisations.accesAccessibiliteEquite.sensibilisation.enfantsHorsEcole}
+                onChange={(e) => {
+                  setFormData(prev => ({
+                    ...prev,
+                    realisations: {
+                      ...prev.realisations,
+                      accesAccessibiliteEquite: {
+                        ...prev.realisations.accesAccessibiliteEquite,
+                        sensibilisation: {
+                          ...prev.realisations.accesAccessibiliteEquite.sensibilisation,
+                          enfantsHorsEcole: e.target.checked
+                        }
+                      }
+                    }
+                  }));
+                }}
+              />
               <label>Enfants et Adolescents en dehors de l'Ecole (EADE):</label>
             </div>
             <div className="flex items-center">
-              <input type="checkbox" className="mr-2" />
+              <input 
+                type="checkbox" 
+                className="mr-2" 
+                checked={formData.realisations.accesAccessibiliteEquite.sensibilisation.peuplesAutochtones}
+                onChange={(e) => {
+                  setFormData(prev => ({
+                    ...prev,
+                    realisations: {
+                      ...prev.realisations,
+                      accesAccessibiliteEquite: {
+                        ...prev.realisations.accesAccessibiliteEquite,
+                        sensibilisation: {
+                          ...prev.realisations.accesAccessibiliteEquite.sensibilisation,
+                          peuplesAutochtones: e.target.checked
+                        }
+                      }
+                    }
+                  }));
+                }}
+              />
               <label>Enfants des Peuples Autochtones</label>
             </div>
           </div>
@@ -408,46 +751,142 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2 font-medium">A. NIVEAU PRESCOLAIRE</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      value={cantines.prescolaire.gvt}
+                      onChange={(e) => setCantines(prev => ({
+                        ...prev,
+                        prescolaire: { ...prev.prescolaire, gvt: parseInt(e.target.value) || 0 }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      value={cantines.prescolaire.projet}
+                      onChange={(e) => setCantines(prev => ({
+                        ...prev,
+                        prescolaire: { ...prev.prescolaire, projet: parseInt(e.target.value) || 0 }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      value={cantines.prescolaire.ptfs}
+                      onChange={(e) => setCantines(prev => ({
+                        ...prev,
+                        prescolaire: { ...prev.prescolaire, ptfs: parseInt(e.target.value) || 0 }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      value={cantines.prescolaire.ong}
+                      onChange={(e) => setCantines(prev => ({
+                        ...prev,
+                        prescolaire: { ...prev.prescolaire, ong: parseInt(e.target.value) || 0 }
+                      }))}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2 font-medium">B. NIVEAU PRIMAIRE</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      value={cantines.primaire.gvt}
+                      onChange={(e) => setCantines(prev => ({
+                        ...prev,
+                        primaire: { ...prev.primaire, gvt: parseInt(e.target.value) || 0 }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      value={cantines.primaire.projet}
+                      onChange={(e) => setCantines(prev => ({
+                        ...prev,
+                        primaire: { ...prev.primaire, projet: parseInt(e.target.value) || 0 }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      value={cantines.primaire.ptfs}
+                      onChange={(e) => setCantines(prev => ({
+                        ...prev,
+                        primaire: { ...prev.primaire, ptfs: parseInt(e.target.value) || 0 }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      value={cantines.primaire.ong}
+                      onChange={(e) => setCantines(prev => ({
+                        ...prev,
+                        primaire: { ...prev.primaire, ong: parseInt(e.target.value) || 0 }
+                      }))}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2 font-medium">C. NIVEAU SECONDAIRE</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      value={cantines.secondaire.gvt}
+                      onChange={(e) => setCantines(prev => ({
+                        ...prev,
+                        secondaire: { ...prev.secondaire, gvt: parseInt(e.target.value) || 0 }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      value={cantines.secondaire.projet}
+                      onChange={(e) => setCantines(prev => ({
+                        ...prev,
+                        secondaire: { ...prev.secondaire, projet: parseInt(e.target.value) || 0 }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      value={cantines.secondaire.ptfs}
+                      onChange={(e) => setCantines(prev => ({
+                        ...prev,
+                        secondaire: { ...prev.secondaire, ptfs: parseInt(e.target.value) || 0 }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="number" className="w-full text-center border-none focus:outline-none focus:ring-0" />
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      value={cantines.secondaire.ong}
+                      onChange={(e) => setCantines(prev => ({
+                        ...prev,
+                        secondaire: { ...prev.secondaire, ong: parseInt(e.target.value) || 0 }
+                      }))}
+                    />
                   </td>
                 </tr>
               </tbody>
@@ -458,11 +897,36 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
             <textarea
               className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Commentaire sur les cantines scolaires..."
+              value={formData.realisations.accesAccessibiliteEquite.cantinesScolaires.commentaire || ''}
+              onChange={(e) => {
+                setFormData(prev => ({
+                  ...prev,
+                  realisations: {
+                    ...prev.realisations,
+                    accesAccessibiliteEquite: {
+                      ...prev.realisations.accesAccessibiliteEquite,
+                      cantinesScolaires: {
+                        ...prev.realisations.accesAccessibiliteEquite.cantinesScolaires,
+                        commentaire: e.target.value
+                      }
+                    }
+                  }
+                }));
+              }}
             />
           </div>
           <div className="mt-4">
             <label className="block text-sm font-medium mb-2">Total General Ecoles ayant des cantines Scolaires</label>
-            <input type="number" className="w-48 p-2 border border-gray-300 rounded-md" />
+            <input 
+              type="number" 
+              className="w-48 p-2 border border-gray-300 rounded-md" 
+              value={
+                cantines.prescolaire.gvt + cantines.prescolaire.projet + cantines.prescolaire.ptfs + cantines.prescolaire.ong +
+                cantines.primaire.gvt + cantines.primaire.projet + cantines.primaire.ptfs + cantines.primaire.ong +
+                cantines.secondaire.gvt + cantines.secondaire.projet + cantines.secondaire.ptfs + cantines.secondaire.ong
+              }
+              readOnly
+            />
           </div>
         </div>
 

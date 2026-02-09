@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RapportActivite } from '../../../models/RapportActivite';
 
 interface GouvernanceProps {
@@ -10,14 +10,16 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData }) => {
   // État pour le modal de calcul des formations
   const [showCalculModalFormations, setShowCalculModalFormations] = useState(false);
 
-  // État pour les formations des gestionnaires
-  const [formationsGestionnaires, setFormationsGestionnaires] = useState({
-    leadershipScolaire: { tauxGF: 0, tauxFilles: 0 },
-    managementScolaire: { tauxGF: 0, tauxFilles: 0 },
-    calculIndicateurs: { tauxGF: 0, tauxFilles: 0 },
-    gestionEntiteEducationnelle: { tauxGF: 0, tauxFilles: 0 },
-    planification: { tauxGF: 0, tauxFilles: 0 }
-  });
+  // État pour les formations des gestionnaires - initialiser depuis formData si disponible
+  const [formationsGestionnaires, setFormationsGestionnaires] = useState(() => 
+    formData?.gouvernance?.formationsGestionnaires || {
+      leadershipScolaire: { tauxGF: 0, tauxFilles: 0 },
+      managementScolaire: { tauxGF: 0, tauxFilles: 0 },
+      calculIndicateurs: { tauxGF: 0, tauxFilles: 0 },
+      gestionEntiteEducationnelle: { tauxGF: 0, tauxFilles: 0 },
+      planification: { tauxGF: 0, tauxFilles: 0 }
+    }
+  );
 
   // État pour les données brutes de calcul des formations
   const [calculDataFormations, setCalculDataFormations] = useState({
@@ -34,6 +36,44 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData }) => {
       [field]: value
     }));
   };
+
+  // Fonction pour gérer les changements de champs imbriqués
+  const handleInputChange = (path: string, value: string) => {
+    setFormData(prev => {
+      const updated = { ...prev };
+      const keys = path.split('.');
+      let current: any = updated;
+
+      for (let i = 0; i < keys.length - 1; i++) {
+        if (!current[keys[i]]) {
+          current[keys[i]] = {};
+        }
+        current = current[keys[i]];
+      }
+
+      current[keys[keys.length - 1]] = value;
+      return updated;
+    });
+  };
+
+  // Synchroniser formationsGestionnaires avec formData
+  useEffect(() => {
+    setFormData(prev => ({
+      ...prev,
+      gouvernance: {
+        ...prev.gouvernance,
+        formationsGestionnaires
+      }
+    }));
+  }, [formationsGestionnaires, setFormData]);
+
+  // Charger formationsGestionnaires depuis formData si changé
+  useEffect(() => {
+    const formations = formData?.gouvernance?.formationsGestionnaires;
+    if (formations && JSON.stringify(formations) !== JSON.stringify(formationsGestionnaires)) {
+      setFormationsGestionnaires(formations);
+    }
+  }, [formData?.gouvernance?.formationsGestionnaires]);
 
   // Fonction pour ouvrir le modal de calcul des formations
   const openCalculModalFormations = () => {
@@ -99,6 +139,8 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData }) => {
         <textarea
           className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Entrez les instructions officielles vulgarisées..."
+          value={formData.gouvernance.vulgarisationInstructions.instructionsOfficielles}
+          onChange={(e) => handleInputChange('gouvernance.vulgarisationInstructions.instructionsOfficielles', e.target.value)}
         />
       </div>
 
@@ -250,6 +292,8 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData }) => {
           <textarea
             className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Commentaire sur le module..."
+            value={formData.gouvernance.commentaireFormations || ''}
+            onChange={(e) => handleInputChange('gouvernance.commentaireFormations', e.target.value)}
           />
         </div>
       </div>

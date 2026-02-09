@@ -15,8 +15,8 @@ const Conclusion: React.FC<ConclusionProps> = ({ formData, handleInputChange }) 
       <div className="mb-6">
         <h4 className="font-bold mb-3">VI.1. Autres principaux problèmes spécifiques (10 lignes maximum)</h4>
         <textarea
-          value={formData.conclusion}
-          onChange={(e) => handleInputChange('conclusion', e.target.value)}
+          value={formData.autresProblemes.problemesSpecifiques}
+          onChange={(e) => handleInputChange('autresProblemes.problemesSpecifiques', e.target.value)}
           className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Décrivez les autres problèmes spécifiques..."
         />
@@ -29,6 +29,8 @@ const Conclusion: React.FC<ConclusionProps> = ({ formData, handleInputChange }) 
         <textarea
           className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Entrez votre conclusion..."
+          value={formData.conclusion}
+          onChange={(e) => handleInputChange('conclusion', e.target.value)}
         />
       </div>
     </div>

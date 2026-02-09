@@ -7,11 +7,22 @@ interface EducationUrgenceProps {
 }
 
 const EducationUrgence: React.FC<EducationUrgenceProps> = ({ formData, setFormData }) => {
-  const handleChange = (field: keyof RapportActivite, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+  const handleInputChange = (path: string, value: string | number) => {
+    setFormData(prev => {
+      const updated = { ...prev };
+      const keys = path.split('.');
+      let current: any = updated;
+
+      for (let i = 0; i < keys.length - 1; i++) {
+        if (!current[keys[i]]) {
+          current[keys[i]] = {};
+        }
+        current = current[keys[i]];
+      }
+
+      current[keys[keys.length - 1]] = value;
+      return updated;
+    });
   };
 
   return (
@@ -27,6 +38,8 @@ const EducationUrgence: React.FC<EducationUrgenceProps> = ({ formData, setFormDa
           <textarea
             className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Décrivez le plan..."
+            value={formData.educationUrgence.planStockContingence.plan}
+            onChange={(e) => handleInputChange('educationUrgence.planStockContingence.plan', e.target.value)}
           />
         </div>
 
@@ -36,6 +49,8 @@ const EducationUrgence: React.FC<EducationUrgenceProps> = ({ formData, setFormDa
           <textarea
             className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Décrivez le contenu du stock..."
+            value={formData.educationUrgence.planStockContingence.stock}
+            onChange={(e) => handleInputChange('educationUrgence.planStockContingence.stock', e.target.value)}
           />
         </div>
 
@@ -45,6 +60,8 @@ const EducationUrgence: React.FC<EducationUrgenceProps> = ({ formData, setFormDa
           <textarea
             className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Décrivez les catastrophes naturelles..."
+            value={formData.educationUrgence.catastrophesNaturelles.nature}
+            onChange={(e) => handleInputChange('educationUrgence.catastrophesNaturelles.nature', e.target.value)}
           />
         </div>
 
@@ -54,6 +71,8 @@ const EducationUrgence: React.FC<EducationUrgenceProps> = ({ formData, setFormDa
           <textarea
             className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Décrivez les destructions..."
+            value={formData.educationUrgence.destructionSDC.forcesNegatives}
+            onChange={(e) => handleInputChange('educationUrgence.destructionSDC.forcesNegatives', e.target.value)}
           />
         </div>
 
@@ -63,6 +82,8 @@ const EducationUrgence: React.FC<EducationUrgenceProps> = ({ formData, setFormDa
           <textarea
             className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Décrivez les solutions locales..."
+            value={formData.educationUrgence.solutionsLocales}
+            onChange={(e) => handleInputChange('educationUrgence.solutionsLocales', e.target.value)}
           />
         </div>
 
@@ -72,6 +93,8 @@ const EducationUrgence: React.FC<EducationUrgenceProps> = ({ formData, setFormDa
           <textarea
             className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Décrivez les réunions du Cluster Education..."
+            value={formData.educationUrgence.reunionsClusterEducation.frequence}
+            onChange={(e) => handleInputChange('educationUrgence.reunionsClusterEducation.frequence', e.target.value)}
           />
         </div>
 
@@ -85,6 +108,8 @@ const EducationUrgence: React.FC<EducationUrgenceProps> = ({ formData, setFormDa
                 type="number"
                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Nombre"
+                value={formData.educationUrgence.recommandations.espacesTemporairesApprentissage.nombre}
+                onChange={(e) => handleInputChange('educationUrgence.recommandations.espacesTemporairesApprentissage.nombre', Number(e.target.value))}
               />
             </div>
             <div>
@@ -93,6 +118,8 @@ const EducationUrgence: React.FC<EducationUrgenceProps> = ({ formData, setFormDa
                 type="number"
                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Nombre"
+                value={formData.educationUrgence.recommandations.apprenantsScolarises.cible}
+                onChange={(e) => handleInputChange('educationUrgence.recommandations.apprenantsScolarises.cible', Number(e.target.value))}
               />
             </div>
           </div>
@@ -101,6 +128,8 @@ const EducationUrgence: React.FC<EducationUrgenceProps> = ({ formData, setFormDa
             <textarea
               className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Décrivez les formations..."
+              value={formData.educationUrgence.recommandations.formationEnseignantsESU}
+              onChange={(e) => handleInputChange('educationUrgence.recommandations.formationEnseignantsESU', e.target.value)}
             />
           </div>
         </div>

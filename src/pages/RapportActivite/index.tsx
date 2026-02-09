@@ -482,26 +482,26 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
               <tbody>
                 <tr>
                   <td><strong>Préscolaire</strong></td>
-                  <td>${(rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreEcoles || 0) + (rapport.parametresCles?.niveauPrescolaire?.maternel?.nombreEcoles || 0) + (rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.nombreEcoles || 0)}</td>
-                  <td>${(rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreClasses || 0) + (rapport.parametresCles?.niveauPrescolaire?.maternel?.nombreClasses || 0) + (rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.nombreClasses || 0)}</td>
-                  <td>${(rapport.personnel?.personnelEnseignant?.prescolaire?.hommes || 0) + (rapport.personnel?.personnelEnseignant?.prescolaire?.femmes || 0)}</td>
-                  <td>${((rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.effectifGarcons || 0) + (rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.effectifFilles || 0) + (rapport.parametresCles?.niveauPrescolaire?.maternel?.effectifGarcons || 0) + (rapport.parametresCles?.niveauPrescolaire?.maternel?.effectifFilles || 0) + (rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.effectifGarcons || 0) + (rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.effectifFilles || 0)).toLocaleString()}</td>
-                  <td>Maternel, Pré-primaire, Spécial</td>
+                  <td>${(rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreEcoles || 0) + (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.maternel?.nombreEcoles || 0) + (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.prePrimaire?.nombreEcoles || 0) + (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.special?.nombreEcoles || 0)}</td>
+                  <td>${(rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreClasses || 0) + (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.maternel?.nombreClasses || 0) + (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.prePrimaire?.nombreClasses || 0) + (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.special?.nombreClasses || 0)}</td>
+                  <td>${(rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaireSpecial?.hommes || 0) + (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaireSpecial?.femmes || 0) + (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaire?.hommes || 0) + (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaire?.femmes || 0)}</td>
+                  <td>${((rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.espaceCommunautaireEveil?.effectifGarconsFilles || 0) + (rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.maternel?.effectifGarconsFilles || 0) + (rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.prePrimaire?.effectifGarconsFilles || 0) + (rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.special?.effectifGarconsFilles || 0)).toLocaleString()}</td>
+                  <td>ECE, Maternel, Pré-primaire, Spécial</td>
                 </tr>
                 <tr>
                   <td><strong>Primaire</strong></td>
-                  <td>${rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.nombreEcoles || 0}</td>
-                  <td>${(rapport.parametresCles?.niveauPrimaire?.enseignementSpecial?.nombreClasses || 0) + (rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.nombreClasses || 0)}</td>
-                  <td>${(rapport.personnel?.personnelEnseignant?.primaire?.hommes || 0) + (rapport.personnel?.personnelEnseignant?.primaire?.femmes || 0)}</td>
-                  <td>${((rapport.parametresCles?.niveauPrimaire?.enseignementSpecial?.effectifGarcons || 0) + (rapport.parametresCles?.niveauPrimaire?.enseignementSpecial?.effectifFilles || 0) + (rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.effectifGarcons || 0) + (rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.effectifFilles || 0)).toLocaleString()}</td>
+                  <td>${(rapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementSpecial?.nombreEcoles || 0) + (rapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.nombreEcoles || 0)}</td>
+                  <td>${(rapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementSpecial?.totalClassesSpecialesPrim || 0) + (rapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.totalClassesPrimaire || 0)}</td>
+                  <td>${(rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrescolaireSpecial?.hommes || 0) + (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrescolaireSpecial?.femmes || 0) + (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrimaire?.hommes || 0) + (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrimaire?.femmes || 0)}</td>
+                  <td>${((rapport.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.effectifGarconsFilles || 0) + (rapport.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.effectifGarconsFilles || 0)).toLocaleString()}</td>
                   <td>Primaire, Spécial</td>
                 </tr>
                 <tr>
                   <td><strong>Secondaire</strong></td>
-                  <td>-</td>
-                  <td>${(rapport.parametresCles?.niveauSecondaire?.enseignementSpecial?.nombreClasses || 0) + (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes7emeCTEB || 0) + (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes8emeCTEB || 0) + (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.classesHumanites || 0)}</td>
-                  <td>${(rapport.personnel?.personnelEnseignant?.secondaire?.hommes || 0) + (rapport.personnel?.personnelEnseignant?.secondaire?.femmes || 0)}</td>
-                  <td>${((rapport.parametresCles?.niveauSecondaire?.enseignementSpecial?.effectifGarcons || 0) + (rapport.parametresCles?.niveauSecondaire?.enseignementSpecial?.effectifFilles || 0) + (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.effectifGarcons || 0) + (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.effectifFilles || 0) + (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.effectifGarcons || 0) + (rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.effectifFilles || 0)).toLocaleString()}</td>
+                  <td>${(rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSpecial?.nombreEcoles || 0) + (rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.nombreEcoles || 0)}</td>
+                  <td>${(rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSpecial?.totalClassesSpecialesSec || 0) + (rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes7emeCTEB || 0) + (rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes8emeCTEB || 0) + (rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.totalClassesHumanites || 0)}</td>
+                  <td>${(rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementPrescolaireSpecial?.hommes || 0) + (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementPrescolaireSpecial?.femmes || 0) + (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementSecondaire?.hommes || 0) + (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementSecondaire?.femmes || 0)}</td>
+                  <td>${((rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.effectifGarcons || 0) + (rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.effectifFilles || 0) + (rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.effectifGarcons || 0) + (rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.effectifFilles || 0) + (rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.effectifGarcons || 0) + (rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.effectifFilles || 0) + (rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.effectifGarcons || 0) + (rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.effectifFilles || 0) + (rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.effectifGarcons || 0) + (rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.effectifFilles || 0)).toLocaleString()}</td>
                   <td>CTEB, Humanités, Spécial</td>
                 </tr>
               </tbody>
@@ -517,92 +517,108 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
               <h4>Espace Communautaire d'Éveil</h4>
               <div class="detail-item">
                 <span class="label">Écoles:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreEcoles || 0}</span>
+                <span class="value">${rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreEcoles || 0}</span>
               </div>
               <div class="detail-item">
                 <span class="label">Classes:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreClasses || 0}</span>
+                <span class="value">${rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreClasses || 0}</span>
               </div>
               <div class="detail-item">
-                <span class="label">Garçons:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.effectifGarcons || 0}</span>
+                <span class="label">Garçons/Filles:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.espaceCommunautaireEveil?.effectifGarconsFilles || 0}</span>
               </div>
               <div class="detail-item">
                 <span class="label">Filles:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.effectifFilles || 0}</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.espaceCommunautaireEveil?.effectifFilles || 0}</span>
               </div>
               <div class="detail-item">
-                <span class="label">Taux d'accroissement:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.espaceCommunautaireEveil?.tauxAccroissement || 0}%</span>
+                <span class="label">Taux d'accroissement G/F:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.espaceCommunautaireEveil?.tauxAccroissementGarconsFilles || 0}%</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux d'accroissement Filles:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.espaceCommunautaireEveil?.tauxAccroissementFilles || 0}%</span>
               </div>
             </div>
             <div class="info-card">
               <h4>Maternel</h4>
               <div class="detail-item">
                 <span class="label">Écoles:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.maternel?.nombreEcoles || 0}</span>
+                <span class="value">${rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.maternel?.nombreEcoles || 0}</span>
               </div>
               <div class="detail-item">
                 <span class="label">Classes:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.maternel?.nombreClasses || 0}</span>
+                <span class="value">${rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.maternel?.nombreClasses || 0}</span>
               </div>
               <div class="detail-item">
-                <span class="label">Garçons:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.maternel?.effectifGarcons || 0}</span>
+                <span class="label">Garçons/Filles:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.maternel?.effectifGarconsFilles || 0}</span>
               </div>
               <div class="detail-item">
                 <span class="label">Filles:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.maternel?.effectifFilles || 0}</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.maternel?.effectifFilles || 0}</span>
               </div>
               <div class="detail-item">
-                <span class="label">Taux d'accroissement:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.maternel?.tauxAccroissement || 0}%</span>
+                <span class="label">Taux d'accroissement G/F:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.maternel?.tauxAccroissementGarconsFilles || 0}%</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux d'accroissement Filles:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.maternel?.tauxAccroissementFilles || 0}%</span>
               </div>
             </div>
             <div class="info-card">
               <h4>Pré-primaire</h4>
               <div class="detail-item">
                 <span class="label">Écoles:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.nombreEcoles || 0}</span>
+                <span class="value">${rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.prePrimaire?.nombreEcoles || 0}</span>
               </div>
               <div class="detail-item">
                 <span class="label">Classes:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.nombreClasses || 0}</span>
+                <span class="value">${rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.prePrimaire?.nombreClasses || 0}</span>
               </div>
               <div class="detail-item">
-                <span class="label">Garçons:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.effectifGarcons || 0}</span>
+                <span class="label">Garçons/Filles:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.prePrimaire?.effectifGarconsFilles || 0}</span>
               </div>
               <div class="detail-item">
                 <span class="label">Filles:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.effectifFilles || 0}</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.prePrimaire?.effectifFilles || 0}</span>
               </div>
               <div class="detail-item">
-                <span class="label">Taux d'accroissement:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.prePrimaire?.tauxAccroissement || 0}%</span>
+                <span class="label">Taux d'accroissement G/F:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.prePrimaire?.tauxAccroissementGarconsFilles || 0}%</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux d'accroissement Filles:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.prePrimaire?.tauxAccroissementFilles || 0}%</span>
               </div>
             </div>
             <div class="info-card">
               <h4>Spécial</h4>
               <div class="detail-item">
                 <span class="label">Écoles:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.special?.nombreEcoles || 0}</span>
+                <span class="value">${rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.special?.nombreEcoles || 0}</span>
               </div>
               <div class="detail-item">
                 <span class="label">Classes:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.special?.nombreClasses || 0}</span>
+                <span class="value">${rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.special?.nombreClasses || 0}</span>
               </div>
               <div class="detail-item">
-                <span class="label">Garçons:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.special?.effectifGarcons || 0}</span>
+                <span class="label">Garçons/Filles:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.special?.effectifGarconsFilles || 0}</span>
               </div>
               <div class="detail-item">
                 <span class="label">Filles:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.special?.effectifFilles || 0}</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.special?.effectifFilles || 0}</span>
               </div>
               <div class="detail-item">
-                <span class="label">Taux d'accroissement:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrescolaire?.special?.tauxAccroissement || 0}%</span>
+                <span class="label">Taux d'accroissement G/F:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.special?.tauxAccroissementGarconsFilles || 0}%</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux d'accroissement Filles:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.special?.tauxAccroissementFilles || 0}%</span>
               </div>
             </div>
           </div>
@@ -616,46 +632,62 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
               <h4>Enseignement Primaire</h4>
               <div class="detail-item">
                 <span class="label">Écoles:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.nombreEcoles || 0}</span>
+                <span class="value">${rapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.nombreEcoles || 0}</span>
               </div>
               <div class="detail-item">
                 <span class="label">Classes:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.nombreClasses || 0}</span>
+                <span class="value">${rapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.totalClassesPrimaire || 0}</span>
               </div>
               <div class="detail-item">
                 <span class="label">Classes Pléthoriques:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.classesPlethoriques || 0}</span>
+                <span class="value">${rapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.classesPlethoriques || 0}</span>
               </div>
               <div class="detail-item">
-                <span class="label">Garçons:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.effectifGarcons || 0}</span>
+                <span class="label">Garçons/Filles:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.effectifGarconsFilles || 0}</span>
               </div>
               <div class="detail-item">
                 <span class="label">Filles:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.effectifFilles || 0}</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.effectifFilles || 0}</span>
               </div>
               <div class="detail-item">
-                <span class="label">Taux d'accroissement:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrimaire?.enseignementPrimaire?.tauxAccroissement || 0}%</span>
+                <span class="label">Taux d'accroissement G/F:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.tauxAccroissementGarconsFilles || 0}%</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux d'accroissement Filles:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.tauxAccroissementFilles || 0}%</span>
               </div>
             </div>
             <div class="info-card">
               <h4>Enseignement Spécial</h4>
               <div class="detail-item">
-                <span class="label">Classes:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrimaire?.enseignementSpecial?.nombreClasses || 0}</span>
+                <span class="label">Écoles:</span>
+                <span class="value">${rapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementSpecial?.nombreEcoles || 0}</span>
               </div>
               <div class="detail-item">
-                <span class="label">Garçons:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrimaire?.enseignementSpecial?.effectifGarcons || 0}</span>
+                <span class="label">Classes:</span>
+                <span class="value">${rapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementSpecial?.totalClassesSpecialesPrim || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Classes Pléthoriques:</span>
+                <span class="value">${rapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementSpecial?.classesPlethoriques || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Garçons/Filles:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.effectifGarconsFilles || 0}</span>
               </div>
               <div class="detail-item">
                 <span class="label">Filles:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrimaire?.enseignementSpecial?.effectifFilles || 0}</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.effectifFilles || 0}</span>
               </div>
               <div class="detail-item">
-                <span class="label">Taux d'accroissement:</span>
-                <span class="value">${rapport.parametresCles?.niveauPrimaire?.enseignementSpecial?.tauxAccroissement || 0}%</span>
+                <span class="label">Taux d'accroissement G/F:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.tauxAccroissementGarconsFilles || 0}%</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux d'accroissement Filles:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.tauxAccroissementFilles || 0}%</span>
               </div>
             </div>
           </div>
@@ -668,62 +700,110 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
             <div class="info-card">
               <h4>Enseignement Spécial</h4>
               <div class="detail-item">
+                <span class="label">Écoles:</span>
+                <span class="value">${rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSpecial?.nombreEcoles || 0}</span>
+              </div>
+              <div class="detail-item">
                 <span class="label">Classes:</span>
-                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSpecial?.nombreClasses || 0}</span>
+                <span class="value">${rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSpecial?.totalClassesSpecialesSec || 0}</span>
               </div>
               <div class="detail-item">
                 <span class="label">Garçons:</span>
-                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSpecial?.effectifGarcons || 0}</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.effectifGarcons || 0}</span>
               </div>
               <div class="detail-item">
                 <span class="label">Filles:</span>
-                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSpecial?.effectifFilles || 0}</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.effectifFilles || 0}</span>
               </div>
               <div class="detail-item">
-                <span class="label">Taux d'accroissement:</span>
-                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSpecial?.tauxAccroissement || 0}%</span>
+                <span class="label">Taux Garçons:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.tauxGarcons || 0}%</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux Filles:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.tauxFilles || 0}%</span>
               </div>
             </div>
             <div class="info-card">
               <h4>Premier Cycle (CTEB)</h4>
               <div class="detail-item">
                 <span class="label">Classes 7ème CTEB:</span>
-                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes7emeCTEB || 0}</span>
+                <span class="value">${rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes7emeCTEB || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Garçons 7ème:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.effectifGarcons || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Filles 7ème:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.effectifFilles || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux G 7ème:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.tauxGarcons || 0}%</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux F 7ème:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.tauxFilles || 0}%</span>
               </div>
               <div class="detail-item">
                 <span class="label">Classes 8ème CTEB:</span>
-                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes8emeCTEB || 0}</span>
+                <span class="value">${rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes8emeCTEB || 0}</span>
               </div>
               <div class="detail-item">
-                <span class="label">Garçons:</span>
-                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.effectifGarcons || 0}</span>
+                <span class="label">Garçons 8ème:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.effectifGarcons || 0}</span>
               </div>
               <div class="detail-item">
-                <span class="label">Filles:</span>
-                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.effectifFilles || 0}</span>
+                <span class="label">Filles 8ème:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.effectifFilles || 0}</span>
               </div>
               <div class="detail-item">
-                <span class="label">Taux d'accroissement:</span>
-                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.tauxAccroissement || 0}%</span>
+                <span class="label">Taux G 8ème:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.tauxGarcons || 0}%</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux F 8ème:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.tauxFilles || 0}%</span>
               </div>
             </div>
             <div class="info-card">
               <h4>Deuxième Cycle (Humanités)</h4>
               <div class="detail-item">
-                <span class="label">Classes Humanités:</span>
-                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.classesHumanites || 0}</span>
+                <span class="label">Total Classes Humanités:</span>
+                <span class="value">${rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.totalClassesHumanites || 0}</span>
               </div>
               <div class="detail-item">
-                <span class="label">Garçons:</span>
-                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.effectifGarcons || 0}</span>
+                <span class="label">Garçons 1ère:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.effectifGarcons || 0}</span>
               </div>
               <div class="detail-item">
-                <span class="label">Filles:</span>
-                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.effectifFilles || 0}</span>
+                <span class="label">Filles 1ère:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.effectifFilles || 0}</span>
               </div>
               <div class="detail-item">
-                <span class="label">Taux d'accroissement:</span>
-                <span class="value">${rapport.parametresCles?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.tauxAccroissement || 0}%</span>
+                <span class="label">Taux G 1ère:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.tauxGarcons || 0}%</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux F 1ère:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.tauxFilles || 0}%</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Garçons 4ème:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.effectifGarcons || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Filles 4ème:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.effectifFilles || 0}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux G 4ème:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.tauxGarcons || 0}%</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Taux F 4ème:</span>
+                <span class="value">${rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.tauxFilles || 0}%</span>
               </div>
             </div>
           </div>

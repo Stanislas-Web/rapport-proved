@@ -6,9 +6,42 @@ interface RealisationsCompleteProps {
   setFormData: React.Dispatch<React.SetStateAction<RapportActivite>>;
 }
 
-const RealisationsComplete: React.FC<RealisationsCompleteProps> = () => {
-  // États pour les valeurs des bureaux
-  const [bureauValues, setBureauValues] = useState({
+const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, setFormData }) => {
+  const mapInspectionsToLocal = (data?: RapportActivite['gouvernance']['inspectionsAdministrativesC2B']) => {
+    if (!data) {
+      return {
+        maternel: { prevu: 0, realise: 0, pourcentage: 0 },
+        primaire: { prevu: 0, realise: 0, pourcentage: 0 },
+        secondaire: { prevu: 0, realise: 0, pourcentage: 0 },
+        special: { prevu: 0, realise: 0, pourcentage: 0 }
+      };
+    }
+
+    return {
+      maternel: {
+        prevu: data.prescolaire.nombrePrevu,
+        realise: data.prescolaire.nombreRealise,
+        pourcentage: data.prescolaire.pourcentageRealisation
+      },
+      primaire: {
+        prevu: data.primaire.nombrePrevu,
+        realise: data.primaire.nombreRealise,
+        pourcentage: data.primaire.pourcentageRealisation
+      },
+      secondaire: {
+        prevu: data.secondaire.nombrePrevu,
+        realise: data.secondaire.nombreRealise,
+        pourcentage: data.secondaire.pourcentageRealisation
+      },
+      special: {
+        prevu: data.special.nombrePrevu,
+        realise: data.special.nombreRealise,
+        pourcentage: data.special.pourcentageRealisation
+      }
+    };
+  };
+
+  const initialBureauValues = formData.gouvernance?.infrastructureBureaux || {
     directionProvinciale: { proprietaire: 0, locataire: 0 },
     inspectionPrincipale: { proprietaire: 0, locataire: 0 },
     dinacope: { proprietaire: 0, locataire: 0 },
@@ -21,22 +54,23 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = () => {
     antenneSernie: { proprietaire: 0, locataire: 0 },
     coordinationDiocesaine: { proprietaire: 0, locataire: 0 },
     sousCoordinationConventionnees: { proprietaire: 0, locataire: 0 },
-    conseillerieResidente: { proprietaire: 0, locataire: 0 },
-  });
+    conseillerieResidente: { proprietaire: 0, locataire: 0 }
+  };
+
+  const initialTotals = formData.gouvernance?.totalInfrastructureBureaux || {
+    totalProprietaire: 0,
+    totalLocataire: 0
+  };
+
+  const initialInspectionsC2B = mapInspectionsToLocal(formData.gouvernance?.inspectionsAdministrativesC2B);
+  // États pour les valeurs des bureaux
+  const [bureauValues, setBureauValues] = useState(initialBureauValues);
 
   // États pour les totaux
-  const [totals, setTotals] = useState({
-    totalProprietaire: 0,
-    totalLocataire: 0,
-  });
+  const [totals, setTotals] = useState(initialTotals);
 
   // État pour les inspections administratives C2B
-  const [inspectionsC2B, setInspectionsC2B] = useState({
-    maternel: { prevu: 0, realise: 0, pourcentage: 0 },
-    primaire: { prevu: 0, realise: 0, pourcentage: 0 },
-    secondaire: { prevu: 0, realise: 0, pourcentage: 0 },
-    special: { prevu: 0, realise: 0, pourcentage: 0 }
-  });
+  const [inspectionsC2B, setInspectionsC2B] = useState(initialInspectionsC2B);
 
   // Fonction pour calculer le pourcentage
   const calculatePercentage = (realise: number, prevu: number): number => {
@@ -93,6 +127,68 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = () => {
       totalLocataire,
     });
   }, [bureauValues]);
+
+  useEffect(() => {
+    setFormData(prev => ({
+      ...prev,
+      gouvernance: {
+        ...prev.gouvernance,
+        infrastructureBureaux: bureauValues,
+        totalInfrastructureBureaux: totals
+      }
+    }));
+  }, [bureauValues, totals, setFormData]);
+
+  useEffect(() => {
+    setFormData(prev => ({
+      ...prev,
+      gouvernance: {
+        ...prev.gouvernance,
+        inspectionsAdministrativesC2B: {
+          prescolaire: {
+            nombrePrevu: inspectionsC2B.maternel.prevu,
+            nombreRealise: inspectionsC2B.maternel.realise,
+            pourcentageRealisation: inspectionsC2B.maternel.pourcentage
+          },
+          primaire: {
+            nombrePrevu: inspectionsC2B.primaire.prevu,
+            nombreRealise: inspectionsC2B.primaire.realise,
+            pourcentageRealisation: inspectionsC2B.primaire.pourcentage
+          },
+          secondaire: {
+            nombrePrevu: inspectionsC2B.secondaire.prevu,
+            nombreRealise: inspectionsC2B.secondaire.realise,
+            pourcentageRealisation: inspectionsC2B.secondaire.pourcentage
+          },
+          special: {
+            nombrePrevu: inspectionsC2B.special.prevu,
+            nombreRealise: inspectionsC2B.special.realise,
+            pourcentageRealisation: inspectionsC2B.special.pourcentage
+          }
+        }
+      }
+    }));
+  }, [inspectionsC2B, setFormData]);
+
+  useEffect(() => {
+    const infra = formData.gouvernance?.infrastructureBureaux;
+    if (infra && JSON.stringify(infra) !== JSON.stringify(bureauValues)) {
+      setBureauValues(infra);
+    }
+
+    const totalsData = formData.gouvernance?.totalInfrastructureBureaux;
+    if (totalsData && JSON.stringify(totalsData) !== JSON.stringify(totals)) {
+      setTotals(totalsData);
+    }
+
+    const inspectionsData = formData.gouvernance?.inspectionsAdministrativesC2B;
+    if (inspectionsData) {
+      const mapped = mapInspectionsToLocal(inspectionsData);
+      if (JSON.stringify(mapped) !== JSON.stringify(inspectionsC2B)) {
+        setInspectionsC2B(mapped);
+      }
+    }
+  }, [formData.gouvernance, bureauValues, totals, inspectionsC2B]);
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <h3 className="text-lg font-medium mb-4 text-primary">IV. REALISATIONS (SUITE)</h3>

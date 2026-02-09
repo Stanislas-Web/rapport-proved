@@ -78,7 +78,7 @@ const CreateRapportActivite: React.FC = () => {
         directeurProvincial: '',
         isActive: true
       },
-      annee: `${new Date().getFullYear()}-${new Date().getFullYear() + 1}`,
+      annee: `${new Date().getFullYear()-2}-${new Date().getFullYear() + 1}`,
       introduction: '',
       parametresCles: {
         nombreEcolesClasses: {
@@ -299,21 +299,27 @@ const CreateRapportActivite: React.FC = () => {
         accesAccessibiliteEquite: {
           nouvellesSallesClasses: {
             prescolaire: 0,
+            sourceFinancementPrescolaire: '',
             primaire: 0,
+            sourceFinancementPrimaire: '',
             secondaire: 0,
-            sourceFinancement: ''
+            sourceFinancementSecondaire: ''
           },
           nouveauxBancsTables: {
             prescolaire: 0,
+            sourceFinancementPrescolaire: '',
             primaire: 0,
+            sourceFinancementPrimaire: '',
             secondaire: 0,
-            sourceFinancement: ''
+            sourceFinancementSecondaire: ''
           },
           nouvellesLatrines: {
             prescolaire: 0,
+            sourceFinancementPrescolaire: '',
             primaire: 0,
+            sourceFinancementPrimaire: '',
             secondaire: 0,
-            sourceFinancement: ''
+            sourceFinancementSecondaire: ''
           },
           gratuitéEnseignementPrimaire: '',
           sensibilisation: {
@@ -1463,8 +1469,8 @@ const CreateRapportActivite: React.FC = () => {
               <ParametresCles formData={formData} setFormData={setFormData} />
               <ParametresClesComplete formData={formData} setFormData={setFormData} />
               <Personnel formData={formData} setFormData={setFormData} />
-              <EvaluationQualitative />
-              <EvaluationQualitativeComplete />
+              <EvaluationQualitative formData={formData} setFormData={setFormData} />
+              <EvaluationQualitativeComplete formData={formData} setFormData={setFormData} />
               <Realisations formData={formData} setFormData={setFormData} />
               <RealisationsComplete formData={formData} setFormData={setFormData} />
               <Gouvernance formData={formData} setFormData={setFormData} />

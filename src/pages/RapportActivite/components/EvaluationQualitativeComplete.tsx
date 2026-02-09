@@ -6,21 +6,62 @@ interface EvaluationQualitativeCompleteProps {
 }
 
 const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps> = ({ formData, setFormData }) => {
+  // Helper pour gérer setFormData en toute sécurité
+  const safeSetFormData = (updater: (prev: any) => any) => {
+    if (setFormData) {
+      setFormData(updater);
+    }
+  };
+
+  // Helper pour mapper les inspections depuis formData
+  const mapInspectionsFromFormData = (data?: any) => {
+    if (!data) {
+      return {
+        maternel: { prevu: 0, realise: 0, pourcentage: 0 },
+        primaire: { prevu: 0, realise: 0, pourcentage: 0 },
+        secondaire: { prevu: 0, realise: 0, pourcentage: 0 },
+        special: { prevu: 0, realise: 0, pourcentage: 0 }
+      };
+    }
+    return {
+      maternel: {
+        prevu: data.prescolaire?.nombrePrevu || 0,
+        realise: data.prescolaire?.nombreRealise || 0,
+        pourcentage: data.prescolaire?.pourcentageRealisation || 0
+      },
+      primaire: {
+        prevu: data.primaire?.nombrePrevu || 0,
+        realise: data.primaire?.nombreRealise || 0,
+        pourcentage: data.primaire?.pourcentageRealisation || 0
+      },
+      secondaire: {
+        prevu: data.secondaire?.nombrePrevu || 0,
+        realise: data.secondaire?.nombreRealise || 0,
+        pourcentage: data.secondaire?.pourcentageRealisation || 0
+      },
+      special: {
+        prevu: data.special?.nombrePrevu || 0,
+        realise: data.special?.nombreRealise || 0,
+        pourcentage: data.special?.pourcentageRealisation || 0
+      }
+    };
+  };
+
   // État pour les inspections pédagogiques C3
-  const [inspectionsC3, setInspectionsC3] = useState({
-    maternel: { prevu: 0, realise: 0, pourcentage: 0 },
-    primaire: { prevu: 0, realise: 0, pourcentage: 0 },
-    secondaire: { prevu: 0, realise: 0, pourcentage: 0 },
-    special: { prevu: 0, realise: 0, pourcentage: 0 }
-  });
+  const [inspectionsC3, setInspectionsC3] = useState(() => 
+    mapInspectionsFromFormData(formData?.ameliorationQualite?.activitesInspectorales?.inspectionsPedagogiquesC3)
+  );
 
   // État pour les inspections de formation
-  const [inspectionsFormation, setInspectionsFormation] = useState({
-    maternel: { prevu: 0, realise: 0, pourcentage: 0 },
-    primaire: { prevu: 0, realise: 0, pourcentage: 0 },
-    secondaire: { prevu: 0, realise: 0, pourcentage: 0 },
-    special: { prevu: 0, realise: 0, pourcentage: 0 }
-  });
+  const [inspectionsFormation, setInspectionsFormation] = useState(() => 
+    mapInspectionsFromFormData(formData?.ameliorationQualite?.activitesInspectorales?.inspectionsFormation)
+  );
+
+  // État pour les thèmes exploités
+  const [themesExploites, setThemesExploites] = useState(() => ({
+    ece: formData?.ameliorationQualite?.activitesInspectorales?.themesExploites?.ece || '',
+    maternel: formData?.ameliorationQualite?.activitesInspectorales?.themesExploites?.maternel || ''
+  }));
 
   // État pour les indicateurs du rendement interne
   const [rendementInterne, setRendementInterne] = useState({
@@ -178,6 +219,129 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
       }));
     }
   }, [indicateursAcces]);
+
+  // Synchroniser inspectionsC3 avec formData.ameliorationQualite
+  useEffect(() => {
+    if (setFormData) {
+      setFormData((prev: any) => ({
+        ...prev,
+        ameliorationQualite: {
+          ...prev.ameliorationQualite,
+          activitesInspectorales: {
+            ...prev.ameliorationQualite?.activitesInspectorales,
+            inspectionsPedagogiquesC3: {
+              prescolaire: {
+                nombrePrevu: inspectionsC3.maternel.prevu,
+                nombreRealise: inspectionsC3.maternel.realise,
+                pourcentageRealisation: inspectionsC3.maternel.pourcentage
+              },
+              primaire: {
+                nombrePrevu: inspectionsC3.primaire.prevu,
+                nombreRealise: inspectionsC3.primaire.realise,
+                pourcentageRealisation: inspectionsC3.primaire.pourcentage
+              },
+              secondaire: {
+                nombrePrevu: inspectionsC3.secondaire.prevu,
+                nombreRealise: inspectionsC3.secondaire.realise,
+                pourcentageRealisation: inspectionsC3.secondaire.pourcentage
+              },
+              special: {
+                nombrePrevu: inspectionsC3.special.prevu,
+                nombreRealise: inspectionsC3.special.realise,
+                pourcentageRealisation: inspectionsC3.special.pourcentage
+              }
+            }
+          }
+        }
+      }));
+    }
+  }, [inspectionsC3, setFormData]);
+
+  // Synchroniser inspectionsFormation avec formData.ameliorationQualite
+  useEffect(() => {
+    if (setFormData) {
+      setFormData((prev: any) => ({
+        ...prev,
+        ameliorationQualite: {
+          ...prev.ameliorationQualite,
+          activitesInspectorales: {
+            ...prev.ameliorationQualite?.activitesInspectorales,
+            inspectionsFormation: {
+              prescolaire: {
+                nombrePrevu: inspectionsFormation.maternel.prevu,
+                nombreRealise: inspectionsFormation.maternel.realise,
+                pourcentageRealisation: inspectionsFormation.maternel.pourcentage
+              },
+              primaire: {
+                nombrePrevu: inspectionsFormation.primaire.prevu,
+                nombreRealise: inspectionsFormation.primaire.realise,
+                pourcentageRealisation: inspectionsFormation.primaire.pourcentage
+              },
+              secondaire: {
+                nombrePrevu: inspectionsFormation.secondaire.prevu,
+                nombreRealise: inspectionsFormation.secondaire.realise,
+                pourcentageRealisation: inspectionsFormation.secondaire.pourcentage
+              },
+              special: {
+                nombrePrevu: inspectionsFormation.special.prevu,
+                nombreRealise: inspectionsFormation.special.realise,
+                pourcentageRealisation: inspectionsFormation.special.pourcentage
+              }
+            }
+          }
+        }
+      }));
+    }
+  }, [inspectionsFormation, setFormData]);
+
+  // Synchroniser themesExploites avec formData.ameliorationQualite
+  useEffect(() => {
+    if (setFormData) {
+      setFormData((prev: any) => ({
+        ...prev,
+        ameliorationQualite: {
+          ...prev.ameliorationQualite,
+          activitesInspectorales: {
+            ...prev.ameliorationQualite?.activitesInspectorales,
+            themesExploites: {
+              ece: themesExploites.ece,
+              maternel: themesExploites.maternel
+            }
+          }
+        }
+      }));
+    }
+  }, [themesExploites, setFormData]);
+
+  // Charger depuis formData si les données changent
+  useEffect(() => {
+    const c3Data = formData?.ameliorationQualite?.activitesInspectorales?.inspectionsPedagogiquesC3;
+    if (c3Data) {
+      const mapped = mapInspectionsFromFormData(c3Data);
+      if (JSON.stringify(mapped) !== JSON.stringify(inspectionsC3)) {
+        setInspectionsC3(mapped);
+      }
+    }
+
+    const formationData = formData?.ameliorationQualite?.activitesInspectorales?.inspectionsFormation;
+    if (formationData) {
+      const mapped = mapInspectionsFromFormData(formationData);
+      if (JSON.stringify(mapped) !== JSON.stringify(inspectionsFormation)) {
+        setInspectionsFormation(mapped);
+      }
+    }
+
+    const themesData = formData?.ameliorationQualite?.activitesInspectorales?.themesExploites;
+    if (themesData) {
+      const newThemes = {
+        ece: themesData.ece || '',
+        maternel: themesData.maternel || ''
+      };
+      if (JSON.stringify(newThemes) !== JSON.stringify(themesExploites)) {
+        setThemesExploites(newThemes);
+      }
+    }
+  }, [formData?.ameliorationQualite?.activitesInspectorales]);
 
   // État pour les données brutes de calcul OCDE
   const [calculDataOCDE, setCalculDataOCDE] = useState({
@@ -1140,61 +1304,331 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
               <tr>
                 <td className="border border-gray-300 px-3 py-2">a) Espace Communautaire d'éveil (ECE)</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="mat_1" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="mat_1" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques?.ece === 'TRES BON'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          materielsDidactiques: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques,
+                            ece: 'TRES BON'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="mat_1" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="mat_1" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques?.ece === 'BON'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          materielsDidactiques: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques,
+                            ece: 'BON'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="mat_1" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="mat_1" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques?.ece === 'CARENCE'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          materielsDidactiques: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques,
+                            ece: 'CARENCE'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
               </tr>
               <tr>
                 <td className="border border-gray-300 px-3 py-2">b) Préprimaire</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="mat_2" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="mat_2" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques?.preprimaire === 'TRES BON'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          materielsDidactiques: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques,
+                            preprimaire: 'TRES BON'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="mat_2" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="mat_2" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques?.preprimaire === 'BON'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          materielsDidactiques: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques,
+                            preprimaire: 'BON'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="mat_2" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="mat_2" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques?.preprimaire === 'CARENCE'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          materielsDidactiques: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques,
+                            preprimaire: 'CARENCE'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
               </tr>
               <tr>
                 <td className="border border-gray-300 px-3 py-2">c) Maternel</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="mat_3" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="mat_3" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques?.maternel === 'TRES BON'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          materielsDidactiques: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques,
+                            maternel: 'TRES BON'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="mat_3" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="mat_3" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques?.maternel === 'BON'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          materielsDidactiques: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques,
+                            maternel: 'BON'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="mat_3" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="mat_3" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques?.maternel === 'CARENCE'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          materielsDidactiques: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques,
+                            maternel: 'CARENCE'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
               </tr>
               <tr>
                 <td className="border border-gray-300 px-3 py-2">d) Primaire</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="mat_4" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="mat_4" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques?.primaire === 'TRES BON'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          materielsDidactiques: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques,
+                            primaire: 'TRES BON'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="mat_4" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="mat_4" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques?.primaire === 'BON'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          materielsDidactiques: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques,
+                            primaire: 'BON'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="mat_4" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="mat_4" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques?.primaire === 'CARENCE'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          materielsDidactiques: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques,
+                            primaire: 'CARENCE'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
               </tr>
               <tr>
                 <td className="border border-gray-300 px-3 py-2">e) Secondaire</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="mat_5" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="mat_5" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques?.secondaire === 'TRES BON'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          materielsDidactiques: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques,
+                            secondaire: 'TRES BON'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="mat_5" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="mat_5" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques?.secondaire === 'BON'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          materielsDidactiques: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques,
+                            secondaire: 'BON'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="mat_5" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="mat_5" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques?.secondaire === 'CARENCE'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          materielsDidactiques: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.materielsDidactiques,
+                            secondaire: 'CARENCE'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
               </tr>
             </tbody>
@@ -1219,37 +1653,199 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
               <tr>
                 <td className="border border-gray-300 px-3 py-2">a) LABORATOIRE DE CHIMIE</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="lab_chimie" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="lab_chimie" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.laboratoires?.chimie === 'TRES BON'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          laboratoires: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.laboratoires,
+                            chimie: 'TRES BON'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="lab_chimie" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="lab_chimie" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.laboratoires?.chimie === 'BON'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          laboratoires: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.laboratoires,
+                            chimie: 'BON'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="lab_chimie" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="lab_chimie" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.laboratoires?.chimie === 'CARENCE'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          laboratoires: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.laboratoires,
+                            chimie: 'CARENCE'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
               </tr>
               <tr>
                 <td className="border border-gray-300 px-3 py-2">b) LABORATOIRE DE BIOLOGIE</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="lab_bio" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="lab_bio" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.laboratoires?.biologie === 'TRES BON'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          laboratoires: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.laboratoires,
+                            biologie: 'TRES BON'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="lab_bio" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="lab_bio" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.laboratoires?.biologie === 'BON'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          laboratoires: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.laboratoires,
+                            biologie: 'BON'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="lab_bio" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="lab_bio" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.laboratoires?.biologie === 'CARENCE'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          laboratoires: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.laboratoires,
+                            biologie: 'CARENCE'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
               </tr>
               <tr>
                 <td className="border border-gray-300 px-3 py-2">c) LABORATOIRE DE PHYSIQUE</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="lab_phys" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="lab_phys" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.laboratoires?.physique === 'TRES BON'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          laboratoires: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.laboratoires,
+                            physique: 'TRES BON'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="lab_phys" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="lab_phys" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.laboratoires?.physique === 'BON'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          laboratoires: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.laboratoires,
+                            physique: 'BON'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="lab_phys" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="lab_phys" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.laboratoires?.physique === 'CARENCE'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          laboratoires: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.laboratoires,
+                            physique: 'CARENCE'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
               </tr>
             </tbody>
@@ -1274,13 +1870,67 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
               <tr>
                 <td className="border border-gray-300 px-3 py-2">a) EQUIPEMENTS ATELIERS</td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="atelier" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="atelier" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.equipementsAteliers?.humanitesTechniques === 'TRES BON'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          equipementsAteliers: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.equipementsAteliers,
+                            humanitesTechniques: 'TRES BON'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="atelier" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="atelier" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.equipementsAteliers?.humanitesTechniques === 'BON'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          equipementsAteliers: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.equipementsAteliers,
+                            humanitesTechniques: 'BON'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
-                  <input type="radio" name="atelier" className="mx-auto block" />
+                  <input 
+                    type="radio" 
+                    name="atelier" 
+                    className="mx-auto block" 
+                    checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.equipementsAteliers?.humanitesTechniques === 'CARENCE'}
+                    onChange={() => safeSetFormData((prev: any) => ({
+                      ...prev,
+                      ameliorationQualite: {
+                        ...prev.ameliorationQualite,
+                        disponibiliteMoyensEnseignement: {
+                          ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement,
+                          equipementsAteliers: {
+                            ...prev.ameliorationQualite?.disponibiliteMoyensEnseignement?.equipementsAteliers,
+                            humanitesTechniques: 'CARENCE'
+                          }
+                        }
+                      }
+                    }))}
+                  />
                 </td>
               </tr>
             </tbody>
@@ -1309,73 +1959,397 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">a) Espace Communautaire d'éveil (ECE)</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="visite_1" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="visite_1" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.visitesClasses?.ece === 'TRES BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            visitesClasses: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.visitesClasses,
+                              ece: 'TRES BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="visite_1" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="visite_1" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.visitesClasses?.ece === 'BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            visitesClasses: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.visitesClasses,
+                              ece: 'BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="visite_1" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="visite_1" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.visitesClasses?.ece === 'ASSEZ BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            visitesClasses: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.visitesClasses,
+                              ece: 'ASSEZ BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">b) Préprimaire</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="visite_2" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="visite_2" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.visitesClasses?.preprimaire === 'TRES BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            visitesClasses: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.visitesClasses,
+                              preprimaire: 'TRES BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="visite_2" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="visite_2" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.visitesClasses?.preprimaire === 'BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            visitesClasses: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.visitesClasses,
+                              preprimaire: 'BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="visite_2" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="visite_2" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.visitesClasses?.preprimaire === 'ASSEZ BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            visitesClasses: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.visitesClasses,
+                              preprimaire: 'ASSEZ BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">c) Maternel</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="visite_3" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="visite_3" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.visitesClasses?.maternel === 'TRES BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            visitesClasses: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.visitesClasses,
+                              maternel: 'TRES BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="visite_3" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="visite_3" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.visitesClasses?.maternel === 'BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            visitesClasses: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.visitesClasses,
+                              maternel: 'BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="visite_3" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="visite_3" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.visitesClasses?.maternel === 'ASSEZ BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            visitesClasses: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.visitesClasses,
+                              maternel: 'ASSEZ BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">d) Primaire</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="visite_4" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="visite_4" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.visitesClasses?.primaire === 'TRES BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            visitesClasses: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.visitesClasses,
+                              primaire: 'TRES BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="visite_4" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="visite_4" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.visitesClasses?.primaire === 'BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            visitesClasses: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.visitesClasses,
+                              primaire: 'BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="visite_4" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="visite_4" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.visitesClasses?.primaire === 'ASSEZ BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            visitesClasses: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.visitesClasses,
+                              primaire: 'ASSEZ BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">e) Secondaire</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="visite_5" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="visite_5" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.visitesClasses?.secondaire === 'TRES BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            visitesClasses: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.visitesClasses,
+                              secondaire: 'TRES BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="visite_5" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="visite_5" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.visitesClasses?.secondaire === 'BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            visitesClasses: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.visitesClasses,
+                              secondaire: 'BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="visite_5" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="visite_5" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.visitesClasses?.secondaire === 'ASSEZ BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            visitesClasses: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.visitesClasses,
+                              secondaire: 'ASSEZ BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">f) Spécial (handicap : Tout niveau confondu)</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="visite_6" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="visite_6" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.visitesClasses?.special === 'TRES BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            visitesClasses: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.visitesClasses,
+                              special: 'TRES BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="visite_6" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="visite_6" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.visitesClasses?.special === 'BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            visitesClasses: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.visitesClasses,
+                              special: 'BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="visite_6" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="visite_6" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.visitesClasses?.special === 'ASSEZ BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            visitesClasses: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.visitesClasses,
+                              special: 'ASSEZ BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                 </tr>
               </tbody>
@@ -1400,49 +2374,265 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">a) Espace Communautaire d'éveil (ECE)</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="reunion_1" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="reunion_1" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques?.ece === 'TRES BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            reunionsPedagogiques: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques,
+                              ece: 'TRES BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="reunion_1" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="reunion_1" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques?.ece === 'BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            reunionsPedagogiques: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques,
+                              ece: 'BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="reunion_1" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="reunion_1" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques?.ece === 'ASSEZ BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            reunionsPedagogiques: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques,
+                              ece: 'ASSEZ BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">b) Préprimaire</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="reunion_2" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="reunion_2" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques?.preprimaire === 'TRES BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            reunionsPedagogiques: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques,
+                              preprimaire: 'TRES BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="reunion_2" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="reunion_2" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques?.preprimaire === 'BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            reunionsPedagogiques: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques,
+                              preprimaire: 'BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="reunion_2" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="reunion_2" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques?.preprimaire === 'ASSEZ BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            reunionsPedagogiques: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques,
+                              preprimaire: 'ASSEZ BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">c) Maternel</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="reunion_3" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="reunion_3" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques?.maternel === 'TRES BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            reunionsPedagogiques: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques,
+                              maternel: 'TRES BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="reunion_3" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="reunion_3" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques?.maternel === 'BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            reunionsPedagogiques: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques,
+                              maternel: 'BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="reunion_3" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="reunion_3" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques?.maternel === 'ASSEZ BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            reunionsPedagogiques: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques,
+                              maternel: 'ASSEZ BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">d) Primaire</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="reunion_4" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="reunion_4" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques?.primaire === 'TRES BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            reunionsPedagogiques: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques,
+                              primaire: 'TRES BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="reunion_4" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="reunion_4" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques?.primaire === 'BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            reunionsPedagogiques: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques,
+                              primaire: 'BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="reunion_4" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="reunion_4" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques?.primaire === 'ASSEZ BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            reunionsPedagogiques: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques,
+                              primaire: 'ASSEZ BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                 </tr>
               </tbody>
@@ -1467,61 +2657,331 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">a) Espace Communautaire d'éveil (ECE)</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="cellule_1" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="cellule_1" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.ece === 'TRES BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            fonctionnementCelluleBase: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase,
+                              ece: 'TRES BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="cellule_1" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="cellule_1" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.ece === 'BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            fonctionnementCelluleBase: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase,
+                              ece: 'BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="cellule_1" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="cellule_1" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.ece === 'ASSEZ BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            fonctionnementCelluleBase: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase,
+                              ece: 'ASSEZ BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">b) Maternel</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="cellule_2" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="cellule_2" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.maternel === 'TRES BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            fonctionnementCelluleBase: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase,
+                              maternel: 'TRES BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="cellule_2" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="cellule_2" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.maternel === 'BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            fonctionnementCelluleBase: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase,
+                              maternel: 'BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="cellule_2" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="cellule_2" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.maternel === 'ASSEZ BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            fonctionnementCelluleBase: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase,
+                              maternel: 'ASSEZ BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">c) Primaire</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="cellule_3" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="cellule_3" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.primaire === 'TRES BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            fonctionnementCelluleBase: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase,
+                              primaire: 'TRES BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="cellule_3" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="cellule_3" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.primaire === 'BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            fonctionnementCelluleBase: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase,
+                              primaire: 'BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="cellule_3" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="cellule_3" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.primaire === 'ASSEZ BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            fonctionnementCelluleBase: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase,
+                              primaire: 'ASSEZ BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">d) Secondaire</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="cellule_4" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="cellule_4" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.secondaire === 'TRES BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            fonctionnementCelluleBase: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase,
+                              secondaire: 'TRES BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="cellule_4" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="cellule_4" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.secondaire === 'BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            fonctionnementCelluleBase: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase,
+                              secondaire: 'BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="cellule_4" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="cellule_4" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.secondaire === 'ASSEZ BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            fonctionnementCelluleBase: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase,
+                              secondaire: 'ASSEZ BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">e) Spécial (handicap : Tout niveau confondu)</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="cellule_5" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="cellule_5" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.special === 'TRES BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            fonctionnementCelluleBase: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase,
+                              special: 'TRES BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="cellule_5" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="cellule_5" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.special === 'BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            fonctionnementCelluleBase: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase,
+                              special: 'BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="cellule_5" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="cellule_5" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.special === 'ASSEZ BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            fonctionnementCelluleBase: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase,
+                              special: 'ASSEZ BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                 </tr>
               </tbody>
@@ -1805,49 +3265,265 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">Maternel</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="formation_1" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="formation_1" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.activitesInspectorales?.formationContinue?.prescolaire === 'TRES BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          activitesInspectorales: {
+                            ...prev.ameliorationQualite?.activitesInspectorales,
+                            formationContinue: {
+                              ...prev.ameliorationQualite?.activitesInspectorales?.formationContinue,
+                              prescolaire: 'TRES BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="formation_1" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="formation_1" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.activitesInspectorales?.formationContinue?.prescolaire === 'BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          activitesInspectorales: {
+                            ...prev.ameliorationQualite?.activitesInspectorales,
+                            formationContinue: {
+                              ...prev.ameliorationQualite?.activitesInspectorales?.formationContinue,
+                              prescolaire: 'BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="formation_1" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="formation_1" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.activitesInspectorales?.formationContinue?.prescolaire === 'CARENCE'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          activitesInspectorales: {
+                            ...prev.ameliorationQualite?.activitesInspectorales,
+                            formationContinue: {
+                              ...prev.ameliorationQualite?.activitesInspectorales?.formationContinue,
+                              prescolaire: 'CARENCE'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">Primaire</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="formation_2" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="formation_2" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.activitesInspectorales?.formationContinue?.primaire === 'TRES BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          activitesInspectorales: {
+                            ...prev.ameliorationQualite?.activitesInspectorales,
+                            formationContinue: {
+                              ...prev.ameliorationQualite?.activitesInspectorales?.formationContinue,
+                              primaire: 'TRES BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="formation_2" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="formation_2" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.activitesInspectorales?.formationContinue?.primaire === 'BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          activitesInspectorales: {
+                            ...prev.ameliorationQualite?.activitesInspectorales,
+                            formationContinue: {
+                              ...prev.ameliorationQualite?.activitesInspectorales?.formationContinue,
+                              primaire: 'BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="formation_2" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="formation_2" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.activitesInspectorales?.formationContinue?.primaire === 'CARENCE'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          activitesInspectorales: {
+                            ...prev.ameliorationQualite?.activitesInspectorales,
+                            formationContinue: {
+                              ...prev.ameliorationQualite?.activitesInspectorales?.formationContinue,
+                              primaire: 'CARENCE'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">Secondaire</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="formation_3" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="formation_3" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.activitesInspectorales?.formationContinue?.secondaire === 'TRES BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          activitesInspectorales: {
+                            ...prev.ameliorationQualite?.activitesInspectorales,
+                            formationContinue: {
+                              ...prev.ameliorationQualite?.activitesInspectorales?.formationContinue,
+                              secondaire: 'TRES BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="formation_3" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="formation_3" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.activitesInspectorales?.formationContinue?.secondaire === 'BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          activitesInspectorales: {
+                            ...prev.ameliorationQualite?.activitesInspectorales,
+                            formationContinue: {
+                              ...prev.ameliorationQualite?.activitesInspectorales?.formationContinue,
+                              secondaire: 'BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="formation_3" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="formation_3" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.activitesInspectorales?.formationContinue?.secondaire === 'CARENCE'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          activitesInspectorales: {
+                            ...prev.ameliorationQualite?.activitesInspectorales,
+                            formationContinue: {
+                              ...prev.ameliorationQualite?.activitesInspectorales?.formationContinue,
+                              secondaire: 'CARENCE'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">Spécial (handicap: Tout niveau confondu)</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="formation_4" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="formation_4" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.activitesInspectorales?.formationContinue?.special === 'TRES BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          activitesInspectorales: {
+                            ...prev.ameliorationQualite?.activitesInspectorales,
+                            formationContinue: {
+                              ...prev.ameliorationQualite?.activitesInspectorales?.formationContinue,
+                              special: 'TRES BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="formation_4" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="formation_4" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.activitesInspectorales?.formationContinue?.special === 'BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          activitesInspectorales: {
+                            ...prev.ameliorationQualite?.activitesInspectorales,
+                            formationContinue: {
+                              ...prev.ameliorationQualite?.activitesInspectorales?.formationContinue,
+                              special: 'BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="radio" name="formation_4" className="mx-auto block" />
+                    <input 
+                      type="radio" 
+                      name="formation_4" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.activitesInspectorales?.formationContinue?.special === 'CARENCE'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          activitesInspectorales: {
+                            ...prev.ameliorationQualite?.activitesInspectorales,
+                            formationContinue: {
+                              ...prev.ameliorationQualite?.activitesInspectorales?.formationContinue,
+                              special: 'CARENCE'
+                            }
+                          }
+                        }
+                      }))}
+                    />
                   </td>
                 </tr>
               </tbody>
@@ -1870,13 +3546,25 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">a) Espace Communautaire d'éveil (ECE)</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="text" className="w-full text-center border-none focus:outline-none focus:ring-0" placeholder="Thèmes exploités..." />
+                    <input 
+                      type="text" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="Thèmes exploités..." 
+                      value={themesExploites.ece}
+                      onChange={(e) => setThemesExploites(prev => ({ ...prev, ece: e.target.value }))}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-3 py-2">b) Maternel</td>
                   <td className="border border-gray-300 px-3 py-2">
-                    <input type="text" className="w-full text-center border-none focus:outline-none focus:ring-0" placeholder="Thèmes exploités..." />
+                    <input 
+                      type="text" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="Thèmes exploités..." 
+                      value={themesExploites.maternel}
+                      onChange={(e) => setThemesExploites(prev => ({ ...prev, maternel: e.target.value }))}
+                    />
                   </td>
                 </tr>
               </tbody>

@@ -245,21 +245,27 @@ export interface RapportActivite {
     accesAccessibiliteEquite: {
       nouvellesSallesClasses: {
         prescolaire: number;
+        sourceFinancementPrescolaire?: string;
         primaire: number;
+        sourceFinancementPrimaire?: string;
         secondaire: number;
-        sourceFinancement?: string;
+        sourceFinancementSecondaire?: string;
       };
       nouveauxBancsTables: {
         prescolaire: number;
+        sourceFinancementPrescolaire?: string;
         primaire: number;
+        sourceFinancementPrimaire?: string;
         secondaire: number;
-        sourceFinancement?: string;
+        sourceFinancementSecondaire?: string;
       };
       nouvellesLatrines: {
         prescolaire: number;
+        sourceFinancementPrescolaire?: string;
         primaire: number;
+        sourceFinancementPrimaire?: string;
         secondaire: number;
-        sourceFinancement?: string;
+        sourceFinancementSecondaire?: string;
       };
       gratuitéEnseignementPrimaire?: string;
       sensibilisation: {
