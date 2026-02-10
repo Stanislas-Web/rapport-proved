@@ -4,9 +4,10 @@ import { RapportActivite } from '../../../models/RapportActivite';
 interface RealisationsProps {
   formData: RapportActivite;
   setFormData: React.Dispatch<React.SetStateAction<RapportActivite>>;
+  autoSaveForceSave?: () => void;
 }
 
-const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) => {
+const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, autoSaveForceSave }) => {
   // État pour le modal de calcul des indicateurs d'accès
   const [showCalculModalAcces, setShowCalculModalAcces] = useState(false);
 
@@ -130,6 +131,13 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData }) =>
     
     setIndicateursAcces(nouveauxTaux);
     setShowCalculModalAcces(false);
+    
+    // Sauvegarder immédiatement dans le brouillon
+    setTimeout(() => {
+      if (autoSaveForceSave) {
+        autoSaveForceSave();
+      }
+    }, 500);
   };
 
   return (

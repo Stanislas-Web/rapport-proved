@@ -4,9 +4,10 @@ import { RapportActivite } from '../../../models/RapportActivite';
 interface GouvernanceProps {
   formData: RapportActivite;
   setFormData: React.Dispatch<React.SetStateAction<RapportActivite>>;
+  autoSaveForceSave?: () => void;
 }
 
-const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData }) => {
+const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSaveForceSave }) => {
   // État pour le modal de calcul des formations
   const [showCalculModalFormations, setShowCalculModalFormations] = useState(false);
 
@@ -67,10 +68,10 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData }) => {
     }));
   }, [formationsGestionnaires, setFormData]);
 
-  // Charger formationsGestionnaires depuis formData si changé
+  // Charger formationsGestionnaires depuis formData au montage et quand formData change
   useEffect(() => {
     const formations = formData?.gouvernance?.formationsGestionnaires;
-    if (formations && JSON.stringify(formations) !== JSON.stringify(formationsGestionnaires)) {
+    if (formations) {
       setFormationsGestionnaires(formations);
     }
   }, [formData?.gouvernance?.formationsGestionnaires]);
@@ -126,6 +127,13 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData }) => {
     
     setFormationsGestionnaires(nouveauxTaux);
     setShowCalculModalFormations(false);
+    
+    // Sauvegarder immédiatement dans le brouillon
+    setTimeout(() => {
+      if (autoSaveForceSave) {
+        autoSaveForceSave();
+      }
+    }, 500);
   };
 
   return (

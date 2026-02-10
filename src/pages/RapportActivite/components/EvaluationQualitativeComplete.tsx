@@ -3,9 +3,10 @@ import React, { useState, useEffect } from 'react';
 interface EvaluationQualitativeCompleteProps {
   formData?: any;
   setFormData?: React.Dispatch<React.SetStateAction<any>>;
+  autoSaveForceSave?: () => void;
 }
 
-const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps> = ({ formData, setFormData }) => {
+const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps> = ({ formData, setFormData, autoSaveForceSave }) => {
   // Helper pour gérer setFormData en toute sécurité
   const safeSetFormData = (updater: (prev: any) => any) => {
     if (setFormData) {
@@ -63,13 +64,25 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     maternel: formData?.ameliorationQualite?.activitesInspectorales?.themesExploites?.maternel || ''
   }));
 
-  // État pour les indicateurs du rendement interne
-  const [rendementInterne, setRendementInterne] = useState({
-    sixiemePrimaire: { abandon: 0, reussite: 0, echec: 0 },
-    huitiemeCETB: { abandon: 0, reussite: 0, echec: 0 },
-    quatriemeHumanite: { abandon: 0, reussite: 0, echec: 0 },
-    diplomesMathematiques: { abandon: 0, reussite: 0, echec: 0 },
-    diplomesFiliereTechniques: { abandon: 0, reussite: 0, echec: 0 }
+  // État pour les indicateurs du rendement interne - CHARGER depuis formData
+  const [rendementInterne, setRendementInterne] = useState(() => {
+    const data = formData?.ameliorationQualite?.indicateursRendement?.rendementInterne;
+    if (data) {
+      return {
+        sixiemePrimaire: data.sixiemePrimaire || { abandon: 0, reussite: 0, echec: 0 },
+        huitiemeCETB: data.huitiemeCETB || { abandon: 0, reussite: 0, echec: 0 },
+        quatriemeHumanite: data.quatriemeHumanite || { abandon: 0, reussite: 0, echec: 0 },
+        diplomesMathematiques: data.diplomesMathematiques || { abandon: 0, reussite: 0, echec: 0 },
+        diplomesFiliereTechniques: data.diplomesFiliereTechniques || { abandon: 0, reussite: 0, echec: 0 }
+      };
+    }
+    return {
+      sixiemePrimaire: { abandon: 0, reussite: 0, echec: 0 },
+      huitiemeCETB: { abandon: 0, reussite: 0, echec: 0 },
+      quatriemeHumanite: { abandon: 0, reussite: 0, echec: 0 },
+      diplomesMathematiques: { abandon: 0, reussite: 0, echec: 0 },
+      diplomesFiliereTechniques: { abandon: 0, reussite: 0, echec: 0 }
+    };
   });
 
   // État pour le modal de calcul
@@ -136,18 +149,35 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     diplomesFiliereTechniques: { inscrits: 0, abandons: 0, reussites: 0, echecs: 0 }
   });
 
-  // État pour les indicateurs du rendement externe
-  const [rendementExterne, setRendementExterne] = useState({
-    prescolaire: { tauxGF: 0, tauxFilles: 0 },
-    espaceCommunautaireEveil: { tauxGF: 0, tauxFilles: 0 },
-    classePreprimaire: { tauxGF: 0, tauxFilles: 0 },
-    maternel: { tauxGF: 0, tauxFilles: 0 },
-    primaire: { tauxGF: 0, tauxFilles: 0 },
-    enseignementSpecialPrimaire: { tauxGF: 0, tauxFilles: 0 },
-    enseignementPrimaire: { tauxGF: 0, tauxFilles: 0 },
-    secondaire: { tauxGF: 0, tauxFilles: 0 },
-    enseignementSpecialSecondaire: { tauxGF: 0, tauxFilles: 0 },
-    enseignementSecondaireNormal: { tauxGF: 0, tauxFilles: 0 }
+  // État pour les indicateurs du rendement externe - CHARGER depuis formData
+  const [rendementExterne, setRendementExterne] = useState(() => {
+    const data = formData?.ameliorationQualite?.indicateursRendement?.rendementExterne;
+    if (data) {
+      return {
+        prescolaire: data.prescolaire || { tauxGF: 0, tauxFilles: 0 },
+        espaceCommunautaireEveil: data.espaceCommunautaireEveil || { tauxGF: 0, tauxFilles: 0 },
+        classePreprimaire: data.classePreprimaire || { tauxGF: 0, tauxFilles: 0 },
+        maternel: data.maternel || { tauxGF: 0, tauxFilles: 0 },
+        primaire: data.primaire || { tauxGF: 0, tauxFilles: 0 },
+        enseignementSpecialPrimaire: data.enseignementSpecialPrimaire || { tauxGF: 0, tauxFilles: 0 },
+        enseignementPrimaire: data.enseignementPrimaire || { tauxGF: 0, tauxFilles: 0 },
+        secondaire: data.secondaire || { tauxGF: 0, tauxFilles: 0 },
+        enseignementSpecialSecondaire: data.enseignementSpecialSecondaire || { tauxGF: 0, tauxFilles: 0 },
+        enseignementSecondaireNormal: data.enseignementSecondaireNormal || { tauxGF: 0, tauxFilles: 0 }
+      };
+    }
+    return {
+      prescolaire: { tauxGF: 0, tauxFilles: 0 },
+      espaceCommunautaireEveil: { tauxGF: 0, tauxFilles: 0 },
+      classePreprimaire: { tauxGF: 0, tauxFilles: 0 },
+      maternel: { tauxGF: 0, tauxFilles: 0 },
+      primaire: { tauxGF: 0, tauxFilles: 0 },
+      enseignementSpecialPrimaire: { tauxGF: 0, tauxFilles: 0 },
+      enseignementPrimaire: { tauxGF: 0, tauxFilles: 0 },
+      secondaire: { tauxGF: 0, tauxFilles: 0 },
+      enseignementSpecialSecondaire: { tauxGF: 0, tauxFilles: 0 },
+      enseignementSecondaireNormal: { tauxGF: 0, tauxFilles: 0 }
+    };
   });
 
   // État pour les données brutes de calcul externe
@@ -164,11 +194,21 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     enseignementSecondaireNormal: { total: 0, garcons: 0, filles: 0 }
   });
 
-  // État pour les indicateurs du niveau primaire (III.8)
-  const [efficacitePrimaire, setEfficacitePrimaire] = useState({
-    tauxAbandon: { tauxGF: 0, tauxFilles: 0 },
-    tauxReussite: { tauxGF: 0, tauxFilles: 0 },
-    tauxEchec: { tauxGF: 0, tauxFilles: 0 }
+  // État pour les indicateurs du niveau primaire (III.8) - CHARGER depuis formData
+  const [efficacitePrimaire, setEfficacitePrimaire] = useState(() => {
+    const data = formData?.ameliorationQualite?.indicateursRendement?.efficacitePrimaire;
+    if (data) {
+      return {
+        tauxAbandon: data.tauxAbandon || { tauxGF: 0, tauxFilles: 0 },
+        tauxReussite: data.tauxReussite || { tauxGF: 0, tauxFilles: 0 },
+        tauxEchec: data.tauxEchec || { tauxGF: 0, tauxFilles: 0 }
+      };
+    }
+    return {
+      tauxAbandon: { tauxGF: 0, tauxFilles: 0 },
+      tauxReussite: { tauxGF: 0, tauxFilles: 0 },
+      tauxEchec: { tauxGF: 0, tauxFilles: 0 }
+    };
   });
 
   // État pour les données brutes de calcul primaire
@@ -178,11 +218,21 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     tauxEchec: { inscrits: 0, echecs: 0, garcons: 0, filles: 0 }
   });
 
-  // État pour les indicateurs du niveau secondaire (III.8)
-  const [efficaciteSecondaire, setEfficaciteSecondaire] = useState({
-    tauxAbandon: { tauxGF: 0, tauxFilles: 0 },
-    tauxReussite: { tauxGF: 0, tauxFilles: 0 },
-    tauxEchec: { tauxGF: 0, tauxFilles: 0 }
+  // État pour les indicateurs du niveau secondaire (III.8) - CHARGER depuis formData
+  const [efficaciteSecondaire, setEfficaciteSecondaire] = useState(() => {
+    const data = formData?.ameliorationQualite?.indicateursRendement?.efficaciteSecondaire;
+    if (data) {
+      return {
+        tauxAbandon: data.tauxAbandon || { tauxGF: 0, tauxFilles: 0 },
+        tauxReussite: data.tauxReussite || { tauxGF: 0, tauxFilles: 0 },
+        tauxEchec: data.tauxEchec || { tauxGF: 0, tauxFilles: 0 }
+      };
+    }
+    return {
+      tauxAbandon: { tauxGF: 0, tauxFilles: 0 },
+      tauxReussite: { tauxGF: 0, tauxFilles: 0 },
+      tauxEchec: { tauxGF: 0, tauxFilles: 0 }
+    };
   });
 
   // État pour les données brutes de calcul secondaire
@@ -192,10 +242,19 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     tauxEchec: { inscrits: 0, echecs: 0, garcons: 0, filles: 0 }
   });
 
-  // État pour les taux de diplômes OCDE
-  const [tauxDiplomesOCDE, setTauxDiplomesOCDE] = useState({
-    humanitesScientifiques: { tauxGF: 0, tauxFilles: 0 },
-    humanitesTechniques: { tauxGF: 0, tauxFilles: 0 }
+  // État pour les taux de diplômes OCDE - CHARGER depuis formData
+  const [tauxDiplomesOCDE, setTauxDiplomesOCDE] = useState(() => {
+    const data = formData?.ameliorationQualite?.indicateursRendement?.tauxDiplomesOCDE;
+    if (data) {
+      return {
+        humanitesScientifiques: data.humanitesScientifiques || { tauxGF: 0, tauxFilles: 0 },
+        humanitesTechniques: data.humanitesTechniques || { tauxGF: 0, tauxFilles: 0 }
+      };
+    }
+    return {
+      humanitesScientifiques: { tauxGF: 0, tauxFilles: 0 },
+      humanitesTechniques: { tauxGF: 0, tauxFilles: 0 }
+    };
   });
 
   // État pour les indicateurs d'accès (Proportion & Transition)
@@ -313,35 +372,85 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     }
   }, [themesExploites, setFormData]);
 
-  // Charger depuis formData si les données changent
+  // Synchroniser rendementInterne vers formData
   useEffect(() => {
-    const c3Data = formData?.ameliorationQualite?.activitesInspectorales?.inspectionsPedagogiquesC3;
-    if (c3Data) {
-      const mapped = mapInspectionsFromFormData(c3Data);
-      if (JSON.stringify(mapped) !== JSON.stringify(inspectionsC3)) {
-        setInspectionsC3(mapped);
-      }
+    if (setFormData) {
+      setFormData((prev: any) => ({
+        ...prev,
+        ameliorationQualite: {
+          ...prev.ameliorationQualite,
+          indicateursRendement: {
+            ...prev.ameliorationQualite?.indicateursRendement,
+            rendementInterne
+          }
+        }
+      }));
     }
+  }, [rendementInterne, setFormData]);
 
-    const formationData = formData?.ameliorationQualite?.activitesInspectorales?.inspectionsFormation;
-    if (formationData) {
-      const mapped = mapInspectionsFromFormData(formationData);
-      if (JSON.stringify(mapped) !== JSON.stringify(inspectionsFormation)) {
-        setInspectionsFormation(mapped);
-      }
+  // Synchroniser rendementExterne vers formData
+  useEffect(() => {
+    if (setFormData) {
+      setFormData((prev: any) => ({
+        ...prev,
+        ameliorationQualite: {
+          ...prev.ameliorationQualite,
+          indicateursRendement: {
+            ...prev.ameliorationQualite?.indicateursRendement,
+            rendementExterne
+          }
+        }
+      }));
     }
+  }, [rendementExterne, setFormData]);
 
-    const themesData = formData?.ameliorationQualite?.activitesInspectorales?.themesExploites;
-    if (themesData) {
-      const newThemes = {
-        ece: themesData.ece || '',
-        maternel: themesData.maternel || ''
-      };
-      if (JSON.stringify(newThemes) !== JSON.stringify(themesExploites)) {
-        setThemesExploites(newThemes);
-      }
+  // Synchroniser efficacitePrimaire vers formData
+  useEffect(() => {
+    if (setFormData) {
+      setFormData((prev: any) => ({
+        ...prev,
+        ameliorationQualite: {
+          ...prev.ameliorationQualite,
+          indicateursRendement: {
+            ...prev.ameliorationQualite?.indicateursRendement,
+            efficacitePrimaire
+          }
+        }
+      }));
     }
-  }, [formData?.ameliorationQualite?.activitesInspectorales]);
+  }, [efficacitePrimaire, setFormData]);
+
+  // Synchroniser efficaciteSecondaire vers formData
+  useEffect(() => {
+    if (setFormData) {
+      setFormData((prev: any) => ({
+        ...prev,
+        ameliorationQualite: {
+          ...prev.ameliorationQualite,
+          indicateursRendement: {
+            ...prev.ameliorationQualite?.indicateursRendement,
+            efficaciteSecondaire
+          }
+        }
+      }));
+    }
+  }, [efficaciteSecondaire, setFormData]);
+
+  // Synchroniser tauxDiplomesOCDE vers formData
+  useEffect(() => {
+    if (setFormData) {
+      setFormData((prev: any) => ({
+        ...prev,
+        ameliorationQualite: {
+          ...prev.ameliorationQualite,
+          indicateursRendement: {
+            ...prev.ameliorationQualite?.indicateursRendement,
+            tauxDiplomesOCDE
+          }
+        }
+      }));
+    }
+  }, [tauxDiplomesOCDE, setFormData]);
 
   // État pour les données brutes de calcul OCDE
   const [calculDataOCDE, setCalculDataOCDE] = useState({
@@ -494,6 +603,13 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     
     setIndicateursAcces(nouveauxTaux);
     setShowCalculModalAcces(false);
+    
+    // Sauvegarder immédiatement dans le brouillon
+    setTimeout(() => {
+      if (autoSaveForceSave) {
+        autoSaveForceSave();
+      }
+    }, 500);
   };
 
   // Fonction pour mettre à jour les données de calcul avec validation intelligente
@@ -724,6 +840,13 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     
     setRendementInterne(nouveauxTaux);
     setShowCalculModal(false);
+    
+    // Sauvegarder immédiatement dans le brouillon
+    setTimeout(() => {
+      if (autoSaveForceSave) {
+        autoSaveForceSave();
+      }
+    }, 500);
   };
 
   // Fonction pour ouvrir le modal de calcul externe
@@ -822,6 +945,13 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     
     setRendementExterne(nouveauxTaux);
     setShowCalculModalExternes(false);
+    
+    // Sauvegarder immédiatement dans le brouillon
+    setTimeout(() => {
+      if (autoSaveForceSave) {
+        autoSaveForceSave();
+      }
+    }, 500);
   };
 
   // Fonction pour ouvrir le modal de calcul primaire
@@ -970,6 +1100,13 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     
     setEfficacitePrimaire(nouveauxTaux);
     setShowCalculModalPrimaire(false);
+    
+    // Sauvegarder immédiatement dans le brouillon
+    setTimeout(() => {
+      if (autoSaveForceSave) {
+        autoSaveForceSave();
+      }
+    }, 500);
   };
 
   // Fonction pour ouvrir le modal de calcul secondaire
@@ -1118,6 +1255,13 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     
     setEfficaciteSecondaire(nouveauxTaux);
     setShowCalculModalSecondaire(false);
+    
+    // Sauvegarder immédiatement dans le brouillon
+    setTimeout(() => {
+      if (autoSaveForceSave) {
+        autoSaveForceSave();
+      }
+    }, 500);
   };
 
   // Fonction pour ouvrir le modal de calcul OCDE
@@ -1281,6 +1425,13 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     
     setTauxDiplomesOCDE(nouveauxTaux);
     setShowCalculModalOCDE(false);
+    
+    // Sauvegarder immédiatement dans le brouillon
+    setTimeout(() => {
+      if (autoSaveForceSave) {
+        autoSaveForceSave();
+      }
+    }, 500);
   };
 
   return (

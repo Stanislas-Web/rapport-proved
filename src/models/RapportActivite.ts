@@ -290,14 +290,20 @@ export interface RapportActivite {
   ameliorationQualite: {
     disponibiliteMoyensEnseignement: {
       programmesScolaires: {
-        prescolaire: 'TRES BON' | 'BON' | 'CARENCE';
+        ece: 'TRES BON' | 'BON' | 'CARENCE';
+        preprimaire: 'TRES BON' | 'BON' | 'CARENCE';
+        maternel: 'TRES BON' | 'BON' | 'CARENCE';
         primaire: 'TRES BON' | 'BON' | 'CARENCE';
         secondaire: 'TRES BON' | 'BON' | 'CARENCE';
+        prescolaire?: 'TRES BON' | 'BON' | 'CARENCE';
       };
       manuelsScolaires: {
-        prescolaire: 'TRES BON' | 'BON' | 'CARENCE';
+        ece: 'TRES BON' | 'BON' | 'CARENCE';
+        preprimaire: 'TRES BON' | 'BON' | 'CARENCE';
+        maternel: 'TRES BON' | 'BON' | 'CARENCE';
         primaire: 'TRES BON' | 'BON' | 'CARENCE';
         secondaire: 'TRES BON' | 'BON' | 'CARENCE';
+        prescolaire?: 'TRES BON' | 'BON' | 'CARENCE';
       };
       materielsDidactiques: {
         prescolaire: 'TRES BON' | 'BON' | 'CARENCE';
@@ -950,12 +956,16 @@ export const defaultRapportActivite: Omit<RapportActivite, 'identificationProved
   ameliorationQualite: {
     disponibiliteMoyensEnseignement: {
       programmesScolaires: {
-        prescolaire: 'BON',
+        ece: 'BON',
+        preprimaire: 'BON',
+        maternel: 'BON',
         primaire: 'BON',
         secondaire: 'BON',
       },
       manuelsScolaires: {
-        prescolaire: 'BON',
+        ece: 'BON',
+        preprimaire: 'BON',
+        maternel: 'BON',
         primaire: 'BON',
         secondaire: 'BON',
       },

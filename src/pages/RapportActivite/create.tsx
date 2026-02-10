@@ -343,12 +343,16 @@ const CreateRapportActivite: React.FC = () => {
       ameliorationQualite: {
         disponibiliteMoyensEnseignement: {
           programmesScolaires: {
-            prescolaire: 'BON',
+            ece: 'BON',
+            preprimaire: 'BON',
+            maternel: 'BON',
             primaire: 'BON',
             secondaire: 'BON'
           },
           manuelsScolaires: {
-            prescolaire: 'BON',
+            ece: 'BON',
+            preprimaire: 'BON',
+            maternel: 'BON',
             primaire: 'BON',
             secondaire: 'BON'
           },
@@ -1470,10 +1474,10 @@ const CreateRapportActivite: React.FC = () => {
               <ParametresClesComplete formData={formData} setFormData={setFormData} />
               <Personnel formData={formData} setFormData={setFormData} />
               <EvaluationQualitative formData={formData} setFormData={setFormData} />
-              <EvaluationQualitativeComplete formData={formData} setFormData={setFormData} />
-              <Realisations formData={formData} setFormData={setFormData} />
+              <EvaluationQualitativeComplete formData={formData} setFormData={setFormData} autoSaveForceSave={autoSave?.forceSave} />
+              <Realisations formData={formData} setFormData={setFormData} autoSaveForceSave={autoSave?.forceSave} />
               <RealisationsComplete formData={formData} setFormData={setFormData} />
-              <Gouvernance formData={formData} setFormData={setFormData} />
+              <Gouvernance formData={formData} setFormData={setFormData} autoSaveForceSave={autoSave?.forceSave} />
               <EducationUrgence formData={formData} setFormData={setFormData} />
               <Conclusion formData={formData} handleInputChange={handleInputChange} />
 
