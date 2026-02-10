@@ -440,6 +440,16 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
             </div>
           </div>
         </div>
+
+                <!-- Introduction -->
+        ${rapport.introduction ? `
+        <div class="info-section">
+          <div class="section-title">Introduction</div>
+          <div class="info-card">
+            <p>${rapport.introduction}</p>
+          </div>
+        </div>
+        ` : ''}
         
         <!-- Statistiques principales -->
         <div class="info-section">
@@ -1054,15 +1064,7 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
            </div>
          </div>
         
-        <!-- Introduction -->
-        ${rapport.introduction ? `
-        <div class="info-section">
-          <div class="section-title">Introduction</div>
-          <div class="info-card">
-            <p>${rapport.introduction}</p>
-          </div>
-        </div>
-        ` : ''}
+
         
         <!-- Conclusion -->
         ${rapport.conclusion ? `
@@ -1766,7 +1768,7 @@ const RapportActivitePage: React.FC = () => {
                             <button
                               onClick={() => generateBeautifulPDF(rapport)}
                               className="hover:text-blue-600"
-                              title="Générer PDF Beau"
+                              title="Générer PDF"
                             >
                               <svg className="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M13.5 2.25H4.5C3.67157 2.25 3 2.92157 3 3.75V14.25C3 15.0784 3.67157 15.75 4.5 15.75H13.5C14.3284 15.75 15 15.0784 15 14.25V3.75C15 2.92157 14.3284 2.25 13.5 2.25Z" stroke="currentColor" strokeWidth="1.5" fill="none"/>
@@ -2051,7 +2053,7 @@ const RapportActivitePage: React.FC = () => {
                   <path d="M5 9H8" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
                   <path d="M9 1.5V4C9 4.27614 9.22386 4.5 9.5 4.5H12" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                Générer PDF Beau
+                Générer PDF 
               </button>
               <button
                 onClick={() => window.location.href = `/rapport-activite/edit/${selectedRapport._id}`}
