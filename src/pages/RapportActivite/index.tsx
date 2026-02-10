@@ -1395,11 +1395,93 @@ const RapportActivitePage: React.FC = () => {
         "Année": rapport.annee,
         "Province Administrative": rapport.identificationProved?.provinceAdministrative || '',
         "Province Educationnelle": rapport.identificationProved?.provinceEducationnelle || '',
+        "Chef Lieu PROVED": rapport.identificationProved?.chefLieuProved || '',
         "Directeur Provincial": rapport.identificationProved?.directeurProvincial || '',
+        "Email": rapport.identificationProved?.emailProfessionnel || '',
+        "Téléphone": rapport.identificationProved?.telephone || '',
+        "Territoires": rapport.identificationProved?.nombreTerritoires || 0,
+        "Sous-divisions": rapport.identificationProved?.nombreSousDivisions || 0,
+        
+        // Écoles par niveau
+        "Écoles Préscolaire": (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreEcoles || 0) + 
+          (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.maternel?.nombreEcoles || 0) + 
+          (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.prePrimaire?.nombreEcoles || 0) + 
+          (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.special?.nombreEcoles || 0),
+        "Écoles Primaire": rapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.nombreEcoles || 0,
+        "Écoles Secondaire": rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.nombreEcoles || 0,
         "Total Écoles": totalEcoles,
+        
+        // Classes par niveau
+        "Classes Préscolaire": (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.espaceCommunautaireEveil?.nombreClasses || 0) + 
+          (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.maternel?.nombreClasses || 0) + 
+          (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.prePrimaire?.nombreClasses || 0) + 
+          (rapport.parametresCles?.nombreEcolesClasses?.niveauPrescolaire?.special?.nombreClasses || 0),
+        "Classes Primaire": (rapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementSpecial?.totalClassesSpecialesPrim || 0) + 
+          (rapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.totalClassesPrimaire || 0),
+        "Classes Secondaire": (rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSpecial?.totalClassesSpecialesSec || 0) + 
+          (rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes7emeCTEB || 0) + 
+          (rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes8emeCTEB || 0) + 
+          (rapport.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.totalClassesHumanites || 0),
+        "Classes Pléthoriques": rapport.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.classesPlethoriques || 0,
         "Total Classes": totalClasses,
+        
+        // Effectifs par niveau
+        "Effectifs Garçons Préscolaire": (rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.espaceCommunautaireEveil?.effectifGarconsFilles || 0) + 
+          (rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.maternel?.effectifGarconsFilles || 0) + 
+          (rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.prePrimaire?.effectifGarconsFilles || 0) + 
+          (rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.special?.effectifGarconsFilles || 0),
+        "Effectifs Filles Préscolaire": (rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.espaceCommunautaireEveil?.effectifFilles || 0) + 
+          (rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.maternel?.effectifFilles || 0) + 
+          (rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.prePrimaire?.effectifFilles || 0) + 
+          (rapport.parametresCles?.effectifScolaire?.niveauPrescolaire?.special?.effectifFilles || 0),
+        "Effectifs Garçons Primaire": (rapport.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.effectifGarconsFilles || 0) + 
+          (rapport.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.effectifGarconsFilles || 0),
+        "Effectifs Filles Primaire": (rapport.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.effectifFilles || 0) + 
+          (rapport.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.effectifFilles || 0),
+        "Effectifs Garçons Secondaire": (rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.effectifGarcons || 0) + 
+          (rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.effectifGarcons || 0) + 
+          (rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.effectifGarcons || 0),
+        "Effectifs Filles Secondaire": (rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.effectifFilles || 0) + 
+          (rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.effectifFilles || 0) + 
+          (rapport.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.effectifFilles || 0),
         "Total Effectifs": rapport.totalEffectifs || 0,
+        
+        // Personnel Enseignant
+        "Personnel Enseignant Préscolaire": calculatePersonnelEnseignantTotal(rapport, 'prescolaire'),
+        "Personnel Enseignant Primaire": calculatePersonnelEnseignantTotal(rapport, 'primaire'),
+        "Personnel Enseignant Secondaire": calculatePersonnelEnseignantTotal(rapport, 'secondaire'),
+        
+        // Personnel Administratif
+        "Direction Provinciale": (rapport.personnel?.personnelAdministratif?.directionProvinciale?.hommes || 0) + 
+          (rapport.personnel?.personnelAdministratif?.directionProvinciale?.femmes || 0),
+        "Inspection Principale": (rapport.personnel?.personnelAdministratif?.inspectionPrincipale?.hommes || 0) + 
+          (rapport.personnel?.personnelAdministratif?.inspectionPrincipale?.femmes || 0),
+        "Coordination Provinciale": (rapport.personnel?.personnelAdministratif?.coordinationProvinciale?.hommes || 0) + 
+          (rapport.personnel?.personnelAdministratif?.coordinationProvinciale?.femmes || 0),
+        "Sous-division": (rapport.personnel?.personnelAdministratif?.sousDivision?.hommes || 0) + 
+          (rapport.personnel?.personnelAdministratif?.sousDivision?.femmes || 0),
+        "Pools Inspection": (rapport.personnel?.personnelAdministratif?.poolsInspectionPrimaire?.hommes || 0) + 
+          (rapport.personnel?.personnelAdministratif?.poolsInspectionPrimaire?.femmes || 0) + 
+          (rapport.personnel?.personnelAdministratif?.poolsInspectionSecondaire?.hommes || 0) + 
+          (rapport.personnel?.personnelAdministratif?.poolsInspectionSecondaire?.femmes || 0),
         "Total Personnel": totalPersonnel,
+        
+        // Réalisations - Infrastructures
+        "Nouvelles Salles Primaire": rapport.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.primaire || 0,
+        "Nouvelles Salles Secondaire": rapport.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.secondaire || 0,
+        "Nouveaux Bancs Primaire": rapport.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.primaire || 0,
+        "Nouveaux Bancs Secondaire": rapport.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.secondaire || 0,
+        "Nouvelles Latrines Primaire": rapport.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.primaire || 0,
+        "Nouvelles Latrines Secondaire": rapport.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.secondaire || 0,
+        
+        // Indicateurs d'Accès
+        "Nouveaux Inscrits (%)": rapport.realisations?.accesAccessibiliteEquite?.indicateursAcces?.proportionNouveauxInscrits || 0,
+        "Taux Transition Primaire-CTEB (%)": rapport.realisations?.accesAccessibiliteEquite?.indicateursAcces?.tauxTransitionPrimaireCTEB || 0,
+        "Taux Transition CTEB-Humanités (%)": rapport.realisations?.accesAccessibiliteEquite?.indicateursAcces?.tauxTransitionCTEBHumanites || 0,
+        
+        "Introduction": rapport.introduction || '',
+        "Conclusion": rapport.conclusion || '',
+        
         "Statut": rapport.statut,
         "Créé le": rapport.createdAt ? moment(rapport.createdAt).format('DD/MM/YYYY') : '-',
         "Modifié le": rapport.updatedAt ? moment(rapport.updatedAt).format('DD/MM/YYYY') : '-',
@@ -1430,9 +1512,10 @@ const RapportActivitePage: React.FC = () => {
     };
 
     // Fusionner les cellules pour le titre et la date
+    const numberOfColumns = Object.keys(formattedData[0] || {}).length;
     ws['!merges'] = [
-      { s: { r: 0, c: 0 }, e: { r: 0, c: 11 } }, // Titre
-      { s: { r: 2, c: 0 }, e: { r: 2, c: 11 } }, // Date
+      { s: { r: 0, c: 0 }, e: { r: 0, c: numberOfColumns - 1 } }, // Titre
+      { s: { r: 2, c: 0 }, e: { r: 2, c: numberOfColumns - 1 } }, // Date
     ];
 
     // Largeurs des colonnes
@@ -1441,11 +1524,48 @@ const RapportActivitePage: React.FC = () => {
       { wch: 10 },  // Année
       { wch: 25 },  // Province Administrative
       { wch: 25 },  // Province Educationnelle
+      { wch: 20 },  // Chef Lieu PROVED
       { wch: 25 },  // Directeur Provincial
+      { wch: 25 },  // Email
+      { wch: 15 },  // Téléphone
+      { wch: 12 },  // Territoires
+      { wch: 15 },  // Sous-divisions
+      { wch: 18 },  // Écoles Préscolaire
+      { wch: 15 },  // Écoles Primaire
+      { wch: 17 },  // Écoles Secondaire
       { wch: 15 },  // Total Écoles
+      { wch: 18 },  // Classes Préscolaire
+      { wch: 15 },  // Classes Primaire
+      { wch: 17 },  // Classes Secondaire
+      { wch: 18 },  // Classes Pléthoriques
       { wch: 15 },  // Total Classes
+      { wch: 25 },  // Effectifs Garçons Préscolaire
+      { wch: 22 },  // Effectifs Filles Préscolaire
+      { wch: 22 },  // Effectifs Garçons Primaire
+      { wch: 20 },  // Effectifs Filles Primaire
+      { wch: 25 },  // Effectifs Garçons Secondaire
+      { wch: 23 },  // Effectifs Filles Secondaire
       { wch: 15 },  // Total Effectifs
+      { wch: 28 },  // Personnel Enseignant Préscolaire
+      { wch: 25 },  // Personnel Enseignant Primaire
+      { wch: 28 },  // Personnel Enseignant Secondaire
+      { wch: 22 },  // Direction Provinciale
+      { wch: 22 },  // Inspection Principale
+      { wch: 25 },  // Coordination Provinciale
+      { wch: 15 },  // Sous-division
+      { wch: 18 },  // Pools Inspection
       { wch: 15 },  // Total Personnel
+      { wch: 23 },  // Nouvelles Salles Primaire
+      { wch: 25 },  // Nouvelles Salles Secondaire
+      { wch: 22 },  // Nouveaux Bancs Primaire
+      { wch: 24 },  // Nouveaux Bancs Secondaire
+      { wch: 25 },  // Nouvelles Latrines Primaire
+      { wch: 27 },  // Nouvelles Latrines Secondaire
+      { wch: 22 },  // Nouveaux Inscrits (%)
+      { wch: 30 },  // Taux Transition Primaire-CTEB (%)
+      { wch: 32 },  // Taux Transition CTEB-Humanités (%)
+      { wch: 50 },  // Introduction
+      { wch: 50 },  // Conclusion
       { wch: 15 },  // Statut
       { wch: 15 },  // Créé le
       { wch: 15 },  // Modifié le
