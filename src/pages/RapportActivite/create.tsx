@@ -78,7 +78,7 @@ const CreateRapportActivite: React.FC = () => {
         directeurProvincial: '',
         isActive: true
       },
-      annee: `${new Date().getFullYear()-2}-${new Date().getFullYear() + 1}`,
+      annee: '2024-2025',
       introduction: '',
       parametresCles: {
         nombreEcolesClasses: {
