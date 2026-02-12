@@ -162,6 +162,7 @@ const AutoFillBanner: React.FC<AutoFillBannerProps> = ({ formData, setFormData }
             prescolaire: 12,
             primaire: 45,
             secondaire: 8,
+            totalGeneralEcoles: 70,
             commentaire: "Programme PAM étendu à plus d'écoles"
           },
           indicateursAcces: {

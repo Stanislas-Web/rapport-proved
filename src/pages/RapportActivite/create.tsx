@@ -331,6 +331,7 @@ const CreateRapportActivite: React.FC = () => {
             prescolaire: 0,
             primaire: 0,
             secondaire: 0,
+            totalGeneralEcoles: 0,
             commentaire: ''
           },
           indicateursAcces: {

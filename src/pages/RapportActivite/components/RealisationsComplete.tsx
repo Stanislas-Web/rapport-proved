@@ -72,6 +72,33 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
   // État pour les inspections administratives C2B
   const [inspectionsC2B, setInspectionsC2B] = useState(initialInspectionsC2B);
 
+  // États pour les données de groupes d'aides
+  const [groupesAidesData, setGroupesAidesData] = useState({
+    nombreGAPMisEnPlace: formData.gouvernance?.groupesAidesPsychopedagogiques?.nombreGAPMisEnPlace || 0,
+    nombreGAPOperationnel: formData.gouvernance?.groupesAidesPsychopedagogiques?.nombreGAPOperationnel || 0,
+    nombreCasPrisEnCharge: formData.gouvernance?.groupesAidesPsychopedagogiques?.nombreCasPrisEnCharge || 0,
+    problemesIdentifies: formData.gouvernance?.groupesAidesPsychopedagogiques?.problemesIdentifies || '',
+    solutionsPreconisees: formData.gouvernance?.groupesAidesPsychopedagogiques?.solutionsPreconisees || ''
+  });
+
+  // États pour les acquisitions de matériels
+  const [acquisitionsMateriels, setAcquisitionsMateriels] = useState({
+    ecoles: {
+      nature: formData.gouvernance?.acquisitionsMateriels?.ecoles?.nature || '',
+      gvt: formData.gouvernance?.acquisitionsMateriels?.ecoles?.sourceFinancement?.gvt || 0,
+      projet: formData.gouvernance?.acquisitionsMateriels?.ecoles?.sourceFinancement?.projet || 0,
+      ptfs: formData.gouvernance?.acquisitionsMateriels?.ecoles?.sourceFinancement?.ptfs || 0,
+      ong: formData.gouvernance?.acquisitionsMateriels?.ecoles?.sourceFinancement?.ong || 0
+    },
+    bureauxGestionnaires: {
+      nature: formData.gouvernance?.acquisitionsMateriels?.bureauxGestionnaires?.nature || '',
+      gvt: formData.gouvernance?.acquisitionsMateriels?.bureauxGestionnaires?.sourceFinancement?.gvt || 0,
+      projet: formData.gouvernance?.acquisitionsMateriels?.bureauxGestionnaires?.sourceFinancement?.projet || 0,
+      ptfs: formData.gouvernance?.acquisitionsMateriels?.bureauxGestionnaires?.sourceFinancement?.ptfs || 0,
+      ong: formData.gouvernance?.acquisitionsMateriels?.bureauxGestionnaires?.sourceFinancement?.ong || 0
+    }
+  });
+
   // Fonction pour calculer le pourcentage
   const calculatePercentage = (realise: number, prevu: number): number => {
     if (prevu === 0) return 0;
@@ -165,30 +192,57 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
             nombreRealise: inspectionsC2B.special.realise,
             pourcentageRealisation: inspectionsC2B.special.pourcentage
           }
+        },
+        groupesAidesPsychopedagogiques: groupesAidesData,
+        acquisitionsMateriels: {
+          ecoles: {
+            nature: acquisitionsMateriels.ecoles.nature,
+            sourceFinancement: {
+              gvt: acquisitionsMateriels.ecoles.gvt,
+              projet: acquisitionsMateriels.ecoles.projet,
+              ptfs: acquisitionsMateriels.ecoles.ptfs,
+              ong: acquisitionsMateriels.ecoles.ong
+            }
+          },
+          bureauxGestionnaires: {
+            nature: acquisitionsMateriels.bureauxGestionnaires.nature,
+            sourceFinancement: {
+              gvt: acquisitionsMateriels.bureauxGestionnaires.gvt,
+              projet: acquisitionsMateriels.bureauxGestionnaires.projet,
+              ptfs: acquisitionsMateriels.bureauxGestionnaires.ptfs,
+              ong: acquisitionsMateriels.bureauxGestionnaires.ong
+            }
+          }
         }
       }
     }));
-  }, [inspectionsC2B, setFormData]);
+  }, [inspectionsC2B, groupesAidesData, acquisitionsMateriels, setFormData]);
 
+  // Synchronisation initiale uniquement depuis formData
   useEffect(() => {
+    // Ne synchroniser que si les données viennent de formData et non de nos changements locaux
     const infra = formData.gouvernance?.infrastructureBureaux;
-    if (infra && JSON.stringify(infra) !== JSON.stringify(bureauValues)) {
-      setBureauValues(infra);
+    if (infra && Object.keys(infra).length > 0) {
+      setBureauValues(prev => {
+        // Comparer les valeurs réelles, pas les objets eux-mêmes
+        const isEqual = Object.keys(infra).every(
+          key => JSON.stringify(prev[key as keyof typeof prev]) === JSON.stringify(infra[key as keyof typeof infra])
+        );
+        return isEqual ? prev : infra;
+      });
     }
 
     const totalsData = formData.gouvernance?.totalInfrastructureBureaux;
-    if (totalsData && JSON.stringify(totalsData) !== JSON.stringify(totals)) {
-      setTotals(totalsData);
+    if (totalsData) {
+      setTotals(prev => JSON.stringify(prev) === JSON.stringify(totalsData) ? prev : totalsData);
     }
 
     const inspectionsData = formData.gouvernance?.inspectionsAdministrativesC2B;
     if (inspectionsData) {
       const mapped = mapInspectionsToLocal(inspectionsData);
-      if (JSON.stringify(mapped) !== JSON.stringify(inspectionsC2B)) {
-        setInspectionsC2B(mapped);
-      }
+      setInspectionsC2B(prev => JSON.stringify(prev) === JSON.stringify(mapped) ? prev : mapped);
     }
-  }, [formData.gouvernance, bureauValues, totals, inspectionsC2B]);
+  }, []);
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <h3 className="text-lg font-medium mb-4 text-primary">IV. REALISATIONS (SUITE)</h3>
@@ -397,6 +451,11 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
             <textarea
               className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Décrivez les problèmes..."
+              value={groupesAidesData.problemesIdentifies}
+              onChange={(e) => setGroupesAidesData(prev => ({
+                ...prev,
+                problemesIdentifies: e.target.value
+              }))}
             />
           </div>
           <div>
@@ -404,6 +463,11 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
             <textarea
               className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Décrivez les solutions..."
+              value={groupesAidesData.solutionsPreconisees}
+              onChange={(e) => setGroupesAidesData(prev => ({
+                ...prev,
+                solutionsPreconisees: e.target.value
+              }))}
             />
           </div>
         </div>
@@ -416,22 +480,67 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
         {/* A. ECOLES */}
         <div className="mb-4">
           <h5 className="font-medium mb-2">A. ECOLES: Nature</h5>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">Nature des matériels</label>
+            <input 
+              type="text" 
+              className="w-full p-2 border border-gray-300 rounded-md" 
+              placeholder="Décrivez les matériels acquis..."
+              value={acquisitionsMateriels.ecoles.nature}
+              onChange={(e) => setAcquisitionsMateriels(prev => ({
+                ...prev,
+                ecoles: { ...prev.ecoles, nature: e.target.value }
+              }))}
+            />
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <label className="block text-sm font-medium mb-2">GVT:</label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" />
+              <input 
+                type="number" 
+                className="w-full p-2 border border-gray-300 rounded-md" 
+                value={acquisitionsMateriels.ecoles.gvt}
+                onChange={(e) => setAcquisitionsMateriels(prev => ({
+                  ...prev,
+                  ecoles: { ...prev.ecoles, gvt: parseInt(e.target.value) || 0 }
+                }))}
+              />
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">Projet:</label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" />
+              <input 
+                type="number" 
+                className="w-full p-2 border border-gray-300 rounded-md" 
+                value={acquisitionsMateriels.ecoles.projet}
+                onChange={(e) => setAcquisitionsMateriels(prev => ({
+                  ...prev,
+                  ecoles: { ...prev.ecoles, projet: parseInt(e.target.value) || 0 }
+                }))}
+              />
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">PTFS:</label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" />
+              <input 
+                type="number" 
+                className="w-full p-2 border border-gray-300 rounded-md" 
+                value={acquisitionsMateriels.ecoles.ptfs}
+                onChange={(e) => setAcquisitionsMateriels(prev => ({
+                  ...prev,
+                  ecoles: { ...prev.ecoles, ptfs: parseInt(e.target.value) || 0 }
+                }))}
+              />
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">ONG:</label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" />
+              <input 
+                type="number" 
+                className="w-full p-2 border border-gray-300 rounded-md" 
+                value={acquisitionsMateriels.ecoles.ong}
+                onChange={(e) => setAcquisitionsMateriels(prev => ({
+                  ...prev,
+                  ecoles: { ...prev.ecoles, ong: parseInt(e.target.value) || 0 }
+                }))}
+              />
             </div>
           </div>
         </div>
@@ -439,22 +548,67 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
         {/* B. BUREAUX GESTIONNAIRE */}
         <div className="mb-4">
           <h5 className="font-medium mb-2">B. BUREAUX GESTIONNAIRE: Nature</h5>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">Nature des matériels</label>
+            <input 
+              type="text" 
+              className="w-full p-2 border border-gray-300 rounded-md" 
+              placeholder="Décrivez les matériels acquis..."
+              value={acquisitionsMateriels.bureauxGestionnaires.nature}
+              onChange={(e) => setAcquisitionsMateriels(prev => ({
+                ...prev,
+                bureauxGestionnaires: { ...prev.bureauxGestionnaires, nature: e.target.value }
+              }))}
+            />
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <label className="block text-sm font-medium mb-2">GVT:</label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" />
+              <input 
+                type="number" 
+                className="w-full p-2 border border-gray-300 rounded-md" 
+                value={acquisitionsMateriels.bureauxGestionnaires.gvt}
+                onChange={(e) => setAcquisitionsMateriels(prev => ({
+                  ...prev,
+                  bureauxGestionnaires: { ...prev.bureauxGestionnaires, gvt: parseInt(e.target.value) || 0 }
+                }))}
+              />
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">Projet:</label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" />
+              <input 
+                type="number" 
+                className="w-full p-2 border border-gray-300 rounded-md" 
+                value={acquisitionsMateriels.bureauxGestionnaires.projet}
+                onChange={(e) => setAcquisitionsMateriels(prev => ({
+                  ...prev,
+                  bureauxGestionnaires: { ...prev.bureauxGestionnaires, projet: parseInt(e.target.value) || 0 }
+                }))}
+              />
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">PTFS:</label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" />
+              <input 
+                type="number" 
+                className="w-full p-2 border border-gray-300 rounded-md" 
+                value={acquisitionsMateriels.bureauxGestionnaires.ptfs}
+                onChange={(e) => setAcquisitionsMateriels(prev => ({
+                  ...prev,
+                  bureauxGestionnaires: { ...prev.bureauxGestionnaires, ptfs: parseInt(e.target.value) || 0 }
+                }))}
+              />
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">ONG:</label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" />
+              <input 
+                type="number" 
+                className="w-full p-2 border border-gray-300 rounded-md" 
+                value={acquisitionsMateriels.bureauxGestionnaires.ong}
+                onChange={(e) => setAcquisitionsMateriels(prev => ({
+                  ...prev,
+                  bureauxGestionnaires: { ...prev.bureauxGestionnaires, ong: parseInt(e.target.value) || 0 }
+                }))}
+              />
             </div>
           </div>
         </div>

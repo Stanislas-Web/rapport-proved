@@ -277,6 +277,7 @@ export interface RapportActivite {
         prescolaire: number;
         primaire: number;
         secondaire: number;
+        totalGeneralEcoles?: number;
         commentaire?: string;
       };
       indicateursAcces: {
@@ -944,6 +945,7 @@ export const defaultRapportActivite: Omit<RapportActivite, 'identificationProved
         prescolaire: 0,
         primaire: 0,
         secondaire: 0,
+        totalGeneralEcoles: 0,
         commentaire: '',
       },
       indicateursAcces: {
