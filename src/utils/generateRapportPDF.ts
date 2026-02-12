@@ -511,6 +511,10 @@ const generateRapportHTML = (rapport: RapportActivite): string => {
                                 <td>Secondaire</td>
                                 <td>${formatNumber(rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.secondaire || 0)}</td>
                             </tr>
+                            <tr style="background-color: #f0f0f0; font-weight: bold;">
+                                <td><strong>Total Général</strong></td>
+                                <td><strong>${formatNumber((rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.prescolaire || 0) + (rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.primaire || 0) + (rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.secondaire || 0))}</strong></td>
+                            </tr>
                         </tbody>
                     </table>
                     ${rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.commentaire ? `

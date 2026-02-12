@@ -977,6 +977,10 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
                   <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.cantinesScolaires?.secondaire || 0}</span>
                 </div>
                 <div class="realisation-item">
+                  <span class="label">Total Général Écoles ayant des Cantines:</span>
+                  <span class="value"><strong>${(rapport.realisations?.accesAccessibiliteEquite?.cantinesScolaires?.prescolaire || 0) + (rapport.realisations?.accesAccessibiliteEquite?.cantinesScolaires?.primaire || 0) + (rapport.realisations?.accesAccessibiliteEquite?.cantinesScolaires?.secondaire || 0)}</strong></span>
+                </div>
+                <div class="realisation-item">
                   <span class="label">Commentaire Cantines:</span>
                   <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.cantinesScolaires?.commentaire || 'Aucun commentaire'}</span>
                 </div>
