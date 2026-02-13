@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { rapportActiviteService } from '../../services/rapportActivite/rapportActiviteService';
 import { RapportActivite } from '../../models/RapportActivite';
@@ -28,6 +28,8 @@ import {
 
 const CreateRapportActivite: React.FC = () => {
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const isEditMode = !!id;
   const [loading, setLoading] = useState(false);
   const [savingDraft, setSavingDraft] = useState(false);
   const [showDraftModal, setShowDraftModal] = useState(false);
@@ -358,6 +360,9 @@ const CreateRapportActivite: React.FC = () => {
             secondaire: 'BON'
           },
           materielsDidactiques: {
+            ece: 'BON',
+            preprimaire: 'BON',
+            maternel: 'BON',
             prescolaire: 'BON',
             primaire: 'BON',
             secondaire: 'BON'
@@ -752,7 +757,23 @@ const CreateRapportActivite: React.FC = () => {
           },
           niveauSecondaire: {
             ...defaultData.parametresCles.nombreEcolesClasses.niveauSecondaire,
-            ...data.parametresCles?.nombreEcolesClasses?.niveauSecondaire
+            ...data.parametresCles?.nombreEcolesClasses?.niveauSecondaire,
+            enseignementSpecial: {
+              ...defaultData.parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSpecial,
+              ...data.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSpecial
+            },
+            enseignementSecondaire: {
+              ...defaultData.parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSecondaire,
+              ...data.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire,
+              premierCycle: {
+                ...defaultData.parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSecondaire.premierCycle,
+                ...data.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.premierCycle
+              },
+              deuxiemeCycle: {
+                ...defaultData.parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSecondaire.deuxiemeCycle,
+                ...data.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle
+              }
+            }
           }
         },
         effectifScolaire: {
@@ -851,6 +872,79 @@ const CreateRapportActivite: React.FC = () => {
       }
     }
   }, []); // Exécuter une seule fois au montage
+
+  // Fonction pour s'assurer que toutes les données nécessaires existent (pas de undefined)
+  const ensureCompleteData = (data: any): RapportActivite => {
+    const defaultData = loadDraft();
+    
+    // Deep merge pour les sections importantes
+    const mergeObjects = (defaults: any, loaded: any): any => {
+      if (!loaded) return defaults;
+      if (!defaults) return loaded;
+      
+      const merged: any = { ...defaults };
+      Object.keys(loaded).forEach(key => {
+        if (loaded[key] !== null && loaded[key] !== undefined) {
+          if (typeof loaded[key] === 'object' && !Array.isArray(loaded[key])) {
+            merged[key] = mergeObjects(defaults[key] || {}, loaded[key]);
+          } else {
+            merged[key] = loaded[key];
+          }
+        }
+      });
+      return merged;
+    };
+    
+    return {
+      ...defaultData,
+      ...data,
+      realisations: mergeObjects(defaultData.realisations, data?.realisations),
+      gouvernance: mergeObjects(defaultData.gouvernance, data?.gouvernance),
+      parametresCles: mergeObjects(defaultData.parametresCles, data?.parametresCles),
+      personnel: mergeObjects(defaultData.personnel, data?.personnel),
+      ameliorationQualite: mergeObjects(defaultData.ameliorationQualite, data?.ameliorationQualite),
+      educationUrgence: mergeObjects(defaultData.educationUrgence, data?.educationUrgence),
+      autresProblemes: mergeObjects(defaultData.autresProblemes, data?.autresProblemes)
+    };
+  };
+
+  // Charger les données en mode édition
+  useEffect(() => {
+    if (isEditMode && id) {
+      console.log('📝 Mode édition détecté, ID:', id);
+      const loadExistingRapport = async () => {
+        try {
+          setLoading(true);
+          const existingRapport = await rapportActiviteService.getRapportById(id);
+          console.log('✅ Rapport existant chargé (brut):', existingRapport);
+          console.log('🔍 Keys du rapport chargé:', Object.keys(existingRapport).slice(0, 10));
+          console.log('🔍 Realisations dans chargement?', !!existingRapport.realisations);
+          console.log('🔍 Gouvernance dans chargement?', !!existingRapport.gouvernance);
+          
+          // Merger avec les données par défaut pour éviter les undefined
+          const completeData = ensureCompleteData(existingRapport);
+          console.log('✅ Données complétées:', {
+            hasRealisations: !!completeData.realisations,
+            hasGouvernance: !!completeData.gouvernance,
+            hasPersonnel: !!completeData.personnel,
+            intro: completeData.introduction?.substring(0, 50)
+          });
+          
+          // Charger les données dans formData
+          setFormData(completeData);
+          // Ne pas afficher le modal de brouillon en mode édition
+          setShowDraftModal(false);
+        } catch (error) {
+          console.error('❌ Erreur lors du chargement du rapport:', error);
+          toast.error('Erreur lors du chargement du rapport');
+        } finally {
+          setLoading(false);
+        }
+      };
+      
+      loadExistingRapport();
+    }
+  }, [id, isEditMode]);
 
   // Auto-save avec le hook personnalisé
   const autoSave = useAutoSave({
@@ -1369,29 +1463,56 @@ const CreateRapportActivite: React.FC = () => {
         anneeCorrigee = `${year}-${year + 1}`;
       }
 
-      const createRequest = {
-        identificationProved: provedId, // Envoyer l'ID comme string
+      // Préparer les données - inclure TOUTES les sections
+      const rapportData: any = {
         annee: anneeCorrigee,
         introduction: formData.introduction,
         parametresCles: formData.parametresCles,
         personnel: formData.personnel,
         realisations: formData.realisations,
-        conclusion: formData.conclusion,
-        statut: 'soumis' // Statut automatiquement défini à "soumis"
+        ameliorationQualite: formData.ameliorationQualite,
+        gouvernance: formData.gouvernance,
+        educationUrgence: formData.educationUrgence,
+        autresProblemes: formData.autresProblemes,
+        conclusion: formData.conclusion
       };
       
-      console.log('🔍 Données à envoyer:', createRequest);
-      await rapportActiviteService.createRapport(createRequest);
+      // Convertir classesPlethoriques en number
+      if (rapportData.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.classesPlethoriques) {
+        rapportData.parametresCles.nombreEcolesClasses.niveauPrimaire.enseignementPrimaire.classesPlethoriques = 
+          parseInt(rapportData.parametresCles.nombreEcolesClasses.niveauPrimaire.enseignementPrimaire.classesPlethoriques.toString());
+      }
+      if (rapportData.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementSpecial?.classesPlethoriques) {
+        rapportData.parametresCles.nombreEcolesClasses.niveauPrimaire.enseignementSpecial.classesPlethoriques = 
+          parseInt(rapportData.parametresCles.nombreEcolesClasses.niveauPrimaire.enseignementSpecial.classesPlethoriques.toString());
+      }
+      
+      // En mode édition: faire un UPDATE, sinon CREATE
+      if (isEditMode && id) {
+        // En édition, on ne change pas le statut automatiquement
+        rapportData.statut = formData.statut || 'approuve';
+        console.log('📝 Mode édition - Appel updateRapport avec ID:', id);
+        await rapportActiviteService.updateRapport(id, rapportData);
+        toast.success('Rapport d\'activité modifié avec succès !');
+      } else {
+        // En création, ajouter l'ID PROVED et le statut
+        rapportData.identificationProved = provedId;
+        rapportData.statut = 'soumis';
+        console.log('➕ Mode création - Appel createRapport');
+        await rapportActiviteService.createRapport(rapportData);
+        toast.success('Rapport d\'activité créé avec succès !');
+      }
+      
+      console.log('🔍 Données à envoyer:', rapportData);
       
       // Effacer le brouillon après envoi réussi
       deleteDraft();
       autoSave.clearDraft();
       
-      toast.success('Rapport d\'activité créé avec succès !');
       navigate('/rapport-activite');
     } catch (error) {
-      console.error('Erreur lors de la création du rapport:', error);
-      toast.error('Erreur lors de la création du rapport d\'activité');
+      console.error('Erreur lors de la création/modification du rapport:', error);
+      toast.error('Erreur lors de la création/modification du rapport d\'activité');
     } finally {
       setLoading(false);
     }
@@ -1422,7 +1543,7 @@ const CreateRapportActivite: React.FC = () => {
       <div className="mx-auto max-w-7xl">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-title-md2 font-semibold text-black dark:text-white">
-            Créer un rapport d'activité
+            {isEditMode ? 'Modifier le rapport d\'activité' : 'Créer un rapport d\'activité'}
           </h2>
           
           {/* Boutons de brouillon en haut */}
@@ -1497,7 +1618,7 @@ const CreateRapportActivite: React.FC = () => {
               disabled={loading}
               className="inline-flex items-center justify-center rounded-md bg-primary py-2 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10 disabled:opacity-50"
             >
-              {loading ? 'Création...' : 'Soumettre le rapport'}
+              {loading ? (isEditMode ? 'Modification...' : 'Création...') : (isEditMode ? 'Enregistrer les modifications' : 'Soumettre le rapport')}
             </button>
           </div>
         </form>

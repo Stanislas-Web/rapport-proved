@@ -307,6 +307,9 @@ export interface RapportActivite {
         prescolaire?: 'TRES BON' | 'BON' | 'CARENCE';
       };
       materielsDidactiques: {
+        ece?: 'TRES BON' | 'BON' | 'CARENCE';
+        preprimaire?: 'TRES BON' | 'BON' | 'CARENCE';
+        maternel?: 'TRES BON' | 'BON' | 'CARENCE';
         prescolaire: 'TRES BON' | 'BON' | 'CARENCE';
         primaire: 'TRES BON' | 'BON' | 'CARENCE';
         secondaire: 'TRES BON' | 'BON' | 'CARENCE';

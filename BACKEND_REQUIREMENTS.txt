@@ -1,0 +1,229 @@
+================================================================================
+RAPPORT ACTIVITE - SPECIFICATIONS BACKEND
+Date: 12 février 2026
+================================================================================
+
+PROBLEME RESOLU (FRONTEND):
+================================================================================
+✅ Seule l'introduction s'enregistrait -> FIXE
+✅ Les sections manquantes n'étaient pas envoyées -> FIXE
+✅ Le bouton modifier ne fonctionnait pas -> FIXE
+
+Les 4 sections suivantes sont MAINTENANT envoyées au backend:
+- ameliorationQualite
+- gouvernance  
+- educationUrgence
+- autresProblemes
+
+================================================================================
+PROBLEME BACKEND - MANQUES IDENTIFIES:
+================================================================================
+
+Le backend N'A PAS certains champs. Voici ce qui MANQUE et DOIT ETRE AJOUTE :
+
+1. AJOUTER 3 SECTIONS A ameliorationQualite:
+================================================================================
+
+A. visitesEtReunions
+-----------
+visitesEtReunions: {
+  visitesClasses: {
+    prescolaire: string,        // "TRES BON" | "BON" | "ASSEZ BON"
+    primaire: string,
+    secondaire: string,
+    special: string
+  },
+  reunionsPedagogiques: {
+    prescolaire: string,
+    primaire: string,
+    secondaire: string
+  },
+  fonctionnementCelluleBase: {
+    prescolaire: string,
+    primaire: string,
+    secondaire: string,
+    special: string
+  }
+}
+
+
+B. activitesInspectorales
+-----------
+activitesInspectorales: {
+  inspectionsPedagogiquesC3: {
+    prescolaire: {
+      nombrePrevu: number,
+      nombreRealise: number,
+      pourcentageRealisation: number
+    },
+    primaire: {
+      nombrePrevu: number,
+      nombreRealise: number,
+      pourcentageRealisation: number
+    },
+    secondaire: {
+      nombrePrevu: number,
+      nombreRealise: number,
+      pourcentageRealisation: number
+    },
+    special: {
+      nombrePrevu: number,
+      nombreRealise: number,
+      pourcentageRealisation: number
+    }
+  },
+  inspectionsFormation: {
+    prescolaire: {
+      nombrePrevu: number,
+      nombreRealise: number,
+      pourcentageRealisation: number
+    },
+    primaire: {
+      nombrePrevu: number,
+      nombreRealise: number,
+      pourcentageRealisation: number
+    },
+    secondaire: {
+      nombrePrevu: number,
+      nombreRealise: number,
+      pourcentageRealisation: number
+    },
+    special: {
+      nombrePrevu: number,
+      nombreRealise: number,
+      pourcentageRealisation: number
+    }
+  },
+  formationContinue: {
+    prescolaire: string,        // "TRES BON" | "BON" | "CARENCE"
+    primaire: string,
+    secondaire: string,
+    special: string
+  }
+}
+
+
+C. indicateursRendement
+-----------
+indicateursRendement: {
+  rendementInterne: {
+    prescolaire: {
+      tauxAbandon: number,
+      tauxReussite: number,
+      tauxEchec: number
+    },
+    primaire: {
+      tauxAbandon: number,
+      tauxReussite: number,
+      tauxEchec: number
+    },
+    secondaire: {
+      tauxAbandon: number,
+      tauxReussite: number,
+      tauxEchec: number
+    }
+  },
+  rendementExterne: {
+    examensCertificatifs: {
+      tauxDiplomes: number,
+      tauxHumanitesScientifiques: number,
+      tauxHumanitesTechniques: number
+    }
+  }
+}
+
+
+2. FIXER Le champ prescolaire manquant:
+================================================================================
+
+Dans: ameliorationQualite.disponibiliteMoyensEnseignement.programmesScolaires
+
+AJOUTER:
+  prescolaire: 'TRES BON' | 'BON' | 'CARENCE'
+
+Complet:
+programmesScolaires: {
+  ece: 'TRES BON' | 'BON' | 'CARENCE',
+  preprimaire: 'TRES BON' | 'BON' | 'CARENCE',
+  maternel: 'TRES BON' | 'BON' | 'CARENCE',
+  primaire: 'TRES BON' | 'BON' | 'CARENCE',
+  secondaire: 'TRES BON' | 'BON' | 'CARENCE',
+  prescolaire: 'TRES BON' | 'BON' | 'CARENCE'  ← AJOUTER
+}
+
+
+================================================================================
+BODY ENVOYE PAR LE FRONTEND (EXEMPLE):
+================================================================================
+
+{
+  "identificationProved": "ID_PROVED_FROM_TOKEN",
+  "annee": "2024-2025",
+  "introduction": "...",
+  
+  "parametresCles": { ... },
+  "personnel": { ... },
+  "realisations": { ... },
+  
+  "ameliorationQualite": {
+    "disponibiliteMoyensEnseignement": { ... },
+    "visitesEtReunions": { ... },              ← NOUVEAU
+    "activitesInspectorales": { ... },         ← NOUVEAU
+    "indicateursRendement": { ... }            ← NOUVEAU
+  },
+  
+  "gouvernance": { ... },
+  "educationUrgence": { ... },
+  "autresProblemes": { ... },
+  
+  "conclusion": "...",
+  "statut": "soumis"
+}
+
+
+================================================================================
+CE QUI A ETE FIXE AU FRONTEND (pour reference):
+================================================================================
+
+1. Mode Édition:
+   ✅ Ajouté useParams pour récupérer l'ID de la route /rapport-activite/edit/:id
+   ✅ Ajouté useEffect pour charger les données du rapport existant
+   ✅ Logique CREATE vs UPDATE implémentée
+
+2. Sections Manquantes:
+   ✅ ameliorationQualite envoyée
+   ✅ gouvernance envoyée
+   ✅ educationUrgence envoyée
+   ✅ autresProblemes envoyée
+
+3. Interface:
+   ✅ Titre change: "Créer" ou "Modifier"
+   ✅ Bouton change: "Soumettre" ou "Enregistrer les modifications"
+
+
+================================================================================
+CHECKLIST BACKEND:
+================================================================================
+
+☐ Ajouter visitesEtReunions dans ameliorationQualite
+☐ Ajouter activitesInspectorales dans ameliorationQualite  
+☐ Ajouter indicateursRendement dans ameliorationQualite
+☐ Ajouter prescolaire dans disponibiliteMoyensEnseignement.programmesScolaires
+☐ Ajouter les migrations de base de données si nécessaire
+☐ Tester la création de rapport avec les nouvelles sections
+☐ Tester la modification de rapport avec les nouvelles sections
+☐ Vérifier que toutes les données s'enregistrent correctement
+
+
+================================================================================
+NOTES IMPORTANTES:
+================================================================================
+
+- Les sections peuvent contenir des valeurs vides/null au démarrage
+- Les types string pour les enums doivent être strictement: "TRES BON" | "BON" | "CARENCE" ou "ASSEZ BON"
+- Les endpoints utilisés sont:
+  * POST /rapport-activite (création)
+  * PUT /rapport-activite/:id (modification)
+  * GET /rapport-activite/:id (récupération)
+
+================================================================================

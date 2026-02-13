@@ -583,6 +583,342 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
           </div>
         </div>
       )}
+
+      {/* IV.3. Comités Provinciaux */}
+      <div className="mb-6 mt-6">
+        <h4 className="font-bold mb-3">IV.3. Comités Provinciaux</h4>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse border border-gray-300">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-300 px-3 py-2 text-left">Comité</th>
+                <th className="border border-gray-300 px-3 py-2">Fréquence des réunions</th>
+                <th className="border border-gray-300 px-3 py-2">Points traités</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2">EDUNC</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="text" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0 p-1" 
+                    value={formData.gouvernance?.comitesProvinciaux?.comiteEDUNC?.frequenceReunions || ''}
+                    onChange={(e) => handleInputChange('gouvernance.comitesProvinciaux.comiteEDUNC.frequenceReunions', e.target.value)}
+                    placeholder="Ex: Mensuellement"
+                  />
+                </td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="text" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0 p-1" 
+                    value={formData.gouvernance?.comitesProvinciaux?.comiteEDUNC?.pointsTraites || ''}
+                    onChange={(e) => handleInputChange('gouvernance.comitesProvinciaux.comiteEDUNC.pointsTraites', e.target.value)}
+                    placeholder="Points traités"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2">ENAFP</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="text" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0 p-1" 
+                    value={formData.gouvernance?.comitesProvinciaux?.comiteENAFP?.frequenceReunions || ''}
+                    onChange={(e) => handleInputChange('gouvernance.comitesProvinciaux.comiteENAFP.frequenceReunions', e.target.value)}
+                    placeholder="Ex: Trimestriellement"
+                  />
+                </td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="text" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0 p-1" 
+                    value={formData.gouvernance?.comitesProvinciaux?.comiteENAFP?.pointsTraites || ''}
+                    onChange={(e) => handleInputChange('gouvernance.comitesProvinciaux.comiteENAFP.pointsTraites', e.target.value)}
+                    placeholder="Points traités"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2">TENASOSP</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="text" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0 p-1" 
+                    value={formData.gouvernance?.comitesProvinciaux?.comiteTENASOSP?.frequenceReunions || ''}
+                    onChange={(e) => handleInputChange('gouvernance.comitesProvinciaux.comiteTENASOSP.frequenceReunions', e.target.value)}
+                    placeholder="Fréquence"
+                  />
+                </td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="text" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0 p-1" 
+                    value={formData.gouvernance?.comitesProvinciaux?.comiteTENASOSP?.pointsTraites || ''}
+                    onChange={(e) => handleInputChange('gouvernance.comitesProvinciaux.comiteTENASOSP.pointsTraites', e.target.value)}
+                    placeholder="Points traités"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2">Examen d'État</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="text" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0 p-1" 
+                    value={formData.gouvernance?.comitesProvinciaux?.comiteExamenEtat?.frequenceReunions || ''}
+                    onChange={(e) => handleInputChange('gouvernance.comitesProvinciaux.comiteExamenEtat.frequenceReunions', e.target.value)}
+                    placeholder="Fréquence"
+                  />
+                </td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="text" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0 p-1" 
+                    value={formData.gouvernance?.comitesProvinciaux?.comiteExamenEtat?.pointsTraites || ''}
+                    onChange={(e) => handleInputChange('gouvernance.comitesProvinciaux.comiteExamenEtat.pointsTraites', e.target.value)}
+                    placeholder="Points traités"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* IV.4. Rémunération du Personnel */}
+      <div className="mb-6 mt-6">
+        <h4 className="font-bold mb-3">IV.4. Rémunération du Personnel</h4>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse border border-gray-300 text-sm">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-300 px-2 py-2 text-left">Structure</th>
+                <th className="border border-gray-300 px-2 py-2 text-center">Total Agents</th>
+                <th className="border border-gray-300 px-2 py-2 text-center">Non Payés</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { key: 'directionProvinciale', label: 'Direction Provinciale' },
+                { key: 'inspectionPrincipale', label: 'Inspection Principale' },
+                { key: 'dinacope', label: 'DINACOPE' },
+                { key: 'sernie', label: 'SERNIE' },
+                { key: 'coordinationProvinciale', label: 'Coordination Provinciale' },
+                { key: 'sousDivision', label: 'Sous-Division' },
+                { key: 'poolsInspectionPrimaire', label: 'Pools Inspection Primaire' },
+                { key: 'poolsInspectionSecondaire', label: 'Pools Inspection Secondaire' },
+                { key: 'antenneDinacope', label: 'Antenne DINACOPE' },
+                { key: 'antenneSernie', label: 'Antenne SERNIE' },
+                { key: 'coordinationDiocesaine', label: 'Coordination Diocésaine' },
+                { key: 'sousCoordinationConventionnees', label: 'Sous-Coordination Conventionnées' },
+                { key: 'conseillerieResidente', label: 'Conseillerie Résidente' }
+              ].map((item) => (
+                <tr key={item.key}>
+                  <td className="border border-gray-300 px-2 py-2">{item.label}</td>
+                  <td className="border border-gray-300 px-2 py-2">
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0 p-1" 
+                      value={formData.gouvernance?.remunerationPersonnel?.[item.key as keyof any]?.totalAgents || 0}
+                      onChange={(e) => handleInputChange(`gouvernance.remunerationPersonnel.${item.key}.totalAgents`, e.target.value)}
+                      placeholder="0"
+                    />
+                  </td>
+                  <td className="border border-gray-300 px-2 py-2">
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0 p-1" 
+                      value={formData.gouvernance?.remunerationPersonnel?.[item.key as keyof any]?.nonPayes || 0}
+                      onChange={(e) => handleInputChange(`gouvernance.remunerationPersonnel.${item.key}.nonPayes`, e.target.value)}
+                      placeholder="0"
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* IV.5. Groupes d'Aides Psychopédagogiques */}
+      <div className="mb-6 mt-6">
+        <h4 className="font-bold mb-3">IV.5. Groupes d'Aides Psychopédagogiques (GAP)</h4>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Nombre de GAP mis en place</label>
+            <input 
+              type="number" 
+              className="w-full p-2 border border-gray-300 rounded-md" 
+              value={formData.gouvernance?.groupesAidesPsychopedagogiques?.nombreGAPMisEnPlace || 0}
+              onChange={(e) => handleInputChange('gouvernance.groupesAidesPsychopedagogiques.nombreGAPMisEnPlace', e.target.value)}
+              placeholder="0"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Nombre de GAP opérationnel</label>
+            <input 
+              type="number" 
+              className="w-full p-2 border border-gray-300 rounded-md" 
+              value={formData.gouvernance?.groupesAidesPsychopedagogiques?.nombreGAPOperationnel || 0}
+              onChange={(e) => handleInputChange('gouvernance.groupesAidesPsychopedagogiques.nombreGAPOperationnel', e.target.value)}
+              placeholder="0"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Nombre de cas pris en charge</label>
+            <input 
+              type="number" 
+              className="w-full p-2 border border-gray-300 rounded-md" 
+              value={formData.gouvernance?.groupesAidesPsychopedagogiques?.nombreCasPrisEnCharge || 0}
+              onChange={(e) => handleInputChange('gouvernance.groupesAidesPsychopedagogiques.nombreCasPrisEnCharge', e.target.value)}
+              placeholder="0"
+            />
+          </div>
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-2">Problèmes identifiés</label>
+          <textarea 
+            className="w-full h-20 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+            value={formData.gouvernance?.groupesAidesPsychopedagogiques?.problemesIdentifies || ''}
+            onChange={(e) => handleInputChange('gouvernance.groupesAidesPsychopedagogiques.problemesIdentifies', e.target.value)}
+            placeholder="Problèmes identifiés..."
+          />
+        </div>
+        <div className="mt-3">
+          <label className="block text-sm font-medium mb-2">Solutions préconisées</label>
+          <textarea 
+            className="w-full h-20 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+            value={formData.gouvernance?.groupesAidesPsychopedagogiques?.solutionsPreconisees || ''}
+            onChange={(e) => handleInputChange('gouvernance.groupesAidesPsychopedagogiques.solutionsPreconisees', e.target.value)}
+            placeholder="Solutions préconisées..."
+          />
+        </div>
+      </div>
+
+      {/* IV.6. Acquisitions de Matériels */}
+      <div className="mb-6 mt-6">
+        <h4 className="font-bold mb-3">IV.6. Acquisitions de Matériels</h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[
+            { key: 'ecoles', label: 'Pour les Écoles' },
+            { key: 'bureauxGestionnaires', label: 'Pour les Bureaux des Gestionnaires' }
+          ].map((section) => (
+            <div key={section.key} className="border border-gray-200 rounded-lg p-4">
+              <h5 className="font-semibold text-base mb-3">{section.label}</h5>
+              <div className="mb-3">
+                <label className="block text-sm font-medium mb-2">Nature</label>
+                <textarea 
+                  className="w-full h-16 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" 
+                  value={formData.gouvernance?.acquisitionsMateriels?.[section.key as keyof any]?.nature || ''}
+                  onChange={(e) => handleInputChange(`gouvernance.acquisitionsMateriels.${section.key}.nature`, e.target.value)}
+                  placeholder="Description du matériel..."
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Source de Financement</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-xs font-medium mb-1 block">Gouvernement</label>
+                    <input 
+                      type="number" 
+                      className="w-full p-1 border border-gray-300 rounded text-sm" 
+                      value={formData.gouvernance?.acquisitionsMateriels?.[section.key as keyof any]?.sourceFinancement?.gvt || 0}
+                      onChange={(e) => handleInputChange(`gouvernance.acquisitionsMateriels.${section.key}.sourceFinancement.gvt`, e.target.value)}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium mb-1 block">Projet</label>
+                    <input 
+                      type="number" 
+                      className="w-full p-1 border border-gray-300 rounded text-sm" 
+                      value={formData.gouvernance?.acquisitionsMateriels?.[section.key as keyof any]?.sourceFinancement?.projet || 0}
+                      onChange={(e) => handleInputChange(`gouvernance.acquisitionsMateriels.${section.key}.sourceFinancement.projet`, e.target.value)}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium mb-1 block">PTFs</label>
+                    <input 
+                      type="number" 
+                      className="w-full p-1 border border-gray-300 rounded text-sm" 
+                      value={formData.gouvernance?.acquisitionsMateriels?.[section.key as keyof any]?.sourceFinancement?.ptfs || 0}
+                      onChange={(e) => handleInputChange(`gouvernance.acquisitionsMateriels.${section.key}.sourceFinancement.ptfs`, e.target.value)}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium mb-1 block">ONG</label>
+                    <input 
+                      type="number" 
+                      className="w-full p-1 border border-gray-300 rounded text-sm" 
+                      value={formData.gouvernance?.acquisitionsMateriels?.[section.key as keyof any]?.sourceFinancement?.ong || 0}
+                      onChange={(e) => handleInputChange(`gouvernance.acquisitionsMateriels.${section.key}.sourceFinancement.ong`, e.target.value)}
+                      placeholder="0"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* IV.7. Infrastructure des Bureaux */}
+      <div className="mb-6 mt-6">
+        <h4 className="font-bold mb-3">IV.7. Infrastructure des Bureaux</h4>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse border border-gray-300 text-sm">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-300 px-2 py-2 text-left">Structure</th>
+                <th className="border border-gray-300 px-2 py-2 text-center">Propriétaire</th>
+                <th className="border border-gray-300 px-2 py-2 text-center">Locataire</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { key: 'directionProvinciale', label: 'Direction Provinciale' },
+                { key: 'inspectionPrincipale', label: 'Inspection Principale' },
+                { key: 'dinacope', label: 'DINACOPE' },
+                { key: 'sernie', label: 'SERNIE' },
+                { key: 'coordinationProvinciale', label: 'Coordination Provinciale' },
+                { key: 'sousDivision', label: 'Sous-Division' },
+                { key: 'poolsInspectionPrimaire', label: 'Pools Inspection Primaire' },
+                { key: 'poolsInspectionSecondaire', label: 'Pools Inspection Secondaire' },
+                { key: 'antenneDinacope', label: 'Antenne DINACOPE' },
+                { key: 'antenneSernie', label: 'Antenne SERNIE' },
+                { key: 'coordinationDiocesaine', label: 'Coordination Diocésaine' },
+                { key: 'sousCoordinationConventionnees', label: 'Sous-Coordination Conventionnées' },
+                { key: 'conseillerieResidente', label: 'Conseillerie Résidente' }
+              ].map((item) => (
+                <tr key={item.key}>
+                  <td className="border border-gray-300 px-2 py-2">{item.label}</td>
+                  <td className="border border-gray-300 px-2 py-2">
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0 p-1" 
+                      value={formData.gouvernance?.infrastructureBureaux?.[item.key as keyof any]?.proprietaire || 0}
+                      onChange={(e) => handleInputChange(`gouvernance.infrastructureBureaux.${item.key}.proprietaire`, e.target.value)}
+                      placeholder="0"
+                    />
+                  </td>
+                  <td className="border border-gray-300 px-2 py-2">
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0 p-1" 
+                      value={formData.gouvernance?.infrastructureBureaux?.[item.key as keyof any]?.locataire || 0}
+                      onChange={(e) => handleInputChange(`gouvernance.infrastructureBureaux.${item.key}.locataire`, e.target.value)}
+                      placeholder="0"
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };

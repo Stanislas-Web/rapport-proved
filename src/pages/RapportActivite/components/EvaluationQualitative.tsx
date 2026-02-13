@@ -190,6 +190,8 @@ const EvaluationQualitative: React.FC<EvaluationQualitativeProps> = ({ formData,
             </table>
           </div>
         </div>
+
+
       </div>
     </div>
   );

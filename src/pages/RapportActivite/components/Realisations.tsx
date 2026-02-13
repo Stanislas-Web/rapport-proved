@@ -166,7 +166,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                   <td className="border border-gray-300 px-3 py-2">
                     <input
                       type="number"
-                      value={formData.realisations.accesAccessibiliteEquite.nouvellesSallesClasses.prescolaire}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.prescolaire || 0}
                       onChange={(e) => {
                         const newValue = parseInt(e.target.value) || 0;
                         setFormData(prev => ({
@@ -189,7 +189,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                   <td className="border border-gray-300 px-3 py-2">
                     <input
                       type="text"
-                      value={formData.realisations.accesAccessibiliteEquite.nouvellesSallesClasses.sourceFinancementPrescolaire || ''}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.sourceFinancementPrescolaire || ''}
                       onChange={(e) => {
                         setFormData(prev => ({
                           ...prev,
@@ -215,7 +215,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                   <td className="border border-gray-300 px-3 py-2">
                     <input
                       type="number"
-                      value={formData.realisations.accesAccessibiliteEquite.nouvellesSallesClasses.primaire}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.primaire || 0}
                       onChange={(e) => {
                         const newValue = parseInt(e.target.value) || 0;
                         setFormData(prev => ({
@@ -238,7 +238,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                   <td className="border border-gray-300 px-3 py-2">
                     <input
                       type="text"
-                      value={formData.realisations.accesAccessibiliteEquite.nouvellesSallesClasses.sourceFinancementPrimaire || ''}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.sourceFinancementPrimaire || ''}
                       onChange={(e) => {
                         setFormData(prev => ({
                           ...prev,
@@ -264,7 +264,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                   <td className="border border-gray-300 px-3 py-2">
                     <input
                       type="number"
-                      value={formData.realisations.accesAccessibiliteEquite.nouvellesSallesClasses.secondaire}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.secondaire || 0}
                       onChange={(e) => {
                         const newValue = parseInt(e.target.value) || 0;
                         setFormData(prev => ({
@@ -287,7 +287,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                   <td className="border border-gray-300 px-3 py-2">
                     <input
                       type="text"
-                      value={formData.realisations.accesAccessibiliteEquite.nouvellesSallesClasses.sourceFinancementSecondaire || ''}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.sourceFinancementSecondaire || ''}
                       onChange={(e) => {
                         setFormData(prev => ({
                           ...prev,
@@ -332,7 +332,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      value={formData.realisations.accesAccessibiliteEquite.nouveauxBancsTables.prescolaire}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.prescolaire || 0}
                       onChange={(e) => {
                         const newValue = parseInt(e.target.value) || 0;
                         setFormData(prev => ({
@@ -356,7 +356,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                       type="text" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="GVT, Projet, PTFS, ONG..." 
-                      value={formData.realisations.accesAccessibiliteEquite.nouveauxBancsTables.sourceFinancementPrescolaire || ''}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.sourceFinancementPrescolaire || ''}
                       onChange={(e) => {
                         setFormData(prev => ({
                           ...prev,
@@ -381,7 +381,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      value={formData.realisations.accesAccessibiliteEquite.nouveauxBancsTables.primaire}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.primaire || 0}
                       onChange={(e) => {
                         const newValue = parseInt(e.target.value) || 0;
                         setFormData(prev => ({
@@ -405,7 +405,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                       type="text" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="GVT, Projet, PTFS, ONG..." 
-                      value={formData.realisations.accesAccessibiliteEquite.nouveauxBancsTables.sourceFinancementPrimaire || ''}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.sourceFinancementPrimaire || ''}
                       onChange={(e) => {
                         setFormData(prev => ({
                           ...prev,
@@ -430,7 +430,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      value={formData.realisations.accesAccessibiliteEquite.nouveauxBancsTables.secondaire}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.secondaire || 0}
                       onChange={(e) => {
                         const newValue = parseInt(e.target.value) || 0;
                         setFormData(prev => ({
@@ -454,7 +454,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                       type="text" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="GVT, Projet, PTFS, ONG..." 
-                      value={formData.realisations.accesAccessibiliteEquite.nouveauxBancsTables.sourceFinancementSecondaire || ''}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.sourceFinancementSecondaire || ''}
                       onChange={(e) => {
                         setFormData(prev => ({
                           ...prev,
@@ -497,7 +497,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      value={formData.realisations.accesAccessibiliteEquite.nouvellesLatrines.prescolaire}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.prescolaire || 0}
                       onChange={(e) => {
                         const newValue = parseInt(e.target.value) || 0;
                         setFormData(prev => ({
@@ -521,7 +521,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                       type="text" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="GVT, Projet, PTFS, ONG..." 
-                      value={formData.realisations.accesAccessibiliteEquite.nouvellesLatrines.sourceFinancementPrescolaire || ''}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.sourceFinancementPrescolaire || ''}
                       onChange={(e) => {
                         setFormData(prev => ({
                           ...prev,
@@ -546,7 +546,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      value={formData.realisations.accesAccessibiliteEquite.nouvellesLatrines.primaire}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.primaire || 0}
                       onChange={(e) => {
                         const newValue = parseInt(e.target.value) || 0;
                         setFormData(prev => ({
@@ -570,7 +570,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                       type="text" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="GVT, Projet, PTFS, ONG..." 
-                      value={formData.realisations.accesAccessibiliteEquite.nouvellesLatrines.sourceFinancementPrimaire || ''}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.sourceFinancementPrimaire || ''}
                       onChange={(e) => {
                         setFormData(prev => ({
                           ...prev,
@@ -595,7 +595,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      value={formData.realisations.accesAccessibiliteEquite.nouvellesLatrines.secondaire}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.secondaire || 0}
                       onChange={(e) => {
                         const newValue = parseInt(e.target.value) || 0;
                         setFormData(prev => ({
@@ -619,7 +619,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                       type="text" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="GVT, Projet, PTFS, ONG..." 
-                      value={formData.realisations.accesAccessibiliteEquite.nouvellesLatrines.sourceFinancementSecondaire || ''}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.sourceFinancementSecondaire || ''}
                       onChange={(e) => {
                         setFormData(prev => ({
                           ...prev,
@@ -649,7 +649,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
           <textarea
             className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Décrivez l'état de la gratuité de l'enseignement primaire public..."
-            value={formData.realisations.accesAccessibiliteEquite.gratuitéEnseignementPrimaire || ''}
+            value={formData.realisations?.accesAccessibiliteEquite?.gratuitéEnseignementPrimaire || ''}
             onChange={(e) => {
               setFormData(prev => ({
                 ...prev,
@@ -673,7 +673,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
               <input 
                 type="checkbox" 
                 className="mr-2" 
-                checked={formData.realisations.accesAccessibiliteEquite.sensibilisation.filles}
+                checked={formData.realisations?.accesAccessibiliteEquite?.sensibilisation?.filles || false}
                 onChange={(e) => {
                   setFormData(prev => ({
                     ...prev,
@@ -696,7 +696,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
               <input 
                 type="checkbox" 
                 className="mr-2" 
-                checked={formData.realisations.accesAccessibiliteEquite.sensibilisation.enfantsHorsEcole}
+                checked={formData.realisations?.accesAccessibiliteEquite?.sensibilisation?.enfantsHorsEcole || false}
                 onChange={(e) => {
                   setFormData(prev => ({
                     ...prev,
@@ -719,7 +719,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
               <input 
                 type="checkbox" 
                 className="mr-2" 
-                checked={formData.realisations.accesAccessibiliteEquite.sensibilisation.peuplesAutochtones}
+                checked={formData.realisations?.accesAccessibiliteEquite?.sensibilisation?.peuplesAutochtones || false}
                 onChange={(e) => {
                   setFormData(prev => ({
                     ...prev,
@@ -905,7 +905,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
             <textarea
               className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Commentaire sur les cantines scolaires..."
-              value={formData.realisations.accesAccessibiliteEquite.cantinesScolaires.commentaire || ''}
+              value={formData.realisations?.accesAccessibiliteEquite?.cantinesScolaires?.commentaire || ''}
               onChange={(e) => {
                 setFormData(prev => ({
                   ...prev,

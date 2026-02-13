@@ -143,69 +143,70 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
         
                  .header {
            text-align: center;
-           margin-bottom: 30px;
+           margin-bottom: 15px;
            border-bottom: 3px solid #1e40af;
-           padding-bottom: 20px;
+           padding-bottom: 10px;
          }
          
          .logo-center {
            text-align: center;
-           margin: 15px 0;
+           margin: 8px 0;
          }
          
          .header-logo {
-           width: 100px;
-           height: 100px;
+           width: 70px;
+           height: 70px;
            object-fit: contain;
          }
         
-                         .republic {
-          font-size: 18px;
+         .republic {
+          font-size: 13px;
           font-weight: 700;
           color: #666;
-          margin-bottom: 10px;
+          margin-bottom: 5px;
           text-align: center;
         }
         
         .ministry {
-          font-size: 20px;
+          font-size: 14px;
           font-weight: 700;
           text-transform: uppercase;
           color: #1e40af;
-          margin-bottom: 5px;
+          margin-bottom: 3px;
         }
         
         .direction {
-          font-size: 18px;
+          font-size: 12px;
           font-weight: 600;
           text-transform: uppercase;
           color: #374151;
-          margin-bottom: 10px;
+          margin-bottom: 5px;
         }
         
         .main-title {
-          font-size: 26px;
+          font-size: 18px;
           font-weight: 700;
           text-transform: uppercase;
           color: #1e40af;
           background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-          padding: 15px;
-          border-radius: 8px;
-          margin: 20px 0;
+          padding: 8px;
+          border-radius: 4px;
+          margin: 10px 0;
           text-align: center;
           border: 2px solid #1e40af;
         }
         
         .info-section {
-          margin: 25px 0;
+          margin: 5px 0;
+          padding: 3px 0;
         }
         
         .section-title {
-          font-size: 18px;
+          font-size: 13px;
           font-weight: 600;
           color: #1e40af;
-          margin-bottom: 15px;
-          padding: 10px;
+          margin-bottom: 8px;
+          padding: 6px;
           background: #f3f4f6;
           border-left: 4px solid #1e40af;
           border-radius: 4px;
@@ -214,22 +215,23 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
         .info-grid {
           display: grid;
           grid-template-columns: 1fr;
-          gap: 15px;
-          margin-bottom: 20px;
+          gap: 3px;
+          margin-bottom: 5px;
         }
         
         .info-card {
           background: #f8fafc;
-          padding: 15px;
-          border-radius: 8px;
+          padding: 8px;
+          border-radius: 6px;
           border: 1px solid #e2e8f0;
+          page-break-inside: avoid;
         }
         
         .info-card h4 {
-          font-size: 16px;
+          font-size: 12px;
           font-weight: 600;
           color: #374151;
-          margin-bottom: 8px;
+          margin-bottom: 4px;
         }
         
         .info-card p {
@@ -240,32 +242,32 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
         .stats-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          gap: 15px;
-          margin: 20px 0;
+          gap: 5px;
+          margin: 5px 0;
         }
         
         .stat-card {
           background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
           color: white;
-          padding: 20px;
-          border-radius: 12px;
+          padding: 8px;
+          border-radius: 6px;
           text-align: center;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .stat-number {
-          font-size: 26px;
+          font-size: 18px;
           font-weight: 700;
-          margin-bottom: 5px;
+          margin-bottom: 2px;
         }
         
         .stat-label {
-          font-size: 14px;
+          font-size: 10px;
           opacity: 0.9;
         }
         
         .table-container {
-          margin: 25px 0;
+          margin: 5px 0;
           overflow-x: auto;
         }
         
@@ -281,16 +283,16 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
         .data-table th {
           background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
           color: white;
-          padding: 12px;
+          padding: 6px;
           text-align: left;
           font-weight: 600;
-          font-size: 15px;
+          font-size: 10px;
         }
         
         .data-table td {
-          padding: 12px;
+          padding: 4px;
           border-bottom: 1px solid #e5e7eb;
-          font-size: 15px;
+          font-size: 10px;
         }
         
         .data-table tr:nth-child(even) {
@@ -302,30 +304,30 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
         }
         
         .footer {
-          margin-top: 40px;
-          padding-top: 20px;
+          margin-top: 15px;
+          padding-top: 10px;
           border-top: 2px solid #e5e7eb;
           text-align: center;
           color: #6b7280;
-          font-size: 14px;
+          font-size: 10px;
         }
         
         .signature-section {
-          margin-top: 40px;
+          margin-top: 8px;
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 40px;
+          gap: 10px;
         }
         
         .signature-box {
           text-align: center;
-          padding: 20px;
+          padding: 10px;
           border: 2px solid #e5e7eb;
-          border-radius: 8px;
+          border-radius: 4px;
         }
         
                  .signature-line {
-           width: 200px;
+           width: 150px;
            height: 2px;
            background: #374151;
            margin: 40px auto 10px;
@@ -474,6 +476,8 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
           </div>
         </div>
         
+
+
         <!-- Détails par niveau -->
         <div class="info-section">
           <div class="section-title">Détails par Niveau d'Enseignement</div>
@@ -1067,7 +1071,149 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
              </div>
            </div>
          </div>
-        
+
+        <!-- PAGE BREAK 2 -->
+        <div style="page-break-after: always;"></div>
+
+        <!-- Amélioration de Qualité -->
+        ${rapport.ameliorationQualite ? `
+        <div class="info-section">
+          <div class="section-title">Amélioration de la Qualité</div>
+          <div class="info-grid">
+            <div class="info-card">
+              <h4>Disponibilité des Moyens d'Enseignement</h4>
+              <div class="realisation-details">
+                <div class="realisation-item">
+                  <span class="label">Programmes (ECE):</span>
+                  <span class="value">${rapport.ameliorationQualite.disponibiliteMoyensEnseignement?.programmesScolaires?.ece || '-'}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Manuels (Primaire):</span>
+                  <span class="value">${rapport.ameliorationQualite.disponibiliteMoyensEnseignement?.manuelsScolaires?.primaire || '-'}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Matériels (Secondaire):</span>
+                  <span class="value">${rapport.ameliorationQualite.disponibiliteMoyensEnseignement?.materielsDidactiques?.secondaire || '-'}</span>
+                </div>
+              </div>
+            </div>
+            <div class="info-card">
+              <h4>Indicateurs de Rendement</h4>
+              <div class="realisation-details">
+                <div class="realisation-item">
+                  <span class="label">Taux Réussite Primaire:</span>
+                  <span class="value">${rapport.ameliorationQualite.indicateursRendement?.rendementInterne?.primaire?.tauxReussite || 0}%</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Taux Réussite Secondaire:</span>
+                  <span class="value">${rapport.ameliorationQualite.indicateursRendement?.rendementInterne?.secondaire?.tauxReussite || 0}%</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Taux Diplômes:</span>
+                  <span class="value">${rapport.ameliorationQualite.indicateursRendement?.rendementExterne?.examensCertificatifs?.tauxDiplomes || 0}%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        ` : ''}
+
+    
+
+        <!-- Gouvernance -->
+        ${rapport.gouvernance ? `
+        <div class="info-section">
+          <div class="section-title">Gouvernance</div>
+          <div class="info-grid">
+            <div class="info-card">
+              <h4>Comités Provinciaux</h4>
+              <div class="realisation-details">
+                <div class="realisation-item">
+                  <span class="label">Comité EDUNC:</span>
+                  <span class="value">${rapport.gouvernance.comitesProvinciaux?.comiteEDUNC?.frequenceReunions || '-'}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Comité ENAFP:</span>
+                  <span class="value">${rapport.gouvernance.comitesProvinciaux?.comiteENAFP?.frequenceReunions || '-'}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Comité TENASOSSP:</span>
+                  <span class="value">${rapport.gouvernance.comitesProvinciaux?.comiteTENASOSP?.frequenceReunions || '-'}</span>
+                </div>
+              </div>
+            </div>
+            <div class="info-card">
+              <h4>Groupes d'Aides Psychopédagogiques</h4>
+              <div class="realisation-details">
+                <div class="realisation-item">
+                  <span class="label">GAP Mis en Place:</span>
+                  <span class="value">${rapport.gouvernance.groupesAidesPsychopedagogiques?.nombreGAPMisEnPlace || 0}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">GAP Opérationnel:</span>
+                  <span class="value">${rapport.gouvernance.groupesAidesPsychopedagogiques?.nombreGAPOperationnel || 0}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Cas Pris en Charge:</span>
+                  <span class="value">${rapport.gouvernance.groupesAidesPsychopedagogiques?.nombreCasPrisEnCharge || 0}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        ` : ''}
+
+        <!-- PAGE BREAK 4 -->
+        <div style="page-break-after: always;"></div>
+
+        <!-- Education en Situation d'Urgence -->
+        ${rapport.educationUrgence ? `
+        <div class="info-section">
+          <div class="section-title">Éducation en Situation d'Urgence</div>
+          <div class="info-grid">
+            <div class="info-card">
+              <h4>Plan de Contingence</h4>
+              <div class="realisation-details">
+                <div class="realisation-item">
+                  <span class="label">Plan d'Urgence:</span>
+                  <span class="value">${rapport.educationUrgence.planStockContingence?.plan ? 'Élaboré' : 'Non élaboré'}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Stock de Fournitures:</span>
+                  <span class="value">${rapport.educationUrgence.planStockContingence?.stock ? 'Constitué' : 'Non constitué'}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Nature des Catastrophes:</span>
+                  <span class="value">${rapport.educationUrgence.catastrophesNaturelles?.nature || 'Aucune'}</span>
+                </div>
+              </div>
+            </div>
+            <div class="info-card">
+              <h4>Recommandations</h4>
+              <div class="realisation-details">
+                <div class="realisation-item">
+                  <span class="label">Espaces Temporaires:</span>
+                  <span class="value">${rapport.educationUrgence.recommandations?.espacesTemporairesApprentissage?.nombre || 0}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Apprenants Cible:</span>
+                  <span class="value">${rapport.educationUrgence.recommandations?.apprenantsScolarises?.cible || 0}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        ` : ''}
+
+        <!-- Autres Problèmes -->
+        ${rapport.autresProblemes ? `
+        <div class="info-section">
+          <div class="section-title">Autres Problèmes</div>
+          <div class="info-card">
+            <p>${rapport.autresProblemes.problemesSpecifiques || 'Aucun problème spécifique identifié'}</p>
+          </div>
+        </div>
+        ` : ''}
 
         
         <!-- Conclusion -->
@@ -2140,6 +2286,231 @@ const RapportActivitePage: React.FC = () => {
                 </div>
               </div>
             </div>
+
+            {/* Amélioration de Qualité */}
+            {selectedRapport.ameliorationQualite && (
+              <div className="mt-6 bg-cyan-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-lg mb-3 text-cyan-800">Amélioration de Qualité</h3>
+                
+                {/* Disponibilité des moyens */}
+                <div className="mb-4">
+                  <h4 className="font-medium text-cyan-700 mb-2">Disponibilité des Moyens d'Enseignement</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                    <div className="bg-white p-2 rounded">
+                      <div className="font-semibold">Programmes</div>
+                      <div>ECE: {selectedRapport.ameliorationQualite.disponibiliteMoyensEnseignement?.programmesScolaires?.ece || '-'}</div>
+                      <div>Préprimaire: {selectedRapport.ameliorationQualite.disponibiliteMoyensEnseignement?.programmesScolaires?.preprimaire || '-'}</div>
+                      <div>Primaire: {selectedRapport.ameliorationQualite.disponibiliteMoyensEnseignement?.programmesScolaires?.primaire || '-'}</div>
+                      <div>Secondaire: {selectedRapport.ameliorationQualite.disponibiliteMoyensEnseignement?.programmesScolaires?.secondaire || '-'}</div>
+                    </div>
+                    <div className="bg-white p-2 rounded">
+                      <div className="font-semibold">Manuels</div>
+                      <div>ECE: {selectedRapport.ameliorationQualite.disponibiliteMoyensEnseignement?.manuelsScolaires?.ece || '-'}</div>
+                      <div>Préprimaire: {selectedRapport.ameliorationQualite.disponibiliteMoyensEnseignement?.manuelsScolaires?.preprimaire || '-'}</div>
+                      <div>Primaire: {selectedRapport.ameliorationQualite.disponibiliteMoyensEnseignement?.manuelsScolaires?.primaire || '-'}</div>
+                      <div>Secondaire: {selectedRapport.ameliorationQualite.disponibiliteMoyensEnseignement?.manuelsScolaires?.secondaire || '-'}</div>
+                    </div>
+                    <div className="bg-white p-2 rounded">
+                      <div className="font-semibold">Matériels</div>
+                      <div>ECE: {selectedRapport.ameliorationQualite.disponibiliteMoyensEnseignement?.materielsDidactiques?.ece || '-'}</div>
+                      <div>Préprimaire: {selectedRapport.ameliorationQualite.disponibiliteMoyensEnseignement?.materielsDidactiques?.preprimaire || '-'}</div>
+                      <div>Primaire: {selectedRapport.ameliorationQualite.disponibiliteMoyensEnseignement?.materielsDidactiques?.primaire || '-'}</div>
+                      <div>Secondaire: {selectedRapport.ameliorationQualite.disponibiliteMoyensEnseignement?.materielsDidactiques?.secondaire || '-'}</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Visites et Réunions */}
+                {selectedRapport.ameliorationQualite.visitesEtReunions && (
+                  <div className="mb-4">
+                    <h4 className="font-medium text-cyan-700 mb-2">Visites et Réunions</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                      <div className="bg-white p-2 rounded">
+                        <div className="font-semibold">Visites de Classes</div>
+                        <div>Préscolaire: {selectedRapport.ameliorationQualite.visitesEtReunions.visitesClasses?.prescolaire || '-'}</div>
+                        <div>Primaire: {selectedRapport.ameliorationQualite.visitesEtReunions.visitesClasses?.primaire || '-'}</div>
+                        <div>Secondaire: {selectedRapport.ameliorationQualite.visitesEtReunions.visitesClasses?.secondaire || '-'}</div>
+                      </div>
+                      <div className="bg-white p-2 rounded">
+                        <div className="font-semibold">Réunions Pédagogiques</div>
+                        <div>Préscolaire: {selectedRapport.ameliorationQualite.visitesEtReunions.reunionsPedagogiques?.prescolaire || '-'}</div>
+                        <div>Primaire: {selectedRapport.ameliorationQualite.visitesEtReunions.reunionsPedagogiques?.primaire || '-'}</div>
+                        <div>Secondaire: {selectedRapport.ameliorationQualite.visitesEtReunions.reunionsPedagogiques?.secondaire || '-'}</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Activités Inspectorales */}
+                {selectedRapport.ameliorationQualite.activitesInspectorales && (
+                  <div className="mb-4">
+                    <h4 className="font-medium text-cyan-700 mb-2">Activités Inspectorales</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                      <div className="bg-white p-2 rounded">
+                        <div className="font-semibold">Inspections Pédagogiques C3</div>
+                        <div>Prescolaire: {selectedRapport.ameliorationQualite.activitesInspectorales.inspectionsPedagogiquesC3?.prescolaire?.nombreRealise || 0}/{selectedRapport.ameliorationQualite.activitesInspectorales.inspectionsPedagogiquesC3?.prescolaire?.nombrePrevu || 0} ({selectedRapport.ameliorationQualite.activitesInspectorales.inspectionsPedagogiquesC3?.prescolaire?.pourcentageRealisation || 0}%)</div>
+                        <div>Primaire: {selectedRapport.ameliorationQualite.activitesInspectorales.inspectionsPedagogiquesC3?.primaire?.nombreRealise || 0}/{selectedRapport.ameliorationQualite.activitesInspectorales.inspectionsPedagogiquesC3?.primaire?.nombrePrevu || 0} ({selectedRapport.ameliorationQualite.activitesInspectorales.inspectionsPedagogiquesC3?.primaire?.pourcentageRealisation || 0}%)</div>
+                        <div>Secondaire: {selectedRapport.ameliorationQualite.activitesInspectorales.inspectionsPedagogiquesC3?.secondaire?.nombreRealise || 0}/{selectedRapport.ameliorationQualite.activitesInspectorales.inspectionsPedagogiquesC3?.secondaire?.nombrePrevu || 0} ({selectedRapport.ameliorationQualite.activitesInspectorales.inspectionsPedagogiquesC3?.secondaire?.pourcentageRealisation || 0}%)</div>
+                      </div>
+                      <div className="bg-white p-2 rounded">
+                        <div className="font-semibold">Formation Continue</div>
+                        <div>Préscolaire: {selectedRapport.ameliorationQualite.activitesInspectorales.formationContinue?.prescolaire || '-'}</div>
+                        <div>Primaire: {selectedRapport.ameliorationQualite.activitesInspectorales.formationContinue?.primaire || '-'}</div>
+                        <div>Secondaire: {selectedRapport.ameliorationQualite.activitesInspectorales.formationContinue?.secondaire || '-'}</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Indicateurs de Rendement */}
+                {selectedRapport.ameliorationQualite.indicateursRendement && (
+                  <div className="mb-4">
+                    <h4 className="font-medium text-cyan-700 mb-2">Indicateurs de Rendement</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                      <div className="bg-white p-2 rounded">
+                        <div className="font-semibold">Rendement Interne</div>
+                        <div>Primaire - Réussite: {selectedRapport.ameliorationQualite.indicateursRendement.rendementInterne?.primaire?.tauxReussite || 0}%</div>
+                        <div>Secondaire - Réussite: {selectedRapport.ameliorationQualite.indicateursRendement.rendementInterne?.secondaire?.tauxReussite || 0}%</div>
+                      </div>
+                      <div className="bg-white p-2 rounded">
+                        <div className="font-semibold">Rendement Externe</div>
+                        <div>Diplômes: {selectedRapport.ameliorationQualite.indicateursRendement.rendementExterne?.examensCertificatifs?.tauxDiplomes || 0}%</div>
+                        <div>Humanités: {selectedRapport.ameliorationQualite.indicateursRendement.rendementExterne?.examensCertificatifs?.tauxHumanitesScientifiques || 0}%</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Gouvernance */}
+            {selectedRapport.gouvernance && (
+              <div className="mt-6 bg-teal-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-lg mb-3 text-teal-800">Gouvernance</h3>
+
+                {/* Comités Provinciaux */}
+                <div className="mb-4">
+                  <h4 className="font-medium text-teal-700 mb-2">Comités Provinciaux</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                    <div className="bg-white p-2 rounded">
+                      <div>Comité EDUNC: {selectedRapport.gouvernance.comitesProvinciaux?.comiteEDUNC?.frequenceReunions || '-'}</div>
+                      <div>Comité ENAFP: {selectedRapport.gouvernance.comitesProvinciaux?.comiteENAFP?.frequenceReunions || '-'}</div>
+                    </div>
+                    <div className="bg-white p-2 rounded">
+                      <div>Comité TENASOSSP: {selectedRapport.gouvernance.comitesProvinciaux?.comiteTENASOSP?.frequenceReunions || '-'}</div>
+                      <div>Comité Examen État: {selectedRapport.gouvernance.comitesProvinciaux?.comiteExamenEtat?.frequenceReunions || '-'}</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Inspections Administratives */}
+                {selectedRapport.gouvernance.inspectionsAdministrativesC2B && (
+                  <div className="mb-4">
+                    <h4 className="font-medium text-teal-700 mb-2">Inspections Administratives C2B</h4>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+                      <div className="bg-white p-2 rounded">
+                        <div>Prescolaire: {selectedRapport.gouvernance.inspectionsAdministrativesC2B.prescolaire?.nombreRealise || 0}/{selectedRapport.gouvernance.inspectionsAdministrativesC2B.prescolaire?.nombrePrevu || 0}</div>
+                      </div>
+                      <div className="bg-white p-2 rounded">
+                        <div>Primaire: {selectedRapport.gouvernance.inspectionsAdministrativesC2B.primaire?.nombreRealise || 0}/{selectedRapport.gouvernance.inspectionsAdministrativesC2B.primaire?.nombrePrevu || 0}</div>
+                      </div>
+                      <div className="bg-white p-2 rounded">
+                        <div>Secondaire: {selectedRapport.gouvernance.inspectionsAdministrativesC2B.secondaire?.nombreRealise || 0}/{selectedRapport.gouvernance.inspectionsAdministrativesC2B.secondaire?.nombrePrevu || 0}</div>
+                      </div>
+                      <div className="bg-white p-2 rounded">
+                        <div>Spécial: {selectedRapport.gouvernance.inspectionsAdministrativesC2B.special?.nombreRealise || 0}/{selectedRapport.gouvernance.inspectionsAdministrativesC2B.special?.nombrePrevu || 0}</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Rémunération Personnel */}
+                {selectedRapport.gouvernance.remunerationPersonnel && (
+                  <div className="mb-4">
+                    <h4 className="font-medium text-teal-700 mb-2">Rémunération Personnel</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs max-h-40 overflow-y-auto">
+                      {Object.entries(selectedRapport.gouvernance.remunerationPersonnel).map(([key, value]: [string, any]) => (
+                        <div key={key} className="bg-white p-2 rounded">
+                          <div className="font-semibold capitalize">{key.replace(/([A-Z])/g, ' $1')}</div>
+                          <div>Total: {value.totalAgents || 0}</div>
+                          <div>Non payés: {value.nonPayes || 0}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Groupes d'Aides */}
+                {selectedRapport.gouvernance.groupesAidesPsychopedagogiques && (
+                  <div className="mb-4">
+                    <h4 className="font-medium text-teal-700 mb-2">Groupes d'Aides Psychopédagogiques</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                      <div className="bg-white p-2 rounded">
+                        <div>GAP Mis en Place: {selectedRapport.gouvernance.groupesAidesPsychopedagogiques.nombreGAPMisEnPlace || 0}</div>
+                        <div>GAP Opérationnel: {selectedRapport.gouvernance.groupesAidesPsychopedagogiques.nombreGAPOperationnel || 0}</div>
+                        <div>Cas Pris en Charge: {selectedRapport.gouvernance.groupesAidesPsychopedagogiques.nombreCasPrisEnCharge || 0}</div>
+                      </div>
+                      <div className="bg-white p-2 rounded">
+                        <div className="text-xs">Problèmes: {selectedRapport.gouvernance.groupesAidesPsychopedagogiques.problemesIdentifies || '-'}</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Infrastructure */}
+                {selectedRapport.gouvernance.totalInfrastructureBureaux && (
+                  <div className="bg-white p-2 rounded text-sm">
+                    <div>Bureaux Propriété: {selectedRapport.gouvernance.totalInfrastructureBureaux.totalProprietaire || 0}</div>
+                    <div>Bureaux Locataire: {selectedRapport.gouvernance.totalInfrastructureBureaux.totalLocataire || 0}</div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Education en Situation d'Urgence */}
+            {selectedRapport.educationUrgence && (
+              <div className="mt-6 bg-red-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-lg mb-3 text-red-800">Éducation en Situation d'Urgence</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <div className="bg-white p-3 rounded">
+                    <h4 className="font-medium text-red-700 mb-2">Plan & Contingence</h4>
+                    <div>Plan: {selectedRapport.educationUrgence.planStockContingence?.plan || '-'}</div>
+                    <div>Stock: {selectedRapport.educationUrgence.planStockContingence?.stock || '-'}</div>
+                  </div>
+                  <div className="bg-white p-3 rounded">
+                    <h4 className="font-medium text-red-700 mb-2">Catastrophes Naturelles</h4>
+                    <div>Nature: {selectedRapport.educationUrgence.catastrophesNaturelles?.nature || '-'}</div>
+                    <div>Effets: {selectedRapport.educationUrgence.catastrophesNaturelles?.effetsNegatifs || '-'}</div>
+                  </div>
+                  <div className="bg-white p-3 rounded">
+                    <h4 className="font-medium text-red-700 mb-2">Destruction SDC</h4>
+                    <div>{selectedRapport.educationUrgence.destructionSDC?.forcesNegatives || '-'}</div>
+                  </div>
+                  <div className="bg-white p-3 rounded">
+                    <h4 className="font-medium text-red-700 mb-2">Solutions Locales</h4>
+                    <div className="text-xs">{selectedRapport.educationUrgence.solutionsLocales || '-'}</div>
+                  </div>
+                  {selectedRapport.educationUrgence.recommandations && (
+                    <div className="bg-white p-3 rounded">
+                      <h4 className="font-medium text-red-700 mb-2">Recommandations</h4>
+                      <div className="text-xs">
+                        <div>Espaces Temporaires: {selectedRapport.educationUrgence.recommandations.espacesTemporairesApprentissage?.nombre || 0}</div>
+                        <div>Coûts: {selectedRapport.educationUrgence.recommandations.espacesTemporairesApprentissage?.couts || '-'}</div>
+                        <div>Apprenants Cible: {selectedRapport.educationUrgence.recommandations.apprenantsScolarises?.cible || 0}</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Autres Problèmes */}
+            {selectedRapport.autresProblemes && (
+              <div className="mt-6 bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-lg mb-3 text-gray-800">Autres Problèmes</h3>
+                <p className="text-sm text-gray-700">{selectedRapport.autresProblemes.problemesSpecifiques}</p>
+              </div>
+            )}
 
             {/* Introduction et Conclusion */}
             <div className="mt-6 space-y-4">

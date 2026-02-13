@@ -554,15 +554,170 @@ const generateRapportHTML = (rapport: RapportActivite): string => {
             ` : ''}
         </div>
 
+        ${rapport.ameliorationQualite ? `
+        <div class="section">
+            <div class="section-title">6. AMÉLIORATION DE LA QUALITÉ</div>
+            ${rapport.ameliorationQualite.disponibiliteMoyensEnseignement ? `
+            <h4 style="font-size: 10px; margin: 8px 0;">Disponibilité des Moyens d'Enseignement</h4>
+            <table class="info-table">
+                <thead>
+                    <tr>
+                        <th>Niveau</th>
+                        <th>Programmes</th>
+                        <th>Manuels</th>
+                        <th>Matériels</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ECE</td>
+                        <td>${rapport.ameliorationQualite.disponibiliteMoyensEnseignement.programmesScolaires?.ece || '-'}</td>
+                        <td>${rapport.ameliorationQualite.disponibiliteMoyensEnseignement.manuelsScolaires?.ece || '-'}</td>
+                        <td>${rapport.ameliorationQualite.disponibiliteMoyensEnseignement.materielsDidactiques?.ece || '-'}</td>
+                    </tr>
+                    <tr>
+                        <td>Préprimaire</td>
+                        <td>${rapport.ameliorationQualite.disponibiliteMoyensEnseignement.programmesScolaires?.preprimaire || '-'}</td>
+                        <td>${rapport.ameliorationQualite.disponibiliteMoyensEnseignement.manuelsScolaires?.preprimaire || '-'}</td>
+                        <td>${rapport.ameliorationQualite.disponibiliteMoyensEnseignement.materielsDidactiques?.preprimaire || '-'}</td>
+                    </tr>
+                    <tr>
+                        <td>Primaire</td>
+                        <td>${rapport.ameliorationQualite.disponibiliteMoyensEnseignement.programmesScolaires?.primaire || '-'}</td>
+                        <td>${rapport.ameliorationQualite.disponibiliteMoyensEnseignement.manuelsScolaires?.primaire || '-'}</td>
+                        <td>${rapport.ameliorationQualite.disponibiliteMoyensEnseignement.materielsDidactiques?.primaire || '-'}</td>
+                    </tr>
+                    <tr>
+                        <td>Secondaire</td>
+                        <td>${rapport.ameliorationQualite.disponibiliteMoyensEnseignement.programmesScolaires?.secondaire || '-'}</td>
+                        <td>${rapport.ameliorationQualite.disponibiliteMoyensEnseignement.manuelsScolaires?.secondaire || '-'}</td>
+                        <td>${rapport.ameliorationQualite.disponibiliteMoyensEnseignement.materielsDidactiques?.secondaire || '-'}</td>
+                    </tr>
+                </tbody>
+            </table>
+            ` : ''}
+            ${rapport.ameliorationQualite.activitesInspectorales?.inspectionsPedagogiquesC3 ? `
+            <h4 style="font-size: 10px; margin: 8px 0;">Inspections Pédagogiques C3</h4>
+            <table class="info-table">
+                <thead>
+                    <tr>
+                        <th>Niveau</th>
+                        <th>Prévu</th>
+                        <th>Réalisé</th>
+                        <th>%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Préscolaire</td>
+                        <td>${rapport.ameliorationQualite.activitesInspectorales.inspectionsPedagogiquesC3?.prescolaire?.nombrePrevu || 0}</td>
+                        <td>${rapport.ameliorationQualite.activitesInspectorales.inspectionsPedagogiquesC3?.prescolaire?.nombreRealise || 0}</td>
+                        <td>${rapport.ameliorationQualite.activitesInspectorales.inspectionsPedagogiquesC3?.prescolaire?.pourcentageRealisation || 0}%</td>
+                    </tr>
+                    <tr>
+                        <td>Primaire</td>
+                        <td>${rapport.ameliorationQualite.activitesInspectorales.inspectionsPedagogiquesC3?.primaire?.nombrePrevu || 0}</td>
+                        <td>${rapport.ameliorationQualite.activitesInspectorales.inspectionsPedagogiquesC3?.primaire?.nombreRealise || 0}</td>
+                        <td>${rapport.ameliorationQualite.activitesInspectorales.inspectionsPedagogiquesC3?.primaire?.pourcentageRealisation || 0}%</td>
+                    </tr>
+                    <tr>
+                        <td>Secondaire</td>
+                        <td>${rapport.ameliorationQualite.activitesInspectorales.inspectionsPedagogiquesC3?.secondaire?.nombrePrevu || 0}</td>
+                        <td>${rapport.ameliorationQualite.activitesInspectorales.inspectionsPedagogiquesC3?.secondaire?.nombreRealise || 0}</td>
+                        <td>${rapport.ameliorationQualite.activitesInspectorales.inspectionsPedagogiquesC3?.secondaire?.pourcentageRealisation || 0}%</td>
+                    </tr>
+                </tbody>
+            </table>
+            ` : ''}
+        </div>
+        ` : ''}
+
+        ${rapport.gouvernance ? `
+        <div class="section">
+            <div class="section-title">7. GOUVERNANCE</div>
+            ${rapport.gouvernance.comitesProvinciaux ? `
+            <h4 style="font-size: 10px; margin: 8px 0;">Comités Provinciaux</h4>
+            <table class="info-table">
+                <tbody>
+                    <tr>
+                        <th>Comité EDUNC</th>
+                        <td>${rapport.gouvernance.comitesProvinciaux.comiteEDUNC?.frequenceReunions || '-'}</td>
+                    </tr>
+                    <tr>
+                        <th>Comité ENAFP</th>
+                        <td>${rapport.gouvernance.comitesProvinciaux.comiteENAFP?.frequenceReunions || '-'}</td>
+                    </tr>
+                    <tr>
+                        <th>Comité TENASOSSP</th>
+                        <td>${rapport.gouvernance.comitesProvinciaux.comiteTENASOSP?.frequenceReunions || '-'}</td>
+                    </tr>
+                </tbody>
+            </table>
+            ` : ''}
+            ${rapport.gouvernance.groupesAidesPsychopedagogiques ? `
+            <h4 style="font-size: 10px; margin: 8px 0;">Groupes d'Aides Psychopédagogiques</h4>
+            <table class="info-table">
+                <tbody>
+                    <tr>
+                        <th>GAP Mis en Place</th>
+                        <td>${rapport.gouvernance.groupesAidesPsychopedagogiques.nombreGAPMisEnPlace || 0}</td>
+                    </tr>
+                    <tr>
+                        <th>GAP Opérationnel</th>
+                        <td>${rapport.gouvernance.groupesAidesPsychopedagogiques.nombreGAPOperationnel || 0}</td>
+                    </tr>
+                    <tr>
+                        <th>Cas Pris en Charge</th>
+                        <td>${rapport.gouvernance.groupesAidesPsychopedagogiques.nombreCasPrisEnCharge || 0}</td>
+                    </tr>
+                </tbody>
+            </table>
+            ` : ''}
+        </div>
+        ` : ''}
+
+        ${rapport.educationUrgence ? `
+        <div class="section">
+            <div class="section-title">8. ÉDUCATION EN SITUATION D'URGENCE</div>
+            ${rapport.educationUrgence.planStockContingence ? `
+            <table class="info-table">
+                <tbody>
+                    <tr>
+                        <th style="width: 40%;">Plan d'Urgence</th>
+                        <td>${rapport.educationUrgence.planStockContingence.plan || '-'}</td>
+                    </tr>
+                    <tr>
+                        <th>Stock de Fournitures</th>
+                        <td>${rapport.educationUrgence.planStockContingence.stock || '-'}</td>
+                    </tr>
+                    ${rapport.educationUrgence.catastrophesNaturelles ? `
+                    <tr>
+                        <th>Catastrophes</th>
+                        <td>${rapport.educationUrgence.catastrophesNaturelles.nature || '-'}</td>
+                    </tr>
+                    ` : ''}
+                </tbody>
+            </table>
+            ` : ''}
+        </div>
+        ` : ''}
+
+        ${rapport.autresProblemes ? `
+        <div class="section">
+            <div class="section-title">9. AUTRES PROBLÈMES</div>
+            <div style="text-align: justify; margin: 10px 0; font-size: 10px;">${rapport.autresProblemes.problemesSpecifiques || '-'}</div>
+        </div>
+        ` : ''}
+
         ${rapport.conclusion ? `
         <div class="section">
-            <div class="section-title">7. CONCLUSION</div>
+            <div class="section-title">10. CONCLUSION</div>
             <div style="text-align: justify; margin: 10px 0; font-size: 10px;">${rapport.conclusion}</div>
         </div>
         ` : ''}
 
         <div class="section">
-            <div class="section-title">8. INFORMATIONS GÉNÉRALES</div>
+            <div class="section-title">11. INFORMATIONS GÉNÉRALES</div>
             <table class="info-table">
                 <tr>
                     <th style="width: 40%;">Année du rapport</th>

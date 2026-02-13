@@ -30,6 +30,16 @@ class RapportActiviteService {
   async getRapportById(id: string): Promise<RapportActivite> {
     try {
       const response = await BaseService.get(`${this.endpoint}/${id}`);
+      console.log('🔍 RapportActiviteService.getRapportById - Réponse brute:', response);
+      
+      // Si la réponse est wrappée dans une structure { success, data }
+      if (response && response.data && response.success) {
+        console.log('✅ Réponse wrappée détectée, retour de response.data');
+        return response.data;
+      }
+      
+      // Sinon retourner juste la réponse
+      console.log('✅ Réponse non-wrappée, retour direct');
       return response;
     } catch (error) {
       console.error('Erreur lors de la récupération du rapport d\'activité:', error);
