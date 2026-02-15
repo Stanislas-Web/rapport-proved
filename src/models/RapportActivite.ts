@@ -279,11 +279,19 @@ export interface RapportActivite {
         secondaire: number;
         totalGeneralEcoles?: number;
         commentaire?: string;
+        cantinesScolairesDetail?: {
+          prescolaire: { gvt: number; projet: number; ptfs: number; ong: number };
+          primaire: { gvt: number; projet: number; ptfs: number; ong: number };
+          secondaire: { gvt: number; projet: number; ptfs: number; ong: number };
+        };
       };
       indicateursAcces: {
         proportionNouveauxInscrits: number;
+        proportionNouveauxInscrits_Filles?: number;
         tauxTransitionPrimaireCTEB: number;
+        tauxTransitionPrimaireCTEB_Filles?: number;
         tauxTransitionCTEBHumanites: number;
+        tauxTransitionCTEBHumanites_Filles?: number;
       };
     };
   };
@@ -325,18 +333,24 @@ export interface RapportActivite {
     };
     visitesEtReunions: {
       visitesClasses: {
-        prescolaire: 'TRES BON' | 'BON' | 'ASSEZ BON';
+        ece: 'TRES BON' | 'BON' | 'ASSEZ BON';
+        preprimaire: 'TRES BON' | 'BON' | 'ASSEZ BON';
+        maternel: 'TRES BON' | 'BON' | 'ASSEZ BON';
         primaire: 'TRES BON' | 'BON' | 'ASSEZ BON';
         secondaire: 'TRES BON' | 'BON' | 'ASSEZ BON';
         special: 'TRES BON' | 'BON' | 'ASSEZ BON';
       };
       reunionsPedagogiques: {
-        prescolaire: 'TRES BON' | 'BON' | 'ASSEZ BON';
+        ece: 'TRES BON' | 'BON' | 'ASSEZ BON';
+        preprimaire: 'TRES BON' | 'BON' | 'ASSEZ BON';
+        maternel: 'TRES BON' | 'BON' | 'ASSEZ BON';
         primaire: 'TRES BON' | 'BON' | 'ASSEZ BON';
         secondaire: 'TRES BON' | 'BON' | 'ASSEZ BON';
       };
       fonctionnementCelluleBase: {
-        prescolaire: 'TRES BON' | 'BON' | 'ASSEZ BON';
+        ece: 'TRES BON' | 'BON' | 'ASSEZ BON';
+        preprimaire: 'TRES BON' | 'BON' | 'ASSEZ BON';
+        maternel: 'TRES BON' | 'BON' | 'ASSEZ BON';
         primaire: 'TRES BON' | 'BON' | 'ASSEZ BON';
         secondaire: 'TRES BON' | 'BON' | 'ASSEZ BON';
         special: 'TRES BON' | 'BON' | 'ASSEZ BON';
@@ -535,6 +549,14 @@ export interface RapportActivite {
       instructionsOfficielles: string;
       nouvelleCitoyennete: string;
     };
+    formationsGestionnaires?: {
+      leadershipScolaire: { tauxGF: number; tauxFilles: number };
+      managementScolaire: { tauxGF: number; tauxFilles: number };
+      calculIndicateurs: { tauxGF: number; tauxFilles: number };
+      gestionEntiteEducationnelle: { tauxGF: number; tauxFilles: number };
+      planification: { tauxGF: number; tauxFilles: number };
+    };
+    commentaireFormations?: string;
     groupesAidesPsychopedagogiques: {
       nombreGAPMisEnPlace: number;
       nombreGAPOperationnel: number;
@@ -922,21 +944,27 @@ export const defaultRapportActivite: Omit<RapportActivite, 'identificationProved
     accesAccessibiliteEquite: {
       nouvellesSallesClasses: {
         prescolaire: 0,
+        sourceFinancementPrescolaire: '',
         primaire: 0,
+        sourceFinancementPrimaire: '',
         secondaire: 0,
-        sourceFinancement: '',
+        sourceFinancementSecondaire: '',
       },
       nouveauxBancsTables: {
         prescolaire: 0,
+        sourceFinancementPrescolaire: '',
         primaire: 0,
+        sourceFinancementPrimaire: '',
         secondaire: 0,
-        sourceFinancement: '',
+        sourceFinancementSecondaire: '',
       },
       nouvellesLatrines: {
         prescolaire: 0,
+        sourceFinancementPrescolaire: '',
         primaire: 0,
+        sourceFinancementPrimaire: '',
         secondaire: 0,
-        sourceFinancement: '',
+        sourceFinancementSecondaire: '',
       },
       gratuitéEnseignementPrimaire: '',
       sensibilisation: {
@@ -990,18 +1018,24 @@ export const defaultRapportActivite: Omit<RapportActivite, 'identificationProved
     },
     visitesEtReunions: {
       visitesClasses: {
-        prescolaire: 'BON',
+        ece: 'BON',
+        preprimaire: 'BON',
+        maternel: 'BON',
         primaire: 'BON',
         secondaire: 'BON',
         special: 'BON',
       },
       reunionsPedagogiques: {
-        prescolaire: 'BON',
+        ece: 'BON',
+        preprimaire: 'BON',
+        maternel: 'BON',
         primaire: 'BON',
         secondaire: 'BON',
       },
       fonctionnementCelluleBase: {
-        prescolaire: 'BON',
+        ece: 'BON',
+        preprimaire: 'BON',
+        maternel: 'BON',
         primaire: 'BON',
         secondaire: 'BON',
         special: 'BON',

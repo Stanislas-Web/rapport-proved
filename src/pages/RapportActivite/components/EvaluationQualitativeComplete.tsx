@@ -63,27 +63,159 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     ece: formData?.ameliorationQualite?.activitesInspectorales?.themesExploites?.ece || '',
     maternel: formData?.ameliorationQualite?.activitesInspectorales?.themesExploites?.maternel || ''
   }));
+  
+  // Flag pour éviter la boucle infinie de chargement des thèmes
+  const [themesExploitesLoaded, setThemesExploitesLoaded] = useState(false);
+  
+  // Flag pour éviter la boucle infinie de chargement du rendement interne
+  const [rendementInterneLoaded, setRendementInterneLoaded] = useState(false);
+  
+  // Réinitialiser le flag quand le rapport change (formData._id change)
+  useEffect(() => {
+    setRendementInterneLoaded(false);
+  }, [formData?._id]);
 
   // État pour les indicateurs du rendement interne - CHARGER depuis formData
-  const [rendementInterne, setRendementInterne] = useState(() => {
-    const data = formData?.ameliorationQualite?.indicateursRendement?.rendementInterne;
-    if (data) {
-      return {
-        sixiemePrimaire: data.sixiemePrimaire || { abandon: 0, reussite: 0, echec: 0 },
-        huitiemeCETB: data.huitiemeCETB || { abandon: 0, reussite: 0, echec: 0 },
-        quatriemeHumanite: data.quatriemeHumanite || { abandon: 0, reussite: 0, echec: 0 },
-        diplomesMathematiques: data.diplomesMathematiques || { abandon: 0, reussite: 0, echec: 0 },
-        diplomesFiliereTechniques: data.diplomesFiliereTechniques || { abandon: 0, reussite: 0, echec: 0 }
-      };
-    }
-    return {
-      sixiemePrimaire: { abandon: 0, reussite: 0, echec: 0 },
-      huitiemeCETB: { abandon: 0, reussite: 0, echec: 0 },
-      quatriemeHumanite: { abandon: 0, reussite: 0, echec: 0 },
-      diplomesMathematiques: { abandon: 0, reussite: 0, echec: 0 },
-      diplomesFiliereTechniques: { abandon: 0, reussite: 0, echec: 0 }
-    };
+  const [rendementInterne, setRendementInterne] = useState({
+    sixiemePrimaire: { abandon: 0, reussite: 0, echec: 0 },
+    huitiemeCETB: { abandon: 0, reussite: 0, echec: 0 },
+    quatriemeHumanite: { abandon: 0, reussite: 0, echec: 0 },
+    diplomesMathematiques: { abandon: 0, reussite: 0, echec: 0 },
+    diplomesFiliereTechniques: { abandon: 0, reussite: 0, echec: 0 }
   });
+  
+  // Flag pour éviter la boucle infinie de chargement du rendement externe
+  const [rendementExterneLoaded, setRendementExterneLoaded] = useState(false);
+  
+  // Réinitialiser le flag rendementExterne quand le rapport change
+  useEffect(() => {
+    setRendementExterneLoaded(false);
+  }, [formData?._id]);
+
+  // Charger le rendement interne depuis formData au montage
+  useEffect(() => {
+    const data = formData?.ameliorationQualite?.indicateursRendement?.rendementInterne;
+    if (data && !rendementInterneLoaded) {
+      console.log('🔍 [Rendement Interne] Chargement depuis backend:', data);
+      
+      // Mapper les données du backend (nouvelle structure avec 5 niveaux)
+      setRendementInterne({
+        sixiemePrimaire: {
+          abandon: data.sixiemePrimaire?.abandon || 0,
+          reussite: data.sixiemePrimaire?.reussite || 0,
+          echec: data.sixiemePrimaire?.echec || 0
+        },
+        huitiemeCETB: {
+          abandon: data.huitiemeCETB?.abandon || 0,
+          reussite: data.huitiemeCETB?.reussite || 0,
+          echec: data.huitiemeCETB?.echec || 0
+        },
+        quatriemeHumanite: {
+          abandon: data.quatriemeHumanite?.abandon || 0,
+          reussite: data.quatriemeHumanite?.reussite || 0,
+          echec: data.quatriemeHumanite?.echec || 0
+        },
+        diplomesMathematiques: {
+          abandon: data.diplomesMathematiques?.abandon || 0,
+          reussite: data.diplomesMathematiques?.reussite || 0,
+          echec: data.diplomesMathematiques?.echec || 0
+        },
+        diplomesFiliereTechniques: {
+          abandon: data.diplomesFiliereTechniques?.abandon || 0,
+          reussite: data.diplomesFiliereTechniques?.reussite || 0,
+          echec: data.diplomesFiliereTechniques?.echec || 0
+        }
+      });
+      setRendementInterneLoaded(true);
+      console.log('✅ [Rendement Interne] Chargé avec succès');
+    }
+  }, [formData?.ameliorationQualite?.indicateursRendement?.rendementInterne, rendementInterneLoaded]);
+
+  // Charger le rendement externe depuis formData au montage
+  useEffect(() => {
+    const data = formData?.ameliorationQualite?.indicateursRendement?.rendementExterne;
+    if (data && !rendementExterneLoaded) {
+      console.log('🔍 [Rendement Externe] Chargement depuis backend:', data);
+      
+      setRendementExterne({
+        prescolaire: {
+          tauxGF: data.prescolaire?.tauxGF || 0,
+          tauxFilles: data.prescolaire?.tauxFilles || 0
+        },
+        espaceCommunautaireEveil: {
+          tauxGF: data.espaceCommunautaireEveil?.tauxGF || 0,
+          tauxFilles: data.espaceCommunautaireEveil?.tauxFilles || 0
+        },
+        classePreprimaire: {
+          tauxGF: data.classePreprimaire?.tauxGF || 0,
+          tauxFilles: data.classePreprimaire?.tauxFilles || 0
+        },
+        maternel: {
+          tauxGF: data.maternel?.tauxGF || 0,
+          tauxFilles: data.maternel?.tauxFilles || 0
+        },
+        primaire: {
+          tauxGF: data.primaire?.tauxGF || 0,
+          tauxFilles: data.primaire?.tauxFilles || 0
+        },
+        enseignementSpecialPrimaire: {
+          tauxGF: data.enseignementSpecialPrimaire?.tauxGF || 0,
+          tauxFilles: data.enseignementSpecialPrimaire?.tauxFilles || 0
+        },
+        enseignementPrimaire: {
+          tauxGF: data.enseignementPrimaire?.tauxGF || 0,
+          tauxFilles: data.enseignementPrimaire?.tauxFilles || 0
+        },
+        secondaire: {
+          tauxGF: data.secondaire?.tauxGF || 0,
+          tauxFilles: data.secondaire?.tauxFilles || 0
+        },
+        enseignementSpecialSecondaire: {
+          tauxGF: data.enseignementSpecialSecondaire?.tauxGF || 0,
+          tauxFilles: data.enseignementSpecialSecondaire?.tauxFilles || 0
+        },
+        enseignementSecondaireNormal: {
+          tauxGF: data.enseignementSecondaireNormal?.tauxGF || 0,
+          tauxFilles: data.enseignementSecondaireNormal?.tauxFilles || 0
+        }
+      });
+      setRendementExterneLoaded(true);
+      console.log('✅ [Rendement Externe] Chargé avec succès');
+    }
+  }, [formData?.ameliorationQualite?.indicateursRendement?.rendementExterne, rendementExterneLoaded]);
+
+  // Flag pour éviter la boucle infinie de chargement de l'efficacité primaire
+  const [efficacitePrimaireLoaded, setEfficacitePrimaireLoaded] = useState(false);
+  
+  // Réinitialiser le flag efficacitePrimaire quand le rapport change
+  useEffect(() => {
+    setEfficacitePrimaireLoaded(false);
+  }, [formData?._id]);
+
+  // Charger l'efficacité primaire depuis formData au montage
+  useEffect(() => {
+    const data = formData?.ameliorationQualite?.indicateursRendement?.efficacitePrimaire;
+    if (data && !efficacitePrimaireLoaded) {
+      console.log('🔍 [Efficacité Primaire] Chargement depuis backend:', data);
+      
+      setEfficacitePrimaire({
+        tauxAbandon: {
+          tauxGF: data.tauxAbandon?.tauxGF || 0,
+          tauxFilles: data.tauxAbandon?.tauxFilles || 0
+        },
+        tauxReussite: {
+          tauxGF: data.tauxReussite?.tauxGF || 0,
+          tauxFilles: data.tauxReussite?.tauxFilles || 0
+        },
+        tauxEchec: {
+          tauxGF: data.tauxEchec?.tauxGF || 0,
+          tauxFilles: data.tauxEchec?.tauxFilles || 0
+        }
+      });
+      setEfficacitePrimaireLoaded(true);
+      console.log('✅ [Efficacité Primaire] Chargé avec succès');
+    }
+  }, [formData?.ameliorationQualite?.indicateursRendement?.efficacitePrimaire, efficacitePrimaireLoaded]);
 
   // État pour le modal de calcul
   const [showCalculModal, setShowCalculModal] = useState(false);
@@ -91,9 +223,20 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
   const [showCalculModalPrimaire, setShowCalculModalPrimaire] = useState(false);
   const [showCalculModalSecondaire, setShowCalculModalSecondaire] = useState(false);
   const [showCalculModalOCDE, setShowCalculModalOCDE] = useState(false);
-  const [showCalculModalAcces, setShowCalculModalAcces] = useState(false);
+  
   // Fonction pour vérifier si le rendement interne a des données
   const hasRendementInterneData = () => {
+    // Vérifier d'abord dans formData (source de vérité)
+    const dataFromForm = formData?.ameliorationQualite?.indicateursRendement?.rendementInterne;
+    if (dataFromForm) {
+      const hasDataInForm = Object.values(dataFromForm).some((niveau: any) => 
+        niveau?.abandon > 0 || niveau?.reussite > 0 || niveau?.echec > 0 ||
+        niveau?.tauxAbandon > 0 || niveau?.tauxReussite > 0 || niveau?.tauxEchec > 0
+      );
+      if (hasDataInForm) return true;
+    }
+    
+    // Sinon vérifier dans l'état local
     const data = rendementInterne;
     return Object.values(data).some(niveau => 
       niveau.abandon > 0 || niveau.reussite > 0 || niveau.echec > 0
@@ -132,14 +275,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     );
   };
 
-  // Fonction pour vérifier si les indicateurs d'accès ont des données
-  const hasIndicateursAccesData = () => {
-    const data = indicateursAcces;
-    return Object.values(data).some((indicateur: any) => 
-      indicateur.tauxGF > 0 || indicateur.tauxFilles > 0
-    );
-  };
-  
   // État pour les données brutes de calcul
   const [calculData, setCalculData] = useState({
     sixiemePrimaire: { inscrits: 0, abandons: 0, reussites: 0, echecs: 0 },
@@ -257,28 +392,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     };
   });
 
-  // État pour les indicateurs d'accès (Proportion & Transition)
-  const [indicateursAcces, setIndicateursAcces] = useState(() => 
-    formData?.evaluationQualitativeComplete?.indicateursAcces || {
-      proportionGarcons: { tauxGF: 0, tauxFilles: 0 },
-      proportionFilles: { tauxGF: 0, tauxFilles: 0 },
-      transitionPrimaireSecondaire: { tauxGF: 0, tauxFilles: 0 }
-    }
-  );
-
-  // Synchroniser indicateursAcces avec formData
-  useEffect(() => {
-    if (setFormData) {
-      setFormData((prev: any) => ({
-        ...prev,
-        evaluationQualitativeComplete: {
-          ...prev.evaluationQualitativeComplete,
-          indicateursAcces
-        }
-      }));
-    }
-  }, [indicateursAcces]);
-
   // Synchroniser inspectionsC3 avec formData.ameliorationQualite
   useEffect(() => {
     if (setFormData) {
@@ -353,6 +466,22 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     }
   }, [inspectionsFormation, setFormData]);
 
+  // Mettre à jour themesExploites depuis formData quand les données changent
+  useEffect(() => {
+    const backendThemes = formData?.ameliorationQualite?.activitesInspectorales?.themesExploites;
+    
+    // Charger seulement si les données existent ET qu'on ne les a pas encore chargées
+    if (backendThemes && !themesExploitesLoaded && (backendThemes.ece || backendThemes.maternel)) {
+      console.log('🔍 Chargement themesExploites depuis backend:', backendThemes);
+      setThemesExploites({
+        ece: backendThemes.ece || '',
+        maternel: backendThemes.maternel || ''
+      });
+      setThemesExploitesLoaded(true);
+      console.log('✅ Thèmes exploités chargés');
+    }
+  }, [formData?.ameliorationQualite?.activitesInspectorales?.themesExploites, themesExploitesLoaded]);
+
   // Synchroniser themesExploites avec formData.ameliorationQualite
   useEffect(() => {
     if (setFormData) {
@@ -387,6 +516,22 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
       }));
     }
   }, [rendementInterne, setFormData]);
+
+  // Synchroniser rendementExterne vers formData - IMPORTANT pour sauvegarder les 10 lignes du tableau
+  useEffect(() => {
+    if (setFormData) {
+      setFormData((prev: any) => ({
+        ...prev,
+        ameliorationQualite: {
+          ...prev.ameliorationQualite,
+          indicateursRendement: {
+            ...prev.ameliorationQualite?.indicateursRendement,
+            rendementExterne
+          }
+        }
+      }));
+    }
+  }, [rendementExterne, setFormData]);
 
   // Synchroniser rendementExterne vers formData
   useEffect(() => {
@@ -456,13 +601,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
   const [calculDataOCDE, setCalculDataOCDE] = useState({
     humanitesScientifiques: { finalistes: 0, diplomes: 0, garcons: 0, filles: 0 },
     humanitesTechniques: { finalistes: 0, diplomes: 0, garcons: 0, filles: 0 }
-  });
-
-  // État pour les données brutes de calcul des indicateurs d'accès
-  const [calculDataAcces, setCalculDataAcces] = useState({
-    proportionGarcons: { total: 0, garcons: 0 },
-    proportionFilles: { total: 0, filles: 0 },
-    transitionPrimaireSecondaire: { finissantsPrimaire: 0, inscritsSecondaire: 0, garcons: 0, filles: 0 }
   });
 
   // Fonction pour calculer le pourcentage
@@ -540,76 +678,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
   // Fonction pour ouvrir le modal de calcul
   const openCalculModal = () => {
     setShowCalculModal(true);
-  };
-
-  // Fonction pour ouvrir le modal de calcul des indicateurs d'accès
-  const openCalculModalAcces = () => {
-    setShowCalculModalAcces(true);
-  };
-
-  // Fonction pour mettre à jour les données de calcul d'accès
-  const updateCalculDataAcces = (indicateur: string, field: string, value: number) => {
-    const validatedValue = Math.max(0, value);
-    setCalculDataAcces(prev => ({
-      ...prev,
-      [indicateur]: {
-        ...prev[indicateur as keyof typeof prev],
-        [field]: validatedValue
-      }
-    }));
-  };
-
-  // Fonction pour mettre à jour les indicateurs d'accès
-  const updateIndicateursAcces = (indicateur: string, field: 'tauxGF' | 'tauxFilles', value: number) => {
-    setIndicateursAcces((prev: any) => {
-      const updated = { ...prev };
-      const currentIndicateur = updated[indicateur as keyof typeof updated];
-      currentIndicateur[field] = Math.max(0, Math.min(100, value));
-      return updated;
-    });
-  };
-
-  // Fonction pour calculer les taux d'accès
-  const calculerTauxAcces = () => {
-    const nouveauxTaux: any = {};
-    
-    // Proportion Garçons
-    const dataGarcons = calculDataAcces.proportionGarcons;
-    if (dataGarcons.total > 0) {
-      const tauxGF = Math.round((dataGarcons.garcons / dataGarcons.total) * 100 * 100) / 100;
-      nouveauxTaux.proportionGarcons = { tauxGF, tauxFilles: 0 };
-    } else {
-      nouveauxTaux.proportionGarcons = { tauxGF: 0, tauxFilles: 0 };
-    }
-
-    // Proportion Filles
-    const dataFilles = calculDataAcces.proportionFilles;
-    if (dataFilles.total > 0) {
-      const tauxFilles = Math.round((dataFilles.filles / dataFilles.total) * 100 * 100) / 100;
-      nouveauxTaux.proportionFilles = { tauxGF: 0, tauxFilles };
-    } else {
-      nouveauxTaux.proportionFilles = { tauxGF: 0, tauxFilles: 0 };
-    }
-
-    // Transition Primaire vers Secondaire
-    const dataTransition = calculDataAcces.transitionPrimaireSecondaire;
-    if (dataTransition.finissantsPrimaire > 0) {
-      const tauxGF = Math.round((dataTransition.inscritsSecondaire / dataTransition.finissantsPrimaire) * 100 * 100) / 100;
-      const tauxFilles = Math.round((dataTransition.filles / dataTransition.finissantsPrimaire) * 100 * 100) / 100;
-      nouveauxTaux.transitionPrimaireSecondaire = { tauxGF, tauxFilles };
-    } else {
-      nouveauxTaux.transitionPrimaireSecondaire = { tauxGF: 0, tauxFilles: 0 };
-    }
-    
-    setIndicateursAcces(nouveauxTaux);
-    setShowCalculModalAcces(false);
-    
-    // Sauvegarder immédiatement dans le brouillon
-    setTimeout(() => {
-      if (autoSaveForceSave) {
-        autoSaveForceSave();
-      }
-    }, 500);
   };
 
   // Fonction pour mettre à jour les données de calcul avec validation intelligente
@@ -1274,20 +1342,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     setTauxDiplomesOCDE({
       humanitesScientifiques: { tauxGF: 0, tauxFilles: 0 },
       humanitesTechniques: { tauxGF: 0, tauxFilles: 0 }
-    });
-  };
-
-  // Fonction pour réinitialiser les indicateurs d'accès
-  const resetIndicateursAcces = () => {
-    setIndicateursAcces({
-      proportionGarcons: { tauxGF: 0, tauxFilles: 0 },
-      proportionFilles: { tauxGF: 0, tauxFilles: 0 },
-      transitionPrimaireSecondaire: { tauxGF: 0, tauxFilles: 0 }
-    });
-    setCalculDataAcces({
-      proportionGarcons: { total: 0, garcons: 0 },
-      proportionFilles: { total: 0, filles: 0 },
-      transitionPrimaireSecondaire: { finissantsPrimaire: 0, inscritsSecondaire: 0, garcons: 0, filles: 0 }
     });
   };
 
@@ -2872,11 +2926,77 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   </td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-300 px-3 py-2">b) Maternel</td>
+                  <td className="border border-gray-300 px-3 py-2">b) Préprimaire</td>
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="radio" 
                       name="cellule_2" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.preprimaire === 'TRES BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            fonctionnementCelluleBase: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase,
+                              preprimaire: 'TRES BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
+                  </td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input 
+                      type="radio" 
+                      name="cellule_2" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.preprimaire === 'BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            fonctionnementCelluleBase: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase,
+                              preprimaire: 'BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
+                  </td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input 
+                      type="radio" 
+                      name="cellule_2" 
+                      className="mx-auto block" 
+                      checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.preprimaire === 'ASSEZ BON'}
+                      onChange={() => safeSetFormData((prev: any) => ({
+                        ...prev,
+                        ameliorationQualite: {
+                          ...prev.ameliorationQualite,
+                          visitesEtReunions: {
+                            ...prev.ameliorationQualite?.visitesEtReunions,
+                            fonctionnementCelluleBase: {
+                              ...prev.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase,
+                              preprimaire: 'ASSEZ BON'
+                            }
+                          }
+                        }
+                      }))}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2">c) Maternel</td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input 
+                      type="radio" 
+                      name="cellule_2b" 
                       className="mx-auto block" 
                       checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.maternel === 'TRES BON'}
                       onChange={() => safeSetFormData((prev: any) => ({
@@ -2897,7 +3017,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="radio" 
-                      name="cellule_2" 
+                      name="cellule_2b" 
                       className="mx-auto block" 
                       checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.maternel === 'BON'}
                       onChange={() => safeSetFormData((prev: any) => ({
@@ -2918,7 +3038,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="radio" 
-                      name="cellule_2" 
+                      name="cellule_2b" 
                       className="mx-auto block" 
                       checked={formData?.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase?.maternel === 'ASSEZ BON'}
                       onChange={() => safeSetFormData((prev: any) => ({
@@ -2938,7 +3058,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   </td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-300 px-3 py-2">c) Primaire</td>
+                  <td className="border border-gray-300 px-3 py-2">d) Primaire</td>
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="radio" 
@@ -3004,7 +3124,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                   </td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-300 px-3 py-2">d) Secondaire</td>
+                  <td className="border border-gray-300 px-3 py-2">e) Secondaire</td>
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="radio" 
@@ -4295,7 +4415,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
         {/* A. NIVEAU PRIMAIRE */}
         <div className="mb-4">
           <div className="flex justify-between items-center mb-3">
-            <h5 className="font-bold">A. NIVEAU PRIMAIRE (Primary Level)</h5>
+            <h5 className="font-bold">A. NIVEAU PRIMAIRE</h5>
             <div className="flex gap-2">
               {hasEfficacitePrimaireData() && (
                 <button
@@ -4695,139 +4815,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
               </tbody>
             </table>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* IV.7. Indicateurs d'accès: Proportion & Transition */}
-      <div className="mb-6">
-        <div className="flex justify-between items-center mb-3">
-          <h4 className="font-bold">IV.7. Indicateurs d'accès: Proportion & Transition</h4>
-          <div className="flex gap-2">
-            {hasIndicateursAccesData() && (
-              <button
-                type="button"
-                onClick={resetIndicateursAcces}
-                className="px-4 py-2 text-sm bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors flex items-center gap-2"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                Réinitialiser
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={openCalculModalAcces}
-              className="px-4 py-2 text-sm bg-teal-500 text-white rounded-md hover:bg-teal-600 transition-colors flex items-center gap-2"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-              </svg>
-              Calculer les taux
-            </button>
-          </div>
-        </div>
-        <div className="relative">
-          {/* Overlay avec effet flou - MODAL UNIQUEMENT */}
-          {!hasIndicateursAccesData() && (
-            <div className="absolute inset-0 bg-white bg-opacity-75 backdrop-blur-sm z-10 flex items-center justify-center group hover:bg-opacity-85 transition-all duration-300 cursor-pointer">
-              <div className="text-center transform group-hover:scale-105 transition-transform duration-300">
-                <div className="mb-4">
-                  <svg className="w-16 h-16 mx-auto text-teal-500 mb-4 group-hover:text-teal-600 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-2 group-hover:text-gray-800 transition-colors duration-300">
-                  Tableau verrouillé
-                </h3>
-                <p className="text-gray-600 mb-4 group-hover:text-gray-700 transition-colors duration-300">
-                  Cliquez sur le bouton "<span className="font-bold">Calculer les taux</span>" pour saisir les données
-                </p>
-              </div>
-            </div>
-          )}
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse border border-gray-300">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="border border-gray-300 px-3 py-2 text-left">Indicateur</th>
-                  <th className="border border-gray-300 px-3 py-2 text-center">Taux (GF)</th>
-                  <th className="border border-gray-300 px-3 py-2 text-center">des (Filles)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="border border-gray-300 px-3 py-2">Proportion de Garçons</td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      max="100"
-                      step="0.1"
-                      value={indicateursAcces.proportionGarcons.tauxGF || ''}
-                      onChange={(e) => updateIndicateursAcces('proportionGarcons', 'tauxGF', Number(e.target.value))}
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      max="100"
-                      step="0.1"
-                      value={indicateursAcces.proportionGarcons.tauxFilles || ''}
-                      onChange={(e) => updateIndicateursAcces('proportionGarcons', 'tauxFilles', Number(e.target.value))}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 px-3 py-2">Proportion de Filles</td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      max="100"
-                      step="0.1"
-                      value={indicateursAcces.proportionFilles.tauxGF || ''}
-                      onChange={(e) => updateIndicateursAcces('proportionFilles', 'tauxGF', Number(e.target.value))}
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      max="100"
-                      step="0.1"
-                      value={indicateursAcces.proportionFilles.tauxFilles || ''}
-                      onChange={(e) => updateIndicateursAcces('proportionFilles', 'tauxFilles', Number(e.target.value))}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 px-3 py-2">Transition Primaire → Secondaire</td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      max="100"
-                      step="0.1"
-                      value={indicateursAcces.transitionPrimaireSecondaire.tauxGF || ''}
-                      onChange={(e) => updateIndicateursAcces('transitionPrimaireSecondaire', 'tauxGF', Number(e.target.value))}
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      max="100"
-                      step="0.1"
-                      value={indicateursAcces.transitionPrimaireSecondaire.tauxFilles || ''}
-                      onChange={(e) => updateIndicateursAcces('transitionPrimaireSecondaire', 'tauxFilles', Number(e.target.value))}
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
       </div>
@@ -6701,149 +6688,6 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
         </div>
       )}
 
-      {/* Modal de calcul des indicateurs d'accès */}
-      {showCalculModalAcces && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999] p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-              <h3 className="text-xl font-bold text-gray-900">Calculer les indicateurs d'accès et de transition</h3>
-              <button
-                onClick={() => setShowCalculModalAcces(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-
-            <div className="px-6 py-4">
-              <p className="text-sm text-gray-600 mb-6">
-                Saisissez les nombres d'élèves pour chaque indicateur. Les pourcentages seront calculés automatiquement.
-              </p>
-
-              {/* a) Proportion de Garçons */}
-              <div className="mb-6 border border-gray-200 rounded-lg p-4">
-                <h4 className="font-semibold text-lg mb-4 text-blue-700">a) Proportion de Garçons</h4>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Total Élèves</label>
-                    <input
-                      type="number"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      value={calculDataAcces.proportionGarcons.total || ''}
-                      onChange={(e) => updateCalculDataAcces('proportionGarcons', 'total', Number(e.target.value))}
-                      placeholder="0"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Garçons</label>
-                    <input
-                      type="number"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      value={calculDataAcces.proportionGarcons.garcons || ''}
-                      onChange={(e) => updateCalculDataAcces('proportionGarcons', 'garcons', Number(e.target.value))}
-                      placeholder="0"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* b) Proportion de Filles */}
-              <div className="mb-6 border border-gray-200 rounded-lg p-4">
-                <h4 className="font-semibold text-lg mb-4 text-pink-700">b) Proportion de Filles</h4>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Total Élèves</label>
-                    <input
-                      type="number"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
-                      value={calculDataAcces.proportionFilles.total || ''}
-                      onChange={(e) => updateCalculDataAcces('proportionFilles', 'total', Number(e.target.value))}
-                      placeholder="0"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Filles</label>
-                    <input
-                      type="number"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
-                      value={calculDataAcces.proportionFilles.filles || ''}
-                      onChange={(e) => updateCalculDataAcces('proportionFilles', 'filles', Number(e.target.value))}
-                      placeholder="0"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* c) Transition Primaire vers Secondaire */}
-              <div className="mb-6 border border-gray-200 rounded-lg p-4">
-                <h4 className="font-semibold text-lg mb-4 text-teal-700">c) Taux de Transition (Primaire → Secondaire)</h4>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Finissants Primaire</label>
-                    <input
-                      type="number"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                      value={calculDataAcces.transitionPrimaireSecondaire.finissantsPrimaire || ''}
-                      onChange={(e) => updateCalculDataAcces('transitionPrimaireSecondaire', 'finissantsPrimaire', Number(e.target.value))}
-                      placeholder="0"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Inscrits Secondaire</label>
-                    <input
-                      type="number"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                      value={calculDataAcces.transitionPrimaireSecondaire.inscritsSecondaire || ''}
-                      onChange={(e) => updateCalculDataAcces('transitionPrimaireSecondaire', 'inscritsSecondaire', Number(e.target.value))}
-                      placeholder="0"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Garçons</label>
-                    <input
-                      type="number"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      value={calculDataAcces.transitionPrimaireSecondaire.garcons || ''}
-                      onChange={(e) => updateCalculDataAcces('transitionPrimaireSecondaire', 'garcons', Number(e.target.value))}
-                      placeholder="0"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Filles</label>
-                    <input
-                      type="number"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
-                      value={calculDataAcces.transitionPrimaireSecondaire.filles || ''}
-                      onChange={(e) => updateCalculDataAcces('transitionPrimaireSecondaire', 'filles', Number(e.target.value))}
-                      placeholder="0"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-4 flex justify-end gap-3">
-              <button
-                onClick={() => setShowCalculModalAcces(false)}
-                className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100 transition-colors"
-              >
-                Annuler
-              </button>
-              <button
-                onClick={calculerTauxAcces}
-                className="px-6 py-2 bg-teal-500 text-white rounded-md hover:bg-teal-600 transition-colors flex items-center gap-2"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Calculer les pourcentages
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

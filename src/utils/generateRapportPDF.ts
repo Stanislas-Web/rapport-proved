@@ -455,8 +455,8 @@ const generateRapportHTML = (rapport: RapportActivite): string => {
 
                 ${rapport.realisations.accesAccessibiliteEquite.gratuitéEnseignementPrimaire ? `
                 <div style="margin: 8px 0;">
-                    <h4 style="font-size: 10px; margin: 3px 0;">Gratuité Enseignement Primaire</h4>
-                    <p style="font-size: 9px; margin: 3px 0;">${rapport.realisations.accesAccessibiliteEquite.gratuitéEnseignementPrimaire}</p>
+                    <h4 style="font-size: 9px; margin: 3px 0 8px 0;">Gratuité Enseignement Primaire</h4>
+                    <p style="font-size: 6px; margin: 0; padding-top: 0; line-height: 1.3;">${rapport.realisations.accesAccessibiliteEquite.gratuitéEnseignementPrimaire}</p>
                 </div>
                 ` : ''}
 
@@ -517,8 +517,49 @@ const generateRapportHTML = (rapport: RapportActivite): string => {
                             </tr>
                         </tbody>
                     </table>
+                    
+                    ${rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail ? `
+                    <div style="margin-top: 8px;">
+                        <p style="font-size: 9px; font-weight: bold; margin: 3px 0;">Répartition par Source de Financement:</p>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Niveau</th>
+                                    <th>GVT</th>
+                                    <th>Projet</th>
+                                    <th>PTFS</th>
+                                    <th>ONG</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Préscolaire</td>
+                                    <td>${rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.prescolaire?.gvt || 0}</td>
+                                    <td>${rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.prescolaire?.projet || 0}</td>
+                                    <td>${rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.prescolaire?.ptfs || 0}</td>
+                                    <td>${rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.prescolaire?.ong || 0}</td>
+                                </tr>
+                                <tr>
+                                    <td>Primaire</td>
+                                    <td>${rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.primaire?.gvt || 0}</td>
+                                    <td>${rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.primaire?.projet || 0}</td>
+                                    <td>${rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.primaire?.ptfs || 0}</td>
+                                    <td>${rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.primaire?.ong || 0}</td>
+                                </tr>
+                                <tr>
+                                    <td>Secondaire</td>
+                                    <td>${rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.secondaire?.gvt || 0}</td>
+                                    <td>${rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.secondaire?.projet || 0}</td>
+                                    <td>${rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.secondaire?.ptfs || 0}</td>
+                                    <td>${rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.secondaire?.ong || 0}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    ` : ''}
+                    
                     ${rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.commentaire ? `
-                    <p style="font-size: 9px; margin: 3px 0;"><strong>Commentaire:</strong> ${rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.commentaire}</p>
+                    <p style="font-size: 7px; margin: 5px 0 0 0; padding-top: 3px;"><strong>Commentaire:</strong> ${rapport.realisations.accesAccessibiliteEquite.cantinesScolaires.commentaire}</p>
                     ` : ''}
                 </div>
                 ` : ''}
@@ -629,37 +670,153 @@ const generateRapportHTML = (rapport: RapportActivite): string => {
                 </tbody>
             </table>
             ` : ''}
+            
+            ${rapport.ameliorationQualite.activitesInspectorales?.themesExploites ? `
+            <h4 style="font-size: 10px; margin: 8px 0;">Thèmes Exploités lors des Formations</h4>
+            <table class="info-table">
+                <tbody>
+                    ${rapport.ameliorationQualite.activitesInspectorales.themesExploites.ece ? `
+                    <tr>
+                        <th style="width: 20%;">ECE</th>
+                        <td style="font-size: 8px;">${rapport.ameliorationQualite.activitesInspectorales.themesExploites.ece}</td>
+                    </tr>
+                    ` : ''}
+                    ${rapport.ameliorationQualite.activitesInspectorales.themesExploites.maternel ? `
+                    <tr>
+                        <th style="width: 20%;">Maternel</th>
+                        <td style="font-size: 8px;">${rapport.ameliorationQualite.activitesInspectorales.themesExploites.maternel}</td>
+                    </tr>
+                    ` : ''}
+                </tbody>
+            </table>
+            ` : ''}
         </div>
         ` : ''}
 
         ${rapport.gouvernance ? `
         <div class="section">
             <div class="section-title">7. GOUVERNANCE</div>
+            
+            ${rapport.gouvernance.miseEnOeuvreSSEF ? `
+            <h4 style="font-size: 10px; margin: 8px 0;">Mise en Œuvre du SSEF</h4>
+            ${rapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle ? `
+            <div style="margin: 8px 0;">
+                <p style="font-size: 9px; font-weight: bold; margin: 3px 0;">Province Éducationnelle:</p>
+                <table class="info-table">
+                    <tbody>
+                        ${rapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.elaborationPAO ? `
+                        <tr>
+                            <th style="width: 25%;">Élaboration PAO</th>
+                            <td style="font-size: 8px;">${rapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.elaborationPAO}</td>
+                        </tr>
+                        ` : ''}
+                        ${rapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.miseEnOeuvre ? `
+                        <tr>
+                            <th>Mise en Œuvre</th>
+                            <td style="font-size: 8px;">${rapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.miseEnOeuvre}</td>
+                        </tr>
+                        ` : ''}
+                        ${rapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.evaluationMiParcours ? `
+                        <tr>
+                            <th>Évaluation Mi-Parcours</th>
+                            <td style="font-size: 8px;">${rapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.evaluationMiParcours}</td>
+                        </tr>
+                        ` : ''}
+                        ${rapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.evaluationFinale ? `
+                        <tr>
+                            <th>Évaluation Finale</th>
+                            <td style="font-size: 8px;">${rapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.evaluationFinale}</td>
+                        </tr>
+                        ` : ''}
+                    </tbody>
+                </table>
+            </div>
+            ` : ''}
+            ${rapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative ? `
+            <div style="margin: 8px 0;">
+                <p style="font-size: 9px; font-weight: bold; margin: 3px 0;">Province Administrative:</p>
+                <table class="info-table">
+                    <tbody>
+                        ${rapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.elaborationPAO ? `
+                        <tr>
+                            <th style="width: 25%;">Élaboration PAO</th>
+                            <td style="font-size: 8px;">${rapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.elaborationPAO}</td>
+                        </tr>
+                        ` : ''}
+                        ${rapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.miseEnOeuvre ? `
+                        <tr>
+                            <th>Mise en Œuvre</th>
+                            <td style="font-size: 8px;">${rapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.miseEnOeuvre}</td>
+                        </tr>
+                        ` : ''}
+                        ${rapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.evaluationMiParcours ? `
+                        <tr>
+                            <th>Évaluation Mi-Parcours</th>
+                            <td style="font-size: 8px;">${rapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.evaluationMiParcours}</td>
+                        </tr>
+                        ` : ''}
+                        ${rapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.evaluationFinale ? `
+                        <tr>
+                            <th>Évaluation Finale</th>
+                            <td style="font-size: 8px;">${rapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.evaluationFinale}</td>
+                        </tr>
+                        ` : ''}
+                    </tbody>
+                </table>
+            </div>
+            ` : ''}
+            ` : ''}
+            
             ${rapport.gouvernance.comitesProvinciaux ? `
             <h4 style="font-size: 10px; margin: 8px 0;">Comités Provinciaux</h4>
             <table class="info-table">
                 <tbody>
                     <tr>
-                        <th>Comité EDUNC</th>
-                        <td>${rapport.gouvernance.comitesProvinciaux.comiteEDUNC?.frequenceReunions || '-'}</td>
+                        <th style="width: 25%;">Comité EDUNC</th>
+                        <td style="font-size: 7px; padding-top: 5px; padding-bottom: 5px;">Fréquence: ${rapport.gouvernance.comitesProvinciaux.comiteEDUNC?.frequenceReunions || '-'}${rapport.gouvernance.comitesProvinciaux.comiteEDUNC?.pointsTraites ? ` | Points: ${rapport.gouvernance.comitesProvinciaux.comiteEDUNC.pointsTraites}` : ''}</td>
                     </tr>
                     <tr>
                         <th>Comité ENAFP</th>
-                        <td>${rapport.gouvernance.comitesProvinciaux.comiteENAFP?.frequenceReunions || '-'}</td>
+                        <td style="font-size: 7px; padding-top: 5px; padding-bottom: 5px;">Fréquence: ${rapport.gouvernance.comitesProvinciaux.comiteENAFP?.frequenceReunions || '-'}${rapport.gouvernance.comitesProvinciaux.comiteENAFP?.pointsTraites ? ` | Points: ${rapport.gouvernance.comitesProvinciaux.comiteENAFP.pointsTraites}` : ''}</td>
                     </tr>
                     <tr>
                         <th>Comité TENASOSSP</th>
-                        <td>${rapport.gouvernance.comitesProvinciaux.comiteTENASOSP?.frequenceReunions || '-'}</td>
+                        <td style="font-size: 7px; padding-top: 5px; padding-bottom: 5px;">Fréquence: ${rapport.gouvernance.comitesProvinciaux.comiteTENASOSP?.frequenceReunions || '-'}${rapport.gouvernance.comitesProvinciaux.comiteTENASOSP?.pointsTraites ? ` | Points: ${rapport.gouvernance.comitesProvinciaux.comiteTENASOSP.pointsTraites}` : ''}</td>
+                    </tr>
+                    <tr>
+                        <th>Comité Examen État</th>
+                        <td style="font-size: 7px; padding-top: 5px; padding-bottom: 5px;">Fréquence: ${rapport.gouvernance.comitesProvinciaux.comiteExamenEtat?.frequenceReunions || '-'}${rapport.gouvernance.comitesProvinciaux.comiteExamenEtat?.pointsTraites ? ` | Points: ${rapport.gouvernance.comitesProvinciaux.comiteExamenEtat.pointsTraites}` : ''}</td>
                     </tr>
                 </tbody>
             </table>
             ` : ''}
+            
+            ${rapport.gouvernance.vulgarisationInstructions ? `
+            <h4 style="font-size: 10px; margin: 8px 0;">Vulgarisation des Instructions</h4>
+            <table class="info-table">
+                <tbody>
+                    ${rapport.gouvernance.vulgarisationInstructions.instructionsOfficielles ? `
+                    <tr>
+                        <th style="width: 25%;">Instructions Officielles</th>
+                        <td style="font-size: 8px;">${rapport.gouvernance.vulgarisationInstructions.instructionsOfficielles}</td>
+                    </tr>
+                    ` : ''}
+                    ${rapport.gouvernance.vulgarisationInstructions.nouvelleCitoyennete ? `
+                    <tr>
+                        <th>Nouvelle Citoyenneté</th>
+                        <td style="font-size: 8px;">${rapport.gouvernance.vulgarisationInstructions.nouvelleCitoyennete}</td>
+                    </tr>
+                    ` : ''}
+                </tbody>
+            </table>
+            ` : ''}
+            
             ${rapport.gouvernance.groupesAidesPsychopedagogiques ? `
             <h4 style="font-size: 10px; margin: 8px 0;">Groupes d'Aides Psychopédagogiques</h4>
             <table class="info-table">
                 <tbody>
                     <tr>
-                        <th>GAP Mis en Place</th>
+                        <th style="width: 25%;">GAP Mis en Place</th>
                         <td>${rapport.gouvernance.groupesAidesPsychopedagogiques.nombreGAPMisEnPlace || 0}</td>
                     </tr>
                     <tr>
@@ -670,8 +827,62 @@ const generateRapportHTML = (rapport: RapportActivite): string => {
                         <th>Cas Pris en Charge</th>
                         <td>${rapport.gouvernance.groupesAidesPsychopedagogiques.nombreCasPrisEnCharge || 0}</td>
                     </tr>
+                    ${rapport.gouvernance.groupesAidesPsychopedagogiques.problemesIdentifies ? `
+                    <tr>
+                        <th>Problèmes Identifiés</th>
+                        <td style="font-size: 8px;">${rapport.gouvernance.groupesAidesPsychopedagogiques.problemesIdentifies}</td>
+                    </tr>
+                    ` : ''}
+                    ${rapport.gouvernance.groupesAidesPsychopedagogiques.solutionsPreconisees ? `
+                    <tr>
+                        <th>Solutions Préconisées</th>
+                        <td style="font-size: 8px;">${rapport.gouvernance.groupesAidesPsychopedagogiques.solutionsPreconisees}</td>
+                    </tr>
+                    ` : ''}
                 </tbody>
             </table>
+            ` : ''}
+            
+            ${rapport.gouvernance.acquisitionsMateriels ? `
+            <h4 style="font-size: 10px; margin: 8px 0;">Acquisitions de Matériels</h4>
+            ${rapport.gouvernance.acquisitionsMateriels.ecoles ? `
+            <div style="margin: 8px 0;">
+                <p style="font-size: 9px; font-weight: bold; margin: 3px 0;">Pour les Écoles:</p>
+                <table class="info-table">
+                    <tbody>
+                        <tr>
+                            <th style="width: 25%;">Nature</th>
+                            <td style="font-size: 8px;">${rapport.gouvernance.acquisitionsMateriels.ecoles.nature}</td>
+                        </tr>
+                        ${rapport.gouvernance.acquisitionsMateriels.ecoles.sourceFinancement ? `
+                        <tr>
+                            <th>Sources de Financement</th>
+                            <td style="font-size: 8px;">GVT: ${rapport.gouvernance.acquisitionsMateriels.ecoles.sourceFinancement.gvt}% | Projet: ${rapport.gouvernance.acquisitionsMateriels.ecoles.sourceFinancement.projet}% | PTFS: ${rapport.gouvernance.acquisitionsMateriels.ecoles.sourceFinancement.ptfs}% | ONG: ${rapport.gouvernance.acquisitionsMateriels.ecoles.sourceFinancement.ong}%</td>
+                        </tr>
+                        ` : ''}
+                    </tbody>
+                </table>
+            </div>
+            ` : ''}
+            ${rapport.gouvernance.acquisitionsMateriels.bureauxGestionnaires ? `
+            <div style="margin: 8px 0;">
+                <p style="font-size: 9px; font-weight: bold; margin: 3px 0;">Pour les Bureaux Gestionnaires:</p>
+                <table class="info-table">
+                    <tbody>
+                        <tr>
+                            <th style="width: 25%;">Nature</th>
+                            <td style="font-size: 8px;">${rapport.gouvernance.acquisitionsMateriels.bureauxGestionnaires.nature}</td>
+                        </tr>
+                        ${rapport.gouvernance.acquisitionsMateriels.bureauxGestionnaires.sourceFinancement ? `
+                        <tr>
+                            <th>Sources de Financement</th>
+                            <td style="font-size: 8px;">GVT: ${rapport.gouvernance.acquisitionsMateriels.bureauxGestionnaires.sourceFinancement.gvt}% | Projet: ${rapport.gouvernance.acquisitionsMateriels.bureauxGestionnaires.sourceFinancement.projet}% | PTFS: ${rapport.gouvernance.acquisitionsMateriels.bureauxGestionnaires.sourceFinancement.ptfs}% | ONG: ${rapport.gouvernance.acquisitionsMateriels.bureauxGestionnaires.sourceFinancement.ong}%</td>
+                        </tr>
+                        ` : ''}
+                    </tbody>
+                </table>
+            </div>
+            ` : ''}
             ` : ''}
         </div>
         ` : ''}
@@ -693,7 +904,7 @@ const generateRapportHTML = (rapport: RapportActivite): string => {
                     ${rapport.educationUrgence.catastrophesNaturelles ? `
                     <tr>
                         <th>Catastrophes</th>
-                        <td>${rapport.educationUrgence.catastrophesNaturelles.nature || '-'}</td>
+                        <td style="font-size: 7px; padding-top: 5px; padding-bottom: 5px;">${rapport.educationUrgence.catastrophesNaturelles.nature || '-'}</td>
                     </tr>
                     ` : ''}
                 </tbody>

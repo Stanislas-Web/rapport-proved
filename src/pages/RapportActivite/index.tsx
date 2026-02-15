@@ -994,16 +994,40 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
               <h4>Sources de Financement</h4>
               <div class="realisation-details">
                 <div class="realisation-item">
-                  <span class="label">Salles de classe:</span>
-                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.sourceFinancement || 'Non spécifié'}</span>
+                  <span class="label">Salles de classe (Préscolaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.sourceFinancementPrescolaire || 'Non spécifié'}</span>
                 </div>
                 <div class="realisation-item">
-                  <span class="label">Bancs et tables:</span>
-                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.sourceFinancement || 'Non spécifié'}</span>
+                  <span class="label">Salles de classe (Primaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.sourceFinancementPrimaire || 'Non spécifié'}</span>
                 </div>
                 <div class="realisation-item">
-                  <span class="label">Latrines:</span>
-                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.sourceFinancement || 'Non spécifié'}</span>
+                  <span class="label">Salles de classe (Secondaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.sourceFinancementSecondaire || 'Non spécifié'}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Bancs et tables (Préscolaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.sourceFinancementPrescolaire || 'Non spécifié'}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Bancs et tables (Primaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.sourceFinancementPrimaire || 'Non spécifié'}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Bancs et tables (Secondaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.sourceFinancementSecondaire || 'Non spécifié'}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Latrines (Préscolaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.sourceFinancementPrescolaire || 'Non spécifié'}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Latrines (Primaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.sourceFinancementPrimaire || 'Non spécifié'}</span>
+                </div>
+                <div class="realisation-item">
+                  <span class="label">Latrines (Secondaire):</span>
+                  <span class="value">${rapport.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.sourceFinancementSecondaire || 'Non spécifié'}</span>
                 </div>
               </div>
             </div>
@@ -2284,6 +2308,45 @@ const RapportActivitePage: React.FC = () => {
                     </div>
                   </div>
                 </div>
+
+                {/* Cantines Scolaires - Détails par Source de Financement */}
+                {selectedRapport.realisations?.accesAccessibiliteEquite?.cantinesScolaires?.cantinesScolairesDetail && (
+                  <div className="mt-4">
+                    <h4 className="font-medium text-orange-700 mb-2">Cantines Scolaires - Sources de Financement</h4>
+                    <div className="bg-white p-3 rounded">
+                      <div className="grid grid-cols-4 gap-2 text-xs">
+                        <div className="font-semibold">Niveau</div>
+                        <div className="font-semibold">GVT</div>
+                        <div className="font-semibold">Projet</div>
+                        <div className="font-semibold">PTFS</div>
+                        <div className="font-semibold">ONG</div>
+                        
+                        <div>Préscolaire</div>
+                        <div>{selectedRapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.prescolaire?.gvt || 0}</div>
+                        <div>{selectedRapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.prescolaire?.projet || 0}</div>
+                        <div>{selectedRapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.prescolaire?.ptfs || 0}</div>
+                        <div>{selectedRapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.prescolaire?.ong || 0}</div>
+                        
+                        <div>Primaire</div>
+                        <div>{selectedRapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.primaire?.gvt || 0}</div>
+                        <div>{selectedRapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.primaire?.projet || 0}</div>
+                        <div>{selectedRapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.primaire?.ptfs || 0}</div>
+                        <div>{selectedRapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.primaire?.ong || 0}</div>
+                        
+                        <div>Secondaire</div>
+                        <div>{selectedRapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.secondaire?.gvt || 0}</div>
+                        <div>{selectedRapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.secondaire?.projet || 0}</div>
+                        <div>{selectedRapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.secondaire?.ptfs || 0}</div>
+                        <div>{selectedRapport.realisations.accesAccessibiliteEquite.cantinesScolaires.cantinesScolairesDetail.secondaire?.ong || 0}</div>
+                      </div>
+                      {selectedRapport.realisations.accesAccessibiliteEquite.cantinesScolaires.commentaire && (
+                        <div className="mt-2 pt-2 border-t border-orange-200 text-xs italic">
+                          {selectedRapport.realisations.accesAccessibiliteEquite.cantinesScolaires.commentaire}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -2338,6 +2401,19 @@ const RapportActivitePage: React.FC = () => {
                         <div>Secondaire: {selectedRapport.ameliorationQualite.visitesEtReunions.reunionsPedagogiques?.secondaire || '-'}</div>
                       </div>
                     </div>
+                    
+                    {/* Thèmes Exploités */}
+                    {selectedRapport.ameliorationQualite.activitesInspectorales?.themesExploites && (
+                      <div className="mt-3 bg-cyan-100 p-2 rounded text-xs">
+                        <div className="font-semibold mb-1">Thèmes Exploités lors des Formations</div>
+                        {selectedRapport.ameliorationQualite.activitesInspectorales.themesExploites.ece && (
+                          <div className="mb-1"><span className="font-medium">ECE:</span> {selectedRapport.ameliorationQualite.activitesInspectorales.themesExploites.ece}</div>
+                        )}
+                        {selectedRapport.ameliorationQualite.activitesInspectorales.themesExploites.maternel && (
+                          <div><span className="font-medium">Maternel:</span> {selectedRapport.ameliorationQualite.activitesInspectorales.themesExploites.maternel}</div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -2388,17 +2464,86 @@ const RapportActivitePage: React.FC = () => {
               <div className="mt-6 bg-teal-50 p-4 rounded-lg">
                 <h3 className="font-semibold text-lg mb-3 text-teal-800">Gouvernance</h3>
 
+                {/* Mise en Oeuvre SSEF */}
+                {selectedRapport.gouvernance.miseEnOeuvreSSEF && (
+                  <div className="mb-4">
+                    <h4 className="font-medium text-teal-700 mb-2">Mise en Œuvre du SSEF</h4>
+                    <div className="space-y-3">
+                      {/* Niveau Province Educationnelle */}
+                      {selectedRapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle && (
+                        <div className="bg-white p-3 rounded">
+                          <div className="font-semibold text-teal-600 mb-2">Province Éducationnelle</div>
+                          <div className="text-xs space-y-1">
+                            {selectedRapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.elaborationPAO && (
+                              <div><span className="font-medium">Élaboration PAO:</span> {selectedRapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.elaborationPAO}</div>
+                            )}
+                            {selectedRapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.miseEnOeuvre && (
+                              <div><span className="font-medium">Mise en Œuvre:</span> {selectedRapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.miseEnOeuvre}</div>
+                            )}
+                            {selectedRapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.evaluationMiParcours && (
+                              <div><span className="font-medium">Évaluation Mi-Parcours:</span> {selectedRapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.evaluationMiParcours}</div>
+                            )}
+                            {selectedRapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.evaluationFinale && (
+                              <div><span className="font-medium">Évaluation Finale:</span> {selectedRapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.evaluationFinale}</div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                      {/* Niveau Province Administrative */}
+                      {selectedRapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative && (
+                        <div className="bg-white p-3 rounded">
+                          <div className="font-semibold text-teal-600 mb-2">Province Administrative</div>
+                          <div className="text-xs space-y-1">
+                            {selectedRapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.elaborationPAO && (
+                              <div><span className="font-medium">Élaboration PAO:</span> {selectedRapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.elaborationPAO}</div>
+                            )}
+                            {selectedRapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.miseEnOeuvre && (
+                              <div><span className="font-medium">Mise en Œuvre:</span> {selectedRapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.miseEnOeuvre}</div>
+                            )}
+                            {selectedRapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.evaluationMiParcours && (
+                              <div><span className="font-medium">Évaluation Mi-Parcours:</span> {selectedRapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.evaluationMiParcours}</div>
+                            )}
+                            {selectedRapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.evaluationFinale && (
+                              <div><span className="font-medium">Évaluation Finale:</span> {selectedRapport.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.evaluationFinale}</div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 {/* Comités Provinciaux */}
                 <div className="mb-4">
                   <h4 className="font-medium text-teal-700 mb-2">Comités Provinciaux</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                    <div className="bg-white p-2 rounded">
-                      <div>Comité EDUNC: {selectedRapport.gouvernance.comitesProvinciaux?.comiteEDUNC?.frequenceReunions || '-'}</div>
-                      <div>Comité ENAFP: {selectedRapport.gouvernance.comitesProvinciaux?.comiteENAFP?.frequenceReunions || '-'}</div>
+                    <div className="bg-white p-3 rounded">
+                      <div className="font-semibold text-teal-600 mb-1">Comité EDUNC</div>
+                      <div className="text-xs">Fréquence: {selectedRapport.gouvernance.comitesProvinciaux?.comiteEDUNC?.frequenceReunions || '-'}</div>
+                      {selectedRapport.gouvernance.comitesProvinciaux?.comiteEDUNC?.pointsTraites && (
+                        <div className="text-xs mt-1 text-gray-600">Points: {selectedRapport.gouvernance.comitesProvinciaux.comiteEDUNC.pointsTraites}</div>
+                      )}
                     </div>
-                    <div className="bg-white p-2 rounded">
-                      <div>Comité TENASOSSP: {selectedRapport.gouvernance.comitesProvinciaux?.comiteTENASOSP?.frequenceReunions || '-'}</div>
-                      <div>Comité Examen État: {selectedRapport.gouvernance.comitesProvinciaux?.comiteExamenEtat?.frequenceReunions || '-'}</div>
+                    <div className="bg-white p-3 rounded">
+                      <div className="font-semibold text-teal-600 mb-1">Comité ENAFP</div>
+                      <div className="text-xs">Fréquence: {selectedRapport.gouvernance.comitesProvinciaux?.comiteENAFP?.frequenceReunions || '-'}</div>
+                      {selectedRapport.gouvernance.comitesProvinciaux?.comiteENAFP?.pointsTraites && (
+                        <div className="text-xs mt-1 text-gray-600">Points: {selectedRapport.gouvernance.comitesProvinciaux.comiteENAFP.pointsTraites}</div>
+                      )}
+                    </div>
+                    <div className="bg-white p-3 rounded">
+                      <div className="font-semibold text-teal-600 mb-1">Comité TENASOSSP</div>
+                      <div className="text-xs">Fréquence: {selectedRapport.gouvernance.comitesProvinciaux?.comiteTENASOSP?.frequenceReunions || '-'}</div>
+                      {selectedRapport.gouvernance.comitesProvinciaux?.comiteTENASOSP?.pointsTraites && (
+                        <div className="text-xs mt-1 text-gray-600">Points: {selectedRapport.gouvernance.comitesProvinciaux.comiteTENASOSP.pointsTraites}</div>
+                      )}
+                    </div>
+                    <div className="bg-white p-3 rounded">
+                      <div className="font-semibold text-teal-600 mb-1">Comité Examen État</div>
+                      <div className="text-xs">Fréquence: {selectedRapport.gouvernance.comitesProvinciaux?.comiteExamenEtat?.frequenceReunions || '-'}</div>
+                      {selectedRapport.gouvernance.comitesProvinciaux?.comiteExamenEtat?.pointsTraites && (
+                        <div className="text-xs mt-1 text-gray-600">Points: {selectedRapport.gouvernance.comitesProvinciaux.comiteExamenEtat.pointsTraites}</div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -2428,14 +2573,35 @@ const RapportActivitePage: React.FC = () => {
                 {selectedRapport.gouvernance.remunerationPersonnel && (
                   <div className="mb-4">
                     <h4 className="font-medium text-teal-700 mb-2">Rémunération Personnel</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs max-h-40 overflow-y-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs max-h-96 overflow-y-auto bg-gray-50 p-2 rounded">
                       {Object.entries(selectedRapport.gouvernance.remunerationPersonnel).map(([key, value]: [string, any]) => (
-                        <div key={key} className="bg-white p-2 rounded">
+                        <div key={key} className="bg-white p-2 rounded shadow-sm">
                           <div className="font-semibold capitalize">{key.replace(/([A-Z])/g, ' $1')}</div>
                           <div>Total: {value.totalAgents || 0}</div>
                           <div>Non payés: {value.nonPayes || 0}</div>
                         </div>
                       ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Vulgarisation des Instructions */}
+                {selectedRapport.gouvernance.vulgarisationInstructions && (
+                  <div className="mb-4">
+                    <h4 className="font-medium text-teal-700 mb-2">Vulgarisation des Instructions</h4>
+                    <div className="space-y-2 text-sm">
+                      {selectedRapport.gouvernance.vulgarisationInstructions.instructionsOfficielles && (
+                        <div className="bg-white p-3 rounded">
+                          <div className="font-semibold text-teal-600 mb-1">Instructions Officielles</div>
+                          <div className="text-xs text-gray-700">{selectedRapport.gouvernance.vulgarisationInstructions.instructionsOfficielles}</div>
+                        </div>
+                      )}
+                      {selectedRapport.gouvernance.vulgarisationInstructions.nouvelleCitoyennete && (
+                        <div className="bg-white p-3 rounded">
+                          <div className="font-semibold text-teal-600 mb-1">Nouvelle Citoyenneté</div>
+                          <div className="text-xs text-gray-700">{selectedRapport.gouvernance.vulgarisationInstructions.nouvelleCitoyennete}</div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -2451,8 +2617,48 @@ const RapportActivitePage: React.FC = () => {
                         <div>Cas Pris en Charge: {selectedRapport.gouvernance.groupesAidesPsychopedagogiques.nombreCasPrisEnCharge || 0}</div>
                       </div>
                       <div className="bg-white p-2 rounded">
-                        <div className="text-xs">Problèmes: {selectedRapport.gouvernance.groupesAidesPsychopedagogiques.problemesIdentifies || '-'}</div>
+                        <div className="text-xs mb-1"><span className="font-medium">Problèmes:</span> {selectedRapport.gouvernance.groupesAidesPsychopedagogiques.problemesIdentifies?.substring(0, 150) || '-'}...</div>
+                        {selectedRapport.gouvernance.groupesAidesPsychopedagogiques.solutionsPreconisees && (
+                          <div className="text-xs"><span className="font-medium">Solutions:</span> {selectedRapport.gouvernance.groupesAidesPsychopedagogiques.solutionsPreconisees.substring(0, 150)}...</div>
+                        )}
                       </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Acquisitions de Matériels */}
+                {selectedRapport.gouvernance.acquisitionsMateriels && (
+                  <div className="mb-4">
+                    <h4 className="font-medium text-teal-700 mb-2">Acquisitions de Matériels</h4>
+                    <div className="space-y-2 text-sm">
+                      {selectedRapport.gouvernance.acquisitionsMateriels.ecoles && (
+                        <div className="bg-white p-3 rounded">
+                          <div className="font-semibold text-teal-600 mb-1">Pour les Écoles</div>
+                          <div className="text-xs text-gray-700 mb-2">{selectedRapport.gouvernance.acquisitionsMateriels.ecoles.nature}</div>
+                          {selectedRapport.gouvernance.acquisitionsMateriels.ecoles.sourceFinancement && (
+                            <div className="flex gap-3 text-xs">
+                              <span>GVT: {selectedRapport.gouvernance.acquisitionsMateriels.ecoles.sourceFinancement.gvt}%</span>
+                              <span>Projet: {selectedRapport.gouvernance.acquisitionsMateriels.ecoles.sourceFinancement.projet}%</span>
+                              <span>PTFS: {selectedRapport.gouvernance.acquisitionsMateriels.ecoles.sourceFinancement.ptfs}%</span>
+                              <span>ONG: {selectedRapport.gouvernance.acquisitionsMateriels.ecoles.sourceFinancement.ong}%</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      {selectedRapport.gouvernance.acquisitionsMateriels.bureauxGestionnaires && (
+                        <div className="bg-white p-3 rounded">
+                          <div className="font-semibold text-teal-600 mb-1">Pour les Bureaux Gestionnaires</div>
+                          <div className="text-xs text-gray-700 mb-2">{selectedRapport.gouvernance.acquisitionsMateriels.bureauxGestionnaires.nature}</div>
+                          {selectedRapport.gouvernance.acquisitionsMateriels.bureauxGestionnaires.sourceFinancement && (
+                            <div className="flex gap-3 text-xs">
+                              <span>GVT: {selectedRapport.gouvernance.acquisitionsMateriels.bureauxGestionnaires.sourceFinancement.gvt}%</span>
+                              <span>Projet: {selectedRapport.gouvernance.acquisitionsMateriels.bureauxGestionnaires.sourceFinancement.projet}%</span>
+                              <span>PTFS: {selectedRapport.gouvernance.acquisitionsMateriels.bureauxGestionnaires.sourceFinancement.ptfs}%</span>
+                              <span>ONG: {selectedRapport.gouvernance.acquisitionsMateriels.bureauxGestionnaires.sourceFinancement.ong}%</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}

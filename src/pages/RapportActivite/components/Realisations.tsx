@@ -18,28 +18,53 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
     secondaire: { gvt: 0, projet: 0, ptfs: 0, ong: 0 }
   }));
 
+  // Flag pour éviter la boucle infinie
+  const [cantinesLoaded, setCantinesLoaded] = useState(false);
+
+  // Charger les données des cantines depuis le backend UNE SEULE FOIS
+  useEffect(() => {
+    if (!cantinesLoaded) {
+      const cantinesDetail = formData?.realisations?.accesAccessibiliteEquite?.cantinesScolaires?.cantinesScolairesDetail;
+      if (cantinesDetail) {
+        setCantines({
+          prescolaire: cantinesDetail.prescolaire || { gvt: 0, projet: 0, ptfs: 0, ong: 0 },
+          primaire: cantinesDetail.primaire || { gvt: 0, projet: 0, ptfs: 0, ong: 0 },
+          secondaire: cantinesDetail.secondaire || { gvt: 0, projet: 0, ptfs: 0, ong: 0 }
+        });
+        setCantinesLoaded(true);
+      }
+    }
+  }, [formData?.realisations?.accesAccessibiliteEquite?.cantinesScolaires?.cantinesScolairesDetail, cantinesLoaded]);
+
   // Sync cantines to formData (total par niveau)
   useEffect(() => {
-    const prescolaireTotal = cantines.prescolaire.gvt + cantines.prescolaire.projet + cantines.prescolaire.ptfs + cantines.prescolaire.ong;
-    const primaireTotal = cantines.primaire.gvt + cantines.primaire.projet + cantines.primaire.ptfs + cantines.primaire.ong;
-    const secondaireTotal = cantines.secondaire.gvt + cantines.secondaire.projet + cantines.secondaire.ptfs + cantines.secondaire.ong;
+    if (cantinesLoaded) { // Seulement après le chargement initial
+      const prescolaireTotal = cantines.prescolaire.gvt + cantines.prescolaire.projet + cantines.prescolaire.ptfs + cantines.prescolaire.ong;
+      const primaireTotal = cantines.primaire.gvt + cantines.primaire.projet + cantines.primaire.ptfs + cantines.primaire.ong;
+      const secondaireTotal = cantines.secondaire.gvt + cantines.secondaire.projet + cantines.secondaire.ptfs + cantines.secondaire.ong;
 
-    setFormData(prev => ({
-      ...prev,
-      realisations: {
-        ...prev.realisations,
-        accesAccessibiliteEquite: {
-          ...prev.realisations.accesAccessibiliteEquite,
-          cantinesScolaires: {
-            ...prev.realisations.accesAccessibiliteEquite.cantinesScolaires,
-            prescolaire: prescolaireTotal,
-            primaire: primaireTotal,
-            secondaire: secondaireTotal
+      setFormData(prev => ({
+        ...prev,
+        realisations: {
+          ...prev.realisations,
+          accesAccessibiliteEquite: {
+            ...prev.realisations.accesAccessibiliteEquite,
+            cantinesScolaires: {
+              ...prev.realisations.accesAccessibiliteEquite.cantinesScolaires,
+              prescolaire: prescolaireTotal,
+              primaire: primaireTotal,
+              secondaire: secondaireTotal,
+              cantinesScolairesDetail: {
+                prescolaire: cantines.prescolaire,
+                primaire: cantines.primaire,
+                secondaire: cantines.secondaire
+              }
+            }
           }
         }
-      }
-    }));
-  }, [cantines, setFormData]);
+      }));
+    }
+  }, [cantines, cantinesLoaded, setFormData]);
 
   // État pour les indicateurs d'accès
   const [indicateursAcces, setIndicateursAcces] = useState({
@@ -47,6 +72,67 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
     transitionPrimaireCTEB: { tauxGF: 0, tauxFilles: 0 },
     transitionCTEBHumanites: { tauxGF: 0, tauxFilles: 0 }
   });
+
+  // Flag pour charger les indicateurs d'accès
+  const [indicateursAccesLoaded, setIndicateursAccesLoaded] = useState(false);
+
+  // Charger les indicateurs d'accès depuis le backend
+  useEffect(() => {
+    const indicateurs = formData?.realisations?.accesAccessibiliteEquite?.indicateursAcces;
+    
+    if (indicateurs) {
+      console.log('🔍 [IV.7] Chargement indicateursAcces depuis backend:', indicateurs);
+      
+      // Vérifier si au moins un champ GF existe dans le backend
+      const hasData = indicateurs.proportionNouveauxInscrits !== undefined || 
+                     indicateurs.tauxTransitionPrimaireCTEB !== undefined || 
+                     indicateurs.tauxTransitionCTEBHumanites !== undefined;
+      
+      if (hasData && !indicateursAccesLoaded) {
+        const newState = {
+          nouveauxInscritsPrimaire: { 
+            tauxGF: indicateurs.proportionNouveauxInscrits || 0, 
+            tauxFilles: indicateurs.proportionNouveauxInscrits_Filles || 0 
+          },
+          transitionPrimaireCTEB: { 
+            tauxGF: indicateurs.tauxTransitionPrimaireCTEB || 0, 
+            tauxFilles: indicateurs.tauxTransitionPrimaireCTEB_Filles || 0 
+          },
+          transitionCTEBHumanites: { 
+            tauxGF: indicateurs.tauxTransitionCTEBHumanites || 0, 
+            tauxFilles: indicateurs.tauxTransitionCTEBHumanites_Filles || 0 
+          }
+        };
+        
+        console.log('✅ [IV.7] Mise à jour de l\'état local avec:', newState);
+        setIndicateursAcces(newState);
+        setIndicateursAccesLoaded(true);
+      }
+    }
+  }, [formData?.realisations?.accesAccessibiliteEquite?.indicateursAcces, indicateursAccesLoaded]);
+
+  // Sync indicateursAcces vers formData (les 6 champs du modèle: 3 GF + 3 Filles)
+  useEffect(() => {
+    if (indicateursAccesLoaded) {
+      setFormData(prev => ({
+        ...prev,
+        realisations: {
+          ...prev.realisations,
+          accesAccessibiliteEquite: {
+            ...prev.realisations.accesAccessibiliteEquite,
+            indicateursAcces: {
+              proportionNouveauxInscrits: indicateursAcces.nouveauxInscritsPrimaire.tauxGF,
+              proportionNouveauxInscrits_Filles: indicateursAcces.nouveauxInscritsPrimaire.tauxFilles,
+              tauxTransitionPrimaireCTEB: indicateursAcces.transitionPrimaireCTEB.tauxGF,
+              tauxTransitionPrimaireCTEB_Filles: indicateursAcces.transitionPrimaireCTEB.tauxFilles,
+              tauxTransitionCTEBHumanites: indicateursAcces.transitionCTEBHumanites.tauxGF,
+              tauxTransitionCTEBHumanites_Filles: indicateursAcces.transitionCTEBHumanites.tauxFilles
+            }
+          }
+        }
+      }));
+    }
+  }, [indicateursAcces, indicateursAccesLoaded, setFormData]);
 
   // État pour les données brutes de calcul des indicateurs d'accès
   const [calculDataAcces, setCalculDataAcces] = useState({
@@ -130,6 +216,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
     }
     
     setIndicateursAcces(nouveauxTaux);
+    setIndicateursAccesLoaded(true); // Marquer comme chargé après calcul
     setShowCalculModalAcces(false);
     
     // Sauvegarder immédiatement dans le brouillon

@@ -72,14 +72,34 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
   // État pour les inspections administratives C2B
   const [inspectionsC2B, setInspectionsC2B] = useState(initialInspectionsC2B);
 
-  // États pour les données de groupes d'aides
-  const [groupesAidesData, setGroupesAidesData] = useState({
-    nombreGAPMisEnPlace: formData.gouvernance?.groupesAidesPsychopedagogiques?.nombreGAPMisEnPlace || 0,
-    nombreGAPOperationnel: formData.gouvernance?.groupesAidesPsychopedagogiques?.nombreGAPOperationnel || 0,
-    nombreCasPrisEnCharge: formData.gouvernance?.groupesAidesPsychopedagogiques?.nombreCasPrisEnCharge || 0,
-    problemesIdentifies: formData.gouvernance?.groupesAidesPsychopedagogiques?.problemesIdentifies || '',
-    solutionsPreconisees: formData.gouvernance?.groupesAidesPsychopedagogiques?.solutionsPreconisees || ''
+  // États pour les comités provinciaux
+  const [comitesProvinciaux, setComitesProvinciaux] = useState({
+    comiteEDUNC: {
+      frequenceReunions: '',
+      pointsTraites: ''
+    },
+    comiteENAFP: {
+      frequenceReunions: '',
+      pointsTraites: ''
+    },
+    comiteTENASOSP: {
+      frequenceReunions: '',
+      pointsTraites: ''
+    },
+    comiteExamenEtat: {
+      frequenceReunions: '',
+      pointsTraites: ''
+    }
   });
+
+  // États pour la vulgarisation des instructions
+  const [vulgarisationInstructions, setVulgarisationInstructions] = useState({
+    instructionsOfficielles: '',
+    nouvelleCitoyennete: ''
+  });
+
+  // Flag pour éviter la boucle infinie
+  const [comitesLoaded, setComitesLoaded] = useState(false);
 
   // États pour les acquisitions de matériels
   const [acquisitionsMateriels, setAcquisitionsMateriels] = useState({
@@ -144,6 +164,44 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
     });
   };
 
+  // Charger les données des comités provinciaux depuis le backend UNE SEULE FOIS
+  useEffect(() => {
+    const comites = formData?.gouvernance?.comitesProvinciaux;
+    const vulgarisation = formData?.gouvernance?.vulgarisationInstructions;
+
+    if (!comitesLoaded && (comites || vulgarisation)) {
+      if (comites) {
+        setComitesProvinciaux({
+          comiteEDUNC: {
+            frequenceReunions: comites.comiteEDUNC?.frequenceReunions || '',
+            pointsTraites: comites.comiteEDUNC?.pointsTraites || ''
+          },
+          comiteENAFP: {
+            frequenceReunions: comites.comiteENAFP?.frequenceReunions || '',
+            pointsTraites: comites.comiteENAFP?.pointsTraites || ''
+          },
+          comiteTENASOSP: {
+            frequenceReunions: comites.comiteTENASOSP?.frequenceReunions || '',
+            pointsTraites: comites.comiteTENASOSP?.pointsTraites || ''
+          },
+          comiteExamenEtat: {
+            frequenceReunions: comites.comiteExamenEtat?.frequenceReunions || '',
+            pointsTraites: comites.comiteExamenEtat?.pointsTraites || ''
+          }
+        });
+      }
+
+      if (vulgarisation) {
+        setVulgarisationInstructions({
+          instructionsOfficielles: vulgarisation.instructionsOfficielles || '',
+          nouvelleCitoyennete: vulgarisation.nouvelleCitoyennete || ''
+        });
+      }
+
+      setComitesLoaded(true);
+    }
+  }, [formData?.gouvernance?.comitesProvinciaux, formData?.gouvernance?.vulgarisationInstructions, comitesLoaded]);
+
   // Calcul automatique des totaux
   useEffect(() => {
     const totalProprietaire = Object.values(bureauValues).reduce((sum, bureau) => sum + bureau.proprietaire, 0);
@@ -156,67 +214,72 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
   }, [bureauValues]);
 
   useEffect(() => {
-    setFormData(prev => ({
-      ...prev,
-      gouvernance: {
-        ...prev.gouvernance,
-        infrastructureBureaux: bureauValues,
-        totalInfrastructureBureaux: totals
-      }
-    }));
-  }, [bureauValues, totals, setFormData]);
+    if (comitesLoaded) { // Seulement après le chargement initial
+      setFormData(prev => ({
+        ...prev,
+        gouvernance: {
+          ...prev.gouvernance,
+          infrastructureBureaux: bureauValues,
+          totalInfrastructureBureaux: totals,
+          comitesProvinciaux: comitesProvinciaux,
+          vulgarisationInstructions: vulgarisationInstructions
+        }
+      }));
+    }
+  }, [bureauValues, totals, comitesProvinciaux, vulgarisationInstructions, comitesLoaded, setFormData]);
 
   useEffect(() => {
-    setFormData(prev => ({
-      ...prev,
-      gouvernance: {
-        ...prev.gouvernance,
-        inspectionsAdministrativesC2B: {
-          prescolaire: {
-            nombrePrevu: inspectionsC2B.maternel.prevu,
-            nombreRealise: inspectionsC2B.maternel.realise,
-            pourcentageRealisation: inspectionsC2B.maternel.pourcentage
-          },
-          primaire: {
-            nombrePrevu: inspectionsC2B.primaire.prevu,
-            nombreRealise: inspectionsC2B.primaire.realise,
-            pourcentageRealisation: inspectionsC2B.primaire.pourcentage
-          },
-          secondaire: {
-            nombrePrevu: inspectionsC2B.secondaire.prevu,
-            nombreRealise: inspectionsC2B.secondaire.realise,
-            pourcentageRealisation: inspectionsC2B.secondaire.pourcentage
-          },
-          special: {
-            nombrePrevu: inspectionsC2B.special.prevu,
-            nombreRealise: inspectionsC2B.special.realise,
-            pourcentageRealisation: inspectionsC2B.special.pourcentage
-          }
-        },
-        groupesAidesPsychopedagogiques: groupesAidesData,
-        acquisitionsMateriels: {
-          ecoles: {
-            nature: acquisitionsMateriels.ecoles.nature,
-            sourceFinancement: {
-              gvt: acquisitionsMateriels.ecoles.gvt,
-              projet: acquisitionsMateriels.ecoles.projet,
-              ptfs: acquisitionsMateriels.ecoles.ptfs,
-              ong: acquisitionsMateriels.ecoles.ong
+    if (comitesLoaded) { // Seulement après le chargement initial
+      setFormData(prev => ({
+        ...prev,
+        gouvernance: {
+          ...prev.gouvernance,
+          inspectionsAdministrativesC2B: {
+            prescolaire: {
+              nombrePrevu: inspectionsC2B.maternel.prevu,
+              nombreRealise: inspectionsC2B.maternel.realise,
+              pourcentageRealisation: inspectionsC2B.maternel.pourcentage
+            },
+            primaire: {
+              nombrePrevu: inspectionsC2B.primaire.prevu,
+              nombreRealise: inspectionsC2B.primaire.realise,
+              pourcentageRealisation: inspectionsC2B.primaire.pourcentage
+            },
+            secondaire: {
+              nombrePrevu: inspectionsC2B.secondaire.prevu,
+              nombreRealise: inspectionsC2B.secondaire.realise,
+              pourcentageRealisation: inspectionsC2B.secondaire.pourcentage
+            },
+            special: {
+              nombrePrevu: inspectionsC2B.special.prevu,
+              nombreRealise: inspectionsC2B.special.realise,
+              pourcentageRealisation: inspectionsC2B.special.pourcentage
             }
           },
-          bureauxGestionnaires: {
-            nature: acquisitionsMateriels.bureauxGestionnaires.nature,
-            sourceFinancement: {
-              gvt: acquisitionsMateriels.bureauxGestionnaires.gvt,
-              projet: acquisitionsMateriels.bureauxGestionnaires.projet,
-              ptfs: acquisitionsMateriels.bureauxGestionnaires.ptfs,
-              ong: acquisitionsMateriels.bureauxGestionnaires.ong
+          acquisitionsMateriels: {
+            ecoles: {
+              nature: acquisitionsMateriels.ecoles.nature,
+              sourceFinancement: {
+                gvt: acquisitionsMateriels.ecoles.gvt,
+                projet: acquisitionsMateriels.ecoles.projet,
+                ptfs: acquisitionsMateriels.ecoles.ptfs,
+                ong: acquisitionsMateriels.ecoles.ong
+              }
+            },
+            bureauxGestionnaires: {
+              nature: acquisitionsMateriels.bureauxGestionnaires.nature,
+              sourceFinancement: {
+                gvt: acquisitionsMateriels.bureauxGestionnaires.gvt,
+                projet: acquisitionsMateriels.bureauxGestionnaires.projet,
+                ptfs: acquisitionsMateriels.bureauxGestionnaires.ptfs,
+                ong: acquisitionsMateriels.bureauxGestionnaires.ong
+              }
             }
           }
         }
-      }
-    }));
-  }, [inspectionsC2B, groupesAidesData, acquisitionsMateriels, setFormData]);
+      }));
+    }
+  }, [inspectionsC2B, acquisitionsMateriels, comitesLoaded, setFormData]);
 
   // Synchronisation initiale uniquement depuis formData
   useEffect(() => {
@@ -380,10 +443,24 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
         {/* IV.3.1. Comité Provincial de l'EDU-NC */}
         <div className="mb-4">
           <h5 className="font-bold mb-2">IV.3.1. Comité Provincial de l'EDU-NC: Fréquence des Réunions</h5>
+          <textarea
+            className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
+            placeholder="Fréquence des réunions..."
+            value={comitesProvinciaux.comiteEDUNC.frequenceReunions}
+            onChange={(e) => setComitesProvinciaux(prev => ({
+              ...prev,
+              comiteEDUNC: { ...prev.comiteEDUNC, frequenceReunions: e.target.value }
+            }))}
+          />
           <p className="text-sm text-gray-600 mb-2">Quelques Principaux points traités (10 lignes au maximum)</p>
           <textarea
             className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Décrivez les points traités..."
+            value={comitesProvinciaux.comiteEDUNC.pointsTraites}
+            onChange={(e) => setComitesProvinciaux(prev => ({
+              ...prev,
+              comiteEDUNC: { ...prev.comiteEDUNC, pointsTraites: e.target.value }
+            }))}
           />
         </div>
 
@@ -391,28 +468,70 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
         <div className="mb-4">
           <h5 className="font-bold mb-2">IV.3.2. Comité Provincial de l'ENAFP</h5>
           <textarea
+            className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
+            placeholder="Fréquence des réunions..."
+            value={comitesProvinciaux.comiteENAFP.frequenceReunions}
+            onChange={(e) => setComitesProvinciaux(prev => ({
+              ...prev,
+              comiteENAFP: { ...prev.comiteENAFP, frequenceReunions: e.target.value }
+            }))}
+          />
+          <textarea
             className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Décrivez les activités du comité..."
+            value={comitesProvinciaux.comiteENAFP.pointsTraites}
+            onChange={(e) => setComitesProvinciaux(prev => ({
+              ...prev,
+              comiteENAFP: { ...prev.comiteENAFP, pointsTraites: e.target.value }
+            }))}
           />
         </div>
 
         {/* IV.3.3. Comité Provincial de TENASOSP */}
         <div className="mb-4">
           <h5 className="font-bold mb-2">IV.3.3. Comité Provincial de TENASOSP</h5>
+          <textarea
+            className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
+            placeholder="Fréquence des réunions..."
+            value={comitesProvinciaux.comiteTENASOSP.frequenceReunions}
+            onChange={(e) => setComitesProvinciaux(prev => ({
+              ...prev,
+              comiteTENASOSP: { ...prev.comiteTENASOSP, frequenceReunions: e.target.value }
+            }))}
+          />
           <p className="text-sm text-gray-600 mb-2">Quelques Principaux points traités (10 lignes au maximum)</p>
           <textarea
             className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Décrivez les points traités..."
+            value={comitesProvinciaux.comiteTENASOSP.pointsTraites}
+            onChange={(e) => setComitesProvinciaux(prev => ({
+              ...prev,
+              comiteTENASOSP: { ...prev.comiteTENASOSP, pointsTraites: e.target.value }
+            }))}
           />
         </div>
 
         {/* IV.3.4. Comité Provincial d'EXAMEN D'ETAT */}
         <div className="mb-4">
           <h5 className="font-bold mb-2">IV.3.4. Comité Provincial d'EXAMEN D'ETAT</h5>
+          <textarea
+            className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
+            placeholder="Fréquence des réunions..."
+            value={comitesProvinciaux.comiteExamenEtat.frequenceReunions}
+            onChange={(e) => setComitesProvinciaux(prev => ({
+              ...prev,
+              comiteExamenEtat: { ...prev.comiteExamenEtat, frequenceReunions: e.target.value }
+            }))}
+          />
           <p className="text-sm text-gray-600 mb-2">Quelques Principaux points traités (10 lignes au maximum)</p>
           <textarea
             className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Décrivez les points traités..."
+            value={comitesProvinciaux.comiteExamenEtat.pointsTraites}
+            onChange={(e) => setComitesProvinciaux(prev => ({
+              ...prev,
+              comiteExamenEtat: { ...prev.comiteExamenEtat, pointsTraites: e.target.value }
+            }))}
           />
         </div>
       </div>
@@ -420,60 +539,29 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
       {/* IV.5. Vulgarisation des Instructions Officielles */}
       <div className="mb-6">
         <h4 className="font-bold mb-3">IV.5. Vulgarisation des Instructions Officielles</h4>
-        <p className="text-sm text-gray-600 mb-2">en Indiquer les Principales et mettre en exergue particulièrement la mise en pratique de celles relatives à la Nouvelle Citoyenneté</p>
-        <p className="text-sm text-gray-600 mb-4">(10 lignes au maximum)</p>
+        <p className="text-sm text-gray-600 mb-2">Instructions officielles</p>
+        <textarea
+          className="w-full h-24 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+          placeholder="Entrez les instructions officielles vulgarisées..."
+          value={vulgarisationInstructions.instructionsOfficielles}
+          onChange={(e) => setVulgarisationInstructions(prev => ({
+            ...prev,
+            instructionsOfficielles: e.target.value
+          }))}
+        />
+        <p className="text-sm text-gray-600 mb-2">Mise en pratique de celles relatives à la Nouvelle Citoyenneté (10 lignes au maximum)</p>
         <textarea
           className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Entrez les instructions officielles vulgarisées..."
+          placeholder="Décrivez la mise en pratique de la nouvelle citoyenneté..."
+          value={vulgarisationInstructions.nouvelleCitoyennete}
+          onChange={(e) => setVulgarisationInstructions(prev => ({
+            ...prev,
+            nouvelleCitoyennete: e.target.value
+          }))}
         />
       </div>
 
-      {/* IV.6. Fonctionnement des Groupes d'aides Psychopédagogiques */}
-      <div className="mb-6">
-        <h4 className="font-bold mb-3">IV.6. Fonctionnement des Groupes d'aides Psychopédagogiques</h4>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-          <div>
-            <label className="block text-sm font-medium mb-2">NBRE DE GAP MIS EN PLACE</label>
-            <input type="number" className="w-full p-2 border border-gray-300 rounded-md" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-2">NBRE DE GAP OPERATIONNEL</label>
-            <input type="number" className="w-full p-2 border border-gray-300 rounded-md" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-2">NBRE DE CAS PRIS EN CHARGE</label>
-            <input type="number" className="w-full p-2 border border-gray-300 rounded-md" />
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-2">Principaux problèmes identifiés</label>
-            <textarea
-              className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Décrivez les problèmes..."
-              value={groupesAidesData.problemesIdentifies}
-              onChange={(e) => setGroupesAidesData(prev => ({
-                ...prev,
-                problemesIdentifies: e.target.value
-              }))}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-2">Solutions Préconisées</label>
-            <textarea
-              className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Décrivez les solutions..."
-              value={groupesAidesData.solutionsPreconisees}
-              onChange={(e) => setGroupesAidesData(prev => ({
-                ...prev,
-                solutionsPreconisees: e.target.value
-              }))}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* IV.7. Acquisitions des Matériels Informatique et Roulant */}
+      {/* IV.6. Acquisitions des Matériels Informatique et Roulant */}
       <div className="mb-6">
         <h4 className="font-bold mb-3">IV.7. Acquisitions des Matériels Informatique et Roulant</h4>
         

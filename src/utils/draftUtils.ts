@@ -48,6 +48,12 @@ export const calculateCompletionPercentage = (formData: RapportActivite): number
     completedSections++;
   }
 
+  // Introduction
+  totalSections++;
+  if (formData.introduction && formData.introduction.trim() !== '') {
+    completedSections++;
+  }
+
   // Section II: Paramètres Clés - Nombre d'écoles et classes
   totalSections++;
   if (hasAnyValue(formData.parametresCles?.nombreEcolesClasses)) {
@@ -60,68 +66,128 @@ export const calculateCompletionPercentage = (formData: RapportActivite): number
     completedSections++;
   }
 
-  // Section III: Personnel
+  // Section III: Personnel Enseignant
   totalSections++;
-  if (hasAnyValue(formData.personnel)) {
+  if (hasAnyValue(formData.personnel?.personnelEnseignant)) {
     completedSections++;
   }
 
-  // Section IV: Réalisations - Inspections
+  // Section III: Personnel Administratif
   totalSections++;
-  if (hasAnyValue(formData.realisations?.inspectionsPedagogiques)) {
+  if (hasAnyValue(formData.personnel?.personnelAdministratif)) {
     completedSections++;
   }
 
-  // Section IV: Réalisations - Formations
+  // Section IV: Réalisations - Accès, Accessibilité & Equité
   totalSections++;
-  if (hasAnyValue(formData.realisations?.formations)) {
+  if (hasAnyValue(formData.realisations?.accesAccessibiliteEquite)) {
     completedSections++;
   }
 
-  // Section IV: Réalisations - Évaluations
+  // Section IV: Amélioration Qualité - Disponibilité Moyens
   totalSections++;
-  if (hasAnyValue(formData.realisations?.evaluations)) {
+  if (hasAnyValue(formData.ameliorationQualite?.disponibiliteMoyensEnseignement)) {
     completedSections++;
   }
 
-  // Section IV: Introduction
+  // Section IV: Amélioration Qualité - Visites et Réunions
   totalSections++;
-  if (formData.introduction && formData.introduction.trim() !== '') {
+  if (hasAnyValue(formData.ameliorationQualite?.visitesEtReunions)) {
     completedSections++;
   }
 
-  // Section V: Conclusion
+  // Section IV: Amélioration Qualité - Activités Inspectorales
+  totalSections++;
+  if (hasAnyValue(formData.ameliorationQualite?.activitesInspectorales)) {
+    completedSections++;
+  }
+
+  // Section IV: Amélioration Qualité - Indicateurs Rendement
+  totalSections++;
+  if (hasAnyValue(formData.ameliorationQualite?.indicateursRendement)) {
+    completedSections++;
+  }
+
+  // Section IV: Gouvernance - Mise en œuvre SSEF
+  totalSections++;
+  if (hasAnyValue(formData.gouvernance?.miseEnOeuvreSSEF)) {
+    completedSections++;
+  }
+
+  // Section IV: Gouvernance - Inspections Administratives
+  totalSections++;
+  if (hasAnyValue(formData.gouvernance?.inspectionsAdministrativesC2B)) {
+    completedSections++;
+  }
+
+  // Section IV: Gouvernance - Comités Provinciaux
+  totalSections++;
+  if (hasAnyValue(formData.gouvernance?.comitesProvinciaux)) {
+    completedSections++;
+  }
+
+  // Section IV: Gouvernance - Rémunération Personnel
+  totalSections++;
+  if (hasAnyValue(formData.gouvernance?.remunerationPersonnel)) {
+    completedSections++;
+  }
+
+  // Section IV: Gouvernance - Vulgarisation Instructions
+  totalSections++;
+  if (hasAnyValue(formData.gouvernance?.vulgarisationInstructions)) {
+    completedSections++;
+  }
+
+  // Section IV: Gouvernance - Groupes Aides Psychopédagogiques
+  totalSections++;
+  if (hasAnyValue(formData.gouvernance?.groupesAidesPsychopedagogiques)) {
+    completedSections++;
+  }
+
+  // Section IV: Gouvernance - Acquisitions Matériels
+  totalSections++;
+  if (hasAnyValue(formData.gouvernance?.acquisitionsMateriels)) {
+    completedSections++;
+  }
+
+  // Section IV: Gouvernance - Infrastructure Bureaux
+  totalSections++;
+  if (hasAnyValue(formData.gouvernance?.infrastructureBureaux)) {
+    completedSections++;
+  }
+
+  // Section V: Éducation en Urgence - Plan & Stock
+  totalSections++;
+  if (hasAnyValue(formData.educationUrgence?.planStockContingence)) {
+    completedSections++;
+  }
+
+  // Section V: Éducation en Urgence - Catastrophes
+  totalSections++;
+  if (hasAnyValue(formData.educationUrgence?.catastrophesNaturelles)) {
+    completedSections++;
+  }
+
+  // Section V: Éducation en Urgence - Recommandations
+  totalSections++;
+  if (hasAnyValue(formData.educationUrgence?.recommandations)) {
+    completedSections++;
+  }
+
+  // Section VI: Autres Problèmes
+  totalSections++;
+  if (hasAnyValue(formData.autresProblemes)) {
+    completedSections++;
+  }
+
+  // Conclusion
   totalSections++;
   if (formData.conclusion && formData.conclusion.trim() !== '') {
     completedSections++;
   }
 
-  // Section IV: Évaluation qualitative
-  totalSections++;
-  if (hasAnyValue(formData.evaluationQualitativeComplete)) {
-    completedSections++;
-  }
-
   if (totalSections === 0) return 0;
   const percentage = Math.round((completedSections / totalSections) * 100);
-  
-  console.log('📊 Calcul complétion:', {
-    completedSections,
-    totalSections,
-    percentage,
-    sections: {
-      identification: !!(formData.identificationProved || formData.annee),
-      ecoles: hasAnyValue(formData.parametresCles?.nombreEcolesClasses),
-      effectifs: hasAnyValue(formData.parametresCles?.effectifScolaire),
-      personnel: hasAnyValue(formData.personnel),
-      inspections: hasAnyValue(formData.realisations?.inspectionsPedagogiques),
-      formations: hasAnyValue(formData.realisations?.formations),
-      evaluations: hasAnyValue(formData.realisations?.evaluations),
-      introduction: !!(formData.introduction && formData.introduction.trim() !== ''),
-      conclusion: !!(formData.conclusion && formData.conclusion.trim() !== ''),
-      evalQualitative: hasAnyValue(formData.evaluationQualitativeComplete)
-    }
-  });
   
   return percentage;
 };

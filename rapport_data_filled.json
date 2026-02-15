@@ -1,0 +1,720 @@
+{
+  "identificationProved": "6970af4de0355a44bca8a5b9",
+  "annee": "2024-2025",
+  "introduction": "Le rapport d'activité de la Province Educationnelle du Kwango5 présente les principales réalisations et défis rencontrés au cours de l'année scolaire 2024-2025. La province couvre 12 territoires avec une population scolaire en croissance continue, malgré les défis infrastructurels et logistiques.",
+  
+  "parametresCles": {
+    "nombreEcolesClasses": {
+      "niveauPrescolaire": {
+        "espaceCommunautaireEveil": {
+          "nombreEcoles": 15,
+          "nombreClasses": 38
+        },
+        "maternel": {
+          "nombreEcoles": 28,
+          "nombreClasses": 65
+        },
+        "prePrimaire": {
+          "nombreEcoles": 22,
+          "nombreClasses": 48
+        },
+        "special": {
+          "nombreEcoles": 4,
+          "nombreClasses": 12
+        }
+      },
+      "niveauPrimaire": {
+        "enseignementSpecial": {
+          "nombreEcoles": 6,
+          "totalClassesSpecialesPrim": 18
+        },
+        "enseignementPrimaire": {
+          "nombreEcoles": 145,
+          "totalClassesPrimaire": 870,
+          "classesPlethoriques": "42"
+        }
+      },
+      "niveauSecondaire": {
+        "enseignementSpecial": {
+          "nombreEcoles": 5,
+          "totalClassesSpecialesSec": 15
+        },
+        "enseignementSecondaire": {
+          "nombreEcoles": 78,
+          "premierCycle": {
+            "classes7emeCTEB": 156,
+            "classes8emeCTEB": 148
+          },
+          "deuxiemeCycle": {
+            "totalClassesHumanites": 312
+          },
+          "totalClasses1er2emeCycle": 616
+        }
+      }
+    },
+    "effectifScolaire": {
+      "niveauPrescolaire": {
+        "espaceCommunautaireEveil": {
+          "effectifGarconsFilles": 950,
+          "effectifFilles": 468,
+          "tauxAccroissementGarconsFilles": 7.2,
+          "tauxAccroissementFilles": 7.8
+        },
+        "maternel": {
+          "effectifGarconsFilles": 1625,
+          "effectifFilles": 798,
+          "tauxAccroissementGarconsFilles": 6.5,
+          "tauxAccroissementFilles": 7.1
+        },
+        "prePrimaire": {
+          "effectifGarconsFilles": 1120,
+          "effectifFilles": 548,
+          "tauxAccroissementGarconsFilles": 8.2,
+          "tauxAccroissementFilles": 8.9
+        },
+        "special": {
+          "effectifGarconsFilles": 228,
+          "effectifFilles": 108,
+          "tauxAccroissementGarconsFilles": 4.8,
+          "tauxAccroissementFilles": 5.2
+        }
+      },
+      "niveauPrimaire": {
+        "enseignementSpecial": {
+          "effectifGarconsFilles": 298,
+          "effectifFilles": 142,
+          "tauxAccroissementGarconsFilles": 4.2,
+          "tauxAccroissementFilles": 4.6
+        },
+        "enseignementPrimaire": {
+          "effectifGarconsFilles": 34500,
+          "effectifFilles": 16675,
+          "tauxAccroissementGarconsFilles": 6.8,
+          "tauxAccroissementFilles": 7.4
+        }
+      },
+      "niveauSecondaire": {
+        "enseignementSpecial": {
+          "effectifGarcons": 118,
+          "effectifFilles": 92,
+          "tauxGarcons": 56.2,
+          "tauxFilles": 43.8
+        },
+        "enseignementSecondaire": {
+          "septiemeCTEB": {
+            "effectifGarcons": 6240,
+            "effectifFilles": 3012,
+            "tauxGarcons": 67.4,
+            "tauxFilles": 32.6
+          },
+          "huitiemeCTEB": {
+            "effectifGarcons": 5760,
+            "effectifFilles": 2820,
+            "tauxGarcons": 67.1,
+            "tauxFilles": 32.9
+          },
+          "premiereHumanite": {
+            "effectifGarcons": 6960,
+            "effectifFilles": 3480,
+            "tauxGarcons": 66.7,
+            "tauxFilles": 33.3
+          },
+          "quatriemeHumanite": {
+            "effectifGarcons": 3840,
+            "effectifFilles": 2040,
+            "tauxGarcons": 65.3,
+            "tauxFilles": 34.7
+          }
+        }
+      }
+    }
+  },
+
+  "personnel": {
+    "personnelEnseignant": {
+      "niveauPrescolaire": {
+        "enseignementPrescolaireSpecial": {
+          "hommes": 22,
+          "femmes": 28
+        },
+        "enseignementPrescolaire": {
+          "hommes": 152,
+          "femmes": 203
+        }
+      },
+      "niveauPrimaire": {
+        "enseignementPrescolaireSpecial": {
+          "hommes": 34,
+          "femmes": 21
+        },
+        "enseignementPrimaire": {
+          "hommes": 2240,
+          "femmes": 1150
+        }
+      },
+      "niveauSecondaire": {
+        "enseignementPrescolaireSpecial": {
+          "hommes": 28,
+          "femmes": 19
+        },
+        "enseignementSecondaire": {
+          "hommes": 1750,
+          "femmes": 820
+        }
+      }
+    },
+    "personnelAdministratif": {
+      "directionProvinciale": {
+        "hommes": 10,
+        "femmes": 5
+      },
+      "inspectionPrincipale": {
+        "hommes": 18,
+        "femmes": 9
+      },
+      "dinacope": {
+        "hommes": 6,
+        "femmes": 4
+      },
+      "sernie": {
+        "hommes": 7,
+        "femmes": 5
+      },
+      "coordinationProvinciale": {
+        "hommes": 14,
+        "femmes": 8
+      },
+      "sousDivision": {
+        "hommes": 42,
+        "femmes": 22
+      },
+      "poolsInspectionPrimaire": {
+        "hommes": 50,
+        "femmes": 18
+      },
+      "poolsInspectionSecondaire": {
+        "hommes": 45,
+        "femmes": 15
+      },
+      "antenneDinacope": {
+        "hommes": 10,
+        "femmes": 6
+      },
+      "antenneSernie": {
+        "hommes": 12,
+        "femmes": 7
+      },
+      "coordinationDiocesaine": {
+        "hommes": 22,
+        "femmes": 11
+      },
+      "sousCoordinationConventionnees": {
+        "hommes": 30,
+        "femmes": 15
+      },
+      "conseillerieResidente": {
+        "hommes": 8,
+        "femmes": 4
+      }
+    }
+  },
+
+  "realisations": {
+    "accesAccessibiliteEquite": {
+      "nouvellesSallesClasses": {
+        "prescolaire": 12,
+        "sourceFinancementPrescolaire": "Gouvernement (60%), PTF (30%), Communauté (10%)",
+        "primaire": 58,
+        "sourceFinancementPrimaire": "Gouvernement (55%), UNICEF (25%), ONG locales (20%)",
+        "secondaire": 28,
+        "sourceFinancementSecondaire": "Gouvernement (70%), Partenaires privés (30%)"
+      },
+      "nouveauxBancsTables": {
+        "prescolaire": 145,
+        "sourceFinancementPrescolaire": "PTF (60%), Communauté (40%)",
+        "primaire": 1020,
+        "sourceFinancementPrimaire": "Gouvernement (65%), UNICEF (35%)",
+        "secondaire": 505,
+        "sourceFinancementSecondaire": "Gouvernement (80%), Privé (20%)"
+      },
+      "nouvellesLatrines": {
+        "prescolaire": 18,
+        "sourceFinancementPrescolaire": "WASH programme (90%), Communauté (10%)",
+        "primaire": 94,
+        "sourceFinancementPrimaire": "Gouvernement (50%), UNICEF (40%), ONG (10%)",
+        "secondaire": 46,
+        "sourceFinancementSecondaire": "Gouvernement (75%), PTF (25%)"
+      },
+      "gratuitéEnseignementPrimaire": "Mise en œuvre effective dans 88% des écoles cibles avec distribution gratuite de 28500 manuels scolaires, 15000 uniformes et suppression des frais de scolarité. Défis persistent dans les zones rurales éloignées.",
+      "sensibilisation": {
+        "filles": true,
+        "enfantsHorsEcole": true,
+        "peuplesAutochtones": true
+      },
+      "cantinesScolaires": {
+        "prescolaire": 6,
+        "primaire": 34,
+        "secondaire": 10,
+        "totalGeneralEcoles": 50,
+        "commentaire": "Les cantines scolaires ont contribué significativement à l'amélioration du taux de rétention scolaire (augmentation de 12%) particulièrement dans les zones rurales éloignées où la malnutrition était un facteur majeur d'abandon.",
+        "cantinesScolairesDetail": {
+          "prescolaire": { "gvt": 2, "projet": 1, "ptfs": 2, "ong": 1 },
+          "primaire": { "gvt": 15, "projet": 8, "ptfs": 7, "ong": 4 },
+          "secondaire": { "gvt": 4, "projet": 3, "ptfs": 2, "ong": 1 }
+        }
+      },
+      "indicateursAcces": {
+        "proportionNouveauxInscrits": 96.2,
+        "proportionNouveauxInscrits_Filles": 94.8,
+        "tauxTransitionPrimaireCTEB": 89.5,
+        "tauxTransitionPrimaireCTEB_Filles": 86.3,
+        "tauxTransitionCTEBHumanites": 84.8,
+        "tauxTransitionCTEBHumanites_Filles": 81.2
+      }
+    }
+  },
+
+  "ameliorationQualite": {
+    "disponibiliteMoyensEnseignement": {
+      "programmesScolaires": {
+        "ece": "TRES BON",
+        "preprimaire": "TRES BON",
+        "maternel": "TRES BON",
+        "primaire": "TRES BON",
+        "secondaire": "TRES BON",
+        "prescolaire": "TRES BON"
+      },
+      "manuelsScolaires": {
+        "ece": "TRES BON",
+        "preprimaire": "BON",
+        "maternel": "BON",
+        "primaire": "TRES BON",
+        "secondaire": "BON",
+        "prescolaire": "BON"
+      },
+      "materielsDidactiques": {
+        "ece": "BON",
+        "preprimaire": "BON",
+        "maternel": "TRES BON",
+        "primaire": "BON",
+        "secondaire": "BON",
+        "prescolaire": "BON"
+      },
+      "laboratoires": {
+        "chimie": "BON",
+        "biologie": "BON",
+        "physique": "BON"
+      },
+      "equipementsAteliers": {
+        "humanitesTechniques": "BON"
+      }
+    },
+    "visitesEtReunions": {
+      "visitesClasses": {
+        "ece": "TRES BON",
+        "preprimaire": "BON",
+        "maternel": "ASSEZ BON",
+        "primaire": "BON",
+        "secondaire": "TRES BON",
+        "special": "BON"
+      },
+      "reunionsPedagogiques": {
+        "ece": "TRES BON",
+        "preprimaire": "BON",
+        "maternel": "ASSEZ BON",
+        "primaire": "BON",
+        "secondaire": "BON"
+      },
+      "fonctionnementCelluleBase": {
+        "ece": "BON",
+        "preprimaire": "TRES BON",
+        "maternel": "BON",
+        "primaire": "BON",
+        "secondaire": "TRES BON",
+        "special": "BON"
+      }
+    },
+    "activitesInspectorales": {
+      "inspectionsPedagogiquesC3": {
+        "prescolaire": {
+          "nombrePrevu": 95,
+          "nombreRealise": 82,
+          "pourcentageRealisation": 86.3
+        },
+        "primaire": {
+          "nombrePrevu": 300,
+          "nombreRealise": 276,
+          "pourcentageRealisation": 92
+        },
+        "secondaire": {
+          "nombrePrevu": 215,
+          "nombreRealise": 195,
+          "pourcentageRealisation": 90.7
+        },
+        "special": {
+          "nombrePrevu": 30,
+          "nombreRealise": 27,
+          "pourcentageRealisation": 90
+        }
+      },
+      "inspectionsFormation": {
+        "prescolaire": {
+          "nombrePrevu": 48,
+          "nombreRealise": 44,
+          "pourcentageRealisation": 91.7
+        },
+        "primaire": {
+          "nombrePrevu": 145,
+          "nombreRealise": 136,
+          "pourcentageRealisation": 93.8
+        },
+        "secondaire": {
+          "nombrePrevu": 115,
+          "nombreRealise": 107,
+          "pourcentageRealisation": 93
+        },
+        "special": {
+          "nombrePrevu": 18,
+          "nombreRealise": 17,
+          "pourcentageRealisation": 94.4
+        }
+      },
+      "formationContinue": {
+        "prescolaire": "TRES BON",
+        "primaire": "CARENCE",
+        "secondaire": "CARENCE",
+        "special": "CARENCE"
+      },
+      "themesExploites": {
+        "ece": "Développement psychomoteur et socialisation",
+        "maternel": "Apprentissage par le jeu et activités sensorielles"
+      }
+    },
+    "indicateursRendement": {
+      "rendementInterne": {
+        "sixiemePrimaire": {
+          "abandon": 5.2,
+          "reussite": 87.9,
+          "echec": 6.9
+        },
+        "huitiemeCETB": {
+          "abandon": 6.8,
+          "reussite": 84.7,
+          "echec": 8.5
+        },
+        "quatriemeHumanite": {
+          "abandon": 6.5,
+          "reussite": 85.2,
+          "echec": 8.3
+        },
+        "diplomesMathematiques": {
+          "abandon": 4.2,
+          "reussite": 88.5,
+          "echec": 7.3
+        },
+        "diplomesFiliereTechniques": {
+          "abandon": 5.8,
+          "reussite": 86.1,
+          "echec": 8.1
+        }
+      },
+      "rendementExterne": {
+        "prescolaire": {
+          "tauxGF": 85.5,
+          "tauxFilles": 82.3
+        },
+        "espaceCommunautaireEveil": {
+          "tauxGF": 78.2,
+          "tauxFilles": 75.8
+        },
+        "classePreprimaire": {
+          "tauxGF": 88.1,
+          "tauxFilles": 86.4
+        },
+        "maternel": {
+          "tauxGF": 90.3,
+          "tauxFilles": 89.2
+        },
+        "primaire": {
+          "tauxGF": 87.9,
+          "tauxFilles": 85.6
+        },
+        "enseignementSpecialPrimaire": {
+          "tauxGF": 72.5,
+          "tauxFilles": 70.1
+        },
+        "enseignementPrimaire": {
+          "tauxGF": 89.2,
+          "tauxFilles": 87.3
+        },
+        "secondaire": {
+          "tauxGF": 84.7,
+          "tauxFilles": 81.9
+        },
+        "enseignementSpecialSecondaire": {
+          "tauxGF": 68.3,
+          "tauxFilles": 65.2
+        },
+        "enseignementSecondaireNormal": {
+          "tauxGF": 86.5,
+          "tauxFilles": 83.8
+        }
+      },
+      "efficacitePrimaire": {
+        "tauxAbandon": {
+          "tauxGF": 5.2,
+          "tauxFilles": 4.8
+        },
+        "tauxReussite": {
+          "tauxGF": 87.9,
+          "tauxFilles": 86.5
+        },
+        "tauxEchec": {
+          "tauxGF": 6.9,
+          "tauxFilles": 8.7
+        }
+      }
+    }
+  },
+
+  "gouvernance": {
+    "miseEnOeuvreSSEF": {
+      "niveauProvinceEducationnelle": {
+        "elaborationPAO": "Le Plan d'Action Opérationnel (PAO) 2024-2025 a été élaboré de manière participative avec l'implication de toutes les parties prenantes (enseignants, directeurs, inspecteurs, parents) en septembre 2024.",
+        "miseEnOeuvre": "Mise en œuvre à 82% avec des progrès notables dans l'accès (95%) et des défis persistants dans la qualité (72%) et la gouvernance (68%). Contraintes budgétaires et logistiques.",
+        "evaluationMiParcours": "Réalisée en décembre 2024, révélant des progrès significatifs dans l'accès à l'éducation (+8% d'effectifs) mais des défis majeurs en qualité (équipements insuffisants) et rémunération du personnel (59 agents non payés).",
+        "evaluationFinale": "Prévue pour juin 2025 avec présentation des résultats au comité provincial et aux partenaires"
+      },
+      "niveauProvinceAdministrative": {
+        "elaborationPAO": "Coordination effective avec le PAO provincial, alignement sur les priorités du SSEF et intégration des spécificités territoriales. Harmonisation avec les plans de développement locaux.",
+        "miseEnOeuvre": "Exécution à 76% avec des variations importantes selon les territoires (de 65% à 88%). Meilleure performance dans les zones urbaines, défis accrus dans les zones rurales éloignées.",
+        "evaluationMiParcours": "Effectuée en janvier 2025 avec participation des autorités locales et des communautés. Identification de 15 recommandations prioritaires.",
+        "evaluationFinale": "Programmée pour juillet 2025 avec restitution communautaire"
+      }
+    },
+    "inspectionsAdministrativesC2B": {
+      "prescolaire": {
+        "nombrePrevu": 72,
+        "nombreRealise": 64,
+        "pourcentageRealisation": 88.9
+      },
+      "primaire": {
+        "nombrePrevu": 240,
+        "nombreRealise": 216,
+        "pourcentageRealisation": 90
+      },
+      "secondaire": {
+        "nombrePrevu": 168,
+        "nombreRealise": 152,
+        "pourcentageRealisation": 90.5
+      },
+      "special": {
+        "nombrePrevu": 24,
+        "nombreRealise": 22,
+        "pourcentageRealisation": 91.7
+      }
+    },
+    "comitesProvinciaux": {
+      "comiteEDUNC": {
+        "frequenceReunions": "Réunions mensuelles régulières, 10 réunions tenues sur 12 prévues (83% de réalisation). Absences justifiées par contraintes budgétaires de déplacement.",
+        "pointsTraites": "Planification et suivi budgétaire, état d'avancement des infrastructures, allocation et distribution des ressources pédagogiques, programme de formation continue des enseignants, gestion des situations d'urgence éducative."
+      },
+      "comiteENAFP": {
+        "frequenceReunions": "Réunions trimestrielles, 4 réunions tenues comme prévu (100% de réalisation)",
+        "pointsTraites": "Programmes d'alphabétisation des adultes (2500 bénéficiaires), développement de l'éducation non-formelle, stratégies d'insertion des jeunes déscolarisés, partenariats avec les organisations communautaires."
+      },
+      "comiteTENASOSP": {
+        "frequenceReunions": "Réunions bimestrielles, 6 réunions tenues (100% de réalisation)",
+        "pointsTraites": "Stratégies d'éducation spécialisée inclusive, inclusion effective des enfants à besoins spécifiques (168 cas suivis), formation des enseignants spécialisés (45 formés), adaptation des infrastructures et curricula."
+      },
+      "comiteExamenEtat": {
+        "frequenceReunions": "4 réunions annuelles selon le calendrier officiel des examens d'État (TENAFEP, Exetat)",
+        "pointsTraites": "Organisation logistique des examens d'État, distribution et sécurisation des épreuves, coordination avec les centres d'examens (78 centres), gestion des incidents (3 cas de fraude traités), proclamation et transmission des résultats."
+      }
+    },
+    "remunerationPersonnel": {
+      "directionProvinciale": {
+        "totalAgents": 15,
+        "nonPayes": 0
+      },
+      "inspectionPrincipale": {
+        "totalAgents": 27,
+        "nonPayes": 2
+      },
+      "dinacope": {
+        "totalAgents": 10,
+        "nonPayes": 1
+      },
+      "sernie": {
+        "totalAgents": 12,
+        "nonPayes": 2
+      },
+      "coordinationProvinciale": {
+        "totalAgents": 22,
+        "nonPayes": 4
+      },
+      "sousDivision": {
+        "totalAgents": 64,
+        "nonPayes": 10
+      },
+      "poolsInspectionPrimaire": {
+        "totalAgents": 68,
+        "nonPayes": 14
+      },
+      "poolsInspectionSecondaire": {
+        "totalAgents": 60,
+        "nonPayes": 12
+      },
+      "antenneDinacope": {
+        "totalAgents": 16,
+        "nonPayes": 4
+      },
+      "antenneSernie": {
+        "totalAgents": 19,
+        "nonPayes": 5
+      },
+      "coordinationDiocesaine": {
+        "totalAgents": 33,
+        "nonPayes": 6
+      },
+      "sousCoordinationConventionnees": {
+        "totalAgents": 45,
+        "nonPayes": 10
+      },
+      "conseillerieResidente": {
+        "totalAgents": 11,
+        "nonPayes": 3
+      }
+    },
+    "vulgarisationInstructions": {
+      "instructionsOfficielles": "Distribution et vulgarisation des instructions officielles dans 94% des établissements scolaires à travers 48 ateliers de formation, circulaires administratives et visites de sensibilisation des chefs d'établissements.",
+      "nouvelleCitoyennete": "Programme de nouvelle citoyenneté intégré dans 82% des écoles avec formation de 540 enseignants relais, production de 12500 supports pédagogiques et organisation de 85 activités citoyennes (clubs, journées thématiques)."
+    },
+    "formationsGestionnaires": {
+      "leadershipScolaire": { "tauxGF": 78.5, "tauxFilles": 42.3 },
+      "managementScolaire": { "tauxGF": 82.1, "tauxFilles": 45.8 },
+      "calculIndicateurs": { "tauxGF": 65.4, "tauxFilles": 38.2 },
+      "gestionEntiteEducationnelle": { "tauxGF": 71.9, "tauxFilles": 41.5 },
+      "planification": { "tauxGF": 68.7, "tauxFilles": 39.6 }
+    },
+    "commentaireFormations": "Les formations ont été dispensées avec un taux de participation satisfaisant. Cependant, la participation des femmes reste à améliorer dans tous les modules.",
+    "groupesAidesPsychopedagogiques": {
+      "nombreGAPMisEnPlace": 54,
+      "nombreGAPOperationnel": 46,
+      "nombreCasPrisEnCharge": 342,
+      "problemesIdentifies": "Difficultés d'apprentissage (38% des cas), troubles comportementaux (22%), cas de violence scolaire (18%), décrochage scolaire imminent (15%), traumatismes psychologiques liés aux conflits familiaux et communautaires (7%).",
+      "solutionsPreconisees": "Renforcement urgent des capacités des GAP existants, recrutement de 25 psychopédagogues qualifiés, création de 8 centres d'écoute dans les sous-divisions, partenariats formalisés avec 6 ONG spécialisées en santé mentale et protection de l'enfant."
+    },
+    "acquisitionsMateriels": {
+      "ecoles": {
+        "nature": "Bancs-pupitres (1020 unités pour 34500 élèves), tableaux noirs (385 unités), matériel didactique (kits pédagogiques pour 215 écoles), équipements informatiques (102 ordinateurs pour 45 écoles), manuels scolaires (28500 exemplaires)",
+        "sourceFinancement": {
+          "gvt": 68,
+          "projet": 18,
+          "ptfs": 11,
+          "ong": 3
+        }
+      },
+      "bureauxGestionnaires": {
+        "nature": "Mobiliers de bureau (150 pièces), ordinateurs (54 unités), imprimantes (34), motos pour supervision (18), photocopieuses (15), générateurs électriques (8)",
+        "sourceFinancement": {
+          "gvt": 72,
+          "projet": 14,
+          "ptfs": 9,
+          "ong": 5
+        }
+      }
+    },
+    "infrastructureBureaux": {
+      "directionProvinciale": {
+        "proprietaire": 1,
+        "locataire": 0
+      },
+      "inspectionPrincipale": {
+        "proprietaire": 1,
+        "locataire": 0
+      },
+      "dinacope": {
+        "proprietaire": 0,
+        "locataire": 1
+      },
+      "sernie": {
+        "proprietaire": 0,
+        "locataire": 1
+      },
+      "coordinationProvinciale": {
+        "proprietaire": 2,
+        "locataire": 1
+      },
+      "sousDivision": {
+        "proprietaire": 10,
+        "locataire": 2
+      },
+      "poolsInspectionPrimaire": {
+        "proprietaire": 7,
+        "locataire": 3
+      },
+      "poolsInspectionSecondaire": {
+        "proprietaire": 6,
+        "locataire": 3
+      },
+      "antenneDinacope": {
+        "proprietaire": 1,
+        "locataire": 2
+      },
+      "antenneSernie": {
+        "proprietaire": 1,
+        "locataire": 2
+      },
+      "coordinationDiocesaine": {
+        "proprietaire": 4,
+        "locataire": 1
+      },
+      "sousCoordinationConventionnees": {
+        "proprietaire": 5,
+        "locataire": 2
+      },
+      "conseillerieResidente": {
+        "proprietaire": 1,
+        "locataire": 1
+      }
+    }
+  },
+
+  "educationUrgence": {
+    "planStockContingence": {
+      "plan": "Plan de contingence élaboré et validé en août 2024, couvrant les principaux risques identifiés: inondations (risque élevé dans 4 territoires), épidémies (choléra, rougeole), conflits intercommunautaires (3 zones sensibles), mouvements de population.",
+      "stock": "Stock de contingence constitué et pré-positionné: 600 kits scolaires d'urgence, 240 bâches plastiques, 180 jerrycans, 85 trousses de premiers soins, médicaments essentiels (antipaludéens, antibiotiques), 120 lampes solaires."
+    },
+    "catastrophesNaturelles": {
+      "nature": "Inondations majeures dans 3 territoires (août-septembre 2024, 850 élèves impactés), érosions graves dans 2 sous-divisions (150 élèves déplacés), vents violents ayant endommagé 8 établissements (mars 2024).",
+      "effetsNegatifs": "Destruction totale de 15 salles de classe, endommagement partiel de 28 salles, interruption des cours pour 1000 élèves pendant 3-5 semaines, perte importante de matériel didactique et de manuels scolaires (environ 3500 livres), perturbation du calendrier scolaire."
+    },
+    "destructionSDC": {
+      "forcesNegatives": "Actes de vandalisme dans 7 écoles (vol d'équipements), conflits fonciers ayant affecté 4 établissements (contestations de propriété), occupation illégale de 2 bâtiments scolaires par des familles déplacées."
+    },
+    "solutionsLocales": "Relocalisation temporaire dans 12 bâtiments communautaires (églises, centres de santé), mise en place de système de double vacation dans 8 écoles affectées, mobilisation de 450 parents d'élèves pour réhabilitation légère, contribution en matériaux locaux (briques, bois, paille).",
+    "reunionsClusterEducation": {
+      "frequence": "Réunions trimestrielles du cluster éducation en situation d'urgence, 4 réunions tenues en 2024-2025 (septembre, décembre, mars, juin)",
+      "pointsTraites": "Coordination inter-agences de la réponse aux urgences éducatives, cartographie actualisée des besoins (3 évaluations rapides conduites), mobilisation et tracking des ressources (1,2 millions USD mobilisés), suivi des interventions d'urgence, plaidoyer auprès des bailleurs."
+    },
+    "recommandations": {
+      "espacesTemporairesApprentissage": {
+        "nombre": 22,
+        "couts": "Coût estimé: 55000 USD pour construction de 22 espaces temporaires d'apprentissage (ETA) avec capacité de 50-60 élèves chacun, incluant kit mobilier de base et matériel pédagogique d'urgence"
+      },
+      "apprenantsScolarises": {
+        "cible": 1100
+      },
+      "formationEnseignantsESU": "Formation urgente de 92 enseignants en Éducation en Situations d'Urgence (ESU) sur les approches pédagogiques adaptées, le soutien psychosocial aux élèves traumatisés, la gestion de classe en contexte d'urgence et la protection de l'enfant."
+    }
+  },
+
+  "autresProblemes": {
+    "problemesSpecifiques": "Insuffisance critique de personnel enseignant qualifié dans les zones rurales reculées (déficit de 180 enseignants); Retard persistant dans le paiement des salaires (73 agents administratifs non payés depuis 3-6 mois); Dégradation avancée des infrastructures scolaires (40% nécessitent une réhabilitation urgente, 15% menacent ruine); Accès très limité à l'eau potable et à l'assainissement dans 52% des écoles (impact sur la santé et la rétention des filles); Taux d'équipement en matériel informatique et scientifique dérisoire (moins de 10% des écoles secondaires disposent d'un laboratoire fonctionnel); Difficultés majeures de transport pour les inspections dans les zones enclavées (8 territoires difficilement accessibles en saison des pluies); Conflits récurrents entre parents et enseignants sur les frais de fonctionnement (23 cas signalés); Faible implication des communautés dans la gestion des écoles."
+  },
+
+  "conclusion": "L'année scolaire 2024-2025 a été marquée par des avancées significatives en matière d'accès à l'éducation dans la Province du Kwango5, avec la construction de 98 nouvelles salles de classe, l'augmentation notable des effectifs scolaires (+6,8% au primaire), et l'amélioration du taux de transition primaire-secondaire (89,5%). Toutefois, des défis majeurs persistent et menacent la durabilité des acquis: la qualité de l'enseignement demeure préoccupante (équipements insuffisants, formation continue limitée), la rémunération du personnel reste problématique (73 agents non payés), les infrastructures se dégradent (40% nécessitent réhabilitation), et les catastrophes naturelles ont impacté négativement 1000 élèves. Les recommandations prioritaires portent sur: (1) le renforcement urgent des capacités des enseignants (formation de 500 enseignants), (2) l'amélioration substantielle des infrastructures et équipements (investissement estimé à 2,5 millions USD), (3) la régularisation immédiate du paiement des salaires du personnel, (4) le renforcement de la résilience du système éducatif face aux urgences (construction de 22 ETA), et (5) l'amélioration de la gouvernance locale avec implication accrue des communautés. La mise en œuvre de ces recommandations nécessitera un engagement politique fort, une mobilisation accrue de ressources domestiques et externes, et un partenariat renforcé avec les PTF et les communautés.",
+
+  "statut": "brouillon"
+}
