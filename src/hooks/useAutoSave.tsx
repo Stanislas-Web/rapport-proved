@@ -141,6 +141,8 @@ export const useAutoSave = ({
 
   // Fonction pour effacer le brouillon
   const clearDraft = () => {
+    console.log('🧹 useAutoSave.clearDraft appelé');
+    console.log('🧹 key:', key);
     localStorage.removeItem(key);
     localStorage.removeItem(`${key}_timestamp`);
     lastSavedDataRef.current = '';
@@ -150,6 +152,7 @@ export const useAutoSave = ({
       hasUnsavedChanges: false,
       error: null
     });
+    console.log('✅ useAutoSave: localStorage nettoyé');
   };
 
   return {

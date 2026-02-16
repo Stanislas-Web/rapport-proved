@@ -100,6 +100,17 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
 
   // Flag pour éviter la boucle infinie
   const [comitesLoaded, setComitesLoaded] = useState(false);
+  const [lastLoadedRapportId, setLastLoadedRapportId] = useState<string | null>(null);
+
+  // Réinitialiser le flag quand on charge un nouveau rapport
+  useEffect(() => {
+    const currentRapportId = formData?.identificationProved?._id || formData?._id;
+    if (currentRapportId && currentRapportId !== lastLoadedRapportId) {
+      console.log('🔄 [RealisationsComplete] Nouveau rapport détecté, réinitialisation du flag');
+      setComitesLoaded(false);
+      setLastLoadedRapportId(currentRapportId);
+    }
+  }, [formData?.identificationProved?._id, formData?._id, lastLoadedRapportId]);
 
   // États pour les acquisitions de matériels
   const [acquisitionsMateriels, setAcquisitionsMateriels] = useState({
@@ -169,7 +180,12 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
     const comites = formData?.gouvernance?.comitesProvinciaux;
     const vulgarisation = formData?.gouvernance?.vulgarisationInstructions;
 
+    console.log('🔍 [RealisationsComplete] useEffect déclenché');
+    console.log('🔍 [RealisationsComplete] comites:', comites);
+    console.log('🔍 [RealisationsComplete] comitesLoaded:', comitesLoaded);
+
     if (!comitesLoaded && (comites || vulgarisation)) {
+      console.log('✅ [RealisationsComplete] Chargement des comités');
       if (comites) {
         setComitesProvinciaux({
           comiteEDUNC: {
@@ -281,11 +297,14 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
     }
   }, [inspectionsC2B, acquisitionsMateriels, comitesLoaded, setFormData]);
 
-  // Synchronisation initiale uniquement depuis formData
+  // Synchronisation depuis formData quand le rapport change
   useEffect(() => {
+    console.log('🔍 [RealisationsComplete] Chargement/rechargement des données - rapport ID:', formData?._id);
+    
     // Ne synchroniser que si les données viennent de formData et non de nos changements locaux
     const infra = formData.gouvernance?.infrastructureBureaux;
     if (infra && Object.keys(infra).length > 0) {
+      console.log('🔄 [RealisationsComplete] Chargement bureauValues depuis formData');
       setBureauValues(prev => {
         // Comparer les valeurs réelles, pas les objets eux-mêmes
         const isEqual = Object.keys(infra).every(
@@ -297,15 +316,41 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
 
     const totalsData = formData.gouvernance?.totalInfrastructureBureaux;
     if (totalsData) {
+      console.log('🔄 [RealisationsComplete] Chargement totals depuis formData');
       setTotals(prev => JSON.stringify(prev) === JSON.stringify(totalsData) ? prev : totalsData);
     }
 
     const inspectionsData = formData.gouvernance?.inspectionsAdministrativesC2B;
     if (inspectionsData) {
+      console.log('🔄 [RealisationsComplete] Chargement inspectionsC2B depuis formData:', inspectionsData);
       const mapped = mapInspectionsToLocal(inspectionsData);
       setInspectionsC2B(prev => JSON.stringify(prev) === JSON.stringify(mapped) ? prev : mapped);
     }
-  }, []);
+
+    const acquisitionsData = formData.gouvernance?.acquisitionsMateriels;
+    if (acquisitionsData) {
+      console.log('🔄 [RealisationsComplete] Chargement acquisitionsMateriels depuis formData:', acquisitionsData);
+      setAcquisitionsMateriels(prev => {
+        const newData = {
+          ecoles: {
+            nature: acquisitionsData.ecoles?.nature || '',
+            gvt: acquisitionsData.ecoles?.sourceFinancement?.gvt || 0,
+            projet: acquisitionsData.ecoles?.sourceFinancement?.projet || 0,
+            ptfs: acquisitionsData.ecoles?.sourceFinancement?.ptfs || 0,
+            ong: acquisitionsData.ecoles?.sourceFinancement?.ong || 0
+          },
+          bureauxGestionnaires: {
+            nature: acquisitionsData.bureauxGestionnaires?.nature || '',
+            gvt: acquisitionsData.bureauxGestionnaires?.sourceFinancement?.gvt || 0,
+            projet: acquisitionsData.bureauxGestionnaires?.sourceFinancement?.projet || 0,
+            ptfs: acquisitionsData.bureauxGestionnaires?.sourceFinancement?.ptfs || 0,
+            ong: acquisitionsData.bureauxGestionnaires?.sourceFinancement?.ong || 0
+          }
+        };
+        return JSON.stringify(prev) === JSON.stringify(newData) ? prev : newData;
+      });
+    }
+  }, [formData?._id]);
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <h3 className="text-lg font-medium mb-4 text-primary">IV. REALISATIONS (SUITE)</h3>

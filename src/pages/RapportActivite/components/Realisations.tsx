@@ -21,7 +21,13 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
   // Flag pour éviter la boucle infinie
   const [cantinesLoaded, setCantinesLoaded] = useState(false);
 
-  // Charger les données des cantines depuis le backend UNE SEULE FOIS
+  // Réinitialiser le flag quand le rapport change
+  useEffect(() => {
+    console.log('🔄 [Realisations] Reset cantinesLoaded pour nouveau rapport:', formData?._id);
+    setCantinesLoaded(false);
+  }, [formData?._id]);
+
+  // Charger les données des cantines depuis le backend
   useEffect(() => {
     if (!cantinesLoaded) {
       const cantinesDetail = formData?.realisations?.accesAccessibiliteEquite?.cantinesScolaires?.cantinesScolairesDetail;
@@ -75,12 +81,26 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
 
   // Flag pour charger les indicateurs d'accès
   const [indicateursAccesLoaded, setIndicateursAccesLoaded] = useState(false);
+  const [lastLoadedRapportId, setLastLoadedRapportId] = useState<string | null>(null);
+
+  // Réinitialiser le flag quand on charge un nouveau rapport
+  useEffect(() => {
+    const currentRapportId = formData?.identificationProved?._id || formData?._id;
+    if (currentRapportId && currentRapportId !== lastLoadedRapportId) {
+      console.log('🔄 [IV.7] Nouveau rapport détecté, réinitialisation du flag');
+      setIndicateursAccesLoaded(false);
+      setLastLoadedRapportId(currentRapportId);
+    }
+  }, [formData?.identificationProved?._id, formData?._id, lastLoadedRapportId]);
 
   // Charger les indicateurs d'accès depuis le backend
   useEffect(() => {
     const indicateurs = formData?.realisations?.accesAccessibiliteEquite?.indicateursAcces;
     
-    if (indicateurs) {
+    console.log('🔍 [IV.7] useEffect déclenché - indicateurs:', indicateurs);
+    console.log('🔍 [IV.7] Flag indicateursAccesLoaded:', indicateursAccesLoaded);
+    
+    if (indicateurs && !indicateursAccesLoaded) {
       console.log('🔍 [IV.7] Chargement indicateursAcces depuis backend:', indicateurs);
       
       // Vérifier si au moins un champ GF existe dans le backend
@@ -88,7 +108,9 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                      indicateurs.tauxTransitionPrimaireCTEB !== undefined || 
                      indicateurs.tauxTransitionCTEBHumanites !== undefined;
       
-      if (hasData && !indicateursAccesLoaded) {
+      console.log('🔍 [IV.7] hasData:', hasData);
+      
+      if (hasData) {
         const newState = {
           nouveauxInscritsPrimaire: { 
             tauxGF: indicateurs.proportionNouveauxInscrits || 0, 

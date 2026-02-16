@@ -378,18 +378,24 @@ const CreateRapportActivite: React.FC = () => {
         },
         visitesEtReunions: {
           visitesClasses: {
-            prescolaire: 'BON',
+            ece: 'BON',
+            preprimaire: 'BON',
+            maternel: 'BON',
             primaire: 'BON',
             secondaire: 'BON',
             special: 'BON'
           },
           reunionsPedagogiques: {
-            prescolaire: 'BON',
+            ece: 'BON',
+            preprimaire: 'BON',
+            maternel: 'BON',
             primaire: 'BON',
             secondaire: 'BON'
           },
           fonctionnementCelluleBase: {
-            prescolaire: 'BON',
+            ece: 'BON',
+            preprimaire: 'BON',
+            maternel: 'BON',
             primaire: 'BON',
             secondaire: 'BON',
             special: 'BON'
@@ -784,10 +790,45 @@ const CreateRapportActivite: React.FC = () => {
       personnel: {
         ...defaultData.personnel,
         ...data.personnel
+      },
+      ameliorationQualite: {
+        ...defaultData.ameliorationQualite,
+        ...data.ameliorationQualite,
+        disponibiliteMoyensEnseignement: {
+          ...defaultData.ameliorationQualite.disponibiliteMoyensEnseignement,
+          ...data.ameliorationQualite?.disponibiliteMoyensEnseignement
+        },
+        visitesEtReunions: {
+          visitesClasses: {
+            ...defaultData.ameliorationQualite.visitesEtReunions.visitesClasses,
+            ...(data.ameliorationQualite?.visitesEtReunions?.visitesClasses && 
+               Object.fromEntries(
+                 Object.entries(data.ameliorationQualite.visitesEtReunions.visitesClasses)
+                   .filter(([_, v]) => v !== null && v !== undefined)
+               ))
+          },
+          reunionsPedagogiques: {
+            ...defaultData.ameliorationQualite.visitesEtReunions.reunionsPedagogiques,
+            ...(data.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques && 
+               Object.fromEntries(
+                 Object.entries(data.ameliorationQualite.visitesEtReunions.reunionsPedagogiques)
+                   .filter(([_, v]) => v !== null && v !== undefined)
+               ))
+          },
+          fonctionnementCelluleBase: {
+            ...defaultData.ameliorationQualite.visitesEtReunions.fonctionnementCelluleBase,
+            ...(data.ameliorationQualite?.visitesEtReunions?.fonctionnementCelluleBase && 
+               Object.fromEntries(
+                 Object.entries(data.ameliorationQualite.visitesEtReunions.fonctionnementCelluleBase)
+                   .filter(([_, v]) => v !== null && v !== undefined)
+               ))
+          }
+        }
       }
     };
     
-    console.log('🔍 Données complètes après fusion:', mergedData);
+    console.log('🔍 [ensureCompleteInitialization] Données visitesClasses fusionnées:', mergedData.ameliorationQualite.visitesEtReunions.visitesClasses);
+    console.log('🔍 [ensureCompleteInitialization] Valeurs - ece:', mergedData.ameliorationQualite.visitesEtReunions.visitesClasses.ece, 'preprimaire:', mergedData.ameliorationQualite.visitesEtReunions.visitesClasses.preprimaire, 'maternel:', mergedData.ameliorationQualite.visitesEtReunions.visitesClasses.maternel);
     return mergedData;
   };
 
@@ -877,21 +918,34 @@ const CreateRapportActivite: React.FC = () => {
   const ensureCompleteData = (data: any): RapportActivite => {
     const defaultData = loadDraft();
     
-    // Deep merge pour les sections importantes
+    // Deep merge pour les sections importantes - MERGE COMPLET des deux objets
     const mergeObjects = (defaults: any, loaded: any): any => {
       if (!loaded) return defaults;
       if (!defaults) return loaded;
       
+      // Commencer avec les valeurs par défaut
       const merged: any = { ...defaults };
+      
+      // Fusionner les propriétés chargées
       Object.keys(loaded).forEach(key => {
         if (loaded[key] !== null && loaded[key] !== undefined) {
           if (typeof loaded[key] === 'object' && !Array.isArray(loaded[key])) {
+            // Merge récursif pour les objets
             merged[key] = mergeObjects(defaults[key] || {}, loaded[key]);
           } else {
+            // Remplacer la valeur par défaut
             merged[key] = loaded[key];
           }
         }
       });
+      
+      // IMPORTANT: Ajouter les clés par défaut qui n'existent pas dans loaded
+      Object.keys(defaults).forEach(key => {
+        if (!(key in loaded) || loaded[key] === null || loaded[key] === undefined) {
+          merged[key] = defaults[key];
+        }
+      });
+      
       return merged;
     };
     
@@ -920,18 +974,27 @@ const CreateRapportActivite: React.FC = () => {
           console.log('🔍 Keys du rapport chargé:', Object.keys(existingRapport).slice(0, 10));
           console.log('🔍 Realisations dans chargement?', !!existingRapport.realisations);
           console.log('🔍 Gouvernance dans chargement?', !!existingRapport.gouvernance);
+          console.log('🔍 DÉTAIL Realisations.accesAccessibiliteEquite.indicateursAcces:', existingRapport.realisations?.accesAccessibiliteEquite?.indicateursAcces);
+          console.log('🔍 DÉTAIL Gouvernance.comitesProvinciaux:', existingRapport.gouvernance?.comitesProvinciaux);
+          console.log('🔍 DÉTAIL Gouvernance.acquisitionsMateriels:', existingRapport.gouvernance?.acquisitionsMateriels);
           
           // Merger avec les données par défaut pour éviter les undefined
-          const completeData = ensureCompleteData(existingRapport);
+          const completeData = ensureCompleteInitialization(existingRapport);
           console.log('✅ Données complétées:', {
             hasRealisations: !!completeData.realisations,
             hasGouvernance: !!completeData.gouvernance,
             hasPersonnel: !!completeData.personnel,
             intro: completeData.introduction?.substring(0, 50)
           });
+          console.log('🔍 APRÈS MERGE - indicateursAcces:', completeData.realisations?.accesAccessibiliteEquite?.indicateursAcces);
+          console.log('🔍 APRÈS MERGE - comitesProvinciaux:', completeData.gouvernance?.comitesProvinciaux);
+          console.log('🔍 APRÈS MERGE - acquisitionsMateriels:', completeData.gouvernance?.acquisitionsMateriels);
+          console.log('🎯 APRÈS MERGE - visitesClasses:', completeData.ameliorationQualite?.visitesEtReunions?.visitesClasses);
+          console.log('🎯 APRÈS MERGE - reunionsPedagogiques:', completeData.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques);
           
           // Charger les données dans formData
           setFormData(completeData);
+          console.log('🎯 formData mis à jour avec les données complètes');
           // Ne pas afficher le modal de brouillon en mode édition
           setShowDraftModal(false);
         } catch (error) {
@@ -1084,6 +1147,11 @@ const CreateRapportActivite: React.FC = () => {
       
       localStorage.removeItem('rapportActiviteDraft');
       console.log('🔍 Brouillon supprimé de localStorage');
+      
+      // Supprimer le nouveau système de brouillon
+      deleteDraft();
+      autoSave.clearDraft();
+      console.log('🔍 Nouveau système de brouillon supprimé');
       
       // Vérifier que la suppression a fonctionné
       const checkDraft = localStorage.getItem('rapportActiviteDraft');
@@ -1537,7 +1605,12 @@ const CreateRapportActivite: React.FC = () => {
         hasUnsavedChanges={autoSave?.hasUnsavedChanges || false}
         completionPercentage={completionPercentage || 0}
         onForceSave={autoSave?.forceSave}
+        onClearDraft={() => {
+          console.log('🎯 onClearDraft props appelé');
+          autoSave.clearDraft();
+        }}
         error={autoSave?.error || null}
+        isEditMode={isEditMode}
       />
 
       <div className="mx-auto max-w-7xl">

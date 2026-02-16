@@ -9,6 +9,7 @@ interface DraftIndicatorProps {
   onForceSave?: () => void;
   onClearDraft?: () => void;
   error?: Error | null;
+  isEditMode?: boolean;
 }
 
 const DraftIndicator: React.FC<DraftIndicatorProps> = ({
@@ -18,25 +19,37 @@ const DraftIndicator: React.FC<DraftIndicatorProps> = ({
   completionPercentage,
   onForceSave,
   onClearDraft,
-  error
+  error,
+  isEditMode = false
 }) => {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
   const handleClearDraft = () => {
-    // Supprimer toutes les clés de brouillon
-    deleteDraft();
+    console.log('🗑️ handleClearDraft appelé');
+    console.log('🗑️ isEditMode:', isEditMode);
     
-    // Callback pour notifier le parent
-    if (onClearDraft) {
-      onClearDraft();
+    // En mode modification, ne pas vider le brouillon, juste recharger
+    if (!isEditMode) {
+      // En mode création: supprimer le brouillon
+      console.log('🗑️ Mode création: suppression du brouillon');
+      deleteDraft();
+      
+      // Callback pour notifier le parent
+      if (onClearDraft) {
+        console.log('🗑️ Appel du callback onClearDraft');
+        onClearDraft();
+      }
+    } else {
+      console.log('🗑️ Mode édition: pas de suppression du brouillon');
     }
     
     setShowConfirmDelete(false);
     
-    // Forcer le nettoyage et recharger
+    // Attendre que les suppressions localStorage soient terminées
+    console.log('🔄 Rechargement de la page dans 10ms...');
     setTimeout(() => {
-      window.location.href = window.location.pathname;
-    }, 100);
+      window.location.reload();
+    }, 10);
   };
   const getStatusColor = () => {
     if (error) return 'text-red-600';
@@ -151,16 +164,16 @@ const DraftIndicator: React.FC<DraftIndicatorProps> = ({
             <button
               onClick={() => setShowConfirmDelete(true)}
               className="text-xs text-red-600 hover:text-red-800 hover:underline flex items-center gap-1"
-              title="Vider le brouillon et recommencer"
+              title={isEditMode ? "Abandonner les modifications et recharger" : "Vider le brouillon et recommencer"}
             >
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
-              Vider le brouillon
+              {isEditMode ? "Abandonner les modifications" : "Vider le brouillon"}
             </button>
           ) : (
             <div className="bg-red-50 p-2 rounded space-y-2">
-              <p className="text-xs text-red-700">Êtes-vous sûr ? Cette action est irréversible.</p>
+              <p className="text-xs text-red-700">{isEditMode ? "Abandonner vos modifications ?" : "Êtes-vous sûr ? Cette action est irréversible."}</p>
               <div className="flex gap-2">
                 <button
                   onClick={handleClearDraft}

@@ -70,6 +70,23 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     mapInspectionsFromFormData(formData?.ameliorationQualite?.activitesInspectorales?.inspectionsFormation)
   );
 
+  // Recharger les inspections C3 et Formation quand le rapport change
+  useEffect(() => {
+    const inspectionsC3Data = formData?.ameliorationQualite?.activitesInspectorales?.inspectionsPedagogiquesC3;
+    if (inspectionsC3Data) {
+      console.log('🔄 [EvaluationQualitativeComplete] Chargement inspectionsC3 depuis formData:', inspectionsC3Data);
+      const mapped = mapInspectionsFromFormData(inspectionsC3Data);
+      setInspectionsC3(prev => JSON.stringify(prev) === JSON.stringify(mapped) ? prev : mapped);
+    }
+
+    const inspectionsFormationData = formData?.ameliorationQualite?.activitesInspectorales?.inspectionsFormation;
+    if (inspectionsFormationData) {
+      console.log('🔄 [EvaluationQualitativeComplete] Chargement inspectionsFormation depuis formData:', inspectionsFormationData);
+      const mapped = mapInspectionsFromFormData(inspectionsFormationData);
+      setInspectionsFormation(prev => JSON.stringify(prev) === JSON.stringify(mapped) ? prev : mapped);
+    }
+  }, [formData?._id]);
+
   // État pour les thèmes exploités
   const [themesExploites, setThemesExploites] = useState(() => ({
     ece: formData?.ameliorationQualite?.activitesInspectorales?.themesExploites?.ece || '',
@@ -78,6 +95,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
   
   // Flag pour éviter la boucle infinie de chargement des thèmes
   const [themesExploitesLoaded, setThemesExploitesLoaded] = useState(false);
+  
+  // Réinitialiser le flag thèmes exploités quand le rapport change
+  useEffect(() => {
+    console.log('🔄 [EvaluationQualitativeComplete] Reset themesExploitesLoaded pour nouveau rapport:', formData?._id);
+    setThemesExploitesLoaded(false);
+  }, [formData?._id]);
   
   // Flag pour éviter la boucle infinie de chargement du rendement interne
   const [rendementInterneLoaded, setRendementInterneLoaded] = useState(false);

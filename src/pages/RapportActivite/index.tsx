@@ -832,15 +832,15 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
               <div class="personnel-details">
                 <div class="personnel-item">
                   <span class="label">Préscolaire:</span>
-                  <span class="value">${rapport.personnel?.personnelEnseignant?.prescolaire?.hommes || 0}H / ${rapport.personnel?.personnelEnseignant?.prescolaire?.femmes || 0}F</span>
+                  <span class="value">${((rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaire?.hommes || 0) + (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaireSpecial?.hommes || 0))}H / ${((rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaire?.femmes || 0) + (rapport.personnel?.personnelEnseignant?.niveauPrescolaire?.enseignementPrescolaireSpecial?.femmes || 0))}F</span>
                 </div>
                 <div class="personnel-item">
                   <span class="label">Primaire:</span>
-                  <span class="value">${rapport.personnel?.personnelEnseignant?.primaire?.hommes || 0}H / ${rapport.personnel?.personnelEnseignant?.primaire?.femmes || 0}F</span>
+                  <span class="value">${((rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrimaire?.hommes || 0) + (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrescolaireSpecial?.hommes || 0))}H / ${((rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrimaire?.femmes || 0) + (rapport.personnel?.personnelEnseignant?.niveauPrimaire?.enseignementPrescolaireSpecial?.femmes || 0))}F</span>
                 </div>
                 <div class="personnel-item">
                   <span class="label">Secondaire:</span>
-                  <span class="value">${rapport.personnel?.personnelEnseignant?.secondaire?.hommes || 0}H / ${rapport.personnel?.personnelEnseignant?.secondaire?.femmes || 0}F</span>
+                  <span class="value">${((rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementSecondaire?.hommes || 0) + (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementPrescolaireSpecial?.hommes || 0))}H / ${((rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementSecondaire?.femmes || 0) + (rapport.personnel?.personnelEnseignant?.niveauSecondaire?.enseignementPrescolaireSpecial?.femmes || 0))}F</span>
                 </div>
               </div>
             </div>
@@ -2384,26 +2384,30 @@ const RapportActivitePage: React.FC = () => {
                 </div>
 
                 {/* Visites et Réunions */}
-                {selectedRapport.ameliorationQualite.visitesEtReunions && (
-                  <div className="mb-4">
-                    <h4 className="font-medium text-cyan-700 mb-2">Visites et Réunions</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                      <div className="bg-white p-2 rounded">
-                        <div className="font-semibold">Visites de Classes</div>
-                        <div>Préscolaire: {selectedRapport.ameliorationQualite.visitesEtReunions.visitesClasses?.prescolaire || '-'}</div>
-                        <div>Primaire: {selectedRapport.ameliorationQualite.visitesEtReunions.visitesClasses?.primaire || '-'}</div>
-                        <div>Secondaire: {selectedRapport.ameliorationQualite.visitesEtReunions.visitesClasses?.secondaire || '-'}</div>
-                      </div>
-                      <div className="bg-white p-2 rounded">
-                        <div className="font-semibold">Réunions Pédagogiques</div>
-                        <div>Préscolaire: {selectedRapport.ameliorationQualite.visitesEtReunions.reunionsPedagogiques?.prescolaire || '-'}</div>
-                        <div>Primaire: {selectedRapport.ameliorationQualite.visitesEtReunions.reunionsPedagogiques?.primaire || '-'}</div>
-                        <div>Secondaire: {selectedRapport.ameliorationQualite.visitesEtReunions.reunionsPedagogiques?.secondaire || '-'}</div>
-                      </div>
+                <div className="mb-4">
+                  <h4 className="font-medium text-cyan-700 mb-2">Visites et Réunions</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                    <div className="bg-white p-2 rounded">
+                      <div className="font-semibold">Visites de Classes</div>
+                      <div>ECE: {selectedRapport.ameliorationQualite?.visitesEtReunions?.visitesClasses?.ece || '-'}</div>
+                      <div>Préprimaire: {selectedRapport.ameliorationQualite?.visitesEtReunions?.visitesClasses?.preprimaire || '-'}</div>
+                      <div>Maternel: {selectedRapport.ameliorationQualite?.visitesEtReunions?.visitesClasses?.maternel || '-'}</div>
+                      <div>Primaire: {selectedRapport.ameliorationQualite?.visitesEtReunions?.visitesClasses?.primaire || '-'}</div>
+                      <div>Secondaire: {selectedRapport.ameliorationQualite?.visitesEtReunions?.visitesClasses?.secondaire || '-'}</div>
+                      <div>Spécial: {selectedRapport.ameliorationQualite?.visitesEtReunions?.visitesClasses?.special || '-'}</div>
                     </div>
-                    
-                    {/* Thèmes Exploités */}
-                    {selectedRapport.ameliorationQualite.activitesInspectorales?.themesExploites && (
+                    <div className="bg-white p-2 rounded">
+                      <div className="font-semibold">Réunions Pédagogiques</div>
+                      <div>ECE: {selectedRapport.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques?.ece || '-'}</div>
+                      <div>Préprimaire: {selectedRapport.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques?.preprimaire || '-'}</div>
+                      <div>Maternel: {selectedRapport.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques?.maternel || '-'}</div>
+                      <div>Primaire: {selectedRapport.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques?.primaire || '-'}</div>
+                      <div>Secondaire: {selectedRapport.ameliorationQualite?.visitesEtReunions?.reunionsPedagogiques?.secondaire || '-'}</div>
+                    </div>
+                  </div>
+                  
+                  {/* Thèmes Exploités */}
+                  {selectedRapport.ameliorationQualite?.activitesInspectorales?.themesExploites && (
                       <div className="mt-3 bg-cyan-100 p-2 rounded text-xs">
                         <div className="font-semibold mb-1">Thèmes Exploités lors des Formations</div>
                         {selectedRapport.ameliorationQualite.activitesInspectorales.themesExploites.ece && (
@@ -2414,8 +2418,7 @@ const RapportActivitePage: React.FC = () => {
                         )}
                       </div>
                     )}
-                  </div>
-                )}
+                </div>
 
                 {/* Activités Inspectorales */}
                 {selectedRapport.ameliorationQualite.activitesInspectorales && (
