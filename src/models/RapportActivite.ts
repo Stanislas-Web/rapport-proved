@@ -407,30 +407,137 @@ export interface RapportActivite {
         secondaire: 'TRES BON' | 'BON' | 'CARENCE';
         special: 'TRES BON' | 'BON' | 'CARENCE';
       };
+      themesExploites?: {
+        ece?: string;
+        maternel?: string;
+      };
     };
     indicateursRendement: {
       rendementInterne: {
-        prescolaire: {
-          tauxAbandon: number;
-          tauxReussite: number;
-          tauxEchec: number;
+        prescolaire?: {
+          tauxAbandon?: number;
+          tauxReussite?: number;
+          tauxEchec?: number;
         };
-        primaire: {
-          tauxAbandon: number;
-          tauxReussite: number;
-          tauxEchec: number;
+        primaire?: {
+          tauxAbandon?: number;
+          tauxReussite?: number;
+          tauxEchec?: number;
         };
-        secondaire: {
-          tauxAbandon: number;
-          tauxReussite: number;
-          tauxEchec: number;
+        secondaire?: {
+          tauxAbandon?: number;
+          tauxReussite?: number;
+          tauxEchec?: number;
+        };
+        sixiemePrimaire?: {
+          abandon?: number;
+          reussite?: number;
+          echec?: number;
+        };
+        huitiemeCETB?: {
+          abandon?: number;
+          reussite?: number;
+          echec?: number;
+        };
+        quatriemeHumanite?: {
+          abandon?: number;
+          reussite?: number;
+          echec?: number;
+        };
+        diplomesMathematiques?: {
+          abandon?: number;
+          reussite?: number;
+          echec?: number;
+        };
+        diplomesFiliereTechniques?: {
+          abandon?: number;
+          reussite?: number;
+          echec?: number;
         };
       };
-      rendementExterne: {
-        examensCertificatifs: {
-          tauxDiplomes: number;
-          tauxHumanitesScientifiques: number;
-          tauxHumanitesTechniques: number;
+      rendementExterne?: {
+        prescolaire?: {
+          tauxGF?: number;
+          tauxFilles?: number;
+        };
+        espaceCommunautaireEveil?: {
+          tauxGF?: number;
+          tauxFilles?: number;
+        };
+        classePreprimaire?: {
+          tauxGF?: number;
+          tauxFilles?: number;
+        };
+        maternel?: {
+          tauxGF?: number;
+          tauxFilles?: number;
+        };
+        primaire?: {
+          tauxGF?: number;
+          tauxFilles?: number;
+        };
+        enseignementSpecialPrimaire?: {
+          tauxGF?: number;
+          tauxFilles?: number;
+        };
+        enseignementPrimaire?: {
+          tauxGF?: number;
+          tauxFilles?: number;
+        };
+        secondaire?: {
+          tauxGF?: number;
+          tauxFilles?: number;
+        };
+        enseignementSpecialSecondaire?: {
+          tauxGF?: number;
+          tauxFilles?: number;
+        };
+        enseignementSecondaireNormal?: {
+          tauxGF?: number;
+          tauxFilles?: number;
+        };
+        examensCertificatifs?: {
+          tauxDiplomes?: number;
+          tauxHumanitesScientifiques?: number;
+          tauxHumanitesTechniques?: number;
+        };
+      };
+      efficacitePrimaire?: {
+        tauxAbandon?: {
+          tauxGF?: number;
+          tauxFilles?: number;
+        };
+        tauxReussite?: {
+          tauxGF?: number;
+          tauxFilles?: number;
+        };
+        tauxEchec?: {
+          tauxGF?: number;
+          tauxFilles?: number;
+        };
+      };
+      efficaciteSecondaire?: {
+        tauxAbandon?: {
+          tauxGF?: number;
+          tauxFilles?: number;
+        };
+        tauxReussite?: {
+          tauxGF?: number;
+          tauxFilles?: number;
+        };
+        tauxEchec?: {
+          tauxGF?: number;
+          tauxFilles?: number;
+        };
+      };
+      tauxDiplomesOCDE?: {
+        humanitesScientifiques?: {
+          tauxGF?: number;
+          tauxFilles?: number;
+        };
+        humanitesTechniques?: {
+          tauxGF?: number;
+          tauxFilles?: number;
         };
       };
     };

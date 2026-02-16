@@ -473,6 +473,30 @@
           "tauxGF": 6.9,
           "tauxFilles": 8.7
         }
+      },
+      "efficaciteSecondaire": {
+        "tauxAbandon": {
+          "tauxGF": 7.5,
+          "tauxFilles": 7.2
+        },
+        "tauxReussite": {
+          "tauxGF": 83.0,
+          "tauxFilles": 82.3
+        },
+        "tauxEchec": {
+          "tauxGF": 9.5,
+          "tauxFilles": 10.5
+        }
+      },
+      "tauxDiplomesOCDE": {
+        "humanitesScientifiques": {
+          "tauxGF": 62.3,
+          "tauxFilles": 58.7
+        },
+        "humanitesTechniques": {
+          "tauxGF": 37.7,
+          "tauxFilles": 35.2
+        }
       }
     }
   },

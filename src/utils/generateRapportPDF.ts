@@ -772,20 +772,20 @@ const generateRapportHTML = (rapport: RapportActivite): string => {
             <table class="info-table">
                 <tbody>
                     <tr>
-                        <th style="width: 25%;">Comité EDUNC</th>
-                        <td style="font-size: 7px; padding-top: 5px; padding-bottom: 5px;">Fréquence: ${rapport.gouvernance.comitesProvinciaux.comiteEDUNC?.frequenceReunions || '-'}${rapport.gouvernance.comitesProvinciaux.comiteEDUNC?.pointsTraites ? ` | Points: ${rapport.gouvernance.comitesProvinciaux.comiteEDUNC.pointsTraites}` : ''}</td>
+                        <th>Comité EDUNC</th>
+                        <td style="font-size: 7px; padding: 5px 8px;">Fréquence: ${rapport.gouvernance.comitesProvinciaux.comiteEDUNC?.frequenceReunions || '-'}${rapport.gouvernance.comitesProvinciaux.comiteEDUNC?.pointsTraites ? ` | Points: ${rapport.gouvernance.comitesProvinciaux.comiteEDUNC.pointsTraites}` : ''}</td>
                     </tr>
                     <tr>
                         <th>Comité ENAFP</th>
-                        <td style="font-size: 7px; padding-top: 5px; padding-bottom: 5px;">Fréquence: ${rapport.gouvernance.comitesProvinciaux.comiteENAFP?.frequenceReunions || '-'}${rapport.gouvernance.comitesProvinciaux.comiteENAFP?.pointsTraites ? ` | Points: ${rapport.gouvernance.comitesProvinciaux.comiteENAFP.pointsTraites}` : ''}</td>
+                        <td style="font-size: 7px; padding: 5px 8px;">Fréquence: ${rapport.gouvernance.comitesProvinciaux.comiteENAFP?.frequenceReunions || '-'}${rapport.gouvernance.comitesProvinciaux.comiteENAFP?.pointsTraites ? ` | Points: ${rapport.gouvernance.comitesProvinciaux.comiteENAFP.pointsTraites}` : ''}</td>
                     </tr>
                     <tr>
                         <th>Comité TENASOSSP</th>
-                        <td style="font-size: 7px; padding-top: 5px; padding-bottom: 5px;">Fréquence: ${rapport.gouvernance.comitesProvinciaux.comiteTENASOSP?.frequenceReunions || '-'}${rapport.gouvernance.comitesProvinciaux.comiteTENASOSP?.pointsTraites ? ` | Points: ${rapport.gouvernance.comitesProvinciaux.comiteTENASOSP.pointsTraites}` : ''}</td>
+                        <td style="font-size: 7px; padding: 5px 8px;">Fréquence: ${rapport.gouvernance.comitesProvinciaux.comiteTENASOSP?.frequenceReunions || '-'}${rapport.gouvernance.comitesProvinciaux.comiteTENASOSP?.pointsTraites ? ` | Points: ${rapport.gouvernance.comitesProvinciaux.comiteTENASOSP.pointsTraites}` : ''}</td>
                     </tr>
                     <tr>
                         <th>Comité Examen État</th>
-                        <td style="font-size: 7px; padding-top: 5px; padding-bottom: 5px;">Fréquence: ${rapport.gouvernance.comitesProvinciaux.comiteExamenEtat?.frequenceReunions || '-'}${rapport.gouvernance.comitesProvinciaux.comiteExamenEtat?.pointsTraites ? ` | Points: ${rapport.gouvernance.comitesProvinciaux.comiteExamenEtat.pointsTraites}` : ''}</td>
+                        <td style="font-size: 7px; padding: 5px 8px;">Fréquence: ${rapport.gouvernance.comitesProvinciaux.comiteExamenEtat?.frequenceReunions || '-'}${rapport.gouvernance.comitesProvinciaux.comiteExamenEtat?.pointsTraites ? ` | Points: ${rapport.gouvernance.comitesProvinciaux.comiteExamenEtat.pointsTraites}` : ''}</td>
                     </tr>
                 </tbody>
             </table>
@@ -904,7 +904,7 @@ const generateRapportHTML = (rapport: RapportActivite): string => {
                     ${rapport.educationUrgence.catastrophesNaturelles ? `
                     <tr>
                         <th>Catastrophes</th>
-                        <td style="font-size: 7px; padding-top: 5px; padding-bottom: 5px;">${rapport.educationUrgence.catastrophesNaturelles.nature || '-'}</td>
+                        <td style="font-size: 7px; padding: 5px 8px;">${rapport.educationUrgence.catastrophesNaturelles.nature || '-'}</td>
                     </tr>
                     ` : ''}
                 </tbody>

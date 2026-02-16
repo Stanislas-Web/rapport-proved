@@ -7,6 +7,18 @@ interface EvaluationQualitativeCompleteProps {
 }
 
 const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps> = ({ formData, setFormData, autoSaveForceSave }) => {
+  // DEBUG: Log des données au chargement
+  useEffect(() => {
+    console.log('🔍 [EvaluationQualitativeComplete] formData chargé:', {
+      hasFormData: !!formData,
+      hasAmeliorationQualite: !!formData?.ameliorationQualite,
+      hasIndicateursRendement: !!formData?.ameliorationQualite?.indicateursRendement,
+      efficacitePrimaire: formData?.ameliorationQualite?.indicateursRendement?.efficacitePrimaire,
+      rendementInterne: formData?.ameliorationQualite?.indicateursRendement?.rendementInterne,
+      rendementExterne: formData?.ameliorationQualite?.indicateursRendement?.rendementExterne
+    });
+  }, [formData?._id]);
+
   // Helper pour gérer setFormData en toute sécurité
   const safeSetFormData = (updater: (prev: any) => any) => {
     if (setFormData) {
@@ -217,6 +229,68 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
     }
   }, [formData?.ameliorationQualite?.indicateursRendement?.efficacitePrimaire, efficacitePrimaireLoaded]);
 
+  // Flag pour éviter la boucle infinie de chargement de l'efficacité secondaire
+  const [efficaciteSecondaireLoaded, setEfficaciteSecondaireLoaded] = useState(false);
+  
+  // Réinitialiser le flag efficaciteSecondaire quand le rapport change
+  useEffect(() => {
+    setEfficaciteSecondaireLoaded(false);
+  }, [formData?._id]);
+
+  // Charger l'efficacité secondaire depuis formData au montage
+  useEffect(() => {
+    const data = formData?.ameliorationQualite?.indicateursRendement?.efficaciteSecondaire;
+    if (data && !efficaciteSecondaireLoaded) {
+      console.log('🔍 [Efficacité Secondaire] Chargement depuis backend:', data);
+      
+      setEfficaciteSecondaire({
+        tauxAbandon: {
+          tauxGF: data.tauxAbandon?.tauxGF || 0,
+          tauxFilles: data.tauxAbandon?.tauxFilles || 0
+        },
+        tauxReussite: {
+          tauxGF: data.tauxReussite?.tauxGF || 0,
+          tauxFilles: data.tauxReussite?.tauxFilles || 0
+        },
+        tauxEchec: {
+          tauxGF: data.tauxEchec?.tauxGF || 0,
+          tauxFilles: data.tauxEchec?.tauxFilles || 0
+        }
+      });
+      setEfficaciteSecondaireLoaded(true);
+      console.log('✅ [Efficacité Secondaire] Chargé avec succès');
+    }
+  }, [formData?.ameliorationQualite?.indicateursRendement?.efficaciteSecondaire, efficaciteSecondaireLoaded]);
+
+  // Flag pour éviter la boucle infinie de chargement des taux diplômés OCDE
+  const [tauxDiplomesOCDELoaded, setTauxDiplomesOCDELoaded] = useState(false);
+  
+  // Réinitialiser le flag tauxDiplomesOCDE quand le rapport change
+  useEffect(() => {
+    setTauxDiplomesOCDELoaded(false);
+  }, [formData?._id]);
+
+  // Charger les taux diplômés OCDE depuis formData au montage
+  useEffect(() => {
+    const data = formData?.ameliorationQualite?.indicateursRendement?.tauxDiplomesOCDE;
+    if (data && !tauxDiplomesOCDELoaded) {
+      console.log('🔍 [Taux Diplômés OCDE] Chargement depuis backend:', data);
+      
+      setTauxDiplomesOCDE({
+        humanitesScientifiques: {
+          tauxGF: data.humanitesScientifiques?.tauxGF || 0,
+          tauxFilles: data.humanitesScientifiques?.tauxFilles || 0
+        },
+        humanitesTechniques: {
+          tauxGF: data.humanitesTechniques?.tauxGF || 0,
+          tauxFilles: data.humanitesTechniques?.tauxFilles || 0
+        }
+      });
+      setTauxDiplomesOCDELoaded(true);
+      console.log('✅ [Taux Diplômés OCDE] Chargé avec succès');
+    }
+  }, [formData?.ameliorationQualite?.indicateursRendement?.tauxDiplomesOCDE, tauxDiplomesOCDELoaded]);
+
   // État pour le modal de calcul
   const [showCalculModal, setShowCalculModal] = useState(false);
   const [showCalculModalExternes, setShowCalculModalExternes] = useState(false);
@@ -253,6 +327,16 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
 
   // Fonction pour vérifier si l'efficacité primaire a des données
   const hasEfficacitePrimaireData = () => {
+    // Vérifier d'abord dans formData (source de vérité)
+    const dataFromForm = formData?.ameliorationQualite?.indicateursRendement?.efficacitePrimaire;
+    if (dataFromForm) {
+      const hasDataInForm = Object.values(dataFromForm).some((indicateur: any) => 
+        indicateur?.tauxGF > 0 || indicateur?.tauxFilles > 0
+      );
+      if (hasDataInForm) return true;
+    }
+    
+    // Sinon vérifier dans l'état local
     const data = efficacitePrimaire;
     return Object.values(data).some(indicateur => 
       indicateur.tauxGF > 0 || indicateur.tauxFilles > 0
@@ -261,6 +345,16 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
 
   // Fonction pour vérifier si l'efficacité secondaire a des données
   const hasEfficaciteSecondaireData = () => {
+    // Vérifier d'abord si les données existent dans formData (même avec valeurs à 0)
+    const backendData = formData?.ameliorationQualite?.indicateursRendement?.efficaciteSecondaire;
+    if (backendData && (
+      backendData.tauxAbandon || 
+      backendData.tauxReussite || 
+      backendData.tauxEchec
+    )) {
+      return true;
+    }
+    // Sinon, vérifier l'état local (pour les nouvelles saisies)
     const data = efficaciteSecondaire;
     return Object.values(data).some(indicateur => 
       indicateur.tauxGF > 0 || indicateur.tauxFilles > 0
@@ -269,6 +363,15 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
 
   // Fonction pour vérifier si les taux OCDE ont des données
   const hasEfficaciteOCDEData = () => {
+    // Vérifier d'abord si les données existent dans formData (même avec valeurs à 0)
+    const backendData = formData?.ameliorationQualite?.indicateursRendement?.tauxDiplomesOCDE;
+    if (backendData && (
+      backendData.humanitesScientifiques || 
+      backendData.humanitesTechniques
+    )) {
+      return true;
+    }
+    // Sinon, vérifier l'état local (pour les nouvelles saisies)
     const data = tauxDiplomesOCDE;
     return Object.values(data).some(filiere => 
       filiere.tauxGF > 0 || filiere.tauxFilles > 0
