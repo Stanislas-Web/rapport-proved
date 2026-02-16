@@ -2663,6 +2663,55 @@ const RapportActivitePage: React.FC = () => {
                   </div>
                 )}
 
+                {/* Formations des Gestionnaires */}
+                {selectedRapport.gouvernance.formationsGestionnaires && (
+                  <div className="mb-4">
+                    <h4 className="font-medium text-teal-700 mb-2">Formations des Gestionnaires</h4>
+                    <div className="space-y-2 text-sm">
+                      {selectedRapport.gouvernance.formationsGestionnaires.leadershipScolaire && (
+                        <div className="bg-white p-2 rounded flex justify-between">
+                          <span className="font-medium">Leadership Scolaire:</span>
+                          <span>G+F: {selectedRapport.gouvernance.formationsGestionnaires.leadershipScolaire.tauxGF}% | Filles: {selectedRapport.gouvernance.formationsGestionnaires.leadershipScolaire.tauxFilles}%</span>
+                        </div>
+                      )}
+                      {selectedRapport.gouvernance.formationsGestionnaires.managementScolaire && (
+                        <div className="bg-white p-2 rounded flex justify-between">
+                          <span className="font-medium">Management Scolaire:</span>
+                          <span>G+F: {selectedRapport.gouvernance.formationsGestionnaires.managementScolaire.tauxGF}% | Filles: {selectedRapport.gouvernance.formationsGestionnaires.managementScolaire.tauxFilles}%</span>
+                        </div>
+                      )}
+                      {selectedRapport.gouvernance.formationsGestionnaires.calculIndicateurs && (
+                        <div className="bg-white p-2 rounded flex justify-between">
+                          <span className="font-medium">Calcul Indicateurs:</span>
+                          <span>G+F: {selectedRapport.gouvernance.formationsGestionnaires.calculIndicateurs.tauxGF}% | Filles: {selectedRapport.gouvernance.formationsGestionnaires.calculIndicateurs.tauxFilles}%</span>
+                        </div>
+                      )}
+                      {selectedRapport.gouvernance.formationsGestionnaires.gestionEntiteEducationnelle && (
+                        <div className="bg-white p-2 rounded flex justify-between">
+                          <span className="font-medium">Gestion Entité Éducationnelle:</span>
+                          <span>G+F: {selectedRapport.gouvernance.formationsGestionnaires.gestionEntiteEducationnelle.tauxGF}% | Filles: {selectedRapport.gouvernance.formationsGestionnaires.gestionEntiteEducationnelle.tauxFilles}%</span>
+                        </div>
+                      )}
+                      {selectedRapport.gouvernance.formationsGestionnaires.planification && (
+                        <div className="bg-white p-2 rounded flex justify-between">
+                          <span className="font-medium">Planification:</span>
+                          <span>G+F: {selectedRapport.gouvernance.formationsGestionnaires.planification.tauxGF}% | Filles: {selectedRapport.gouvernance.formationsGestionnaires.planification.tauxFilles}%</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Commentaire Formations */}
+                {selectedRapport.gouvernance.commentaireFormations && (
+                  <div className="mb-4">
+                    <h4 className="font-medium text-teal-700 mb-2">Commentaire sur les Formations</h4>
+                    <div className="bg-white p-3 rounded text-sm text-gray-700">
+                      {selectedRapport.gouvernance.commentaireFormations}
+                    </div>
+                  </div>
+                )}
+
                 {/* Infrastructure */}
                 {selectedRapport.gouvernance.totalInfrastructureBureaux && (
                   <div className="bg-white p-2 rounded text-sm">
@@ -2703,6 +2752,20 @@ const RapportActivitePage: React.FC = () => {
                         <div>Espaces Temporaires: {selectedRapport.educationUrgence.recommandations.espacesTemporairesApprentissage?.nombre || 0}</div>
                         <div>Coûts: {selectedRapport.educationUrgence.recommandations.espacesTemporairesApprentissage?.couts || '-'}</div>
                         <div>Apprenants Cible: {selectedRapport.educationUrgence.recommandations.apprenantsScolarises?.cible || 0}</div>
+                        {selectedRapport.educationUrgence.recommandations.formationEnseignantsESU && (
+                          <div className="mt-2">Formation Enseignants ESU: {selectedRapport.educationUrgence.recommandations.formationEnseignantsESU}</div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  {selectedRapport.educationUrgence.reunionsClusterEducation && (
+                    <div className="bg-white p-3 rounded">
+                      <h4 className="font-medium text-red-700 mb-2">Réunions Cluster Éducation</h4>
+                      <div className="text-xs">
+                        <div className="mb-1"><span className="font-semibold">Fréquence:</span> {selectedRapport.educationUrgence.reunionsClusterEducation.frequence || '-'}</div>
+                        {selectedRapport.educationUrgence.reunionsClusterEducation.pointsTraites && (
+                          <div><span className="font-semibold">Points Traités:</span> {selectedRapport.educationUrgence.reunionsClusterEducation.pointsTraites}</div>
+                        )}
                       </div>
                     </div>
                   )}
