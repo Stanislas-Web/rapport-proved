@@ -3412,7 +3412,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={inspectionsC3.maternel.prevu || ''}
+                      value={inspectionsC3.maternel.prevu ?? ''}
                       onChange={(e) => updateInspection('maternel', 'prevu', Number(e.target.value))}
                     />
                   </td>
@@ -3422,7 +3422,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       max={inspectionsC3.maternel.prevu || undefined}
-                      value={inspectionsC3.maternel.realise || ''}
+                      value={inspectionsC3.maternel.realise ?? ''}
                       onChange={(e) => updateInspection('maternel', 'realise', Number(e.target.value))}
                     />
                   </td>
@@ -3439,7 +3439,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={inspectionsC3.primaire.prevu || ''}
+                      value={inspectionsC3.primaire.prevu ?? ''}
                       onChange={(e) => updateInspection('primaire', 'prevu', Number(e.target.value))}
                     />
                   </td>
@@ -3449,7 +3449,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       max={inspectionsC3.primaire.prevu || undefined}
-                      value={inspectionsC3.primaire.realise || ''}
+                      value={inspectionsC3.primaire.realise ?? ''}
                       onChange={(e) => updateInspection('primaire', 'realise', Number(e.target.value))}
                     />
                   </td>
@@ -3466,7 +3466,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={inspectionsC3.secondaire.prevu || ''}
+                      value={inspectionsC3.secondaire.prevu ?? ''}
                       onChange={(e) => updateInspection('secondaire', 'prevu', Number(e.target.value))}
                     />
                   </td>
@@ -3476,7 +3476,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       max={inspectionsC3.secondaire.prevu || undefined}
-                      value={inspectionsC3.secondaire.realise || ''}
+                      value={inspectionsC3.secondaire.realise ?? ''}
                       onChange={(e) => updateInspection('secondaire', 'realise', Number(e.target.value))}
                     />
                   </td>
@@ -3493,7 +3493,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={inspectionsC3.special.prevu || ''}
+                      value={inspectionsC3.special.prevu ?? ''}
                       onChange={(e) => updateInspection('special', 'prevu', Number(e.target.value))}
                     />
                   </td>
@@ -3503,7 +3503,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       max={inspectionsC3.special.prevu || undefined}
-                      value={inspectionsC3.special.realise || ''}
+                      value={inspectionsC3.special.realise ?? ''}
                       onChange={(e) => updateInspection('special', 'realise', Number(e.target.value))}
                     />
                   </td>
@@ -3539,7 +3539,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={inspectionsFormation.maternel.prevu || ''}
+                      value={inspectionsFormation.maternel.prevu ?? ''}
                       onChange={(e) => updateInspectionFormation('maternel', 'prevu', Number(e.target.value))}
                     />
                   </td>
@@ -3549,7 +3549,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       max={inspectionsFormation.maternel.prevu || undefined}
-                      value={inspectionsFormation.maternel.realise || ''}
+                      value={inspectionsFormation.maternel.realise ?? ''}
                       onChange={(e) => updateInspectionFormation('maternel', 'realise', Number(e.target.value))}
                     />
                   </td>
@@ -3566,7 +3566,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={inspectionsFormation.primaire.prevu || ''}
+                      value={inspectionsFormation.primaire.prevu ?? ''}
                       onChange={(e) => updateInspectionFormation('primaire', 'prevu', Number(e.target.value))}
                     />
                   </td>
@@ -3576,7 +3576,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       max={inspectionsFormation.primaire.prevu || undefined}
-                      value={inspectionsFormation.primaire.realise || ''}
+                      value={inspectionsFormation.primaire.realise ?? ''}
                       onChange={(e) => updateInspectionFormation('primaire', 'realise', Number(e.target.value))}
                     />
                   </td>
@@ -3593,7 +3593,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={inspectionsFormation.secondaire.prevu || ''}
+                      value={inspectionsFormation.secondaire.prevu ?? ''}
                       onChange={(e) => updateInspectionFormation('secondaire', 'prevu', Number(e.target.value))}
                     />
                   </td>
@@ -3603,7 +3603,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       max={inspectionsFormation.secondaire.prevu || undefined}
-                      value={inspectionsFormation.secondaire.realise || ''}
+                      value={inspectionsFormation.secondaire.realise ?? ''}
                       onChange={(e) => updateInspectionFormation('secondaire', 'realise', Number(e.target.value))}
                     />
                   </td>
@@ -3620,7 +3620,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={inspectionsFormation.special.prevu || ''}
+                      value={inspectionsFormation.special.prevu ?? ''}
                       onChange={(e) => updateInspectionFormation('special', 'prevu', Number(e.target.value))}
                     />
                   </td>
@@ -3630,7 +3630,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
                       max={inspectionsFormation.special.prevu || undefined}
-                      value={inspectionsFormation.special.realise || ''}
+                      value={inspectionsFormation.special.realise ?? ''}
                       onChange={(e) => updateInspectionFormation('special', 'realise', Number(e.target.value))}
                     />
                   </td>
@@ -4056,7 +4056,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.sixiemePrimaire.abandon || ''}
+                    value={rendementInterne.sixiemePrimaire.abandon ?? ''}
                     onChange={(e) => updateRendementInterne('sixiemePrimaire', 'abandon', Number(e.target.value))}
                   />
                 </td>
@@ -4066,7 +4066,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.sixiemePrimaire.reussite || ''}
+                    value={rendementInterne.sixiemePrimaire.reussite ?? ''}
                     onChange={(e) => updateRendementInterne('sixiemePrimaire', 'reussite', Number(e.target.value))}
                   />
                 </td>
@@ -4076,7 +4076,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.sixiemePrimaire.echec || ''}
+                    value={rendementInterne.sixiemePrimaire.echec ?? ''}
                     onChange={(e) => updateRendementInterne('sixiemePrimaire', 'echec', Number(e.target.value))}
                   />
                 </td>
@@ -4089,7 +4089,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.huitiemeCETB.abandon || ''}
+                    value={rendementInterne.huitiemeCETB.abandon ?? ''}
                     onChange={(e) => updateRendementInterne('huitiemeCETB', 'abandon', Number(e.target.value))}
                   />
                 </td>
@@ -4099,7 +4099,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.huitiemeCETB.reussite || ''}
+                    value={rendementInterne.huitiemeCETB.reussite ?? ''}
                     onChange={(e) => updateRendementInterne('huitiemeCETB', 'reussite', Number(e.target.value))}
                   />
                 </td>
@@ -4109,7 +4109,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.huitiemeCETB.echec || ''}
+                    value={rendementInterne.huitiemeCETB.echec ?? ''}
                     onChange={(e) => updateRendementInterne('huitiemeCETB', 'echec', Number(e.target.value))}
                   />
                 </td>
@@ -4122,7 +4122,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.quatriemeHumanite.abandon || ''}
+                    value={rendementInterne.quatriemeHumanite.abandon ?? ''}
                     onChange={(e) => updateRendementInterne('quatriemeHumanite', 'abandon', Number(e.target.value))}
                   />
                 </td>
@@ -4132,7 +4132,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.quatriemeHumanite.reussite || ''}
+                    value={rendementInterne.quatriemeHumanite.reussite ?? ''}
                     onChange={(e) => updateRendementInterne('quatriemeHumanite', 'reussite', Number(e.target.value))}
                   />
                 </td>
@@ -4142,7 +4142,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.quatriemeHumanite.echec || ''}
+                    value={rendementInterne.quatriemeHumanite.echec ?? ''}
                     onChange={(e) => updateRendementInterne('quatriemeHumanite', 'echec', Number(e.target.value))}
                   />
                 </td>
@@ -4155,7 +4155,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.diplomesMathematiques.abandon || ''}
+                    value={rendementInterne.diplomesMathematiques.abandon ?? ''}
                     onChange={(e) => updateRendementInterne('diplomesMathematiques', 'abandon', Number(e.target.value))}
                   />
                 </td>
@@ -4165,7 +4165,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.diplomesMathematiques.reussite || ''}
+                    value={rendementInterne.diplomesMathematiques.reussite ?? ''}
                     onChange={(e) => updateRendementInterne('diplomesMathematiques', 'reussite', Number(e.target.value))}
                   />
                 </td>
@@ -4175,7 +4175,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.diplomesMathematiques.echec || ''}
+                    value={rendementInterne.diplomesMathematiques.echec ?? ''}
                     onChange={(e) => updateRendementInterne('diplomesMathematiques', 'echec', Number(e.target.value))}
                   />
                 </td>
@@ -4188,7 +4188,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.diplomesFiliereTechniques.abandon || ''}
+                    value={rendementInterne.diplomesFiliereTechniques.abandon ?? ''}
                     onChange={(e) => updateRendementInterne('diplomesFiliereTechniques', 'abandon', Number(e.target.value))}
                   />
                 </td>
@@ -4198,7 +4198,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.diplomesFiliereTechniques.reussite || ''}
+                    value={rendementInterne.diplomesFiliereTechniques.reussite ?? ''}
                     onChange={(e) => updateRendementInterne('diplomesFiliereTechniques', 'reussite', Number(e.target.value))}
                   />
                 </td>
@@ -4208,7 +4208,7 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.diplomesFiliereTechniques.echec || ''}
+                    value={rendementInterne.diplomesFiliereTechniques.echec ?? ''}
                     onChange={(e) => updateRendementInterne('diplomesFiliereTechniques', 'echec', Number(e.target.value))}
                   />
                 </td>
