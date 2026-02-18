@@ -1080,8 +1080,12 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={indicateursAcces.nouveauxInscritsPrimaire.tauxGF || ''}
-                      onChange={(e) => updateIndicateursAcces('nouveauxInscritsPrimaire', 'tauxGF', Number(e.target.value))}
+                      defaultValue={indicateursAcces.nouveauxInscritsPrimaire.tauxGF || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateIndicateursAcces('nouveauxInscritsPrimaire', 'tauxGF', isNaN(val) ? 0 : val);
+                      }}
+                      key={`acces-nouveaux-gf-${indicateursAcces.nouveauxInscritsPrimaire.tauxGF}`}
                     />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -1090,8 +1094,12 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={indicateursAcces.nouveauxInscritsPrimaire.tauxFilles || ''}
-                      onChange={(e) => updateIndicateursAcces('nouveauxInscritsPrimaire', 'tauxFilles', Number(e.target.value))}
+                      defaultValue={indicateursAcces.nouveauxInscritsPrimaire.tauxFilles || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateIndicateursAcces('nouveauxInscritsPrimaire', 'tauxFilles', isNaN(val) ? 0 : val);
+                      }}
+                      key={`acces-nouveaux-f-${indicateursAcces.nouveauxInscritsPrimaire.tauxFilles}`}
                     />
                   </td>
                 </tr>
@@ -1103,8 +1111,12 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={indicateursAcces.transitionPrimaireCTEB.tauxGF || ''}
-                      onChange={(e) => updateIndicateursAcces('transitionPrimaireCTEB', 'tauxGF', Number(e.target.value))}
+                      defaultValue={indicateursAcces.transitionPrimaireCTEB.tauxGF || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateIndicateursAcces('transitionPrimaireCTEB', 'tauxGF', isNaN(val) ? 0 : val);
+                      }}
+                      key={`acces-primcteb-gf-${indicateursAcces.transitionPrimaireCTEB.tauxGF}`}
                     />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -1113,8 +1125,12 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={indicateursAcces.transitionPrimaireCTEB.tauxFilles || ''}
-                      onChange={(e) => updateIndicateursAcces('transitionPrimaireCTEB', 'tauxFilles', Number(e.target.value))}
+                      defaultValue={indicateursAcces.transitionPrimaireCTEB.tauxFilles || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateIndicateursAcces('transitionPrimaireCTEB', 'tauxFilles', isNaN(val) ? 0 : val);
+                      }}
+                      key={`acces-primcteb-f-${indicateursAcces.transitionPrimaireCTEB.tauxFilles}`}
                     />
                   </td>
                 </tr>
@@ -1126,8 +1142,12 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={indicateursAcces.transitionCTEBHumanites.tauxGF || ''}
-                      onChange={(e) => updateIndicateursAcces('transitionCTEBHumanites', 'tauxGF', Number(e.target.value))}
+                      defaultValue={indicateursAcces.transitionCTEBHumanites.tauxGF || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateIndicateursAcces('transitionCTEBHumanites', 'tauxGF', isNaN(val) ? 0 : val);
+                      }}
+                      key={`acces-ctebhum-gf-${indicateursAcces.transitionCTEBHumanites.tauxGF}`}
                     />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -1136,8 +1156,12 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={indicateursAcces.transitionCTEBHumanites.tauxFilles || ''}
-                      onChange={(e) => updateIndicateursAcces('transitionCTEBHumanites', 'tauxFilles', Number(e.target.value))}
+                      defaultValue={indicateursAcces.transitionCTEBHumanites.tauxFilles || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateIndicateursAcces('transitionCTEBHumanites', 'tauxFilles', isNaN(val) ? 0 : val);
+                      }}
+                      key={`acces-ctebhum-f-${indicateursAcces.transitionCTEBHumanites.tauxFilles}`}
                     />
                   </td>
                 </tr>

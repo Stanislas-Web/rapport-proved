@@ -4056,8 +4056,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.sixiemePrimaire.abandon ?? ''}
-                    onChange={(e) => updateRendementInterne('sixiemePrimaire', 'abandon', Number(e.target.value))}
+                    defaultValue={rendementInterne.sixiemePrimaire.abandon || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementInterne('sixiemePrimaire', 'abandon', isNaN(val) ? 0 : val);
+                    }}
+                    key={`abandon-${rendementInterne.sixiemePrimaire.abandon}`}
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
@@ -4066,8 +4070,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.sixiemePrimaire.reussite ?? ''}
-                    onChange={(e) => updateRendementInterne('sixiemePrimaire', 'reussite', Number(e.target.value))}
+                    defaultValue={rendementInterne.sixiemePrimaire.reussite || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementInterne('sixiemePrimaire', 'reussite', isNaN(val) ? 0 : val);
+                    }}
+                    key={`reussite-${rendementInterne.sixiemePrimaire.reussite}`}
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
@@ -4076,8 +4084,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.sixiemePrimaire.echec ?? ''}
-                    onChange={(e) => updateRendementInterne('sixiemePrimaire', 'echec', Number(e.target.value))}
+                    defaultValue={rendementInterne.sixiemePrimaire.echec || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementInterne('sixiemePrimaire', 'echec', isNaN(val) ? 0 : val);
+                    }}
+                    key={`echec-${rendementInterne.sixiemePrimaire.echec}`}
                   />
                 </td>
               </tr>
@@ -4089,8 +4101,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.huitiemeCETB.abandon ?? ''}
-                    onChange={(e) => updateRendementInterne('huitiemeCETB', 'abandon', Number(e.target.value))}
+                    defaultValue={rendementInterne.huitiemeCETB.abandon || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementInterne('huitiemeCETB', 'abandon', isNaN(val) ? 0 : val);
+                    }}
+                    key={`abandon-cetb-${rendementInterne.huitiemeCETB.abandon}`}
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
@@ -4099,8 +4115,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.huitiemeCETB.reussite ?? ''}
-                    onChange={(e) => updateRendementInterne('huitiemeCETB', 'reussite', Number(e.target.value))}
+                    defaultValue={rendementInterne.huitiemeCETB.reussite || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementInterne('huitiemeCETB', 'reussite', isNaN(val) ? 0 : val);
+                    }}
+                    key={`reussite-cetb-${rendementInterne.huitiemeCETB.reussite}`}
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
@@ -4109,8 +4129,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.huitiemeCETB.echec ?? ''}
-                    onChange={(e) => updateRendementInterne('huitiemeCETB', 'echec', Number(e.target.value))}
+                    defaultValue={rendementInterne.huitiemeCETB.echec || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementInterne('huitiemeCETB', 'echec', isNaN(val) ? 0 : val);
+                    }}
+                    key={`echec-cetb-${rendementInterne.huitiemeCETB.echec}`}
                   />
                 </td>
               </tr>
@@ -4122,8 +4146,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.quatriemeHumanite.abandon ?? ''}
-                    onChange={(e) => updateRendementInterne('quatriemeHumanite', 'abandon', Number(e.target.value))}
+                    defaultValue={rendementInterne.quatriemeHumanite.abandon || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementInterne('quatriemeHumanite', 'abandon', isNaN(val) ? 0 : val);
+                    }}
+                    key={`abandon-humanite-${rendementInterne.quatriemeHumanite.abandon}`}
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
@@ -4132,8 +4160,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.quatriemeHumanite.reussite ?? ''}
-                    onChange={(e) => updateRendementInterne('quatriemeHumanite', 'reussite', Number(e.target.value))}
+                    defaultValue={rendementInterne.quatriemeHumanite.reussite || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementInterne('quatriemeHumanite', 'reussite', isNaN(val) ? 0 : val);
+                    }}
+                    key={`reussite-humanite-${rendementInterne.quatriemeHumanite.reussite}`}
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
@@ -4142,8 +4174,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.quatriemeHumanite.echec ?? ''}
-                    onChange={(e) => updateRendementInterne('quatriemeHumanite', 'echec', Number(e.target.value))}
+                    defaultValue={rendementInterne.quatriemeHumanite.echec || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementInterne('quatriemeHumanite', 'echec', isNaN(val) ? 0 : val);
+                    }}
+                    key={`echec-humanite-${rendementInterne.quatriemeHumanite.echec}`}
                   />
                 </td>
               </tr>
@@ -4155,8 +4191,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.diplomesMathematiques.abandon ?? ''}
-                    onChange={(e) => updateRendementInterne('diplomesMathematiques', 'abandon', Number(e.target.value))}
+                    defaultValue={rendementInterne.diplomesMathematiques.abandon || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementInterne('diplomesMathematiques', 'abandon', isNaN(val) ? 0 : val);
+                    }}
+                    key={`abandon-math-${rendementInterne.diplomesMathematiques.abandon}`}
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
@@ -4165,8 +4205,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.diplomesMathematiques.reussite ?? ''}
-                    onChange={(e) => updateRendementInterne('diplomesMathematiques', 'reussite', Number(e.target.value))}
+                    defaultValue={rendementInterne.diplomesMathematiques.reussite || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementInterne('diplomesMathematiques', 'reussite', isNaN(val) ? 0 : val);
+                    }}
+                    key={`reussite-math-${rendementInterne.diplomesMathematiques.reussite}`}
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
@@ -4175,8 +4219,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.diplomesMathematiques.echec ?? ''}
-                    onChange={(e) => updateRendementInterne('diplomesMathematiques', 'echec', Number(e.target.value))}
+                    defaultValue={rendementInterne.diplomesMathematiques.echec || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementInterne('diplomesMathematiques', 'echec', isNaN(val) ? 0 : val);
+                    }}
+                    key={`echec-math-${rendementInterne.diplomesMathematiques.echec}`}
                   />
                 </td>
               </tr>
@@ -4188,8 +4236,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.diplomesFiliereTechniques.abandon ?? ''}
-                    onChange={(e) => updateRendementInterne('diplomesFiliereTechniques', 'abandon', Number(e.target.value))}
+                    defaultValue={rendementInterne.diplomesFiliereTechniques.abandon || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementInterne('diplomesFiliereTechniques', 'abandon', isNaN(val) ? 0 : val);
+                    }}
+                    key={`abandon-tech-${rendementInterne.diplomesFiliereTechniques.abandon}`}
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
@@ -4198,8 +4250,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.diplomesFiliereTechniques.reussite ?? ''}
-                    onChange={(e) => updateRendementInterne('diplomesFiliereTechniques', 'reussite', Number(e.target.value))}
+                    defaultValue={rendementInterne.diplomesFiliereTechniques.reussite || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementInterne('diplomesFiliereTechniques', 'reussite', isNaN(val) ? 0 : val);
+                    }}
+                    key={`reussite-tech-${rendementInterne.diplomesFiliereTechniques.reussite}`}
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
@@ -4208,8 +4264,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementInterne.diplomesFiliereTechniques.echec ?? ''}
-                    onChange={(e) => updateRendementInterne('diplomesFiliereTechniques', 'echec', Number(e.target.value))}
+                    defaultValue={rendementInterne.diplomesFiliereTechniques.echec || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementInterne('diplomesFiliereTechniques', 'echec', isNaN(val) ? 0 : val);
+                    }}
+                    key={`echec-tech-${rendementInterne.diplomesFiliereTechniques.echec}`}
                   />
                 </td>
               </tr>
@@ -4307,8 +4367,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementExterne.prescolaire.tauxGF || ''}
-                    onChange={(e) => updateRendementExterne('prescolaire', 'tauxGF', Number(e.target.value))}
+                    defaultValue={rendementExterne.prescolaire.tauxGF || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementExterne('prescolaire', 'tauxGF', isNaN(val) ? 0 : val);
+                    }}
+                    key={`ext-prescolaire-gf-${rendementExterne.prescolaire.tauxGF}`}
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
@@ -4317,8 +4381,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementExterne.prescolaire.tauxFilles || ''}
-                    onChange={(e) => updateRendementExterne('prescolaire', 'tauxFilles', Number(e.target.value))}
+                    defaultValue={rendementExterne.prescolaire.tauxFilles || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementExterne('prescolaire', 'tauxFilles', isNaN(val) ? 0 : val);
+                    }}
+                    key={`ext-prescolaire-f-${rendementExterne.prescolaire.tauxFilles}`}
                   />
                 </td>
               </tr>
@@ -4330,8 +4398,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementExterne.espaceCommunautaireEveil.tauxGF || ''}
-                    onChange={(e) => updateRendementExterne('espaceCommunautaireEveil', 'tauxGF', Number(e.target.value))}
+                    defaultValue={rendementExterne.espaceCommunautaireEveil.tauxGF || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementExterne('espaceCommunautaireEveil', 'tauxGF', isNaN(val) ? 0 : val);
+                    }}
+                    key={`ext-ece-gf-${rendementExterne.espaceCommunautaireEveil.tauxGF}`}
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
@@ -4340,8 +4412,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementExterne.espaceCommunautaireEveil.tauxFilles || ''}
-                    onChange={(e) => updateRendementExterne('espaceCommunautaireEveil', 'tauxFilles', Number(e.target.value))}
+                    defaultValue={rendementExterne.espaceCommunautaireEveil.tauxFilles || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementExterne('espaceCommunautaireEveil', 'tauxFilles', isNaN(val) ? 0 : val);
+                    }}
+                    key={`ext-ece-f-${rendementExterne.espaceCommunautaireEveil.tauxFilles}`}
                   />
                 </td>
               </tr>
@@ -4353,8 +4429,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementExterne.classePreprimaire.tauxGF || ''}
-                    onChange={(e) => updateRendementExterne('classePreprimaire', 'tauxGF', Number(e.target.value))}
+                    defaultValue={rendementExterne.classePreprimaire.tauxGF || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementExterne('classePreprimaire', 'tauxGF', isNaN(val) ? 0 : val);
+                    }}
+                    key={`ext-preprimaire-gf-${rendementExterne.classePreprimaire.tauxGF}`}
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
@@ -4363,8 +4443,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementExterne.classePreprimaire.tauxFilles || ''}
-                    onChange={(e) => updateRendementExterne('classePreprimaire', 'tauxFilles', Number(e.target.value))}
+                    defaultValue={rendementExterne.classePreprimaire.tauxFilles || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementExterne('classePreprimaire', 'tauxFilles', isNaN(val) ? 0 : val);
+                    }}
+                    key={`ext-preprimaire-f-${rendementExterne.classePreprimaire.tauxFilles}`}
                   />
                 </td>
               </tr>
@@ -4376,8 +4460,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementExterne.maternel.tauxGF || ''}
-                    onChange={(e) => updateRendementExterne('maternel', 'tauxGF', Number(e.target.value))}
+                    defaultValue={rendementExterne.maternel.tauxGF || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementExterne('maternel', 'tauxGF', isNaN(val) ? 0 : val);
+                    }}
+                    key={`ext-maternel-gf-${rendementExterne.maternel.tauxGF}`}
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
@@ -4386,8 +4474,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementExterne.maternel.tauxFilles || ''}
-                    onChange={(e) => updateRendementExterne('maternel', 'tauxFilles', Number(e.target.value))}
+                    defaultValue={rendementExterne.maternel.tauxFilles || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementExterne('maternel', 'tauxFilles', isNaN(val) ? 0 : val);
+                    }}
+                    key={`ext-maternel-f-${rendementExterne.maternel.tauxFilles}`}
                   />
                 </td>
               </tr>
@@ -4399,8 +4491,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementExterne.primaire.tauxGF || ''}
-                    onChange={(e) => updateRendementExterne('primaire', 'tauxGF', Number(e.target.value))}
+                    defaultValue={rendementExterne.primaire.tauxGF || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementExterne('primaire', 'tauxGF', isNaN(val) ? 0 : val);
+                    }}
+                    key={`ext-primaire-gf-${rendementExterne.primaire.tauxGF}`}
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
@@ -4409,8 +4505,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementExterne.primaire.tauxFilles || ''}
-                    onChange={(e) => updateRendementExterne('primaire', 'tauxFilles', Number(e.target.value))}
+                    defaultValue={rendementExterne.primaire.tauxFilles || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementExterne('primaire', 'tauxFilles', isNaN(val) ? 0 : val);
+                    }}
+                    key={`ext-primaire-f-${rendementExterne.primaire.tauxFilles}`}
                   />
                 </td>
               </tr>
@@ -4422,8 +4522,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementExterne.enseignementSpecialPrimaire.tauxGF || ''}
-                    onChange={(e) => updateRendementExterne('enseignementSpecialPrimaire', 'tauxGF', Number(e.target.value))}
+                    defaultValue={rendementExterne.enseignementSpecialPrimaire.tauxGF || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementExterne('enseignementSpecialPrimaire', 'tauxGF', isNaN(val) ? 0 : val);
+                    }}
+                    key={`ext-specialprimaire-gf-${rendementExterne.enseignementSpecialPrimaire.tauxGF}`}
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
@@ -4432,8 +4536,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementExterne.enseignementSpecialPrimaire.tauxFilles || ''}
-                    onChange={(e) => updateRendementExterne('enseignementSpecialPrimaire', 'tauxFilles', Number(e.target.value))}
+                    defaultValue={rendementExterne.enseignementSpecialPrimaire.tauxFilles || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementExterne('enseignementSpecialPrimaire', 'tauxFilles', isNaN(val) ? 0 : val);
+                    }}
+                    key={`ext-specialprimaire-f-${rendementExterne.enseignementSpecialPrimaire.tauxFilles}`}
                   />
                 </td>
               </tr>
@@ -4445,8 +4553,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementExterne.enseignementPrimaire.tauxGF || ''}
-                    onChange={(e) => updateRendementExterne('enseignementPrimaire', 'tauxGF', Number(e.target.value))}
+                    defaultValue={rendementExterne.enseignementPrimaire.tauxGF || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementExterne('enseignementPrimaire', 'tauxGF', isNaN(val) ? 0 : val);
+                    }}
+                    key={`ext-ensprimaire-gf-${rendementExterne.enseignementPrimaire.tauxGF}`}
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
@@ -4455,8 +4567,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementExterne.enseignementPrimaire.tauxFilles || ''}
-                    onChange={(e) => updateRendementExterne('enseignementPrimaire', 'tauxFilles', Number(e.target.value))}
+                    defaultValue={rendementExterne.enseignementPrimaire.tauxFilles || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementExterne('enseignementPrimaire', 'tauxFilles', isNaN(val) ? 0 : val);
+                    }}
+                    key={`ext-ensprimaire-f-${rendementExterne.enseignementPrimaire.tauxFilles}`}
                   />
                 </td>
               </tr>
@@ -4468,8 +4584,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementExterne.secondaire.tauxGF || ''}
-                    onChange={(e) => updateRendementExterne('secondaire', 'tauxGF', Number(e.target.value))}
+                    defaultValue={rendementExterne.secondaire.tauxGF || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementExterne('secondaire', 'tauxGF', isNaN(val) ? 0 : val);
+                    }}
+                    key={`ext-secondaire-gf-${rendementExterne.secondaire.tauxGF}`}
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
@@ -4478,8 +4598,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementExterne.secondaire.tauxFilles || ''}
-                    onChange={(e) => updateRendementExterne('secondaire', 'tauxFilles', Number(e.target.value))}
+                    defaultValue={rendementExterne.secondaire.tauxFilles || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementExterne('secondaire', 'tauxFilles', isNaN(val) ? 0 : val);
+                    }}
+                    key={`ext-secondaire-f-${rendementExterne.secondaire.tauxFilles}`}
                   />
                 </td>
               </tr>
@@ -4491,8 +4615,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementExterne.enseignementSpecialSecondaire.tauxGF || ''}
-                    onChange={(e) => updateRendementExterne('enseignementSpecialSecondaire', 'tauxGF', Number(e.target.value))}
+                    defaultValue={rendementExterne.enseignementSpecialSecondaire.tauxGF || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementExterne('enseignementSpecialSecondaire', 'tauxGF', isNaN(val) ? 0 : val);
+                    }}
+                    key={`ext-specialsecondaire-gf-${rendementExterne.enseignementSpecialSecondaire.tauxGF}`}
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
@@ -4501,8 +4629,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementExterne.enseignementSpecialSecondaire.tauxFilles || ''}
-                    onChange={(e) => updateRendementExterne('enseignementSpecialSecondaire', 'tauxFilles', Number(e.target.value))}
+                    defaultValue={rendementExterne.enseignementSpecialSecondaire.tauxFilles || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementExterne('enseignementSpecialSecondaire', 'tauxFilles', isNaN(val) ? 0 : val);
+                    }}
+                    key={`ext-specialsecondaire-f-${rendementExterne.enseignementSpecialSecondaire.tauxFilles}`}
                   />
                 </td>
               </tr>
@@ -4514,8 +4646,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementExterne.enseignementSecondaireNormal.tauxGF || ''}
-                    onChange={(e) => updateRendementExterne('enseignementSecondaireNormal', 'tauxGF', Number(e.target.value))}
+                    defaultValue={rendementExterne.enseignementSecondaireNormal.tauxGF || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementExterne('enseignementSecondaireNormal', 'tauxGF', isNaN(val) ? 0 : val);
+                    }}
+                    key={`ext-secondairenormal-gf-${rendementExterne.enseignementSecondaireNormal.tauxGF}`}
                   />
                 </td>
                 <td className="border border-gray-300 px-3 py-2">
@@ -4524,8 +4660,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={rendementExterne.enseignementSecondaireNormal.tauxFilles || ''}
-                    onChange={(e) => updateRendementExterne('enseignementSecondaireNormal', 'tauxFilles', Number(e.target.value))}
+                    defaultValue={rendementExterne.enseignementSecondaireNormal.tauxFilles || ''}
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      updateRendementExterne('enseignementSecondaireNormal', 'tauxFilles', isNaN(val) ? 0 : val);
+                    }}
+                    key={`ext-secondairenormal-f-${rendementExterne.enseignementSecondaireNormal.tauxFilles}`}
                   />
                 </td>
               </tr>
@@ -4620,8 +4760,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={efficacitePrimaire.tauxAbandon.tauxGF || ''}
-                      onChange={(e) => updateEfficacitePrimaire('tauxAbandon', 'tauxGF', Number(e.target.value))}
+                      defaultValue={efficacitePrimaire.tauxAbandon.tauxGF || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateEfficacitePrimaire('tauxAbandon', 'tauxGF', isNaN(val) ? 0 : val);
+                      }}
+                      key={`ep-abandon-gf-${efficacitePrimaire.tauxAbandon.tauxGF}`}
                     />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -4630,8 +4774,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={efficacitePrimaire.tauxAbandon.tauxFilles || ''}
-                      onChange={(e) => updateEfficacitePrimaire('tauxAbandon', 'tauxFilles', Number(e.target.value))}
+                      defaultValue={efficacitePrimaire.tauxAbandon.tauxFilles || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateEfficacitePrimaire('tauxAbandon', 'tauxFilles', isNaN(val) ? 0 : val);
+                      }}
+                      key={`ep-abandon-f-${efficacitePrimaire.tauxAbandon.tauxFilles}`}
                     />
                   </td>
                 </tr>
@@ -4643,8 +4791,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={efficacitePrimaire.tauxReussite.tauxGF || ''}
-                      onChange={(e) => updateEfficacitePrimaire('tauxReussite', 'tauxGF', Number(e.target.value))}
+                      defaultValue={efficacitePrimaire.tauxReussite.tauxGF || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateEfficacitePrimaire('tauxReussite', 'tauxGF', isNaN(val) ? 0 : val);
+                      }}
+                      key={`ep-reussite-gf-${efficacitePrimaire.tauxReussite.tauxGF}`}
                     />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -4653,8 +4805,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={efficacitePrimaire.tauxReussite.tauxFilles || ''}
-                      onChange={(e) => updateEfficacitePrimaire('tauxReussite', 'tauxFilles', Number(e.target.value))}
+                      defaultValue={efficacitePrimaire.tauxReussite.tauxFilles || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateEfficacitePrimaire('tauxReussite', 'tauxFilles', isNaN(val) ? 0 : val);
+                      }}
+                      key={`ep-reussite-f-${efficacitePrimaire.tauxReussite.tauxFilles}`}
                     />
                   </td>
                 </tr>
@@ -4666,8 +4822,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={efficacitePrimaire.tauxEchec.tauxGF || ''}
-                      onChange={(e) => updateEfficacitePrimaire('tauxEchec', 'tauxGF', Number(e.target.value))}
+                      defaultValue={efficacitePrimaire.tauxEchec.tauxGF || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateEfficacitePrimaire('tauxEchec', 'tauxGF', isNaN(val) ? 0 : val);
+                      }}
+                      key={`ep-echec-gf-${efficacitePrimaire.tauxEchec.tauxGF}`}
                     />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -4676,8 +4836,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={efficacitePrimaire.tauxEchec.tauxFilles || ''}
-                      onChange={(e) => updateEfficacitePrimaire('tauxEchec', 'tauxFilles', Number(e.target.value))}
+                      defaultValue={efficacitePrimaire.tauxEchec.tauxFilles || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateEfficacitePrimaire('tauxEchec', 'tauxFilles', isNaN(val) ? 0 : val);
+                      }}
+                      key={`ep-echec-f-${efficacitePrimaire.tauxEchec.tauxFilles}`}
                     />
                   </td>
                 </tr>
@@ -4768,8 +4932,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={efficaciteSecondaire.tauxAbandon.tauxGF || ''}
-                      onChange={(e) => updateEfficaciteSecondaire('tauxAbandon', 'tauxGF', Number(e.target.value))}
+                      defaultValue={efficaciteSecondaire.tauxAbandon.tauxGF || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateEfficaciteSecondaire('tauxAbandon', 'tauxGF', isNaN(val) ? 0 : val);
+                      }}
+                      key={`es-abandon-gf-${efficaciteSecondaire.tauxAbandon.tauxGF}`}
                     />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -4778,8 +4946,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={efficaciteSecondaire.tauxAbandon.tauxFilles || ''}
-                      onChange={(e) => updateEfficaciteSecondaire('tauxAbandon', 'tauxFilles', Number(e.target.value))}
+                      defaultValue={efficaciteSecondaire.tauxAbandon.tauxFilles || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateEfficaciteSecondaire('tauxAbandon', 'tauxFilles', isNaN(val) ? 0 : val);
+                      }}
+                      key={`es-abandon-f-${efficaciteSecondaire.tauxAbandon.tauxFilles}`}
                     />
                   </td>
                 </tr>
@@ -4791,8 +4963,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={efficaciteSecondaire.tauxReussite.tauxGF || ''}
-                      onChange={(e) => updateEfficaciteSecondaire('tauxReussite', 'tauxGF', Number(e.target.value))}
+                      defaultValue={efficaciteSecondaire.tauxReussite.tauxGF || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateEfficaciteSecondaire('tauxReussite', 'tauxGF', isNaN(val) ? 0 : val);
+                      }}
+                      key={`es-reussite-gf-${efficaciteSecondaire.tauxReussite.tauxGF}`}
                     />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -4801,8 +4977,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={efficaciteSecondaire.tauxReussite.tauxFilles || ''}
-                      onChange={(e) => updateEfficaciteSecondaire('tauxReussite', 'tauxFilles', Number(e.target.value))}
+                      defaultValue={efficaciteSecondaire.tauxReussite.tauxFilles || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateEfficaciteSecondaire('tauxReussite', 'tauxFilles', isNaN(val) ? 0 : val);
+                      }}
+                      key={`es-reussite-f-${efficaciteSecondaire.tauxReussite.tauxFilles}`}
                     />
                   </td>
                 </tr>
@@ -4814,8 +4994,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={efficaciteSecondaire.tauxEchec.tauxGF || ''}
-                      onChange={(e) => updateEfficaciteSecondaire('tauxEchec', 'tauxGF', Number(e.target.value))}
+                      defaultValue={efficaciteSecondaire.tauxEchec.tauxGF || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateEfficaciteSecondaire('tauxEchec', 'tauxGF', isNaN(val) ? 0 : val);
+                      }}
+                      key={`es-echec-gf-${efficaciteSecondaire.tauxEchec.tauxGF}`}
                     />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -4824,8 +5008,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={efficaciteSecondaire.tauxEchec.tauxFilles || ''}
-                      onChange={(e) => updateEfficaciteSecondaire('tauxEchec', 'tauxFilles', Number(e.target.value))}
+                      defaultValue={efficaciteSecondaire.tauxEchec.tauxFilles || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateEfficaciteSecondaire('tauxEchec', 'tauxFilles', isNaN(val) ? 0 : val);
+                      }}
+                      key={`es-echec-f-${efficaciteSecondaire.tauxEchec.tauxFilles}`}
                     />
                   </td>
                 </tr>
@@ -4900,8 +5088,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={tauxDiplomesOCDE.humanitesScientifiques.tauxGF || ''}
-                      onChange={(e) => updateTauxDiplomesOCDE('humanitesScientifiques', 'tauxGF', Number(e.target.value))}
+                      defaultValue={tauxDiplomesOCDE.humanitesScientifiques.tauxGF || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateTauxDiplomesOCDE('humanitesScientifiques', 'tauxGF', isNaN(val) ? 0 : val);
+                      }}
+                      key={`ocde-scientific-gf-${tauxDiplomesOCDE.humanitesScientifiques.tauxGF}`}
                     />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -4910,8 +5102,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={tauxDiplomesOCDE.humanitesScientifiques.tauxFilles || ''}
-                      onChange={(e) => updateTauxDiplomesOCDE('humanitesScientifiques', 'tauxFilles', Number(e.target.value))}
+                      defaultValue={tauxDiplomesOCDE.humanitesScientifiques.tauxFilles || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateTauxDiplomesOCDE('humanitesScientifiques', 'tauxFilles', isNaN(val) ? 0 : val);
+                      }}
+                      key={`ocde-scientific-f-${tauxDiplomesOCDE.humanitesScientifiques.tauxFilles}`}
                     />
                   </td>
                 </tr>
@@ -4923,8 +5119,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={tauxDiplomesOCDE.humanitesTechniques.tauxGF || ''}
-                      onChange={(e) => updateTauxDiplomesOCDE('humanitesTechniques', 'tauxGF', Number(e.target.value))}
+                      defaultValue={tauxDiplomesOCDE.humanitesTechniques.tauxGF || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateTauxDiplomesOCDE('humanitesTechniques', 'tauxGF', isNaN(val) ? 0 : val);
+                      }}
+                      key={`ocde-technical-gf-${tauxDiplomesOCDE.humanitesTechniques.tauxGF}`}
                     />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -4933,8 +5133,12 @@ const EvaluationQualitativeComplete: React.FC<EvaluationQualitativeCompleteProps
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       max="100"
                       step="0.1"
-                      value={tauxDiplomesOCDE.humanitesTechniques.tauxFilles || ''}
-                      onChange={(e) => updateTauxDiplomesOCDE('humanitesTechniques', 'tauxFilles', Number(e.target.value))}
+                      defaultValue={tauxDiplomesOCDE.humanitesTechniques.tauxFilles || ''}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value);
+                        updateTauxDiplomesOCDE('humanitesTechniques', 'tauxFilles', isNaN(val) ? 0 : val);
+                      }}
+                      key={`ocde-technical-f-${tauxDiplomesOCDE.humanitesTechniques.tauxFilles}`}
                     />
                   </td>
                 </tr>
