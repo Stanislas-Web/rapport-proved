@@ -173,7 +173,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementSpecial?.nombreEcoles || ''}
+                      value={formData.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementSpecial?.nombreEcoles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauPrimaire.enseignementSpecial.nombreEcoles', Number(e.target.value))}
                     />
                   </td>
@@ -182,7 +182,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementSpecial?.totalClassesSpecialesPrim || ''}
+                      value={formData.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementSpecial?.totalClassesSpecialesPrim ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauPrimaire.enseignementSpecial.totalClassesSpecialesPrim', Number(e.target.value))}
                     />
                   </td>
@@ -191,7 +191,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementSpecial?.classesPlethoriques || ''}
+                      value={formData.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementSpecial?.classesPlethoriques ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauPrimaire.enseignementSpecial.classesPlethoriques', Number(e.target.value))}
                     />
                   </td>
@@ -203,7 +203,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.nombreEcoles || ''}
+                      value={formData.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.nombreEcoles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauPrimaire.enseignementPrimaire.nombreEcoles', Number(e.target.value))}
                     />
                   </td>
@@ -212,7 +212,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.totalClassesPrimaire || ''}
+                      value={formData.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.totalClassesPrimaire ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauPrimaire.enseignementPrimaire.totalClassesPrimaire', Number(e.target.value))}
                     />
                   </td>
@@ -221,7 +221,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.classesPlethoriques || ''}
+                      value={formData.parametresCles?.nombreEcolesClasses?.niveauPrimaire?.enseignementPrimaire?.classesPlethoriques ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauPrimaire.enseignementPrimaire.classesPlethoriques', Number(e.target.value))}
                     />
                   </td>
@@ -253,7 +253,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.effectifGarcons || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.effectifGarcons ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSpecial.effectifGarcons', Number(e.target.value))}
                     />
                   </td>
@@ -262,7 +262,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.effectifFilles || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.effectifFilles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSpecial.effectifFilles', Number(e.target.value))}
                     />
                   </td>
@@ -271,7 +271,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.tauxGarcons || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.tauxGarcons ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSpecial.tauxGarcons', Number(e.target.value))}
                     />
                   </td>
@@ -280,7 +280,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.tauxFilles || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.tauxFilles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSpecial.tauxFilles', Number(e.target.value))}
                     />
                   </td>
@@ -292,7 +292,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.effectifGarcons || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.effectifGarcons ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.septiemeCTEB.effectifGarcons', Number(e.target.value))}
                     />
                   </td>
@@ -301,7 +301,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.effectifFilles || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.effectifFilles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.septiemeCTEB.effectifFilles', Number(e.target.value))}
                     />
                   </td>
@@ -310,7 +310,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.tauxGarcons || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.tauxGarcons ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.septiemeCTEB.tauxGarcons', Number(e.target.value))}
                     />
                   </td>
@@ -319,7 +319,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.tauxFilles || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.tauxFilles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.septiemeCTEB.tauxFilles', Number(e.target.value))}
                     />
                   </td>
@@ -331,7 +331,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.effectifGarcons || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.effectifGarcons ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.huitiemeCTEB.effectifGarcons', Number(e.target.value))}
                     />
                   </td>
@@ -340,7 +340,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.effectifFilles || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.effectifFilles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.huitiemeCTEB.effectifFilles', Number(e.target.value))}
                     />
                   </td>
@@ -349,7 +349,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.tauxGarcons || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.tauxGarcons ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.huitiemeCTEB.tauxGarcons', Number(e.target.value))}
                     />
                   </td>
@@ -358,7 +358,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.tauxFilles || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.tauxFilles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.huitiemeCTEB.tauxFilles', Number(e.target.value))}
                     />
                   </td>
@@ -370,7 +370,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.effectifGarcons || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.effectifGarcons ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.premiereHumanite.effectifGarcons', Number(e.target.value))}
                     />
                   </td>
@@ -379,7 +379,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.effectifFilles || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.effectifFilles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.premiereHumanite.effectifFilles', Number(e.target.value))}
                     />
                   </td>
@@ -388,7 +388,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.tauxGarcons || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.tauxGarcons ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.premiereHumanite.tauxGarcons', Number(e.target.value))}
                     />
                   </td>
@@ -397,7 +397,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.tauxFilles || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.tauxFilles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.premiereHumanite.tauxFilles', Number(e.target.value))}
                     />
                   </td>
@@ -409,7 +409,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.effectifGarcons || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.effectifGarcons ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.quatriemeHumanite.effectifGarcons', Number(e.target.value))}
                     />
                   </td>
@@ -418,7 +418,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.effectifFilles || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.effectifFilles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.quatriemeHumanite.effectifFilles', Number(e.target.value))}
                     />
                   </td>
@@ -427,7 +427,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.tauxGarcons || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.tauxGarcons ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.quatriemeHumanite.tauxGarcons', Number(e.target.value))}
                     />
                   </td>
@@ -436,7 +436,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.tauxFilles || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.tauxFilles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.quatriemeHumanite.tauxFilles', Number(e.target.value))}
                     />
                   </td>
@@ -657,7 +657,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.effectifGarconsFilles || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.effectifGarconsFilles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrimaire.enseignementSpecial.effectifGarconsFilles', Number(e.target.value))}
                     />
                   </td>
@@ -666,7 +666,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.effectifFilles || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.effectifFilles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrimaire.enseignementSpecial.effectifFilles', Number(e.target.value))}
                     />
                   </td>
@@ -676,7 +676,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       step="0.01"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.tauxAccroissementGarconsFilles || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.tauxAccroissementGarconsFilles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrimaire.enseignementSpecial.tauxAccroissementGarconsFilles', Number(e.target.value))}
                     />
                   </td>
@@ -686,7 +686,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       step="0.01"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.tauxAccroissementFilles || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementSpecial?.tauxAccroissementFilles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrimaire.enseignementSpecial.tauxAccroissementFilles', Number(e.target.value))}
                     />
                   </td>
@@ -698,7 +698,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.effectifGarconsFilles || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.effectifGarconsFilles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrimaire.enseignementPrimaire.effectifGarconsFilles', Number(e.target.value))}
                     />
                   </td>
@@ -707,7 +707,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.effectifFilles || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.effectifFilles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrimaire.enseignementPrimaire.effectifFilles', Number(e.target.value))}
                     />
                   </td>
@@ -717,7 +717,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       step="0.01"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.tauxAccroissementGarconsFilles || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.tauxAccroissementGarconsFilles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrimaire.enseignementPrimaire.tauxAccroissementGarconsFilles', Number(e.target.value))}
                     />
                   </td>
@@ -727,7 +727,7 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       step="0.01"
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.tauxAccroissementFilles || ''}
+                      value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.tauxAccroissementFilles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrimaire.enseignementPrimaire.tauxAccroissementFilles', Number(e.target.value))}
                     />
                   </td>

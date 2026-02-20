@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { RapportActivite } from '../../../models/RapportActivite';
+import EffectifsPrecedent, { EffectifsAnneePrecedente } from './EffectifsPrecedent';
+import { EffectifAnnuelService } from '../../../services/effectifAnnuel/effectifAnnuel.service';
 
 interface BasicInfoProps {
   formData: RapportActivite;
@@ -7,9 +9,85 @@ interface BasicInfoProps {
 }
 
 const BasicInfo: React.FC<BasicInfoProps> = ({ formData, handleInputChange }) => {
+  // État initial pour les effectifs - utilise les données de formData si disponibles
+  const defaultEffectifs: EffectifsAnneePrecedente = {
+    niveauPrescolaire: {
+      espaceCommunautaireEveil: { effectifGarconsFilles: 0, effectifFilles: 0 },
+      maternel: { effectifGarconsFilles: 0, effectifFilles: 0 },
+      prePrimaire: { effectifGarconsFilles: 0, effectifFilles: 0 },
+      special: { effectifGarconsFilles: 0, effectifFilles: 0 }
+    },
+    niveauPrimaire: {
+      enseignementSpecial: { effectifGarconsFilles: 0, effectifFilles: 0 },
+      enseignementPrimaire: { effectifGarconsFilles: 0, effectifFilles: 0 }
+    },
+    niveauSecondaire: {
+      enseignementSpecial: { effectifGarcons: 0, effectifFilles: 0 },
+      enseignementSecondaire: {
+        septiemeCTEB: { effectifGarcons: 0, effectifFilles: 0 },
+        huitiemeCTEB: { effectifGarcons: 0, effectifFilles: 0 },
+        premiereHumanite: { effectifGarcons: 0, effectifFilles: 0 },
+        quatriemeHumanite: { effectifGarcons: 0, effectifFilles: 0 }
+      }
+    }
+  };
+
+  const [effectifs, setEffectifs] = useState<EffectifsAnneePrecedente>(
+    (formData as any)?.effectifs || defaultEffectifs
+  );
+
+  // Charger les effectifs existants au montage du composant
+  useEffect(() => {
+    const loadInitialEffectifs = async () => {
+      const identificationId = typeof formData?.identificationProved === 'object' 
+        ? formData?.identificationProved?._id 
+        : formData?.identificationProved;
+      const annee = formData?.annee;
+      
+      if (identificationId && annee) {
+        try {
+          const data = await EffectifAnnuelService.getByProvedAndAnnee(identificationId, annee);
+          
+          let effectifsCharges = null;
+          
+          if (Array.isArray(data) && data.length > 0 && data[0].effectifs) {
+            effectifsCharges = data[0].effectifs;
+          } else if (data && data.effectifs) {
+            effectifsCharges = data.effectifs;
+          } else if (data && data.niveauPrescolaire && data.niveauPrimaire && data.niveauSecondaire) {
+            effectifsCharges = data;
+          }
+          
+          if (effectifsCharges) {
+            console.log('✅ BasicInfo: Effectifs chargés au montage:', effectifsCharges);
+            setEffectifs(effectifsCharges);
+            handleInputChange('effectifs', effectifsCharges);
+          }
+        } catch (error) {
+          console.log('ℹ️ BasicInfo: Aucun effectif existant au montage');
+        }
+      }
+    };
+    
+    loadInitialEffectifs();
+  }, [formData?.identificationProved, formData?.annee]);
+
+  const handleEffectifsUpdate = (newEffectifs: EffectifsAnneePrecedente) => {
+    setEffectifs(newEffectifs);
+    handleInputChange('effectifs', newEffectifs);
+  };
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <h3 className="text-lg font-medium mb-4">Informations de base</h3>
+      
+      {/* Composant Effectifs */}
+      <EffectifsPrecedent 
+        effectifs={effectifs} 
+        onUpdate={handleEffectifsUpdate}
+        identificationProved={formData?.identificationProved?._id || formData?.identificationProved}
+        annee={formData?.annee}
+      />
       
       <div className="mb-4">
         <label className="block text-sm font-medium text-black dark:text-white mb-2">
