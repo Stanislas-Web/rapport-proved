@@ -85,8 +85,12 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ formData, handleInputChange }) =>
       <EffectifsPrecedent 
         effectifs={effectifs} 
         onUpdate={handleEffectifsUpdate}
-        identificationProved={formData?.identificationProved?._id || formData?.identificationProved}
-        annee={formData?.annee}
+        identificationProved={
+          typeof formData?.identificationProved === 'object' 
+            ? formData?.identificationProved?._id 
+            : formData?.identificationProved
+        }
+        annee={formData?.annee?.toString()}
       />
       
       <div className="mb-4">

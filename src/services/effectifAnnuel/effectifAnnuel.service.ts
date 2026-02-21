@@ -99,7 +99,8 @@ export const EffectifAnnuelService = {
   getByProvedAndAnnee: async (identificationProved: string | number, annee: string | number) => {
     try {
       console.log('🔍 EffectifAnnuelService.getByProvedAndAnnee - Params:', { identificationProved, annee });
-      const response = await BaseService.get(`effectif-annuel?identificationProved=${identificationProved}&annee=${annee}`);
+      // Utiliser l'endpoint correct avec le format /previous/{provedId}/{annee}
+      const response = await BaseService.get(`effectif-annuel/previous/${identificationProved}/${annee}`);
       console.log('✅ EffectifAnnuelService.getByProvedAndAnnee - Succès:', response);
       return response;
     } catch (error) {

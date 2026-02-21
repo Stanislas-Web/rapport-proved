@@ -53,45 +53,74 @@ const EffectifsPrecedent: React.FC<EffectifsPrecedentProps> = ({ effectifs, onUp
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Log des props reçues au montage
+  useEffect(() => {
+    console.log('🎯 EffectifsPrecedent - Props reçues:');
+    console.log('  - identificationProved:', identificationProved);
+    console.log('  - annee:', annee);
+    console.log('  - effectifs (props):', effectifs);
+  }, []);
+
   // Charger les effectifs existants à l'ouverture du modal
   useEffect(() => {
     const loadEffectifs = async () => {
+      console.log('🔍 Modal ouvert:', showModal);
+      console.log('🔍 identificationProved:', identificationProved, 'Type:', typeof identificationProved);
+      console.log('🔍 annee:', annee, 'Type:', typeof annee);
+      
       if (showModal && identificationProved && annee) {
         setIsLoading(true);
+        console.log('📡 Chargement des effectifs depuis l\'API...');
+        
         try {
           const data = await EffectifAnnuelService.getByProvedAndAnnee(identificationProved, annee);
+          console.log('📦 Données reçues de l\'API:', data);
           
           let effectifsCharges = null;
           
           // Vérifier si la réponse est un tableau
           if (Array.isArray(data) && data.length > 0) {
+            console.log('✅ Format: Tableau avec éléments');
             const firstItem = data[0];
             if (firstItem.effectifs) {
               effectifsCharges = firstItem.effectifs;
+              console.log('✅ Effectifs trouvés dans firstItem.effectifs');
             }
           } 
           // Vérifier si c'est un objet direct avec effectifs
           else if (data && data.effectifs) {
+            console.log('✅ Format: Objet avec propriété effectifs');
             effectifsCharges = data.effectifs;
           }
           // Vérifier si data est directement la structure effectifs
           else if (data && data.niveauPrescolaire && data.niveauPrimaire && data.niveauSecondaire) {
+            console.log('✅ Format: Structure effectifs directe');
             effectifsCharges = data;
           }
           
           if (effectifsCharges) {
+            console.log('✅ Mise à jour de localEffectifs avec:', effectifsCharges);
             setLocalEffectifs(effectifsCharges);
             toast.success('📊 Effectifs existants chargés !', { duration: 2000 });
+          } else {
+            console.log('❌ Aucun effectif trouvé dans la réponse');
           }
           
         } catch (error: any) {
           // Ne pas afficher d'erreur si c'est juste une absence de données (404)
           if (error.response?.status !== 404) {
             console.log('⚠️ Erreur lors du chargement:', error);
+          } else {
+            console.log('ℹ️ Aucune donnée existante (404)');
           }
         } finally {
           setIsLoading(false);
         }
+      } else {
+        console.log('❌ Conditions non remplies pour charger les effectifs');
+        if (!showModal) console.log('  - Modal fermé');
+        if (!identificationProved) console.log('  - identificationProved manquant');
+        if (!annee) console.log('  - annee manquante');
       }
     };
 
