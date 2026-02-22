@@ -139,17 +139,258 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <h3 className="text-lg font-medium mb-4 text-primary">IV. GOUVERNANCE (GESTION ET PILOTAGE DU SOUS-SECTEUR)</h3>
+      
+      {/* IV.1. Mise en Œuvre de la SSEF */}
+      <div className="mb-6">
+        <h4 className="font-bold mb-3">IV.1. Mise en Œuvre de la SSEF (Stratégie Sectorielle de l'Éducation et de la Formation)</h4>
+        
+        {/* IV.1.A. Niveau Province Educationnelle */}
+        <div className="mb-4">
+          <h5 className="font-semibold text-blue-600 mb-3">IV.1.A. Au niveau de la Province Educationnelle</h5>
+          
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">1. Elaboration du PAO de la Province Educationnelle dans une approche participative et ascendante (3 lignes)</label>
+            <textarea
+              className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Décrivez l'élaboration du PAO..."
+              value={formData.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.elaborationPAO}
+              onChange={(e) => handleInputChange('gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.elaborationPAO', e.target.value)}
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">2. Mise en œuvre : Suivi</label>
+            <textarea
+              className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Décrivez la mise en œuvre et le suivi..."
+              value={formData.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.miseEnOeuvre}
+              onChange={(e) => handleInputChange('gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.miseEnOeuvre', e.target.value)}
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">3. Evaluation à Mi-Parcours</label>
+            <textarea
+              className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Décrivez l'évaluation à mi-parcours..."
+              value={formData.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.evaluationMiParcours}
+              onChange={(e) => handleInputChange('gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.evaluationMiParcours', e.target.value)}
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">4. Evaluation Finale</label>
+            <textarea
+              className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Décrivez l'évaluation finale..."
+              value={formData.gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.evaluationFinale}
+              onChange={(e) => handleInputChange('gouvernance.miseEnOeuvreSSEF.niveauProvinceEducationnelle.evaluationFinale', e.target.value)}
+            />
+          </div>
+        </div>
+
+        {/* IV.1.B. Niveau Province Administrative */}
+        <div className="mb-4">
+          <h5 className="font-semibold text-blue-600 mb-3">IV.1.B. Au niveau de la Province Administrative</h5>
+          
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">1. Elaboration du PAO de la Province Administrative autour des Gouverneurs de Province (Ministres Provinciaux) dans le Cadre du Comité Technique Provincial de la SSEF (3 lignes au maximum)</label>
+            <textarea
+              className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Décrivez l'élaboration du PAO provincial..."
+              value={formData.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.elaborationPAO}
+              onChange={(e) => handleInputChange('gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.elaborationPAO', e.target.value)}
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">2. Mise en œuvre : Suivi</label>
+            <textarea
+              className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Décrivez la mise en œuvre et le suivi..."
+              value={formData.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.miseEnOeuvre}
+              onChange={(e) => handleInputChange('gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.miseEnOeuvre', e.target.value)}
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">3. Evaluation à Mi-Parcours</label>
+            <textarea
+              className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Décrivez l'évaluation à mi-parcours..."
+              value={formData.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.evaluationMiParcours}
+              onChange={(e) => handleInputChange('gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.evaluationMiParcours', e.target.value)}
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">4. Evaluation Finale</label>
+            <textarea
+              className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Décrivez l'évaluation finale..."
+              value={formData.gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.evaluationFinale}
+              onChange={(e) => handleInputChange('gouvernance.miseEnOeuvreSSEF.niveauProvinceAdministrative.evaluationFinale', e.target.value)}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* IV.2. Inspections Administratives C2B */}
+      <div className="mb-6">
+        <h4 className="font-bold mb-3">IV.2. Inspections Administratives C2B</h4>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse border border-gray-300">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-300 px-3 py-2 text-left">Niveau d'Enseignement</th>
+                <th className="border border-gray-300 px-3 py-2 text-center">Nbre Prévu</th>
+                <th className="border border-gray-300 px-3 py-2 text-center">Nbre Réalisé</th>
+                <th className="border border-gray-300 px-3 py-2 text-center">% Réalisation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2">Préscolaire</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0"
+                    value={formData.gouvernance.inspectionsAdministrativesC2B.prescolaire.nombrePrevu ?? ''}
+                    onChange={(e) => handleInputChange('gouvernance.inspectionsAdministrativesC2B.prescolaire.nombrePrevu', e.target.value)}
+                  />
+                </td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0"
+                    value={formData.gouvernance.inspectionsAdministrativesC2B.prescolaire.nombreRealise ?? ''}
+                    onChange={(e) => handleInputChange('gouvernance.inspectionsAdministrativesC2B.prescolaire.nombreRealise', e.target.value)}
+                  />
+                </td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0"
+                    step="0.1"
+                    value={formData.gouvernance.inspectionsAdministrativesC2B.prescolaire.pourcentageRealisation ?? ''}
+                    onChange={(e) => handleInputChange('gouvernance.inspectionsAdministrativesC2B.prescolaire.pourcentageRealisation', e.target.value)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2">Primaire</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0"
+                    value={formData.gouvernance.inspectionsAdministrativesC2B.primaire.nombrePrevu ?? ''}
+                    onChange={(e) => handleInputChange('gouvernance.inspectionsAdministrativesC2B.primaire.nombrePrevu', e.target.value)}
+                  />
+                </td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0"
+                    value={formData.gouvernance.inspectionsAdministrativesC2B.primaire.nombreRealise ?? ''}
+                    onChange={(e) => handleInputChange('gouvernance.inspectionsAdministrativesC2B.primaire.nombreRealise', e.target.value)}
+                  />
+                </td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0"
+                    step="0.1"
+                    value={formData.gouvernance.inspectionsAdministrativesC2B.primaire.pourcentageRealisation ?? ''}
+                    onChange={(e) => handleInputChange('gouvernance.inspectionsAdministrativesC2B.primaire.pourcentageRealisation', e.target.value)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2">Secondaire</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0"
+                    value={formData.gouvernance.inspectionsAdministrativesC2B.secondaire.nombrePrevu ?? ''}
+                    onChange={(e) => handleInputChange('gouvernance.inspectionsAdministrativesC2B.secondaire.nombrePrevu', e.target.value)}
+                  />
+                </td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0"
+                    value={formData.gouvernance.inspectionsAdministrativesC2B.secondaire.nombreRealise ?? ''}
+                    onChange={(e) => handleInputChange('gouvernance.inspectionsAdministrativesC2B.secondaire.nombreRealise', e.target.value)}
+                  />
+                </td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0"
+                    step="0.1"
+                    value={formData.gouvernance.inspectionsAdministrativesC2B.secondaire.pourcentageRealisation ?? ''}
+                    onChange={(e) => handleInputChange('gouvernance.inspectionsAdministrativesC2B.secondaire.pourcentageRealisation', e.target.value)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2">Spécial (handicap)</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0"
+                    value={formData.gouvernance.inspectionsAdministrativesC2B.special.nombrePrevu ?? ''}
+                    onChange={(e) => handleInputChange('gouvernance.inspectionsAdministrativesC2B.special.nombrePrevu', e.target.value)}
+                  />
+                </td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0"
+                    value={formData.gouvernance.inspectionsAdministrativesC2B.special.nombreRealise ?? ''}
+                    onChange={(e) => handleInputChange('gouvernance.inspectionsAdministrativesC2B.special.nombreRealise', e.target.value)}
+                  />
+                </td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <input 
+                    type="number" 
+                    className="w-full text-center border-none focus:outline-none focus:ring-0"
+                    step="0.1"
+                    value={formData.gouvernance.inspectionsAdministrativesC2B.special.pourcentageRealisation ?? ''}
+                    onChange={(e) => handleInputChange('gouvernance.inspectionsAdministrativesC2B.special.pourcentageRealisation', e.target.value)}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       {/* IV.8. Vulgarisation des Instructions Officielles */}
       <div className="mb-6">
         <h4 className="font-bold mb-3">IV.8. Vulgarisation des Instructions Officielles</h4>
         <p className="text-sm text-gray-600 mb-2">en Indiquer les Principales et mettre en exergue particulièrement la mise en pratique de celles relatives à la Nouvelle Citoyenneté</p>
         <p className="text-sm text-gray-600 mb-4">(10 lignes au maximum)</p>
-        <textarea
-          className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Entrez les instructions officielles vulgarisées..."
-          value={formData.gouvernance.vulgarisationInstructions.instructionsOfficielles}
-          onChange={(e) => handleInputChange('gouvernance.vulgarisationInstructions.instructionsOfficielles', e.target.value)}
-        />
+        
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Instructions Officielles</label>
+          <textarea
+            className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Entrez les instructions officielles vulgarisées..."
+            value={formData.gouvernance.vulgarisationInstructions.instructionsOfficielles}
+            onChange={(e) => handleInputChange('gouvernance.vulgarisationInstructions.instructionsOfficielles', e.target.value)}
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Mise en pratique de la Nouvelle Citoyenneté</label>
+          <textarea
+            className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Décrivez la mise en pratique de la Nouvelle Citoyenneté..."
+            value={formData.gouvernance.vulgarisationInstructions.nouvelleCitoyennete}
+            onChange={(e) => handleInputChange('gouvernance.vulgarisationInstructions.nouvelleCitoyennete', e.target.value)}
+          />
+        </div>
       </div>
 
       {/* IV.9. Formation des Gestionnaires des BG Provinciaux et de Proximité */}
@@ -185,7 +426,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={formationsGestionnaires.leadershipScolaire.tauxGF || ''}
+                    value={formationsGestionnaires.leadershipScolaire.tauxGF ?? ''}
                     onChange={(e) => updateFormationsGestionnaires('leadershipScolaire', 'tauxGF', Number(e.target.value))}
                   />
                 </td>
@@ -195,7 +436,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={formationsGestionnaires.leadershipScolaire.tauxFilles || ''}
+                    value={formationsGestionnaires.leadershipScolaire.tauxFilles ?? ''}
                     onChange={(e) => updateFormationsGestionnaires('leadershipScolaire', 'tauxFilles', Number(e.target.value))}
                   />
                 </td>
@@ -208,7 +449,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={formationsGestionnaires.managementScolaire.tauxGF || ''}
+                    value={formationsGestionnaires.managementScolaire.tauxGF ?? ''}
                     onChange={(e) => updateFormationsGestionnaires('managementScolaire', 'tauxGF', Number(e.target.value))}
                   />
                 </td>
@@ -218,7 +459,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={formationsGestionnaires.managementScolaire.tauxFilles || ''}
+                    value={formationsGestionnaires.managementScolaire.tauxFilles ?? ''}
                     onChange={(e) => updateFormationsGestionnaires('managementScolaire', 'tauxFilles', Number(e.target.value))}
                   />
                 </td>
@@ -231,7 +472,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={formationsGestionnaires.calculIndicateurs.tauxGF || ''}
+                    value={formationsGestionnaires.calculIndicateurs.tauxGF ?? ''}
                     onChange={(e) => updateFormationsGestionnaires('calculIndicateurs', 'tauxGF', Number(e.target.value))}
                   />
                 </td>
@@ -241,7 +482,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={formationsGestionnaires.calculIndicateurs.tauxFilles || ''}
+                    value={formationsGestionnaires.calculIndicateurs.tauxFilles ?? ''}
                     onChange={(e) => updateFormationsGestionnaires('calculIndicateurs', 'tauxFilles', Number(e.target.value))}
                   />
                 </td>
@@ -254,7 +495,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={formationsGestionnaires.gestionEntiteEducationnelle.tauxGF || ''}
+                    value={formationsGestionnaires.gestionEntiteEducationnelle.tauxGF ?? ''}
                     onChange={(e) => updateFormationsGestionnaires('gestionEntiteEducationnelle', 'tauxGF', Number(e.target.value))}
                   />
                 </td>
@@ -264,7 +505,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={formationsGestionnaires.gestionEntiteEducationnelle.tauxFilles || ''}
+                    value={formationsGestionnaires.gestionEntiteEducationnelle.tauxFilles ?? ''}
                     onChange={(e) => updateFormationsGestionnaires('gestionEntiteEducationnelle', 'tauxFilles', Number(e.target.value))}
                   />
                 </td>
@@ -277,7 +518,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={formationsGestionnaires.planification.tauxGF || ''}
+                    value={formationsGestionnaires.planification.tauxGF ?? ''}
                     onChange={(e) => updateFormationsGestionnaires('planification', 'tauxGF', Number(e.target.value))}
                   />
                 </td>
@@ -287,7 +528,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     max="100"
                     step="0.1"
-                    value={formationsGestionnaires.planification.tauxFilles || ''}
+                    value={formationsGestionnaires.planification.tauxFilles ?? ''}
                     onChange={(e) => updateFormationsGestionnaires('planification', 'tauxFilles', Number(e.target.value))}
                   />
                 </td>

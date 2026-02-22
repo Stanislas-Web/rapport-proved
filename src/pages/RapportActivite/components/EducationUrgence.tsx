@@ -57,12 +57,24 @@ const EducationUrgence: React.FC<EducationUrgenceProps> = ({ formData, setFormDa
         {/* V.1.3. Survenue des Catastrophes naturelles */}
         <div className="mb-4">
           <h5 className="font-medium mb-2">V.1.3. Survenue des Catastrophes naturelles (En préciser la nature et les effets négatifs)</h5>
-          <textarea
-            className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Décrivez les catastrophes naturelles..."
-            value={formData.educationUrgence.catastrophesNaturelles.nature}
-            onChange={(e) => handleInputChange('educationUrgence.catastrophesNaturelles.nature', e.target.value)}
-          />
+          <div className="mb-3">
+            <label className="block text-sm font-medium mb-2">Nature des catastrophes</label>
+            <textarea
+              className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Décrivez la nature des catastrophes naturelles..."
+              value={formData.educationUrgence.catastrophesNaturelles.nature}
+              onChange={(e) => handleInputChange('educationUrgence.catastrophesNaturelles.nature', e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Effets négatifs</label>
+            <textarea
+              className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Décrivez les effets négatifs des catastrophes..."
+              value={formData.educationUrgence.catastrophesNaturelles.effetsNegatifs}
+              onChange={(e) => handleInputChange('educationUrgence.catastrophesNaturelles.effetsNegatifs', e.target.value)}
+            />
+          </div>
         </div>
 
         {/* V.1.4. Destruction des SDC par les Forces Négatives */}
@@ -90,12 +102,24 @@ const EducationUrgence: React.FC<EducationUrgenceProps> = ({ formData, setFormDa
         {/* V.1.6. Fréquences des réunions du Cluster Education */}
         <div className="mb-4">
           <h5 className="font-medium mb-2">V.1.6. Fréquences des réunions du Cluster Education, (qlq principaux points traités et réalisés)</h5>
-          <textarea
-            className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Décrivez les réunions du Cluster Education..."
-            value={formData.educationUrgence.reunionsClusterEducation.frequence}
-            onChange={(e) => handleInputChange('educationUrgence.reunionsClusterEducation.frequence', e.target.value)}
-          />
+          <div className="mb-3">
+            <label className="block text-sm font-medium mb-2">Fréquence des réunions</label>
+            <textarea
+              className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Décrivez la fréquence des réunions..."
+              value={formData.educationUrgence.reunionsClusterEducation.frequence}
+              onChange={(e) => handleInputChange('educationUrgence.reunionsClusterEducation.frequence', e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Principaux points traités et réalisés</label>
+            <textarea
+              className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Décrivez les principaux points traités..."
+              value={formData.educationUrgence.reunionsClusterEducation.pointsTraites}
+              onChange={(e) => handleInputChange('educationUrgence.reunionsClusterEducation.pointsTraites', e.target.value)}
+            />
+          </div>
         </div>
 
         {/* V.1.7. Recommandations */}
@@ -103,12 +127,12 @@ const EducationUrgence: React.FC<EducationUrgenceProps> = ({ formData, setFormDa
           <h5 className="font-medium mb-2">V.1.7. Recommandations</h5>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">a) Nbre d'Espaces Temporaires d'apprentissages construits (En préciser les coûts)</label>
+              <label className="block text-sm font-medium mb-2">a) Nbre d'Espaces Temporaires d'apprentissages construits</label>
               <input
                 type="number"
                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Nombre"
-                value={formData.educationUrgence.recommandations.espacesTemporairesApprentissage.nombre}
+                value={formData.educationUrgence.recommandations.espacesTemporairesApprentissage.nombre ?? ''}
                 onChange={(e) => handleInputChange('educationUrgence.recommandations.espacesTemporairesApprentissage.nombre', Number(e.target.value))}
               />
             </div>
@@ -118,10 +142,19 @@ const EducationUrgence: React.FC<EducationUrgenceProps> = ({ formData, setFormDa
                 type="number"
                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Nombre"
-                value={formData.educationUrgence.recommandations.apprenantsScolarises.cible}
+                value={formData.educationUrgence.recommandations.apprenantsScolarises.cible ?? ''}
                 onChange={(e) => handleInputChange('educationUrgence.recommandations.apprenantsScolarises.cible', Number(e.target.value))}
               />
             </div>
+          </div>
+          <div className="mt-4">
+            <label className="block text-sm font-medium mb-2">Coûts des Espaces Temporaires d'apprentissage (En préciser les coûts)</label>
+            <textarea
+              className="w-full h-20 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Décrivez les coûts estimés..."
+              value={formData.educationUrgence.recommandations.espacesTemporairesApprentissage.couts}
+              onChange={(e) => handleInputChange('educationUrgence.recommandations.espacesTemporairesApprentissage.couts', e.target.value)}
+            />
           </div>
           <div className="mt-4">
             <label className="block text-sm font-medium mb-2">c) Formations des enseignants sur l'ESU</label>
