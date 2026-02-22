@@ -32,21 +32,31 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ formData, handleInputChange }) =>
     }
   };
 
-  const [effectifs, setEffectifs] = useState<EffectifsAnneePrecedente>(
-    (formData as any)?.effectifs || defaultEffectifs
-  );
+  const [effectifs, setEffectifs] = useState<EffectifsAnneePrecedente>(defaultEffectifs);
+
+  // Récupérer l'ID PROVED depuis le token JWT (même méthode que create.tsx)
+  const getProvedId = (): string | null => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return null;
+      
+      const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+      return tokenPayload._id || null;
+    } catch (error) {
+      console.error('Erreur récupération PROVED ID depuis token:', error);
+      return null;
+    }
+  };
 
   // Charger les effectifs existants au montage du composant
   useEffect(() => {
     const loadInitialEffectifs = async () => {
-      const identificationId = typeof formData?.identificationProved === 'object' 
-        ? formData?.identificationProved?._id 
-        : formData?.identificationProved;
+      const provedId = getProvedId();
       const annee = formData?.annee;
       
-      if (identificationId && annee) {
+      if (provedId && annee) {
         try {
-          const data = await EffectifAnnuelService.getByProvedAndAnnee(identificationId, annee);
+          const data = await EffectifAnnuelService.getByProvedAndAnnee(provedId, annee);
           
           let effectifsCharges = null;
           
@@ -59,23 +69,26 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ formData, handleInputChange }) =>
           }
           
           if (effectifsCharges) {
-            console.log('✅ BasicInfo: Effectifs chargés au montage:', effectifsCharges);
+            console.log('✅ Effectifs chargés depuis l\'API:', effectifsCharges);
             setEffectifs(effectifsCharges);
-            handleInputChange('effectifs', effectifsCharges);
           }
         } catch (error) {
-          console.log('ℹ️ BasicInfo: Aucun effectif existant au montage');
+          // Pas d'effectif existant, ce n'est pas une erreur
         }
       }
     };
     
     loadInitialEffectifs();
-  }, [formData?.identificationProved, formData?.annee]);
+  }, [formData?.annee]);
 
   const handleEffectifsUpdate = (newEffectifs: EffectifsAnneePrecedente) => {
+    // Mettre à jour uniquement l'état local
+    // Les effectifs sont déjà enregistrés dans la base de données
     setEffectifs(newEffectifs);
-    handleInputChange('effectifs', newEffectifs);
   };
+
+  const provedId = getProvedId();
+  console.log('🔍 BasicInfo render - provedId:', provedId, 'annee:', formData?.annee);
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -85,11 +98,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ formData, handleInputChange }) =>
       <EffectifsPrecedent 
         effectifs={effectifs} 
         onUpdate={handleEffectifsUpdate}
-        identificationProved={
-          typeof formData?.identificationProved === 'object' 
-            ? formData?.identificationProved?._id 
-            : formData?.identificationProved
-        }
+        identificationProved={provedId || undefined}
         annee={formData?.annee?.toString()}
       />
       
