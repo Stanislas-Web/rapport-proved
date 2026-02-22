@@ -205,9 +205,9 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
           font-size: 13px;
           font-weight: 600;
           color: #1e40af;
-          margin-bottom: 16px;
+          margin-bottom: 8px;
           margin-left: 10px;
-          padding: 8px 6px;
+          padding: 6px;
           background: #f3f4f6;
           border-left: 4px solid #1e40af;
           border-radius: 4px;
@@ -216,13 +216,13 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
         .info-grid {
           display: grid;
           grid-template-columns: 1fr;
-          gap: 8px;
-          margin-bottom: 12px;
+          gap: 3px;
+          margin-bottom: 5px;
         }
         
         .info-card {
           background: #f8fafc;
-          padding: 12px;
+          padding: 8px;
           border-radius: 6px;
           border: 1px solid #e2e8f0;
           page-break-inside: avoid;
@@ -232,7 +232,7 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
           font-size: 12px;
           font-weight: 600;
           color: #374151;
-          margin-bottom: 14px;
+          margin-bottom: 4px;
         }
         
         .info-card p {
@@ -268,7 +268,7 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
         }
         
         .table-container {
-          margin: 12px 0;
+          margin: 5px 0;
           overflow-x: auto;
         }
         
@@ -344,7 +344,7 @@ const generateBeautifulPDF = (rapport: RapportActivite) => {
            display: flex;
            justify-content: space-between;
            align-items: center;
-           padding: 10px 0;
+           padding: 6px 0;
            border-bottom: 1px solid #f1f5f9;
          }
          
