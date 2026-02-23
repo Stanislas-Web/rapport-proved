@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { RapportActivite } from '../../../models/RapportActivite';
 import EffectifsPrecedent, { EffectifsAnneePrecedente } from './EffectifsPrecedent';
 import { EffectifAnnuelService } from '../../../services/effectifAnnuel/effectifAnnuel.service';
+import { getProvedIdFromToken } from '../../../utils/jwtUtils';
 
 interface BasicInfoProps {
   formData: RapportActivite;
@@ -34,18 +35,9 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ formData, handleInputChange }) =>
 
   const [effectifs, setEffectifs] = useState<EffectifsAnneePrecedente>(defaultEffectifs);
 
-  // Récupérer l'ID PROVED depuis le token JWT (même méthode que create.tsx)
+  // Récupérer l'ID PROVED depuis le token JWT en utilisant l'utilitaire robuste
   const getProvedId = (): string | null => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) return null;
-      
-      const tokenPayload = JSON.parse(atob(token.split('.')[1]));
-      return tokenPayload._id || null;
-    } catch (error) {
-      console.error('Erreur récupération PROVED ID depuis token:', error);
-      return null;
-    }
+    return getProvedIdFromToken();
   };
 
   // Charger les effectifs existants au montage du composant

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
 import UsersService from '../services/users/usersservice';
 import toast from 'react-hot-toast';
+import { getUserInfoFromToken, isTokenExpired } from '../utils/jwtUtils';
 
 interface UserProfile {
   _id?: string;
@@ -114,16 +115,15 @@ const Profile = () => {
     
     // Essayer de décoder le token JWT pour voir s'il est expiré
     try {
-      const tokenParts = token.split('.');
-      if (tokenParts.length === 3) {
-        const payload = JSON.parse(atob(tokenParts[1]));
+      const payload = getUserInfoFromToken();
+      if (payload) {
         console.log('🔍 Token payload:', payload);
         console.log('🔍 Token exp:', new Date(payload.exp * 1000));
         console.log('🔍 Token iat:', new Date(payload.iat * 1000));
-        console.log('🔍 Token expiré?', Date.now() > payload.exp * 1000);
+        console.log('🔍 Token expiré?', isTokenExpired());
       }
     } catch (error) {
-      console.log('🔍 Token n\'est pas un JWT valide:', error);
+      console.log('🔍 Erreur lors de la lecture du token:', error);
     }
     
     if (!userData._id) {

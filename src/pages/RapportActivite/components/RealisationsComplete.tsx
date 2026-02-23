@@ -375,7 +375,7 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     placeholder="0"
-                    value={inspectionsC2B.maternel.prevu || ''}
+                    value={inspectionsC2B.maternel.prevu ?? 0}
                     onChange={(e) => updateInspectionC2B('maternel', 'prevu', Number(e.target.value))}
                   />
                 </td>
@@ -385,7 +385,7 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     placeholder="0"
                     max={inspectionsC2B.maternel.prevu || undefined}
-                    value={inspectionsC2B.maternel.realise || ''}
+                    value={inspectionsC2B.maternel.realise ?? 0}
                     onChange={(e) => updateInspectionC2B('maternel', 'realise', Number(e.target.value))}
                   />
                 </td>
@@ -402,7 +402,7 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     placeholder="0"
-                    value={inspectionsC2B.primaire.prevu || ''}
+                    value={inspectionsC2B.primaire.prevu ?? 0}
                     onChange={(e) => updateInspectionC2B('primaire', 'prevu', Number(e.target.value))}
                   />
                 </td>
@@ -412,7 +412,7 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     placeholder="0"
                     max={inspectionsC2B.primaire.prevu || undefined}
-                    value={inspectionsC2B.primaire.realise || ''}
+                    value={inspectionsC2B.primaire.realise ?? 0}
                     onChange={(e) => updateInspectionC2B('primaire', 'realise', Number(e.target.value))}
                   />
                 </td>
@@ -429,7 +429,7 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     placeholder="0"
-                    value={inspectionsC2B.secondaire.prevu || ''}
+                    value={inspectionsC2B.secondaire.prevu ?? 0}
                     onChange={(e) => updateInspectionC2B('secondaire', 'prevu', Number(e.target.value))}
                   />
                 </td>
@@ -439,7 +439,7 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     placeholder="0"
                     max={inspectionsC2B.secondaire.prevu || undefined}
-                    value={inspectionsC2B.secondaire.realise || ''}
+                    value={inspectionsC2B.secondaire.realise ?? 0}
                     onChange={(e) => updateInspectionC2B('secondaire', 'realise', Number(e.target.value))}
                   />
                 </td>
@@ -456,7 +456,7 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
                     type="number" 
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     placeholder="0"
-                    value={inspectionsC2B.special.prevu || ''}
+                    value={inspectionsC2B.special.prevu ?? 0}
                     onChange={(e) => updateInspectionC2B('special', 'prevu', Number(e.target.value))}
                   />
                 </td>
@@ -466,7 +466,7 @@ const RealisationsComplete: React.FC<RealisationsCompleteProps> = ({ formData, s
                     className="w-full text-center border-none focus:outline-none focus:ring-0" 
                     placeholder="0"
                     max={inspectionsC2B.special.prevu || undefined}
-                    value={inspectionsC2B.special.realise || ''}
+                    value={inspectionsC2B.special.realise ?? 0}
                     onChange={(e) => updateInspectionC2B('special', 'realise', Number(e.target.value))}
                   />
                 </td>

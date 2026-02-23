@@ -239,14 +239,14 @@ const Personnel: React.FC<PersonnelProps> = ({ formData, setFormData }) => {
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.directionProvinciale?.hommes || ''}
+                      value={formData.personnel?.personnelAdministratif?.directionProvinciale?.hommes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.directionProvinciale.hommes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
                     />
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.directionProvinciale?.femmes || ''}
+                      value={formData.personnel?.personnelAdministratif?.directionProvinciale?.femmes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.directionProvinciale.femmes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
@@ -261,14 +261,14 @@ const Personnel: React.FC<PersonnelProps> = ({ formData, setFormData }) => {
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.inspectionPrincipale?.hommes || ''}
+                      value={formData.personnel?.personnelAdministratif?.inspectionPrincipale?.hommes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.inspectionPrincipale.hommes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
                     />
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.inspectionPrincipale?.femmes || ''}
+                      value={formData.personnel?.personnelAdministratif?.inspectionPrincipale?.femmes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.inspectionPrincipale.femmes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
@@ -283,14 +283,14 @@ const Personnel: React.FC<PersonnelProps> = ({ formData, setFormData }) => {
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.dinacope?.hommes || ''}
+                      value={formData.personnel?.personnelAdministratif?.dinacope?.hommes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.dinacope.hommes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
                     />
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.dinacope?.femmes || ''}
+                      value={formData.personnel?.personnelAdministratif?.dinacope?.femmes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.dinacope.femmes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
@@ -305,14 +305,14 @@ const Personnel: React.FC<PersonnelProps> = ({ formData, setFormData }) => {
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.sernie?.hommes || ''}
+                      value={formData.personnel?.personnelAdministratif?.sernie?.hommes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.sernie.hommes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
                     />
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.sernie?.femmes || ''}
+                      value={formData.personnel?.personnelAdministratif?.sernie?.femmes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.sernie.femmes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
@@ -327,14 +327,14 @@ const Personnel: React.FC<PersonnelProps> = ({ formData, setFormData }) => {
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.coordinationProvinciale?.hommes || ''}
+                      value={formData.personnel?.personnelAdministratif?.coordinationProvinciale?.hommes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.coordinationProvinciale.hommes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
                     />
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.coordinationProvinciale?.femmes || ''}
+                      value={formData.personnel?.personnelAdministratif?.coordinationProvinciale?.femmes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.coordinationProvinciale.femmes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
@@ -349,14 +349,14 @@ const Personnel: React.FC<PersonnelProps> = ({ formData, setFormData }) => {
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.sousDivision?.hommes || ''}
+                      value={formData.personnel?.personnelAdministratif?.sousDivision?.hommes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.sousDivision.hommes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
                     />
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.sousDivision?.femmes || ''}
+                      value={formData.personnel?.personnelAdministratif?.sousDivision?.femmes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.sousDivision.femmes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
@@ -371,14 +371,14 @@ const Personnel: React.FC<PersonnelProps> = ({ formData, setFormData }) => {
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.poolsInspectionPrimaire?.hommes || ''}
+                      value={formData.personnel?.personnelAdministratif?.poolsInspectionPrimaire?.hommes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.poolsInspectionPrimaire.hommes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
                     />
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.poolsInspectionPrimaire?.femmes || ''}
+                      value={formData.personnel?.personnelAdministratif?.poolsInspectionPrimaire?.femmes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.poolsInspectionPrimaire.femmes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
@@ -393,14 +393,14 @@ const Personnel: React.FC<PersonnelProps> = ({ formData, setFormData }) => {
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.poolsInspectionSecondaire?.hommes || ''}
+                      value={formData.personnel?.personnelAdministratif?.poolsInspectionSecondaire?.hommes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.poolsInspectionSecondaire.hommes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
                     />
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.poolsInspectionSecondaire?.femmes || ''}
+                      value={formData.personnel?.personnelAdministratif?.poolsInspectionSecondaire?.femmes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.poolsInspectionSecondaire.femmes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
@@ -415,14 +415,14 @@ const Personnel: React.FC<PersonnelProps> = ({ formData, setFormData }) => {
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.antenneDinacope?.hommes || ''}
+                      value={formData.personnel?.personnelAdministratif?.antenneDinacope?.hommes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.antenneDinacope.hommes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
                     />
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.antenneDinacope?.femmes || ''}
+                      value={formData.personnel?.personnelAdministratif?.antenneDinacope?.femmes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.antenneDinacope.femmes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
@@ -437,14 +437,14 @@ const Personnel: React.FC<PersonnelProps> = ({ formData, setFormData }) => {
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.antenneSernie?.hommes || ''}
+                      value={formData.personnel?.personnelAdministratif?.antenneSernie?.hommes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.antenneSernie.hommes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
                     />
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.antenneSernie?.femmes || ''}
+                      value={formData.personnel?.personnelAdministratif?.antenneSernie?.femmes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.antenneSernie.femmes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
@@ -459,14 +459,14 @@ const Personnel: React.FC<PersonnelProps> = ({ formData, setFormData }) => {
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.coordinationDiocesaine?.hommes || ''}
+                      value={formData.personnel?.personnelAdministratif?.coordinationDiocesaine?.hommes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.coordinationDiocesaine.hommes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"
                     />
                     <input
                       type="number"
-                      value={formData.personnel?.personnelAdministratif?.coordinationDiocesaine?.femmes || ''}
+                      value={formData.personnel?.personnelAdministratif?.coordinationDiocesaine?.femmes ?? ''}
                       onChange={(e) => handleInputChange('personnel.personnelAdministratif.coordinationDiocesaine.femmes', Number(e.target.value))}
                       className="w-full text-center border-none focus:outline-none focus:ring-0"
                       placeholder="0"

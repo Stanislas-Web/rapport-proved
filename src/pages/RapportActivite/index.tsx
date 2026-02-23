@@ -8,6 +8,8 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import moment from 'moment';
 import { generateAndShowPDF } from '../../utils/generateRapportPDF';
+import { extractErrorMessage } from '../../utils/errorUtils';
+import { getProvedIdFromToken, getUserInfoFromToken } from '../../utils/jwtUtils';
 
 // Fonction helper pour formater l'affichage du personnel
 const formatPersonnelDisplay = (rapport: RapportActivite) => {
@@ -1331,9 +1333,9 @@ const RapportActivitePage: React.FC = () => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+        const tokenPayload = getUserInfoFromToken();
         console.log('🔍 Rôle dans le token:', tokenPayload);
-        if (tokenPayload.type === 'ADMIN' || tokenPayload.role === 'admin') {
+        if (tokenPayload?.type === 'ADMIN' || tokenPayload?.role === 'admin') {
           console.log('🔍 Admin détecté dans le token');
           setUserRole('admin');
         }
@@ -1374,8 +1376,7 @@ const RapportActivitePage: React.FC = () => {
         // Récupérer l'ID de l'utilisateur connecté depuis le token
         if (token) {
           try {
-            const tokenPayload = JSON.parse(atob(token.split('.')[1]));
-            const userId = tokenPayload._id;
+            const userId = getProvedIdFromToken();
             console.log('🔍 Filtrage pour l\'utilisateur:', userId);
             
             // TEMPORAIREMENT DÉSACTIVÉ - Filtrer les rapports de l'utilisateur connecté
@@ -1398,10 +1399,10 @@ const RapportActivitePage: React.FC = () => {
       console.log('🔍 RapportActivitePage - Rapports finaux à afficher:', rapportsData);
       
       setRapports(rapportsData);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erreur lors du chargement des rapports:', error);
       console.error('Erreur complète:', JSON.stringify(error, null, 2));
-      toast.error('Erreur lors du chargement des rapports');
+      toast.error(extractErrorMessage(error, 'Erreur lors du chargement des rapports'));
     } finally {
       setLoading(false);
     }
@@ -1413,9 +1414,9 @@ const RapportActivitePage: React.FC = () => {
         await rapportActiviteService.deleteRapport(id);
         toast.success('Rapport supprimé avec succès');
         loadRapports();
-      } catch (error) {
+      } catch (error: any) {
         console.error('Erreur lors de la suppression:', error);
-        toast.error('Erreur lors de la suppression');
+        toast.error(extractErrorMessage(error, 'Erreur lors de la suppression'));
       }
     }
   };
@@ -1425,9 +1426,9 @@ const RapportActivitePage: React.FC = () => {
       await rapportActiviteService.submitRapport(id);
       toast.success('Rapport soumis avec succès');
       loadRapports();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erreur lors de la soumission:', error);
-      toast.error('Erreur lors de la soumission');
+      toast.error(extractErrorMessage(error, 'Erreur lors de la soumission'));
     }
   };
 
@@ -1436,9 +1437,9 @@ const RapportActivitePage: React.FC = () => {
       await rapportActiviteService.approveRapport(id);
       toast.success('Rapport approuvé avec succès');
       loadRapports();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erreur lors de l\'approbation:', error);
-      toast.error('Erreur lors de l\'approbation');
+      toast.error(extractErrorMessage(error, 'Erreur lors de l\'approbation'));
     }
   };
 
@@ -1449,9 +1450,9 @@ const RapportActivitePage: React.FC = () => {
         await rapportActiviteService.rejectRapport(id, reason);
         toast.success('Rapport rejeté avec succès');
         loadRapports();
-      } catch (error) {
+      } catch (error: any) {
         console.error('Erreur lors du rejet:', error);
-        toast.error('Erreur lors du rejet');
+        toast.error(extractErrorMessage(error, 'Erreur lors du rejet'));
       }
     }
   };
@@ -1460,8 +1461,9 @@ const RapportActivitePage: React.FC = () => {
     try {
       // Utiliser la génération côté frontend au lieu du backend
       await generateAndShowPDF(rapport);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erreur lors de la génération du PDF:', error);
+      toast.error(extractErrorMessage(error, 'Erreur lors de la génération du PDF'));
     }
   };
 

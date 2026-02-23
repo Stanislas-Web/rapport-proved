@@ -25,6 +25,8 @@ import {
   hasDraft,
   calculateCompletionPercentage 
 } from '../../utils/draftUtils';
+import { extractErrorMessage } from '../../utils/errorUtils';
+import { getProvedIdFromToken } from '../../utils/jwtUtils';
 
 const CreateRapportActivite: React.FC = () => {
   const navigate = useNavigate();
@@ -876,9 +878,9 @@ const CreateRapportActivite: React.FC = () => {
         setPreviousYearEffectifs(data.data.effectifs);
         toast.success('📊 Effectifs de l\'année précédente chargés avec succès !');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ Erreur lors de la récupération des effectifs:', error);
-      toast.error('Erreur lors du chargement des effectifs de l\'année précédente');
+      toast.error(extractErrorMessage(error, 'Erreur lors du chargement des effectifs de l\'année précédente'));
     }
   };
 
@@ -997,9 +999,9 @@ const CreateRapportActivite: React.FC = () => {
           console.log('🎯 formData mis à jour avec les données complètes');
           // Ne pas afficher le modal de brouillon en mode édition
           setShowDraftModal(false);
-        } catch (error) {
+        } catch (error: any) {
           console.error('❌ Erreur lors du chargement du rapport:', error);
-          toast.error('Erreur lors du chargement du rapport');
+          toast.error(extractErrorMessage(error, 'Erreur lors du chargement du rapport'));
         } finally {
           setLoading(false);
         }
@@ -1511,18 +1513,8 @@ const CreateRapportActivite: React.FC = () => {
 
     try {
       // Récupérer l'ID de la PROVED depuis le token
-      const token = localStorage.getItem('token');
-      let provedId = '';
-      
-      if (token) {
-        try {
-          const tokenPayload = JSON.parse(atob(token.split('.')[1]));
-          provedId = tokenPayload._id || '';
-          console.log('🔍 ID PROVED extrait du token:', provedId);
-        } catch (error) {
-          console.error('Erreur lors du parsing du token:', error);
-        }
-      }
+      const provedId = getProvedIdFromToken() || '';
+      console.log('🔍 ID PROVED extrait du token:', provedId);
 
       // Corriger le format de l'année si nécessaire
       let anneeCorrigee = formData.annee;
@@ -1578,9 +1570,9 @@ const CreateRapportActivite: React.FC = () => {
       autoSave.clearDraft();
       
       navigate('/rapport-activite');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erreur lors de la création/modification du rapport:', error);
-      toast.error('Erreur lors de la création/modification du rapport d\'activité');
+      toast.error(extractErrorMessage(error, 'Erreur lors de la création/modification du rapport d\'activité'));
     } finally {
       setLoading(false);
     }

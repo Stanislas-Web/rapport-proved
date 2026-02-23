@@ -961,7 +961,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0 p-1" 
-                      value={formData.gouvernance?.remunerationPersonnel?.[item.key as keyof any]?.totalAgents || 0}
+                      value={formData.gouvernance?.remunerationPersonnel?.[item.key as keyof any]?.totalAgents ?? 0}
                       onChange={(e) => handleInputChange(`gouvernance.remunerationPersonnel.${item.key}.totalAgents`, e.target.value)}
                       placeholder="0"
                     />
@@ -970,7 +970,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0 p-1" 
-                      value={formData.gouvernance?.remunerationPersonnel?.[item.key as keyof any]?.nonPayes || 0}
+                      value={formData.gouvernance?.remunerationPersonnel?.[item.key as keyof any]?.nonPayes ?? 0}
                       onChange={(e) => handleInputChange(`gouvernance.remunerationPersonnel.${item.key}.nonPayes`, e.target.value)}
                       placeholder="0"
                     />
@@ -991,7 +991,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
             <input 
               type="number" 
               className="w-full p-2 border border-gray-300 rounded-md" 
-              value={formData.gouvernance?.groupesAidesPsychopedagogiques?.nombreGAPMisEnPlace || 0}
+              value={formData.gouvernance?.groupesAidesPsychopedagogiques?.nombreGAPMisEnPlace ?? 0}
               onChange={(e) => handleInputChange('gouvernance.groupesAidesPsychopedagogiques.nombreGAPMisEnPlace', e.target.value)}
               placeholder="0"
             />
@@ -1001,7 +1001,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
             <input 
               type="number" 
               className="w-full p-2 border border-gray-300 rounded-md" 
-              value={formData.gouvernance?.groupesAidesPsychopedagogiques?.nombreGAPOperationnel || 0}
+              value={formData.gouvernance?.groupesAidesPsychopedagogiques?.nombreGAPOperationnel ?? 0}
               onChange={(e) => handleInputChange('gouvernance.groupesAidesPsychopedagogiques.nombreGAPOperationnel', e.target.value)}
               placeholder="0"
             />
@@ -1011,7 +1011,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
             <input 
               type="number" 
               className="w-full p-2 border border-gray-300 rounded-md" 
-              value={formData.gouvernance?.groupesAidesPsychopedagogiques?.nombreCasPrisEnCharge || 0}
+              value={formData.gouvernance?.groupesAidesPsychopedagogiques?.nombreCasPrisEnCharge ?? 0}
               onChange={(e) => handleInputChange('gouvernance.groupesAidesPsychopedagogiques.nombreCasPrisEnCharge', e.target.value)}
               placeholder="0"
             />
@@ -1064,7 +1064,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input 
                       type="number" 
                       className="w-full p-1 border border-gray-300 rounded text-sm" 
-                      value={formData.gouvernance?.acquisitionsMateriels?.[section.key as keyof any]?.sourceFinancement?.gvt || 0}
+                      value={formData.gouvernance?.acquisitionsMateriels?.[section.key as keyof any]?.sourceFinancement?.gvt ?? 0}
                       onChange={(e) => handleInputChange(`gouvernance.acquisitionsMateriels.${section.key}.sourceFinancement.gvt`, e.target.value)}
                       placeholder="0"
                     />
@@ -1074,7 +1074,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input 
                       type="number" 
                       className="w-full p-1 border border-gray-300 rounded text-sm" 
-                      value={formData.gouvernance?.acquisitionsMateriels?.[section.key as keyof any]?.sourceFinancement?.projet || 0}
+                      value={formData.gouvernance?.acquisitionsMateriels?.[section.key as keyof any]?.sourceFinancement?.projet ?? 0}
                       onChange={(e) => handleInputChange(`gouvernance.acquisitionsMateriels.${section.key}.sourceFinancement.projet`, e.target.value)}
                       placeholder="0"
                     />
@@ -1084,7 +1084,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input 
                       type="number" 
                       className="w-full p-1 border border-gray-300 rounded text-sm" 
-                      value={formData.gouvernance?.acquisitionsMateriels?.[section.key as keyof any]?.sourceFinancement?.ptfs || 0}
+                      value={formData.gouvernance?.acquisitionsMateriels?.[section.key as keyof any]?.sourceFinancement?.ptfs ?? 0}
                       onChange={(e) => handleInputChange(`gouvernance.acquisitionsMateriels.${section.key}.sourceFinancement.ptfs`, e.target.value)}
                       placeholder="0"
                     />
@@ -1094,7 +1094,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input 
                       type="number" 
                       className="w-full p-1 border border-gray-300 rounded text-sm" 
-                      value={formData.gouvernance?.acquisitionsMateriels?.[section.key as keyof any]?.sourceFinancement?.ong || 0}
+                      value={formData.gouvernance?.acquisitionsMateriels?.[section.key as keyof any]?.sourceFinancement?.ong ?? 0}
                       onChange={(e) => handleInputChange(`gouvernance.acquisitionsMateriels.${section.key}.sourceFinancement.ong`, e.target.value)}
                       placeholder="0"
                     />
@@ -1140,7 +1140,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0 p-1" 
-                      value={formData.gouvernance?.infrastructureBureaux?.[item.key as keyof any]?.proprietaire || 0}
+                      value={formData.gouvernance?.infrastructureBureaux?.[item.key as keyof any]?.proprietaire ?? 0}
                       onChange={(e) => handleInputChange(`gouvernance.infrastructureBureaux.${item.key}.proprietaire`, e.target.value)}
                       placeholder="0"
                     />
@@ -1149,7 +1149,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0 p-1" 
-                      value={formData.gouvernance?.infrastructureBureaux?.[item.key as keyof any]?.locataire || 0}
+                      value={formData.gouvernance?.infrastructureBureaux?.[item.key as keyof any]?.locataire ?? 0}
                       onChange={(e) => handleInputChange(`gouvernance.infrastructureBureaux.${item.key}.locataire`, e.target.value)}
                       placeholder="0"
                     />

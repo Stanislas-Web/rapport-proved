@@ -275,7 +275,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                   <td className="border border-gray-300 px-3 py-2">
                     <input
                       type="number"
-                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.prescolaire || 0}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.prescolaire ?? 0}
                       onChange={(e) => {
                         const newValue = parseInt(e.target.value) || 0;
                         setFormData(prev => ({
@@ -324,7 +324,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                   <td className="border border-gray-300 px-3 py-2">
                     <input
                       type="number"
-                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.primaire || 0}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.primaire ?? 0}
                       onChange={(e) => {
                         const newValue = parseInt(e.target.value) || 0;
                         setFormData(prev => ({
@@ -373,7 +373,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                   <td className="border border-gray-300 px-3 py-2">
                     <input
                       type="number"
-                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.secondaire || 0}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.secondaire ?? 0}
                       onChange={(e) => {
                         const newValue = parseInt(e.target.value) || 0;
                         setFormData(prev => ({
@@ -441,7 +441,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      value={formData.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.prescolaire || 0}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.prescolaire ?? 0}
                       onChange={(e) => {
                         const newValue = parseInt(e.target.value) || 0;
                         setFormData(prev => ({
@@ -490,7 +490,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      value={formData.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.primaire || 0}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.primaire ?? 0}
                       onChange={(e) => {
                         const newValue = parseInt(e.target.value) || 0;
                         setFormData(prev => ({
@@ -539,7 +539,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      value={formData.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.secondaire || 0}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.secondaire ?? 0}
                       onChange={(e) => {
                         const newValue = parseInt(e.target.value) || 0;
                         setFormData(prev => ({
@@ -606,7 +606,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.prescolaire || 0}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.prescolaire ?? 0}
                       onChange={(e) => {
                         const newValue = parseInt(e.target.value) || 0;
                         setFormData(prev => ({
@@ -655,7 +655,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.primaire || 0}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.primaire ?? 0}
                       onChange={(e) => {
                         const newValue = parseInt(e.target.value) || 0;
                         setFormData(prev => ({
@@ -704,7 +704,7 @@ const Realisations: React.FC<RealisationsProps> = ({ formData, setFormData, auto
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.secondaire || 0}
+                      value={formData.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.secondaire ?? 0}
                       onChange={(e) => {
                         const newValue = parseInt(e.target.value) || 0;
                         setFormData(prev => ({
