@@ -4,9 +4,10 @@ import { RapportActivite } from '../../../models/RapportActivite';
 interface ParametresClesCompleteProps {
   formData: RapportActivite;
   setFormData: React.Dispatch<React.SetStateAction<RapportActivite>>;
+  onInputChange?: (field: string, value: any) => void;
 }
 
-const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formData, setFormData }) => {
+const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formData, setFormData, onInputChange }) => {
   // Vérification de sécurité pour s'assurer que les données sont initialisées
   if (!formData || !formData.parametresCles || !formData.parametresCles.nombreEcolesClasses) {
     console.log('🔍 ParametresClesComplete: Données non initialisées, affichage du loader');
@@ -23,6 +24,12 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
   }
 
   const handleInputChange = (path: string, value: number | string) => {
+    // Si le parent fournit onInputChange, l'utiliser pour déclencher le recalcul auto des taux
+    if (onInputChange) {
+      onInputChange(path, typeof value === 'number' ? value : value);
+      return;
+    }
+    // Fallback: mise à jour directe via setFormData
     setFormData(prev => {
       const newData = { ...prev };
       const keys = path.split('.');

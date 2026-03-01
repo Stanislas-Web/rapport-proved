@@ -8,9 +8,10 @@ interface BasicInfoProps {
   formData: RapportActivite;
   handleInputChange: (field: string, value: any) => void;
   previousYearEffectifs?: any;
+  onPreviousYearEffectifsUpdate?: (effectifs: any) => void;
 }
 
-const BasicInfo: React.FC<BasicInfoProps> = ({ formData, handleInputChange, previousYearEffectifs }) => {
+const BasicInfo: React.FC<BasicInfoProps> = ({ formData, handleInputChange, previousYearEffectifs, onPreviousYearEffectifsUpdate }) => {
   // État initial pour les effectifs - utilise les données de formData si disponibles
   const defaultEffectifs: EffectifsAnneePrecedente = {
     niveauPrescolaire: {
@@ -75,9 +76,12 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ formData, handleInputChange, prev
   }, [formData?.annee]);
 
   const handleEffectifsUpdate = (newEffectifs: EffectifsAnneePrecedente) => {
-    // Mettre à jour uniquement l'état local
-    // Les effectifs sont déjà enregistrés dans la base de données
+    // Mettre à jour l'état local
     setEffectifs(newEffectifs);
+    // Propager au parent pour déclencher le recalcul automatique des taux
+    if (onPreviousYearEffectifsUpdate) {
+      onPreviousYearEffectifsUpdate(newEffectifs);
+    }
   };
 
   const provedId = getProvedId();
