@@ -107,6 +107,18 @@ const EvaluationQualitative: React.FC<EvaluationQualitativeProps> = ({ formData,
                     <input type="radio" name="prog_5" className="mx-auto block" checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.programmesScolaires?.secondaire === 'CARENCE'} onChange={() => handleRadioChange('ameliorationQualite.programmesScolaires.secondaire', 'CARENCE')} />
                   </td>
                 </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2">f) Préscolaire</td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input type="radio" name="prog_6" className="mx-auto block" checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.programmesScolaires?.prescolaire === 'TRES BON'} onChange={() => handleRadioChange('ameliorationQualite.programmesScolaires.prescolaire', 'TRES BON')} />
+                  </td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input type="radio" name="prog_6" className="mx-auto block" checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.programmesScolaires?.prescolaire === 'BON'} onChange={() => handleRadioChange('ameliorationQualite.programmesScolaires.prescolaire', 'BON')} />
+                  </td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input type="radio" name="prog_6" className="mx-auto block" checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.programmesScolaires?.prescolaire === 'CARENCE'} onChange={() => handleRadioChange('ameliorationQualite.programmesScolaires.prescolaire', 'CARENCE')} />
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -184,6 +196,18 @@ const EvaluationQualitative: React.FC<EvaluationQualitativeProps> = ({ formData,
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
                     <input type="radio" name="man_5" className="mx-auto block" checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.manuelsScolaires?.secondaire === 'CARENCE'} onChange={() => handleRadioChange('ameliorationQualite.manuelsScolaires.secondaire', 'CARENCE')} />
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2">f) Préscolaire</td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input type="radio" name="man_6" className="mx-auto block" checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.manuelsScolaires?.prescolaire === 'TRES BON'} onChange={() => handleRadioChange('ameliorationQualite.manuelsScolaires.prescolaire', 'TRES BON')} />
+                  </td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input type="radio" name="man_6" className="mx-auto block" checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.manuelsScolaires?.prescolaire === 'BON'} onChange={() => handleRadioChange('ameliorationQualite.manuelsScolaires.prescolaire', 'BON')} />
+                  </td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input type="radio" name="man_6" className="mx-auto block" checked={formData?.ameliorationQualite?.disponibiliteMoyensEnseignement?.manuelsScolaires?.prescolaire === 'CARENCE'} onChange={() => handleRadioChange('ameliorationQualite.manuelsScolaires.prescolaire', 'CARENCE')} />
                   </td>
                 </tr>
               </tbody>

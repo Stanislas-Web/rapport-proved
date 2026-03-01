@@ -577,7 +577,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input
                       type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      value={calculDataFormations.leadershipScolaire.total ?? ''}
+                      value={calculDataFormations.leadershipScolaire.total || ''}
                       onChange={(e) => updateCalculDataFormations('leadershipScolaire', 'total', Number(e.target.value))}
                       placeholder="0"
                     />
@@ -587,7 +587,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input
                       type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                      value={calculDataFormations.leadershipScolaire.formes ?? ''}
+                      value={calculDataFormations.leadershipScolaire.formes || ''}
                       onChange={(e) => updateCalculDataFormations('leadershipScolaire', 'formes', Number(e.target.value))}
                       placeholder="0"
                     />
@@ -597,7 +597,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input
                       type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      value={calculDataFormations.leadershipScolaire.garcons ?? ''}
+                      value={calculDataFormations.leadershipScolaire.garcons || ''}
                       onChange={(e) => updateCalculDataFormations('leadershipScolaire', 'garcons', Number(e.target.value))}
                       placeholder="0"
                     />
@@ -607,7 +607,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input
                       type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
-                      value={calculDataFormations.leadershipScolaire.filles ?? ''}
+                      value={calculDataFormations.leadershipScolaire.filles || ''}
                       onChange={(e) => updateCalculDataFormations('leadershipScolaire', 'filles', Number(e.target.value))}
                       placeholder="0"
                     />
@@ -624,7 +624,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input
                       type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      value={calculDataFormations.managementScolaire.total ?? ''}
+                      value={calculDataFormations.managementScolaire.total || ''}
                       onChange={(e) => updateCalculDataFormations('managementScolaire', 'total', Number(e.target.value))}
                       placeholder="0"
                     />
@@ -634,7 +634,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input
                       type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                      value={calculDataFormations.managementScolaire.formes ?? ''}
+                      value={calculDataFormations.managementScolaire.formes || ''}
                       onChange={(e) => updateCalculDataFormations('managementScolaire', 'formes', Number(e.target.value))}
                       placeholder="0"
                     />
@@ -644,7 +644,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input
                       type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      value={calculDataFormations.managementScolaire.garcons ?? ''}
+                      value={calculDataFormations.managementScolaire.garcons || ''}
                       onChange={(e) => updateCalculDataFormations('managementScolaire', 'garcons', Number(e.target.value))}
                       placeholder="0"
                     />
@@ -654,7 +654,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input
                       type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
-                      value={calculDataFormations.managementScolaire.filles ?? ''}
+                      value={calculDataFormations.managementScolaire.filles || ''}
                       onChange={(e) => updateCalculDataFormations('managementScolaire', 'filles', Number(e.target.value))}
                       placeholder="0"
                     />
@@ -671,7 +671,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input
                       type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      value={calculDataFormations.calculIndicateurs.total ?? ''}
+                      value={calculDataFormations.calculIndicateurs.total || ''}
                       onChange={(e) => updateCalculDataFormations('calculIndicateurs', 'total', Number(e.target.value))}
                       placeholder="0"
                     />
@@ -681,7 +681,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input
                       type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                      value={calculDataFormations.calculIndicateurs.formes ?? ''}
+                      value={calculDataFormations.calculIndicateurs.formes || ''}
                       onChange={(e) => updateCalculDataFormations('calculIndicateurs', 'formes', Number(e.target.value))}
                       placeholder="0"
                     />
@@ -691,7 +691,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input
                       type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      value={calculDataFormations.calculIndicateurs.garcons ?? ''}
+                      value={calculDataFormations.calculIndicateurs.garcons || ''}
                       onChange={(e) => updateCalculDataFormations('calculIndicateurs', 'garcons', Number(e.target.value))}
                       placeholder="0"
                     />
@@ -701,7 +701,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input
                       type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
-                      value={calculDataFormations.calculIndicateurs.filles ?? ''}
+                      value={calculDataFormations.calculIndicateurs.filles || ''}
                       onChange={(e) => updateCalculDataFormations('calculIndicateurs', 'filles', Number(e.target.value))}
                       placeholder="0"
                     />
@@ -718,7 +718,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input
                       type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      value={calculDataFormations.gestionEntiteEducationnelle.total ?? ''}
+                      value={calculDataFormations.gestionEntiteEducationnelle.total || ''}
                       onChange={(e) => updateCalculDataFormations('gestionEntiteEducationnelle', 'total', Number(e.target.value))}
                       placeholder="0"
                     />
@@ -728,7 +728,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input
                       type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                      value={calculDataFormations.gestionEntiteEducationnelle.formes ?? ''}
+                      value={calculDataFormations.gestionEntiteEducationnelle.formes || ''}
                       onChange={(e) => updateCalculDataFormations('gestionEntiteEducationnelle', 'formes', Number(e.target.value))}
                       placeholder="0"
                     />
@@ -738,7 +738,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input
                       type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      value={calculDataFormations.gestionEntiteEducationnelle.garcons ?? ''}
+                      value={calculDataFormations.gestionEntiteEducationnelle.garcons || ''}
                       onChange={(e) => updateCalculDataFormations('gestionEntiteEducationnelle', 'garcons', Number(e.target.value))}
                       placeholder="0"
                     />
@@ -748,7 +748,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input
                       type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
-                      value={calculDataFormations.gestionEntiteEducationnelle.filles ?? ''}
+                      value={calculDataFormations.gestionEntiteEducationnelle.filles || ''}
                       onChange={(e) => updateCalculDataFormations('gestionEntiteEducationnelle', 'filles', Number(e.target.value))}
                       placeholder="0"
                     />
@@ -765,7 +765,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input
                       type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      value={calculDataFormations.planification.total ?? ''}
+                      value={calculDataFormations.planification.total || ''}
                       onChange={(e) => updateCalculDataFormations('planification', 'total', Number(e.target.value))}
                       placeholder="0"
                     />
@@ -775,7 +775,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input
                       type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                      value={calculDataFormations.planification.formes ?? ''}
+                      value={calculDataFormations.planification.formes || ''}
                       onChange={(e) => updateCalculDataFormations('planification', 'formes', Number(e.target.value))}
                       placeholder="0"
                     />
@@ -785,7 +785,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input
                       type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      value={calculDataFormations.planification.garcons ?? ''}
+                      value={calculDataFormations.planification.garcons || ''}
                       onChange={(e) => updateCalculDataFormations('planification', 'garcons', Number(e.target.value))}
                       placeholder="0"
                     />
@@ -795,7 +795,7 @@ const Gouvernance: React.FC<GouvernanceProps> = ({ formData, setFormData, autoSa
                     <input
                       type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
-                      value={calculDataFormations.planification.filles ?? ''}
+                      value={calculDataFormations.planification.filles || ''}
                       onChange={(e) => updateCalculDataFormations('planification', 'filles', Number(e.target.value))}
                       placeholder="0"
                     />

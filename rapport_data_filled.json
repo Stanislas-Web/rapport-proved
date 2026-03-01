@@ -41,14 +41,19 @@
         },
         "enseignementSecondaire": {
           "nombreEcoles": 78,
+          "totalClassesSecondaire": 920,
           "premierCycle": {
             "classes7emeCTEB": 156,
-            "classes8emeCTEB": 148
+            "classes8emeCTEB": 148,
+            "nombreEcoles7eme": 42,
+            "nombreEcoles8eme": 38
           },
           "deuxiemeCycle": {
-            "totalClassesHumanites": 312
+            "totalClassesHumanites": 312,
+            "nombreEcolesHumanites": 36
           },
-          "totalClasses1er2emeCycle": 616
+          "totalClasses1er2emeCycle": 616,
+          "nombreEcoles1er2emeCycle": 78
         }
       }
     },

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { rapportActiviteService } from '../../services/rapportActivite/rapportActiviteService';
@@ -123,14 +123,19 @@ const CreateRapportActivite: React.FC = () => {
             },
             enseignementSecondaire: {
               nombreEcoles: 0,
+              totalClassesSecondaire: 0,
               premierCycle: {
                 classes7emeCTEB: 0,
-                classes8emeCTEB: 0
+                classes8emeCTEB: 0,
+                nombreEcoles7eme: 0,
+                nombreEcoles8eme: 0
               },
               deuxiemeCycle: {
-                totalClassesHumanites: 0
+                totalClassesHumanites: 0,
+                nombreEcolesHumanites: 0
               },
-              totalClasses1er2emeCycle: 0
+              totalClasses1er2emeCycle: 0,
+              nombreEcoles1er2emeCycle: 0
             }
           }
         },
@@ -848,6 +853,11 @@ const CreateRapportActivite: React.FC = () => {
     return completeData;
   });
 
+  // Ref pour tracker les champs tauxAccroissement édités manuellement
+  const manualTauxEdits = useRef<Set<string>>(new Set());
+  // Compteur pour déclencher le recalcul UNIQUEMENT quand un champ effectif (pas taux) change
+  const [effectifChangeCounter, setEffectifChangeCounter] = useState(0);
+
   // État pour stocker les effectifs de l'année précédente
   const [previousYearEffectifs, setPreviousYearEffectifs] = useState<any>(null);
 
@@ -876,7 +886,7 @@ const CreateRapportActivite: React.FC = () => {
       // Stocker les effectifs de l'année précédente
       if (data.success && data.data?.effectifs) {
         setPreviousYearEffectifs(data.data.effectifs);
-        toast.success('📊 Effectifs de l\'année précédente chargés avec succès !');
+        toast.success('Effectifs de l\'année précédente chargés avec succès !');
       }
     } catch (error: any) {
       console.error('❌ Erreur lors de la récupération des effectifs:', error);
@@ -1071,30 +1081,17 @@ const CreateRapportActivite: React.FC = () => {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [formData, currentSection, autoSave.hasUnsavedChanges]);
 
-  // Calculer automatiquement les taux d'accroissement quand les effectifs changent
+  // Calculer automatiquement les taux d'accroissement UNIQUEMENT quand un champ effectif change
+  // (effectifChangeCounter est incrémenté seulement par handleInputChange sur des champs non-taux)
   useEffect(() => {
-    console.log('🔍 useEffect calcul taux - previousYearEffectifs:', previousYearEffectifs);
-    console.log('🔍 useEffect calcul taux - effectifScolaire changé:', formData.parametresCles?.effectifScolaire);
-    
-    if (previousYearEffectifs) {
-      // Délai pour s'assurer que setFormData a fini de s'exécuter
-      setTimeout(() => {
-        updateGrowthRates();
-      }, 50);
-    }
-  }, [formData.parametresCles?.effectifScolaire, previousYearEffectifs]);
-
-  // Surveiller TOUS les changements de formData pour détecter les modifications d'effectifs
-  useEffect(() => {
-    if (previousYearEffectifs) {
-      // Délai pour éviter les boucles infinies
+    if (effectifChangeCounter > 0 && previousYearEffectifs) {
+      console.log('🔍 useEffect calcul taux déclenché par changement effectif #', effectifChangeCounter);
       const timeoutId = setTimeout(() => {
         updateGrowthRates();
-      }, 100);
-      
+      }, 50);
       return () => clearTimeout(timeoutId);
     }
-  }, [formData]);
+  }, [effectifChangeCounter, previousYearEffectifs]);
 
   // Sauvegarder automatiquement en brouillon toutes les 30 secondes (TEMPORAIREMENT DÉSACTIVÉ)
   // useEffect(() => {
@@ -1222,34 +1219,40 @@ const CreateRapportActivite: React.FC = () => {
             console.log(`🎯 SPÉCIAL - prevF: ${prevF}, currentF: ${currentF}`);
           }
 
-          // Taux G+F
-          if (prevGF > 0 && currentGF > 0) {
-            const taux = Math.round(((currentGF - prevGF) / prevGF) * 100 * 1000) / 1000;
-            if (currentData.tauxAccroissementGarconsFilles !== taux) {
-              console.log(`✅ Préscolaire ${niveau} - Taux G+F: ${currentData.tauxAccroissementGarconsFilles}% → ${taux}% (${prevGF} → ${currentGF})`);
-              currentData.tauxAccroissementGarconsFilles = taux;
-              hasChanges = true;
-              changesCount++;
+          // Taux G+F (skip si édité manuellement)
+          const tauxGFPath = `parametresCles.effectifScolaire.niveauPrescolaire.${niveau}.tauxAccroissementGarconsFilles`;
+          if (!manualTauxEdits.current.has(tauxGFPath)) {
+            if (prevGF > 0 && currentGF > 0) {
+              const taux = Math.round(((currentGF - prevGF) / prevGF) * 100 * 1000) / 1000;
+              if (currentData.tauxAccroissementGarconsFilles !== taux) {
+                console.log(`✅ Préscolaire ${niveau} - Taux G+F: ${currentData.tauxAccroissementGarconsFilles}% → ${taux}% (${prevGF} → ${currentGF})`);
+                currentData.tauxAccroissementGarconsFilles = taux;
+                hasChanges = true;
+                changesCount++;
+              } else if (niveau === 'special') {
+                console.log(`⚠️ SPÉCIAL - Taux G+F déjà correct: ${taux}%`);
+              }
             } else if (niveau === 'special') {
-              console.log(`⚠️ SPÉCIAL - Taux G+F déjà correct: ${taux}%`);
+              console.log(`⚠️ SPÉCIAL - Conditions non remplies: prevGF=${prevGF}, currentGF=${currentGF}`);
             }
-          } else if (niveau === 'special') {
-            console.log(`⚠️ SPÉCIAL - Conditions non remplies: prevGF=${prevGF}, currentGF=${currentGF}`);
           }
           
-          // Taux F
-          if (prevF > 0 && currentF > 0) {
-            const taux = Math.round(((currentF - prevF) / prevF) * 100 * 1000) / 1000;
-            if (currentData.tauxAccroissementFilles !== taux) {
-              console.log(`✅ Préscolaire ${niveau} - Taux F: ${currentData.tauxAccroissementFilles}% → ${taux}% (${prevF} → ${currentF})`);
-              currentData.tauxAccroissementFilles = taux;
-              hasChanges = true;
-              changesCount++;
+          // Taux F (skip si édité manuellement)
+          const tauxFPath = `parametresCles.effectifScolaire.niveauPrescolaire.${niveau}.tauxAccroissementFilles`;
+          if (!manualTauxEdits.current.has(tauxFPath)) {
+            if (prevF > 0 && currentF > 0) {
+              const taux = Math.round(((currentF - prevF) / prevF) * 100 * 1000) / 1000;
+              if (currentData.tauxAccroissementFilles !== taux) {
+                console.log(`✅ Préscolaire ${niveau} - Taux F: ${currentData.tauxAccroissementFilles}% → ${taux}% (${prevF} → ${currentF})`);
+                currentData.tauxAccroissementFilles = taux;
+                hasChanges = true;
+                changesCount++;
+              } else if (niveau === 'special') {
+                console.log(`⚠️ SPÉCIAL - Taux F déjà correct: ${taux}%`);
+              }
             } else if (niveau === 'special') {
-              console.log(`⚠️ SPÉCIAL - Taux F déjà correct: ${taux}%`);
+              console.log(`⚠️ SPÉCIAL - Conditions Taux F non remplies: prevF=${prevF}, currentF=${currentF}`);
             }
-          } else if (niveau === 'special') {
-            console.log(`⚠️ SPÉCIAL - Conditions Taux F non remplies: prevF=${prevF}, currentF=${currentF}`);
           }
         } else {
           console.log(`❌ Préscolaire ${niveau} - Données manquantes - Prev:`, !!prevData, 'Current:', !!currentData);
@@ -1286,34 +1289,40 @@ const CreateRapportActivite: React.FC = () => {
             console.log(`🎯 SPÉCIAL PRIMAIRE - prevF: ${prevF}, currentF: ${currentF}`);
           }
 
-          // Taux G+F
-          if (prevGF > 0 && currentGF > 0) {
-            const taux = Math.round(((currentGF - prevGF) / prevGF) * 100 * 1000) / 1000;
-            if (currentData.tauxAccroissementGarconsFilles !== taux) {
-              console.log(`✅ Primaire ${niveau} - Taux G+F: ${currentData.tauxAccroissementGarconsFilles}% → ${taux}% (${prevGF} → ${currentGF})`);
-              currentData.tauxAccroissementGarconsFilles = taux;
-              hasChanges = true;
-              changesCount++;
+          // Taux G+F (skip si édité manuellement)
+          const tauxPrimGFPath = `parametresCles.effectifScolaire.niveauPrimaire.${niveau}.tauxAccroissementGarconsFilles`;
+          if (!manualTauxEdits.current.has(tauxPrimGFPath)) {
+            if (prevGF > 0 && currentGF > 0) {
+              const taux = Math.round(((currentGF - prevGF) / prevGF) * 100 * 1000) / 1000;
+              if (currentData.tauxAccroissementGarconsFilles !== taux) {
+                console.log(`✅ Primaire ${niveau} - Taux G+F: ${currentData.tauxAccroissementGarconsFilles}% → ${taux}% (${prevGF} → ${currentGF})`);
+                currentData.tauxAccroissementGarconsFilles = taux;
+                hasChanges = true;
+                changesCount++;
+              } else if (niveau === 'enseignementSpecial') {
+                console.log(`⚠️ SPÉCIAL PRIMAIRE - Taux G+F déjà correct: ${taux}%`);
+              }
             } else if (niveau === 'enseignementSpecial') {
-              console.log(`⚠️ SPÉCIAL PRIMAIRE - Taux G+F déjà correct: ${taux}%`);
+              console.log(`⚠️ SPÉCIAL PRIMAIRE - Conditions non remplies: prevGF=${prevGF}, currentGF=${currentGF}`);
             }
-          } else if (niveau === 'enseignementSpecial') {
-            console.log(`⚠️ SPÉCIAL PRIMAIRE - Conditions non remplies: prevGF=${prevGF}, currentGF=${currentGF}`);
           }
           
-          // Taux F
-          if (prevF > 0 && currentF > 0) {
-            const taux = Math.round(((currentF - prevF) / prevF) * 100 * 1000) / 1000;
-            if (currentData.tauxAccroissementFilles !== taux) {
-              console.log(`✅ Primaire ${niveau} - Taux F: ${currentData.tauxAccroissementFilles}% → ${taux}% (${prevF} → ${currentF})`);
-              currentData.tauxAccroissementFilles = taux;
-              hasChanges = true;
-              changesCount++;
+          // Taux F (skip si édité manuellement)
+          const tauxPrimFPath = `parametresCles.effectifScolaire.niveauPrimaire.${niveau}.tauxAccroissementFilles`;
+          if (!manualTauxEdits.current.has(tauxPrimFPath)) {
+            if (prevF > 0 && currentF > 0) {
+              const taux = Math.round(((currentF - prevF) / prevF) * 100 * 1000) / 1000;
+              if (currentData.tauxAccroissementFilles !== taux) {
+                console.log(`✅ Primaire ${niveau} - Taux F: ${currentData.tauxAccroissementFilles}% → ${taux}% (${prevF} → ${currentF})`);
+                currentData.tauxAccroissementFilles = taux;
+                hasChanges = true;
+                changesCount++;
+              } else if (niveau === 'enseignementSpecial') {
+                console.log(`⚠️ SPÉCIAL PRIMAIRE - Taux F déjà correct: ${taux}%`);
+              }
             } else if (niveau === 'enseignementSpecial') {
-              console.log(`⚠️ SPÉCIAL PRIMAIRE - Taux F déjà correct: ${taux}%`);
+              console.log(`⚠️ SPÉCIAL PRIMAIRE - Conditions Taux F non remplies: prevF=${prevF}, currentF=${currentF}`);
             }
-          } else if (niveau === 'enseignementSpecial') {
-            console.log(`⚠️ SPÉCIAL PRIMAIRE - Conditions Taux F non remplies: prevF=${prevF}, currentF=${currentF}`);
           }
         } else {
           console.log(`❌ Primaire ${niveau} - Données manquantes - Prev:`, !!prevData, 'Current:', !!currentData);
@@ -1344,34 +1353,40 @@ const CreateRapportActivite: React.FC = () => {
         console.log(`🎯 SPÉCIAL SECONDAIRE - prevG: ${prevG}, currentG: ${currentG}`);
         console.log(`🎯 SPÉCIAL SECONDAIRE - prevF: ${prevF}, currentF: ${currentF}`);
 
-        // Taux Garçons
-        if (prevG > 0 && currentG > 0) {
-          const taux = Math.round(((currentG - prevG) / prevG) * 100 * 1000) / 1000;
-          if (currentSecSpecial.tauxGarcons !== taux) {
-            console.log(`✅ Secondaire Enseignement Spécial - Taux G: ${currentSecSpecial.tauxGarcons}% → ${taux}% (${prevG} → ${currentG})`);
-            currentSecSpecial.tauxGarcons = taux;
-            hasChanges = true;
-            changesCount++;
+        // Taux Garçons (skip si édité manuellement)
+        const secSpecGPath = 'parametresCles.effectifScolaire.niveauSecondaire.enseignementSpecial.tauxGarcons';
+        if (!manualTauxEdits.current.has(secSpecGPath)) {
+          if (prevG > 0 && currentG > 0) {
+            const taux = Math.round(((currentG - prevG) / prevG) * 100 * 1000) / 1000;
+            if (currentSecSpecial.tauxGarcons !== taux) {
+              console.log(`✅ Secondaire Enseignement Spécial - Taux G: ${currentSecSpecial.tauxGarcons}% → ${taux}% (${prevG} → ${currentG})`);
+              currentSecSpecial.tauxGarcons = taux;
+              hasChanges = true;
+              changesCount++;
+            } else {
+              console.log(`⚠️ SPÉCIAL SECONDAIRE - Taux G déjà correct: ${taux}%`);
+            }
           } else {
-            console.log(`⚠️ SPÉCIAL SECONDAIRE - Taux G déjà correct: ${taux}%`);
+            console.log(`⚠️ SPÉCIAL SECONDAIRE - Conditions Taux G non remplies: prevG=${prevG}, currentG=${currentG}`);
           }
-        } else {
-          console.log(`⚠️ SPÉCIAL SECONDAIRE - Conditions Taux G non remplies: prevG=${prevG}, currentG=${currentG}`);
         }
         
-        // Taux Filles
-        if (prevF > 0 && currentF > 0) {
-          const taux = Math.round(((currentF - prevF) / prevF) * 100 * 1000) / 1000;
-          if (currentSecSpecial.tauxFilles !== taux) {
-            console.log(`✅ Secondaire Enseignement Spécial - Taux F: ${currentSecSpecial.tauxFilles}% → ${taux}% (${prevF} → ${currentF})`);
-            currentSecSpecial.tauxFilles = taux;
-            hasChanges = true;
-            changesCount++;
+        // Taux Filles (skip si édité manuellement)
+        const secSpecFPath = 'parametresCles.effectifScolaire.niveauSecondaire.enseignementSpecial.tauxFilles';
+        if (!manualTauxEdits.current.has(secSpecFPath)) {
+          if (prevF > 0 && currentF > 0) {
+            const taux = Math.round(((currentF - prevF) / prevF) * 100 * 1000) / 1000;
+            if (currentSecSpecial.tauxFilles !== taux) {
+              console.log(`✅ Secondaire Enseignement Spécial - Taux F: ${currentSecSpecial.tauxFilles}% → ${taux}% (${prevF} → ${currentF})`);
+              currentSecSpecial.tauxFilles = taux;
+              hasChanges = true;
+              changesCount++;
+            } else {
+              console.log(`⚠️ SPÉCIAL SECONDAIRE - Taux F déjà correct: ${taux}%`);
+            }
           } else {
-            console.log(`⚠️ SPÉCIAL SECONDAIRE - Taux F déjà correct: ${taux}%`);
+            console.log(`⚠️ SPÉCIAL SECONDAIRE - Conditions Taux F non remplies: prevF=${prevF}, currentF=${currentF}`);
           }
-        } else {
-          console.log(`⚠️ SPÉCIAL SECONDAIRE - Conditions Taux F non remplies: prevF=${prevF}, currentF=${currentF}`);
         }
       } else {
         console.log(`❌ Secondaire Enseignement Spécial - Données manquantes - Prev:`, !!prevSecSpecial, 'Current:', !!currentSecSpecial);
@@ -1389,22 +1404,29 @@ const CreateRapportActivite: React.FC = () => {
           const prevF = prevData.effectifFilles || 0;
           const currentF = currentData.effectifFilles || 0;
 
-          if (prevG > 0 && currentG > 0) {
-            const taux = Math.round(((currentG - prevG) / prevG) * 100 * 1000) / 1000;
-            if (currentData.tauxGarcons !== taux) {
-              console.log(`✅ ${classe} - Taux G: ${currentData.tauxGarcons}% → ${taux}%`);
-              currentData.tauxGarcons = taux;
-              hasChanges = true;
-              changesCount++;
+          // Skip si édité manuellement
+          const secClasseGPath = `parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.${classe}.tauxGarcons`;
+          if (!manualTauxEdits.current.has(secClasseGPath)) {
+            if (prevG > 0 && currentG > 0) {
+              const taux = Math.round(((currentG - prevG) / prevG) * 100 * 1000) / 1000;
+              if (currentData.tauxGarcons !== taux) {
+                console.log(`✅ ${classe} - Taux G: ${currentData.tauxGarcons}% → ${taux}%`);
+                currentData.tauxGarcons = taux;
+                hasChanges = true;
+                changesCount++;
+              }
             }
           }
-          if (prevF > 0 && currentF > 0) {
-            const taux = Math.round(((currentF - prevF) / prevF) * 100 * 1000) / 1000;
-            if (currentData.tauxFilles !== taux) {
-              console.log(`✅ ${classe} - Taux F: ${currentData.tauxFilles}% → ${taux}%`);
-              currentData.tauxFilles = taux;
-              hasChanges = true;
-              changesCount++;
+          const secClasseFPath = `parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.${classe}.tauxFilles`;
+          if (!manualTauxEdits.current.has(secClasseFPath)) {
+            if (prevF > 0 && currentF > 0) {
+              const taux = Math.round(((currentF - prevF) / prevF) * 100 * 1000) / 1000;
+              if (currentData.tauxFilles !== taux) {
+                console.log(`✅ ${classe} - Taux F: ${currentData.tauxFilles}% → ${taux}%`);
+                currentData.tauxFilles = taux;
+                hasChanges = true;
+                changesCount++;
+              }
             }
           }
         }
@@ -1416,6 +1438,16 @@ const CreateRapportActivite: React.FC = () => {
   };
 
   const handleInputChange = (field: string, value: any) => {
+    // Détecter si c'est un champ taux (pas un effectif)
+    const isTauxField = field.includes('tauxAccroissement') || 
+                         (field.includes('tauxGarcons') && field.includes('effectifScolaire')) || 
+                         (field.includes('tauxFilles') && field.includes('effectifScolaire'));
+    
+    // Si taux édité manuellement, le marquer pour que updateGrowthRates ne l'écrase pas
+    if (isTauxField) {
+      manualTauxEdits.current.add(field);
+    }
+
     setFormData(prev => {
       const updated = { ...prev };
       
@@ -1433,8 +1465,11 @@ const CreateRapportActivite: React.FC = () => {
       return updated;
     });
     
-    // Recalculer les taux après mise à jour
-    setTimeout(() => updateGrowthRates(), 100);
+    // Incrémenter le compteur SEULEMENT pour les champs effectif (pas taux)
+    // C'est ce compteur qui déclenche le useEffect de recalcul
+    if (!isTauxField && field.includes('effectifScolaire')) {
+      setEffectifChangeCounter(c => c + 1);
+    }
   };
 
   // Fonctions de gestion du brouillon
@@ -1656,7 +1691,7 @@ const CreateRapportActivite: React.FC = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-                        <BasicInfo formData={formData} handleInputChange={handleInputChange} />
+                        <BasicInfo formData={formData} handleInputChange={handleInputChange} previousYearEffectifs={previousYearEffectifs} />
               <ParametresCles formData={formData} setFormData={setFormData} />
               <ParametresClesComplete formData={formData} setFormData={setFormData} />
               <Personnel formData={formData} setFormData={setFormData} />

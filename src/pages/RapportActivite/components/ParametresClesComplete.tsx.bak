@@ -239,8 +239,10 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
               <thead>
                 <tr className="bg-gray-100">
                   <th className="border border-gray-300 px-3 py-2 text-left">Type d'Enseignement</th>
-                  <th className="border border-gray-300 px-3 py-2 text-center">Nombre d'Écoles</th>
-                  <th className="border border-gray-300 px-3 py-2 text-center">Total Classes</th>
+                  <th className="border border-gray-300 px-3 py-2 text-center">Effectif Garçons</th>
+                  <th className="border border-gray-300 px-3 py-2 text-center">Effectif Filles</th>
+                  <th className="border border-gray-300 px-3 py-2 text-center">Taux Garçons</th>
+                  <th className="border border-gray-300 px-3 py-2 text-center">Taux Filles</th>
                 </tr>
               </thead>
               <tbody>
@@ -251,8 +253,8 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSpecial?.nombreEcoles ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSpecial.nombreEcoles', Number(e.target.value))}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.effectifGarcons ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSpecial.effectifGarcons', Number(e.target.value))}
                     />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -260,20 +262,8 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSpecial?.totalClassesSpecialesSec ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSpecial.totalClassesSpecialesSec', Number(e.target.value))}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 px-3 py-2">Enseignement Secondaire - Nombre d'Écoles</td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.nombreEcoles ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSecondaire.nombreEcoles', Number(e.target.value))}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.effectifFilles ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSpecial.effectifFilles', Number(e.target.value))}
                     />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -281,20 +271,29 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.totalClassesSecondaire ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSecondaire.totalClassesSecondaire', Number(e.target.value))}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.tauxGarcons ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSpecial.tauxGarcons', Number(e.target.value))}
+                    />
+                  </td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.tauxFilles ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSpecial.tauxFilles', Number(e.target.value))}
                     />
                   </td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-300 px-3 py-2">1er Cycle - Classes 7ème CTEB</td>
+                  <td className="border border-gray-300 px-3 py-2">7ème CTEB</td>
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.nombreEcoles7eme ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSecondaire.premierCycle.nombreEcoles7eme', Number(e.target.value))}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.effectifGarcons ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.septiemeCTEB.effectifGarcons', Number(e.target.value))}
                     />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -302,20 +301,8 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes7emeCTEB ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSecondaire.premierCycle.classes7emeCTEB', Number(e.target.value))}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 px-3 py-2">1er Cycle - Classes 8ème CTEB</td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.nombreEcoles8eme ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSecondaire.premierCycle.nombreEcoles8eme', Number(e.target.value))}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.effectifFilles ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.septiemeCTEB.effectifFilles', Number(e.target.value))}
                     />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -323,20 +310,29 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.premierCycle?.classes8emeCTEB ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSecondaire.premierCycle.classes8emeCTEB', Number(e.target.value))}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.tauxGarcons ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.septiemeCTEB.tauxGarcons', Number(e.target.value))}
+                    />
+                  </td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.tauxFilles ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.septiemeCTEB.tauxFilles', Number(e.target.value))}
                     />
                   </td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-300 px-3 py-2">2ème Cycle - Total Classes Humanités</td>
+                  <td className="border border-gray-300 px-3 py-2">8ème CTEB</td>
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.nombreEcolesHumanites ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSecondaire.deuxiemeCycle.nombreEcolesHumanites', Number(e.target.value))}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.effectifGarcons ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.huitiemeCTEB.effectifGarcons', Number(e.target.value))}
                     />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -344,20 +340,38 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.deuxiemeCycle?.totalClassesHumanites ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSecondaire.deuxiemeCycle.totalClassesHumanites', Number(e.target.value))}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.effectifFilles ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.huitiemeCTEB.effectifFilles', Number(e.target.value))}
+                    />
+                  </td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.tauxGarcons ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.huitiemeCTEB.tauxGarcons', Number(e.target.value))}
+                    />
+                  </td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.tauxFilles ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.huitiemeCTEB.tauxFilles', Number(e.target.value))}
                     />
                   </td>
                 </tr>
-                <tr className="bg-gray-50 font-medium">
-                  <td className="border border-gray-300 px-3 py-2">Total Classes 1er & 2ème Cycle</td>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2">1ère Humanité</td>
                   <td className="border border-gray-300 px-3 py-2">
                     <input 
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.nombreEcoles1er2emeCycle ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSecondaire.nombreEcoles1er2emeCycle', Number(e.target.value))}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.effectifGarcons ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.premiereHumanite.effectifGarcons', Number(e.target.value))}
                     />
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -365,8 +379,65 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       type="number" 
                       className="w-full text-center border-none focus:outline-none focus:ring-0" 
                       placeholder="0"
-                      value={formData.parametresCles?.nombreEcolesClasses?.niveauSecondaire?.enseignementSecondaire?.totalClasses1er2emeCycle ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSecondaire.totalClasses1er2emeCycle', Number(e.target.value))}
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.effectifFilles ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.premiereHumanite.effectifFilles', Number(e.target.value))}
+                    />
+                  </td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.tauxGarcons ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.premiereHumanite.tauxGarcons', Number(e.target.value))}
+                    />
+                  </td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.tauxFilles ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.premiereHumanite.tauxFilles', Number(e.target.value))}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2">4ème Humanité</td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.effectifGarcons ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.quatriemeHumanite.effectifGarcons', Number(e.target.value))}
+                    />
+                  </td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.effectifFilles ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.quatriemeHumanite.effectifFilles', Number(e.target.value))}
+                    />
+                  </td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.tauxGarcons ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.quatriemeHumanite.tauxGarcons', Number(e.target.value))}
+                    />
+                  </td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input 
+                      type="number" 
+                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
+                      placeholder="0"
+                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.tauxFilles ?? ''}
+                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.quatriemeHumanite.tauxFilles', Number(e.target.value))}
                     />
                   </td>
                 </tr>
@@ -658,221 +729,6 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
                       placeholder="0"
                       value={formData.parametresCles?.effectifScolaire?.niveauPrimaire?.enseignementPrimaire?.tauxAccroissementFilles ?? ''}
                       onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauPrimaire.enseignementPrimaire.tauxAccroissementFilles', Number(e.target.value))}
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* NIVEAU SECONDAIRE */}
-        <div className="mb-4">
-          <h5 className="font-medium mb-2">NIVEAU SECONDAIRE</h5>
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse border border-gray-300">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="border border-gray-300 px-3 py-2 text-left">Type d'Enseignement</th>
-                  <th className="border border-gray-300 px-3 py-2 text-center">Effectif Garçons</th>
-                  <th className="border border-gray-300 px-3 py-2 text-center">Effectif Filles</th>
-                  <th className="border border-gray-300 px-3 py-2 text-center">Taux Garçons</th>
-                  <th className="border border-gray-300 px-3 py-2 text-center">Taux Filles</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="border border-gray-300 px-3 py-2">Enseignement Spécial (handicap)</td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.effectifGarcons ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSpecial.effectifGarcons', Number(e.target.value))}
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.effectifFilles ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSpecial.effectifFilles', Number(e.target.value))}
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.tauxGarcons ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSpecial.tauxGarcons', Number(e.target.value))}
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial?.tauxFilles ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSpecial.tauxFilles', Number(e.target.value))}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 px-3 py-2">7ème CTEB</td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.effectifGarcons ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.septiemeCTEB.effectifGarcons', Number(e.target.value))}
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.effectifFilles ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.septiemeCTEB.effectifFilles', Number(e.target.value))}
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.tauxGarcons ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.septiemeCTEB.tauxGarcons', Number(e.target.value))}
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.septiemeCTEB?.tauxFilles ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.septiemeCTEB.tauxFilles', Number(e.target.value))}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 px-3 py-2">8ème CTEB</td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.effectifGarcons ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.huitiemeCTEB.effectifGarcons', Number(e.target.value))}
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.effectifFilles ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.huitiemeCTEB.effectifFilles', Number(e.target.value))}
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.tauxGarcons ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.huitiemeCTEB.tauxGarcons', Number(e.target.value))}
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.huitiemeCTEB?.tauxFilles ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.huitiemeCTEB.tauxFilles', Number(e.target.value))}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 px-3 py-2">1ère Humanité</td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.effectifGarcons ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.premiereHumanite.effectifGarcons', Number(e.target.value))}
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.effectifFilles ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.premiereHumanite.effectifFilles', Number(e.target.value))}
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.tauxGarcons ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.premiereHumanite.tauxGarcons', Number(e.target.value))}
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.premiereHumanite?.tauxFilles ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.premiereHumanite.tauxFilles', Number(e.target.value))}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 px-3 py-2">4ème Humanité</td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.effectifGarcons ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.quatriemeHumanite.effectifGarcons', Number(e.target.value))}
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.effectifFilles ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.quatriemeHumanite.effectifFilles', Number(e.target.value))}
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.tauxGarcons ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.quatriemeHumanite.tauxGarcons', Number(e.target.value))}
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input 
-                      type="number" 
-                      className="w-full text-center border-none focus:outline-none focus:ring-0" 
-                      placeholder="0"
-                      value={formData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.quatriemeHumanite?.tauxFilles ?? ''}
-                      onChange={(e) => handleInputChange('parametresCles.effectifScolaire.niveauSecondaire.enseignementSecondaire.quatriemeHumanite.tauxFilles', Number(e.target.value))}
                     />
                   </td>
                 </tr>

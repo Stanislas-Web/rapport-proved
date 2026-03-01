@@ -2120,14 +2120,14 @@ const RapportActivitePage: React.FC = () => {
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <h3 className="font-semibold text-lg mb-3 text-gray-800">Informations PROVED</h3>
                   <div className="space-y-2 text-sm">
-                    <div><span className="font-medium">Province Administrative:</span> {selectedRapport.identificationProved.provinceAdministrative}</div>
-                    <div><span className="font-medium">Province Educationnelle:</span> {selectedRapport.identificationProved.provinceEducationnelle}</div>
-                    <div><span className="font-medium">Chef Lieu PROVED:</span> {selectedRapport.identificationProved.chefLieuProved}</div>
-                    <div><span className="font-medium">Directeur Provincial:</span> {selectedRapport.identificationProved.directeurProvincial}</div>
-                    <div><span className="font-medium">Email:</span> {selectedRapport.identificationProved.emailProfessionnel}</div>
-                    <div><span className="font-medium">Téléphone:</span> {selectedRapport.identificationProved.telephone}</div>
-                    <div><span className="font-medium">Territoires:</span> {selectedRapport.identificationProved.nombreTerritoires}</div>
-                    <div><span className="font-medium">Sous-divisions:</span> {selectedRapport.identificationProved.nombreSousDivisions}</div>
+                    <div><span className="font-medium">Province Administrative:</span> {selectedRapport.identificationProved?.provinceAdministrative || '-'}</div>
+                    <div><span className="font-medium">Province Educationnelle:</span> {selectedRapport.identificationProved?.provinceEducationnelle || '-'}</div>
+                    <div><span className="font-medium">Chef Lieu PROVED:</span> {selectedRapport.identificationProved?.chefLieuProved || '-'}</div>
+                    <div><span className="font-medium">Directeur Provincial:</span> {selectedRapport.identificationProved?.directeurProvincial || '-'}</div>
+                    <div><span className="font-medium">Email:</span> {selectedRapport.identificationProved?.emailProfessionnel || '-'}</div>
+                    <div><span className="font-medium">Téléphone:</span> {selectedRapport.identificationProved?.telephone || '-'}</div>
+                    <div><span className="font-medium">Territoires:</span> {selectedRapport.identificationProved?.nombreTerritoires || '-'}</div>
+                    <div><span className="font-medium">Sous-divisions:</span> {selectedRapport.identificationProved?.nombreSousDivisions || '-'}</div>
                   </div>
                 </div>
 
@@ -2297,17 +2297,17 @@ const RapportActivitePage: React.FC = () => {
                   <div className="bg-white p-3 rounded">
                     <h4 className="font-medium text-orange-700 mb-2">Infrastructures</h4>
                     <div className="space-y-1">
-                      <div>Nouvelles salles: {selectedRapport.realisations.accesAccessibiliteEquite.nouvellesSallesClasses.primaire + selectedRapport.realisations.accesAccessibiliteEquite.nouvellesSallesClasses.secondaire}</div>
-                      <div>Nouveaux bancs: {selectedRapport.realisations.accesAccessibiliteEquite.nouveauxBancsTables.primaire + selectedRapport.realisations.accesAccessibiliteEquite.nouveauxBancsTables.secondaire}</div>
-                      <div>Nouvelles latrines: {selectedRapport.realisations.accesAccessibiliteEquite.nouvellesLatrines.primaire + selectedRapport.realisations.accesAccessibiliteEquite.nouvellesLatrines.secondaire}</div>
+                      <div>Nouvelles salles: {(selectedRapport.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.primaire || 0) + (selectedRapport.realisations?.accesAccessibiliteEquite?.nouvellesSallesClasses?.secondaire || 0)}</div>
+                      <div>Nouveaux bancs: {(selectedRapport.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.primaire || 0) + (selectedRapport.realisations?.accesAccessibiliteEquite?.nouveauxBancsTables?.secondaire || 0)}</div>
+                      <div>Nouvelles latrines: {(selectedRapport.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.primaire || 0) + (selectedRapport.realisations?.accesAccessibiliteEquite?.nouvellesLatrines?.secondaire || 0)}</div>
                     </div>
                   </div>
                   <div className="bg-white p-3 rounded">
                     <h4 className="font-medium text-orange-700 mb-2">Indicateurs d'Accès</h4>
                     <div className="space-y-1">
-                      <div>Nouveaux inscrits: {selectedRapport.realisations.accesAccessibiliteEquite.indicateursAcces.proportionNouveauxInscrits}%</div>
-                      <div>Transition Primaire-CTEB: {selectedRapport.realisations.accesAccessibiliteEquite.indicateursAcces.tauxTransitionPrimaireCTEB}%</div>
-                      <div>Transition CTEB-Humanités: {selectedRapport.realisations.accesAccessibiliteEquite.indicateursAcces.tauxTransitionCTEBHumanites}%</div>
+                      <div>Nouveaux inscrits: {selectedRapport.realisations?.accesAccessibiliteEquite?.indicateursAcces?.proportionNouveauxInscrits || 0}%</div>
+                      <div>Transition Primaire-CTEB: {selectedRapport.realisations?.accesAccessibiliteEquite?.indicateursAcces?.tauxTransitionPrimaireCTEB || 0}%</div>
+                      <div>Transition CTEB-Humanités: {selectedRapport.realisations?.accesAccessibiliteEquite?.indicateursAcces?.tauxTransitionCTEBHumanites || 0}%</div>
                     </div>
                   </div>
                 </div>

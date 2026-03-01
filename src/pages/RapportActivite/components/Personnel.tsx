@@ -474,6 +474,50 @@ const Personnel: React.FC<PersonnelProps> = ({ formData, setFormData }) => {
                   </div>
                 </td>
               </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2 text-center">12</td>
+                <td className="border border-gray-300 px-3 py-2">Sous-Coordination Conventionnées</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.sousCoordinationConventionnees?.hommes ?? ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.sousCoordinationConventionnees.hommes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.sousCoordinationConventionnees?.femmes ?? ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.sousCoordinationConventionnees.femmes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-3 py-2 text-center">13</td>
+                <td className="border border-gray-300 px-3 py-2">Conseillerie Résidente</td>
+                <td className="border border-gray-300 px-3 py-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.conseillerieResidente?.hommes ?? ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.conseillerieResidente.hommes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                    <input
+                      type="number"
+                      value={formData.personnel?.personnelAdministratif?.conseillerieResidente?.femmes ?? ''}
+                      onChange={(e) => handleInputChange('personnel.personnelAdministratif.conseillerieResidente.femmes', Number(e.target.value))}
+                      className="w-full text-center border-none focus:outline-none focus:ring-0"
+                      placeholder="0"
+                    />
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>

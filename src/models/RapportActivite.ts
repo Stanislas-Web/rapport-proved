@@ -37,14 +37,19 @@ interface NombreEcolesClasses {
     };
     enseignementSecondaire: {
       nombreEcoles: number;
+      totalClassesSecondaire: number;
       premierCycle: {
         classes7emeCTEB: number;
         classes8emeCTEB: number;
+        nombreEcoles7eme: number;
+        nombreEcoles8eme: number;
       };
       deuxiemeCycle: {
         totalClassesHumanites: number;
+        nombreEcolesHumanites: number;
       };
       totalClasses1er2emeCycle: number;
+      nombreEcoles1er2emeCycle: number;
     };
   };
 }

@@ -227,3 +227,99 @@ NOTES IMPORTANTES:
   * GET /rapport-activite/:id (récupération)
 
 ================================================================================
+AJOUT: 5 CHAMPS MANQUANTS DANS nombreEcolesClasses.niveauSecondaire
+Date: 1 mars 2026
+================================================================================
+
+Dans la section parametresCles.nombreEcolesClasses.niveauSecondaire,
+le frontend a ajouté 5 nouveaux champs numériques pour compléter le
+tableau NIVEAU SECONDAIRE de la section I.1.1. NOMBRE D'ECOLES ET DE CLASSES.
+
+STRUCTURE ACTUELLE DU BACKEND:
+-----------
+"nombreEcolesClasses": {
+  "niveauSecondaire": {
+    "enseignementSpecial": {
+      "nombreEcoles": Number,
+      "totalClassesSpecialesSec": Number
+    },
+    "enseignementSecondaire": {
+      "nombreEcoles": Number,
+      "premierCycle": {
+        "classes7emeCTEB": Number,
+        "classes8emeCTEB": Number
+      },
+      "deuxiemeCycle": {
+        "totalClassesHumanites": Number
+      },
+      "totalClasses1er2emeCycle": Number
+    }
+  }
+}
+
+5 CHAMPS A AJOUTER (tous Number, default: 0):
+-----------
+
+1) enseignementSecondaire.totalClassesSecondaire
+   → Total classes de l'enseignement secondaire (colonne "Total Classes")
+
+2) enseignementSecondaire.premierCycle.nombreEcoles7eme
+   → Nombre d'écoles 7ème CTEB (colonne "Nombre d'Écoles")
+
+3) enseignementSecondaire.premierCycle.nombreEcoles8eme
+   → Nombre d'écoles 8ème CTEB (colonne "Nombre d'Écoles")
+
+4) enseignementSecondaire.deuxiemeCycle.nombreEcolesHumanites
+   → Nombre d'écoles Humanités (colonne "Nombre d'Écoles")
+
+5) enseignementSecondaire.nombreEcoles1er2emeCycle
+   → Total écoles 1er & 2ème cycle (colonne "Nombre d'Écoles")
+
+STRUCTURE APRES MODIFICATION:
+-----------
+"enseignementSecondaire": {
+  "nombreEcoles": Number,
+  "totalClassesSecondaire": Number,              // ← NOUVEAU
+  "premierCycle": {
+    "classes7emeCTEB": Number,
+    "classes8emeCTEB": Number,
+    "nombreEcoles7eme": Number,                  // ← NOUVEAU
+    "nombreEcoles8eme": Number                   // ← NOUVEAU
+  },
+  "deuxiemeCycle": {
+    "totalClassesHumanites": Number,
+    "nombreEcolesHumanites": Number              // ← NOUVEAU
+  },
+  "totalClasses1er2emeCycle": Number,
+  "nombreEcoles1er2emeCycle": Number             // ← NOUVEAU
+}
+
+CODE MONGOOSE A AJOUTER:
+-----------
+
+// Dans le schéma enseignementSecondaire, ajouter:
+totalClassesSecondaire: { type: Number, default: 0 },
+
+// Dans premierCycle, ajouter:
+nombreEcoles7eme: { type: Number, default: 0 },
+nombreEcoles8eme: { type: Number, default: 0 },
+
+// Dans deuxiemeCycle, ajouter:
+nombreEcolesHumanites: { type: Number, default: 0 },
+
+// Au même niveau que totalClasses1er2emeCycle, ajouter:
+nombreEcoles1er2emeCycle: { type: Number, default: 0 }
+
+CHEMINS COMPLETS:
+-----------
+parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSecondaire.totalClassesSecondaire
+parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSecondaire.premierCycle.nombreEcoles7eme
+parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSecondaire.premierCycle.nombreEcoles8eme
+parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSecondaire.deuxiemeCycle.nombreEcolesHumanites
+parametresCles.nombreEcolesClasses.niveauSecondaire.enseignementSecondaire.nombreEcoles1er2emeCycle
+
+NOTE: Aucun champ existant n'a été modifié ni supprimé.
+Les 5 nouveaux champs ont default: 0, donc les rapports existants
+ne seront pas impactés.
+
+================================================================================

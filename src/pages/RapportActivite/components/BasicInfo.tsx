@@ -7,9 +7,10 @@ import { getProvedIdFromToken } from '../../../utils/jwtUtils';
 interface BasicInfoProps {
   formData: RapportActivite;
   handleInputChange: (field: string, value: any) => void;
+  previousYearEffectifs?: any;
 }
 
-const BasicInfo: React.FC<BasicInfoProps> = ({ formData, handleInputChange }) => {
+const BasicInfo: React.FC<BasicInfoProps> = ({ formData, handleInputChange, previousYearEffectifs }) => {
   // État initial pour les effectifs - utilise les données de formData si disponibles
   const defaultEffectifs: EffectifsAnneePrecedente = {
     niveauPrescolaire: {
@@ -92,6 +93,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ formData, handleInputChange }) =>
         onUpdate={handleEffectifsUpdate}
         identificationProved={provedId || undefined}
         annee={formData?.annee?.toString()}
+        prefillData={previousYearEffectifs}
       />
       
       <div className="mb-4">

@@ -45,23 +45,29 @@ interface EffectifsPrecedentProps {
   onUpdate: (effectifs: EffectifsAnneePrecedente) => void;
   identificationProved?: string;
   annee?: string;
+  prefillData?: EffectifsAnneePrecedente | null;
 }
 
-const EffectifsPrecedent: React.FC<EffectifsPrecedentProps> = ({ effectifs, onUpdate, identificationProved, annee }) => {
+const EffectifsPrecedent: React.FC<EffectifsPrecedentProps> = ({ effectifs, onUpdate, identificationProved, annee, prefillData }) => {
   const [showModal, setShowModal] = useState(false);
   const [localEffectifs, setLocalEffectifs] = useState<EffectifsAnneePrecedente>(effectifs);
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  // Garde la dernière version sauvegardée pour ne jamais la perdre
+  const [savedEffectifs, setSavedEffectifs] = useState<EffectifsAnneePrecedente | null>(null);
 
-  // Log pour voir l'état actuel de localEffectifs à chaque render
+  // Log pour debug
   console.log('🎯 EffectifsPrecedent render - localEffectifs.niveauPrescolaire.maternel:', localEffectifs.niveauPrescolaire?.maternel);
 
-  // Charger les effectifs existants à l'ouverture du modal
+  // Charger les effectifs depuis l'API à chaque ouverture du modal
   useEffect(() => {
+    if (!showModal) return;
+
     const loadEffectifs = async () => {
-      if (showModal && identificationProved && annee) {
+      if (identificationProved && annee) {
         setIsLoading(true);
-        console.log('🔍 Chargement effectifs - ID:', identificationProved, 'Année:', annee);
+        console.log('🔍 Chargement effectifs depuis API - ID:', identificationProved, 'Année:', annee);
+        console.log('🔍 GET previous/' + identificationProved + '/' + annee + ' → retourne année précédente');
         
         try {
           const data = await EffectifAnnuelService.getByProvedAndAnnee(identificationProved, annee);
@@ -69,49 +75,79 @@ const EffectifsPrecedent: React.FC<EffectifsPrecedentProps> = ({ effectifs, onUp
           
           let effectifsCharges = null;
           
-          // Vérifier si la réponse est un tableau
-          if (Array.isArray(data) && data.length > 0 && data[0]?.effectifs) {
+          // Format API documenté: { success, isDefaultData, data: { effectifs } }
+          if (data && data.success && data.data?.effectifs && !data.isDefaultData) {
+            effectifsCharges = data.data.effectifs;
+            console.log('✅ Format API standard - effectifs extraits (données réelles)');
+          }
+          // Format API avec isDefaultData = true → valeurs par défaut, pas de vraies données
+          else if (data && data.success && data.isDefaultData) {
+            console.log('ℹ️ API retourne des valeurs par défaut (isDefaultData=true)');
+            // On ne charge pas les valeurs par défaut de l'API, on utilise prefillData si dispo
+            effectifsCharges = null;
+          }
+          // Fallback: format tableau
+          else if (Array.isArray(data) && data.length > 0 && data[0]?.effectifs) {
             effectifsCharges = data[0].effectifs;
             console.log('✅ Format tableau - effectifs extraits');
           } 
-          // Vérifier si c'est un objet direct avec effectifs
+          // Fallback: objet direct avec effectifs
           else if (data && data.effectifs) {
             effectifsCharges = data.effectifs;
-            console.log('✅ Format objet - effectifs extraits');
+            console.log('✅ Format objet direct - effectifs extraits');
           }
-          // Vérifier si data est directement la structure effectifs
+          // Fallback: structure effectifs directe
           else if (data && data.niveauPrescolaire && data.niveauPrimaire && data.niveauSecondaire) {
             effectifsCharges = data;
             console.log('✅ Format direct - structure effectifs');
           }
           
           if (effectifsCharges) {
-            console.log('✅ Mise à jour de localEffectifs avec:', effectifsCharges);
-            console.log('📊 Exemple de valeur - Maternel effectifGarconsFilles:', effectifsCharges.niveauPrescolaire?.maternel?.effectifGarconsFilles);
+            console.log('✅ Données API chargées:', effectifsCharges);
             setLocalEffectifs(effectifsCharges);
+            setSavedEffectifs(effectifsCharges);
             toast.success('📊 Effectifs existants chargés !', { duration: 2000 });
+          } else if (prefillData) {
+            console.log('🔄 Pré-remplissage avec les effectifs du rapport précédent');
+            setLocalEffectifs(prefillData);
+            toast.success('📊 Effectifs pré-remplis à partir du rapport précédent', { duration: 3000 });
           } else {
             console.log('❌ Aucun effectif trouvé dans la réponse');
-            console.log('❌ Structure data complète:', JSON.stringify(data, null, 2));
           }
           
         } catch (error: any) {
-          // Ne pas afficher d'erreur pour une absence de données (404)
           if (error.response?.status !== 404) {
             console.error('❌ Erreur chargement effectifs:', error);
           } else {
             console.log('ℹ️ Aucun effectif existant (404)');
+            if (prefillData) {
+              console.log('🔄 Pré-remplissage (404) avec les effectifs du rapport précédent');
+              setLocalEffectifs(prefillData);
+              toast.success('📊 Effectifs pré-remplis à partir du rapport précédent', { duration: 3000 });
+            }
           }
         } finally {
           setIsLoading(false);
         }
-      } else {
-        console.log('⚠️ Conditions non remplies:', { showModal, identificationProved, annee });
+      } else if (prefillData) {
+        console.log('🔄 Pré-remplissage direct (sans API) avec les effectifs du rapport précédent');
+        setLocalEffectifs(prefillData);
       }
     };
 
     loadEffectifs();
-  }, [showModal, identificationProved, annee]);
+  }, [showModal]); // Fetch API à chaque ouverture du modal
+
+  // Calculer l'année précédente à partir de l'année courante (ex: "2025-2026" → "2024-2025")
+  const getAnneePrecedente = (anneeCourante: string): string => {
+    const parts = anneeCourante.split('-');
+    if (parts.length === 2) {
+      const startYear = parseInt(parts[0]) - 1;
+      const endYear = parseInt(parts[1]) - 1;
+      return `${startYear}-${endYear}`;
+    }
+    return anneeCourante;
+  };
 
   const handleSave = async () => {
     if (!identificationProved) {
@@ -127,34 +163,30 @@ const EffectifsPrecedent: React.FC<EffectifsPrecedentProps> = ({ effectifs, onUp
     setIsSaving(true);
     
     try {
+      // Le modal édite les effectifs de l'année PRÉCÉDENTE
+      // annee = année courante (ex: "2025-2026"), on doit sauvegarder sous "2024-2025"
+      const anneePrecedente = getAnneePrecedente(annee);
+      console.log('💾 Sauvegarde effectifs - Année courante:', annee, '→ Année précédente (POST):', anneePrecedente);
+
       const payload: EffectifAnnuelPayload = {
         identificationProved,
-        annee,
+        annee: anneePrecedente,
         effectifs: localEffectifs
       };
       
-      await EffectifAnnuelService.create(payload);
+      const response = await EffectifAnnuelService.create(payload);
+      console.log('✅ Réponse POST:', response);
       
-      // Recharger les effectifs depuis le backend pour garantir la synchronisation
-      try {
-        const updatedData = await EffectifAnnuelService.getByProvedAndAnnee(identificationProved, annee);
-        
-        let effectifsFromBackend = localEffectifs; // Par défaut
-        
-        if (Array.isArray(updatedData) && updatedData.length > 0 && updatedData[0].effectifs) {
-          effectifsFromBackend = updatedData[0].effectifs;
-        } else if (updatedData && updatedData.effectifs) {
-          effectifsFromBackend = updatedData.effectifs;
-        } else if (updatedData && updatedData.niveauPrescolaire) {
-          effectifsFromBackend = updatedData;
-        }
-        
-        setLocalEffectifs(effectifsFromBackend);
-        onUpdate(effectifsFromBackend);
-      } catch (reloadError) {
-        // Si le rechargement échoue, utiliser les données locales
-        onUpdate(localEffectifs);
+      // Utiliser directement la réponse du POST (données confirmées par le backend)
+      let effectifsConfirmes = localEffectifs;
+      if (response && response.data && response.data.effectifs) {
+        effectifsConfirmes = response.data.effectifs;
+        console.log('✅ Données confirmées par le backend:', effectifsConfirmes);
       }
+      
+      setSavedEffectifs(effectifsConfirmes);
+      setLocalEffectifs(effectifsConfirmes);
+      onUpdate(effectifsConfirmes);
       
       setShowModal(false);
       toast.success('Effectifs enregistrés avec succès !');
@@ -171,7 +203,8 @@ const EffectifsPrecedent: React.FC<EffectifsPrecedentProps> = ({ effectifs, onUp
   };
 
   const handleCancel = () => {
-    setLocalEffectifs(effectifs);
+    // Restaurer avec les dernières données sauvegardées, sinon prefillData, sinon effectifs prop
+    setLocalEffectifs(savedEffectifs || prefillData || effectifs);
     setShowModal(false);
   };
 
