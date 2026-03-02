@@ -5,9 +5,10 @@ interface ParametresClesCompleteProps {
   formData: RapportActivite;
   setFormData: React.Dispatch<React.SetStateAction<RapportActivite>>;
   onInputChange?: (field: string, value: any) => void;
+  previousYearEffectifs?: any;
 }
 
-const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formData, setFormData, onInputChange }) => {
+const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formData, setFormData, onInputChange, previousYearEffectifs }) => {
   // Vérification de sécurité pour s'assurer que les données sont initialisées
   if (!formData || !formData.parametresCles || !formData.parametresCles.nombreEcolesClasses) {
     console.log('🔍 ParametresClesComplete: Données non initialisées, affichage du loader');
@@ -24,14 +25,14 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
   }
 
   const handleInputChange = (path: string, value: number | string) => {
-    // Si le parent fournit onInputChange, l'utiliser pour déclencher le recalcul auto des taux
-    if (onInputChange) {
-      onInputChange(path, typeof value === 'number' ? value : value);
-      return;
+    // DEBUG CRITIQUE — ce log DOIT apparaître dans la console du navigateur
+    if (path.includes('effectifScolaire') && !path.includes('taux')) {
+      console.log('🔴🔴🔴 ParametresClesComplete handleInputChange:', path, '=', value);
+      console.log('🔴🔴🔴 previousYearEffectifs PROP =', previousYearEffectifs ? JSON.stringify(previousYearEffectifs).substring(0, 200) : 'NULL ❌❌❌');
     }
-    // Fallback: mise à jour directe via setFormData
+    
     setFormData(prev => {
-      const newData = { ...prev };
+      const newData = JSON.parse(JSON.stringify(prev)); // Deep clone pour immutabilité
       const keys = path.split('.');
       let current: any = newData;
       
@@ -45,6 +46,85 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
       // Arrondir les nombres à 2 décimales, laisser les strings telles quelles
       const finalValue = typeof value === 'number' ? Math.round(value * 100) / 100 : value;
       current[keys[keys.length - 1]] = finalValue;
+      
+      // Auto-calcul des taux d'accroissement quand un champ effectif change
+      // Formule: Taux = ((Effectif_N - Effectif_N-1) / Effectif_N-1) × 100
+      const isTauxField = path.includes('tauxAccroissement') || 
+                           (path.includes('tauxGarcons') && path.includes('effectifScolaire')) || 
+                           (path.includes('tauxFilles') && path.includes('effectifScolaire'));
+      
+      if (previousYearEffectifs && path.includes('effectifScolaire') && !isTauxField) {
+        // Niveau Préscolaire
+        ['espaceCommunautaireEveil', 'maternel', 'prePrimaire', 'special'].forEach(niveau => {
+          const prevData = previousYearEffectifs.niveauPrescolaire?.[niveau];
+          const curData = newData.parametresCles?.effectifScolaire?.niveauPrescolaire?.[niveau];
+          if (prevData && curData) {
+            const prevGF = Number(prevData.effectifGarconsFilles) || 0;
+            const curGF = Number(curData.effectifGarconsFilles) || 0;
+            const prevF = Number(prevData.effectifFilles) || 0;
+            const curF = Number(curData.effectifFilles) || 0;
+            if (prevGF > 0 && curGF > 0) {
+              curData.tauxAccroissementGarconsFilles = Math.round(((curGF - prevGF) / prevGF) * 100 * 1000) / 1000;
+            }
+            if (prevF > 0 && curF > 0) {
+              curData.tauxAccroissementFilles = Math.round(((curF - prevF) / prevF) * 100 * 1000) / 1000;
+            }
+          }
+        });
+        
+        // Niveau Primaire
+        ['enseignementSpecial', 'enseignementPrimaire'].forEach(niveau => {
+          const prevData = previousYearEffectifs.niveauPrimaire?.[niveau];
+          const curData = newData.parametresCles?.effectifScolaire?.niveauPrimaire?.[niveau];
+          if (prevData && curData) {
+            const prevGF = Number(prevData.effectifGarconsFilles) || 0;
+            const curGF = Number(curData.effectifGarconsFilles) || 0;
+            const prevF = Number(prevData.effectifFilles) || 0;
+            const curF = Number(curData.effectifFilles) || 0;
+            if (prevGF > 0 && curGF > 0) {
+              curData.tauxAccroissementGarconsFilles = Math.round(((curGF - prevGF) / prevGF) * 100 * 1000) / 1000;
+            }
+            if (prevF > 0 && curF > 0) {
+              curData.tauxAccroissementFilles = Math.round(((curF - prevF) / prevF) * 100 * 1000) / 1000;
+            }
+          }
+        });
+        
+        // Niveau Secondaire - Enseignement Spécial
+        const prevSecSp = previousYearEffectifs.niveauSecondaire?.enseignementSpecial;
+        const curSecSp = newData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial;
+        if (prevSecSp && curSecSp) {
+          const prevG = Number(prevSecSp.effectifGarcons) || 0;
+          const curG = Number(curSecSp.effectifGarcons) || 0;
+          const prevF = Number(prevSecSp.effectifFilles) || 0;
+          const curF = Number(curSecSp.effectifFilles) || 0;
+          if (prevG > 0 && curG > 0) {
+            curSecSp.tauxGarcons = Math.round(((curG - prevG) / prevG) * 100 * 1000) / 1000;
+          }
+          if (prevF > 0 && curF > 0) {
+            curSecSp.tauxFilles = Math.round(((curF - prevF) / prevF) * 100 * 1000) / 1000;
+          }
+        }
+        
+        // Niveau Secondaire - Enseignement Secondaire
+        ['septiemeCTEB', 'huitiemeCTEB', 'premiereHumanite', 'quatriemeHumanite'].forEach(classe => {
+          const prevData = previousYearEffectifs.niveauSecondaire?.enseignementSecondaire?.[classe];
+          const curData = newData.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire?.[classe];
+          if (prevData && curData) {
+            const prevG = Number(prevData.effectifGarcons) || 0;
+            const curG = Number(curData.effectifGarcons) || 0;
+            const prevF = Number(prevData.effectifFilles) || 0;
+            const curF = Number(curData.effectifFilles) || 0;
+            if (prevG > 0 && curG > 0) {
+              curData.tauxGarcons = Math.round(((curG - prevG) / prevG) * 100 * 1000) / 1000;
+            }
+            if (prevF > 0 && curF > 0) {
+              curData.tauxFilles = Math.round(((curF - prevF) / prevF) * 100 * 1000) / 1000;
+            }
+          }
+        });
+      }
+      
       return newData;
     });
   };
@@ -386,6 +466,17 @@ const ParametresClesComplete: React.FC<ParametresClesCompleteProps> = ({ formDat
       {/* I.1.2. EFFECTIF SCOLAIRE ET TAUX D'ACCROISSEMENT */}
       <div className="mb-6">
         <h4 className="font-medium mb-3 text-blue-600">I.1.2. EFFECTIF SCOLAIRE ET TAUX D'ACCROISSEMENT</h4>
+        
+        {/* Indicateur de données année précédente */}
+        {previousYearEffectifs ? (
+          <div className="bg-green-50 border border-green-200 rounded p-2 mb-3 text-sm text-green-700">
+            ✅ Données année précédente chargées — les taux seront calculés automatiquement.
+          </div>
+        ) : (
+          <div className="bg-amber-50 border border-amber-200 rounded p-2 mb-3 text-sm text-amber-700">
+            ⚠️ Données année précédente non disponibles — veuillez d'abord remplir les effectifs via le bouton "Effectifs de l'année précédente" ci-dessus, puis les taux seront calculés automatiquement.
+          </div>
+        )}
         
         {/* NIVEAU PRESCOLAIRE */}
         <div className="mb-4">

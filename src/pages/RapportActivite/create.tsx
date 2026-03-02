@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { rapportActiviteService } from '../../services/rapportActivite/rapportActiviteService';
+import { EffectifAnnuelService } from '../../services/effectifAnnuel/effectifAnnuel.service';
 import { RapportActivite } from '../../models/RapportActivite';
 import AutoFillBanner from './components/AutoFillBanner';
 import BasicInfo from './components/BasicInfo';
@@ -855,38 +856,102 @@ const CreateRapportActivite: React.FC = () => {
 
   // État pour stocker les effectifs de l'année précédente
   const [previousYearEffectifs, setPreviousYearEffectifs] = useState<any>(null);
+  // Ref synchrone pour que handleInputChange ait TOUJOURS la dernière valeur
+  // (le state via closure peut être en retard d'un render)
+  const previousYearEffectifsRef = useRef<any>(null);
+  const setPrevEffectifs = (val: any) => {
+    previousYearEffectifsRef.current = val; // immédiat, synchrone
+    setPreviousYearEffectifs(val);           // déclenche un re-render
+    // Backup dans sessionStorage pour survie aux problèmes de timing
+    if (val) {
+      try {
+        sessionStorage.setItem('previousYearEffectifs', JSON.stringify(val));
+        console.log('💾 previousYearEffectifs sauvegardé dans sessionStorage');
+      } catch (e) { /* ignore */ }
+    }
+  };
 
   // Fonction pour récupérer les effectifs de l'année précédente
   const fetchPreviousYearData = async () => {
+    const userData = localStorage.getItem('data');
+    if (!userData) {
+      console.log('❌ Données utilisateur manquantes');
+      return;
+    }
+
+    const user = JSON.parse(userData);
+    const provedId = user._id;
+    let anneeActuelle = formData.annee;
+    if (!anneeActuelle || !anneeActuelle.includes('-')) {
+      const currentYear = new Date().getFullYear();
+      anneeActuelle = `${currentYear}-${currentYear + 1}`;
+    }
+
+    console.log('🔍 Récupération des effectifs - PROVED:', provedId, 'Année:', anneeActuelle);
+
+    // Tentative 1: endpoint /previous/{id}/{annee}
     try {
-      const userData = localStorage.getItem('data');
+      const data = await rapportActiviteService.getPreviousYearEffectifs(provedId, anneeActuelle);
+      console.log('🔍 /previous response:', JSON.stringify(data)?.substring(0, 500));
       
-      if (!userData) {
-        console.log('❌ Données utilisateur manquantes');
+      // Format API: { success, data: { effectifs: {...} } } — IGNORER les données par défaut
+      if (data.success && data.data?.effectifs && !data.isDefaultData) {
+        setPrevEffectifs(data.data.effectifs);
+        console.log('✅ previousYearEffectifs SET via /previous (success/data/effectifs)');
         return;
       }
-
-      const user = JSON.parse(userData);
-      const provedId = user._id;
-      const currentYear = new Date().getFullYear();
-      const anneeActuelle = `${currentYear}-${currentYear + 1}`;
-
-      console.log('🔍 Récupération des effectifs de l\'année précédente...');
-      console.log('🔍 PROVED ID:', provedId);
-      console.log('🔍 Année actuelle:', anneeActuelle);
-
-      const data = await rapportActiviteService.getPreviousYearEffectifs(provedId, anneeActuelle);
-      console.log('✅ Effectifs de l\'année précédente récupérés:', data);
-
-      // Stocker les effectifs de l'année précédente
-      if (data.success && data.data?.effectifs) {
-        setPreviousYearEffectifs(data.data.effectifs);
-        toast.success('Effectifs de l\'année précédente chargés avec succès !');
+      // Vérifier aussi le format direct
+      if (data?.effectifs && !data.isDefaultData) {
+        setPrevEffectifs(data.effectifs);
+        console.log('✅ previousYearEffectifs SET via /previous (format direct)');
+        return;
       }
-    } catch (error: any) {
-      console.error('❌ Erreur lors de la récupération des effectifs:', error);
-      toast.error(extractErrorMessage(error, 'Erreur lors du chargement des effectifs de l\'année précédente'));
+      if (data?.niveauPrescolaire && data?.niveauPrimaire && data?.niveauSecondaire) {
+        setPrevEffectifs(data);
+        console.log('✅ previousYearEffectifs SET via /previous (format racine)');
+        return;
+      }
+    } catch (e) {
+      console.log('⚠️ /previous a échoué, tentative /last...');
     }
+
+    // Tentative 2: endpoint /last/{provedId} (fallback)
+    try {
+      const lastData = await EffectifAnnuelService.getLastByProved(provedId);
+      console.log('🔍 /last response:', lastData);
+
+      let effectifs = null;
+      if (lastData?.data?.effectifs) {
+        effectifs = lastData.data.effectifs;
+      } else if (lastData?.effectifs) {
+        effectifs = lastData.effectifs;
+      } else if (lastData?.niveauPrescolaire && lastData?.niveauPrimaire && lastData?.niveauSecondaire) {
+        effectifs = lastData;
+      }
+
+      if (effectifs) {
+        setPrevEffectifs(effectifs);
+        console.log('✅ previousYearEffectifs SET via /last (fallback)');
+        return;
+      }
+    } catch (e2) {
+      console.log('⚠️ /last a aussi échoué:', e2);
+    }
+
+    console.log('❌ Aucun effectif trouvé via API - vérifie sessionStorage...');
+    // Dernier recours: essayer sessionStorage (peut contenir des données d'une session précédente)
+    try {
+      const stored = sessionStorage.getItem('previousYearEffectifs');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed && parsed.niveauPrescolaire) {
+          setPrevEffectifs(parsed);
+          console.log('✅ previousYearEffectifs restauré depuis sessionStorage');
+          return;
+        }
+      }
+    } catch (e) { /* ignore */ }
+    console.log('❌ Aucun effectif trouvé nulle part - les taux devront être saisis manuellement');
   };
 
   // Charger les effectifs de l'année précédente au montage du composant
@@ -1076,22 +1141,14 @@ const CreateRapportActivite: React.FC = () => {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [formData, currentSection, autoSave.hasUnsavedChanges]);
 
-  // Calculer automatiquement les taux d'accroissement quand les effectifs changent
+  // Calculer les taux quand les données de l'année précédente arrivent (API ou modal)
+  // Le recalcul lors de la saisie utilisateur est géré directement dans handleInputChange via applyGrowthRates
   useEffect(() => {
-    console.log('🔍 useEffect calcul taux - previousYearEffectifs:', previousYearEffectifs);
-    console.log('🔍 useEffect calcul taux - effectifScolaire changé:', formData.parametresCles?.effectifScolaire);
-    
     if (previousYearEffectifs) {
-      // Délai pour s'assurer que setFormData a fini de s'exécuter
-      setTimeout(() => {
-        updateGrowthRates();
-      }, 50);
+      console.log('✅ previousYearEffectifs chargé, calcul initial des taux...');
+      updateGrowthRates();
     }
-  }, [formData.parametresCles?.effectifScolaire, previousYearEffectifs]);
-
-  // NOTE: Pas de useEffect sur [formData] complet pour éviter d'écraser les taux saisis manuellement
-  // Le recalcul est déclenché par handleInputChange (seulement pour les champs effectif)
-  // et par le useEffect ci-dessus sur [effectifScolaire, previousYearEffectifs]
+  }, [previousYearEffectifs]);
 
   // Sauvegarder automatiquement en brouillon toutes les 30 secondes (TEMPORAIREMENT DÉSACTIVÉ)
   // useEffect(() => {
@@ -1172,6 +1229,83 @@ const CreateRapportActivite: React.FC = () => {
     }
     
     console.log('🔍 Fin de l\'effacement du brouillon');
+  };
+
+  // Fonction PURE : calcule les taux sur un objet déjà cloné, retourne l'objet modifié
+  const applyGrowthRates = (updated: any, prevYearData: any): any => {
+    if (!prevYearData) return updated;
+
+    // Niveau Préscolaire
+    ['espaceCommunautaireEveil', 'maternel', 'prePrimaire', 'special'].forEach((niveau: string) => {
+      const prevData = (prevYearData.niveauPrescolaire as any)?.[niveau];
+      const currentData = (updated.parametresCles?.effectifScolaire?.niveauPrescolaire as any)?.[niveau];
+      if (prevData && currentData) {
+        const prevGF = prevData.effectifGarconsFilles || 0;
+        const currentGF = currentData.effectifGarconsFilles || 0;
+        const prevF = prevData.effectifFilles || 0;
+        const currentF = currentData.effectifFilles || 0;
+        if (prevGF > 0 && currentGF > 0) {
+          currentData.tauxAccroissementGarconsFilles = Math.round(((currentGF - prevGF) / prevGF) * 100 * 1000) / 1000;
+        }
+        if (prevF > 0 && currentF > 0) {
+          currentData.tauxAccroissementFilles = Math.round(((currentF - prevF) / prevF) * 100 * 1000) / 1000;
+        }
+      }
+    });
+
+    // Niveau Primaire
+    ['enseignementSpecial', 'enseignementPrimaire'].forEach((niveau: string) => {
+      const prevData = (prevYearData.niveauPrimaire as any)?.[niveau];
+      const currentData = (updated.parametresCles?.effectifScolaire?.niveauPrimaire as any)?.[niveau];
+      if (prevData && currentData) {
+        const prevGF = prevData.effectifGarconsFilles || 0;
+        const currentGF = currentData.effectifGarconsFilles || 0;
+        const prevF = prevData.effectifFilles || 0;
+        const currentF = currentData.effectifFilles || 0;
+        if (prevGF > 0 && currentGF > 0) {
+          currentData.tauxAccroissementGarconsFilles = Math.round(((currentGF - prevGF) / prevGF) * 100 * 1000) / 1000;
+        }
+        if (prevF > 0 && currentF > 0) {
+          currentData.tauxAccroissementFilles = Math.round(((currentF - prevF) / prevF) * 100 * 1000) / 1000;
+        }
+      }
+    });
+
+    // Niveau Secondaire - Enseignement Spécial
+    const prevSecSpecial = prevYearData.niveauSecondaire?.enseignementSpecial;
+    const currentSecSpecial = updated.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSpecial;
+    if (prevSecSpecial && currentSecSpecial) {
+      const prevG = prevSecSpecial.effectifGarcons || 0;
+      const currentG = currentSecSpecial.effectifGarcons || 0;
+      const prevF = prevSecSpecial.effectifFilles || 0;
+      const currentF = currentSecSpecial.effectifFilles || 0;
+      if (prevG > 0 && currentG > 0) {
+        currentSecSpecial.tauxGarcons = Math.round(((currentG - prevG) / prevG) * 100 * 1000) / 1000;
+      }
+      if (prevF > 0 && currentF > 0) {
+        currentSecSpecial.tauxFilles = Math.round(((currentF - prevF) / prevF) * 100 * 1000) / 1000;
+      }
+    }
+
+    // Niveau Secondaire - Enseignement Secondaire
+    ['septiemeCTEB', 'huitiemeCTEB', 'premiereHumanite', 'quatriemeHumanite'].forEach((classe: string) => {
+      const prevData = (prevYearData.niveauSecondaire?.enseignementSecondaire as any)?.[classe];
+      const currentData = (updated.parametresCles?.effectifScolaire?.niveauSecondaire?.enseignementSecondaire as any)?.[classe];
+      if (prevData && currentData) {
+        const prevG = prevData.effectifGarcons || 0;
+        const currentG = currentData.effectifGarcons || 0;
+        const prevF = prevData.effectifFilles || 0;
+        const currentF = currentData.effectifFilles || 0;
+        if (prevG > 0 && currentG > 0) {
+          currentData.tauxGarcons = Math.round(((currentG - prevG) / prevG) * 100 * 1000) / 1000;
+        }
+        if (prevF > 0 && currentF > 0) {
+          currentData.tauxFilles = Math.round(((currentF - prevF) / prevF) * 100 * 1000) / 1000;
+        }
+      }
+    });
+
+    return updated;
   };
 
   // Fonction globale pour mettre à jour les taux d'accroissement
@@ -1415,8 +1549,34 @@ const CreateRapportActivite: React.FC = () => {
   };
 
   const handleInputChange = (field: string, value: any) => {
+    // Déterminer si c'est un champ taux (saisie manuelle → ne pas recalculer)
+    const isTauxField = field.includes('tauxAccroissement') || 
+                         (field.includes('tauxGarcons') && field.includes('effectifScolaire')) || 
+                         (field.includes('tauxFilles') && field.includes('effectifScolaire'));
+
+    // Lire depuis le REF (toujours synchrone et à jour) au lieu de la closure (peut être en retard)
+    let prevYearData = previousYearEffectifsRef.current;
+
+    // FALLBACK: si le ref est null, essayer sessionStorage
+    if (!prevYearData) {
+      try {
+        const stored = sessionStorage.getItem('previousYearEffectifs');
+        if (stored) {
+          prevYearData = JSON.parse(stored);
+          previousYearEffectifsRef.current = prevYearData; // restaurer le ref
+          console.log('🔄 previousYearEffectifs restauré depuis sessionStorage');
+        }
+      } catch (e) { /* ignore */ }
+    }
+
+    // DEBUG: log pour vérifier l'état
+    if (field.includes('effectifScolaire') && !isTauxField) {
+      console.log('🔥 handleInputChange effectif:', field, '=', value);
+      console.log('🔥 prevYearData:', prevYearData ? 'CHARGÉ ✅' : 'NULL ❌ (aucune donnée année précédente)');
+    }
+
     setFormData(prev => {
-      const updated = { ...prev };
+      const updated = JSON.parse(JSON.stringify(prev)); // Deep clone
       
       // Arrondir les valeurs numériques à 2 décimales
       const finalValue = typeof value === 'number' ? Math.round(value * 100) / 100 : value;
@@ -1429,16 +1589,13 @@ const CreateRapportActivite: React.FC = () => {
       }
       current[keys[keys.length - 1]] = finalValue;
       
+      // Si c'est un champ effectif (pas taux), recalculer les taux DANS LE MÊME setFormData
+      if (!isTauxField && prevYearData) {
+        return applyGrowthRates(updated, prevYearData);
+      }
+      
       return updated;
     });
-    
-    // Recalculer les taux UNIQUEMENT quand un champ effectif change (pas un champ taux)
-    const isTauxField = field.includes('tauxAccroissement') || 
-                         (field.includes('tauxGarcons') && field.includes('effectifScolaire')) || 
-                         (field.includes('tauxFilles') && field.includes('effectifScolaire'));
-    if (!isTauxField) {
-      setTimeout(() => updateGrowthRates(), 100);
-    }
   };
 
   // Fonctions de gestion du brouillon
@@ -1658,11 +1815,36 @@ const CreateRapportActivite: React.FC = () => {
             </div>
           </div>
         )}
+        {!previousYearEffectifs && (
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                  </svg>
+                  <h3 className="text-amber-800 font-semibold">Effectifs de l'année précédente non disponibles</h3>
+                </div>
+                <p className="text-amber-700 text-sm">
+                  Pour calculer automatiquement les taux d'accroissement, veuillez d'abord remplir les effectifs de l'année précédente 
+                  via le bouton <strong>"Effectifs de l'année précédente"</strong> dans la section Informations de base ci-dessous.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => fetchPreviousYearData()}
+                className="ml-4 px-3 py-1 text-sm bg-amber-100 text-amber-700 rounded hover:bg-amber-200 whitespace-nowrap"
+              >
+                Réessayer
+              </button>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-                        <BasicInfo formData={formData} handleInputChange={handleInputChange} previousYearEffectifs={previousYearEffectifs} onPreviousYearEffectifsUpdate={(effectifs) => setPreviousYearEffectifs(effectifs)} />
+                        <BasicInfo formData={formData} handleInputChange={handleInputChange} previousYearEffectifs={previousYearEffectifs} onPreviousYearEffectifsUpdate={(effectifs) => setPrevEffectifs(effectifs)} />
               <ParametresCles formData={formData} setFormData={setFormData} />
-              <ParametresClesComplete formData={formData} setFormData={setFormData} onInputChange={handleInputChange} />
+              <ParametresClesComplete formData={formData} setFormData={setFormData} previousYearEffectifs={previousYearEffectifs} />
               <Personnel formData={formData} setFormData={setFormData} />
               <EvaluationQualitative formData={formData} setFormData={setFormData} />
               <EvaluationQualitativeComplete formData={formData} setFormData={setFormData} autoSaveForceSave={autoSave?.forceSave} />

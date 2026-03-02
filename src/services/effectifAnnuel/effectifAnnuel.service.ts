@@ -120,6 +120,19 @@ export const EffectifAnnuelService = {
     }
   },
 
+  // Récupérer les DERNIERS effectifs d'un PROVED (sans filtre d'année)
+  getLastByProved: async (provedId: string | number) => {
+    try {
+      console.log('🔍 EffectifAnnuelService.getLastByProved - provedId:', provedId);
+      const response = await BaseService.get(`effectif-annuel/last/${provedId}`);
+      console.log('✅ EffectifAnnuelService.getLastByProved - Succès:', response);
+      return response;
+    } catch (error) {
+      console.error('❌ EffectifAnnuelService.getLastByProved - Erreur:', error);
+      throw error;
+    }
+  },
+
   // Supprimer un effectif annuel
   delete: async (id: string) => {
     try {

@@ -54,17 +54,38 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ formData, handleInputChange, prev
           
           let effectifsCharges = null;
           
-          if (Array.isArray(data) && data.length > 0 && data[0].effectifs) {
+          // Format API standard: { success, data: { effectifs: {...} } }
+          if (data && data.success && data.data?.effectifs && !data.isDefaultData) {
+            effectifsCharges = data.data.effectifs;
+            console.log('✅ BasicInfo: Format API standard (success/data/effectifs)');
+          }
+          // Format tableau
+          else if (Array.isArray(data) && data.length > 0 && data[0].effectifs) {
             effectifsCharges = data[0].effectifs;
-          } else if (data && data.effectifs) {
+            console.log('✅ BasicInfo: Format tableau');
+          }
+          // Format objet direct avec effectifs
+          else if (data && data.effectifs) {
             effectifsCharges = data.effectifs;
-          } else if (data && data.niveauPrescolaire && data.niveauPrimaire && data.niveauSecondaire) {
+            console.log('✅ BasicInfo: Format objet direct');
+          }
+          // Format structure racine
+          else if (data && data.niveauPrescolaire && data.niveauPrimaire && data.niveauSecondaire) {
             effectifsCharges = data;
+            console.log('✅ BasicInfo: Format structure racine');
+          }
+          // Format API avec isDefaultData (données par défaut = pas de vraies données)
+          else if (data && data.isDefaultData) {
+            console.log('ℹ️ BasicInfo: API retourne des données par défaut (isDefaultData=true), ignoré');
           }
           
           if (effectifsCharges) {
             console.log('✅ Effectifs chargés depuis l\'API:', effectifsCharges);
             setEffectifs(effectifsCharges);
+            // Propager au parent pour déclencher le calcul auto des taux
+            if (onPreviousYearEffectifsUpdate) {
+              onPreviousYearEffectifsUpdate(effectifsCharges);
+            }
           }
         } catch (error) {
           // Pas d'effectif existant, ce n'est pas une erreur
