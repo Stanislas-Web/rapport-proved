@@ -38,6 +38,10 @@ const CreateRapportActivite: React.FC = () => {
   const [showDraftModal, setShowDraftModal] = useState(false);
   const [existingDraft, setExistingDraft] = useState<any>(null);
   const [currentSection, setCurrentSection] = useState('I');
+  const [backendErrors, setBackendErrors] = useState<Record<string, { message: string; path?: string; kind?: string }>>({});
+  const [backendErrorMessage, setBackendErrorMessage] = useState<string>('');
+  const [backendDuplicateFields, setBackendDuplicateFields] = useState<Record<string, string>>({});
+  const errorsRef = useRef<HTMLDivElement>(null);
   
   // Charger les données du brouillon local au démarrage
   const loadDraft = (): RapportActivite => {
@@ -1671,6 +1675,10 @@ const CreateRapportActivite: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    // Réinitialiser les erreurs backend à chaque soumission
+    setBackendErrors({});
+    setBackendErrorMessage('');
+    setBackendDuplicateFields({});
 
     try {
       // Récupérer l'ID de la PROVED depuis le token
@@ -1733,7 +1741,25 @@ const CreateRapportActivite: React.FC = () => {
       navigate('/rapport-activite');
     } catch (error: any) {
       console.error('Erreur lors de la création/modification du rapport:', error);
+      
+      // Extraire les erreurs structurées du backend
+      // BaseService fait throw error.response.data, donc error = { success, message, errors, duplicateFields, ... }
+      if (error?.errors && typeof error.errors === 'object' && !Array.isArray(error.errors)) {
+        setBackendErrors(error.errors);
+      }
+      if (error?.message) {
+        setBackendErrorMessage(typeof error.message === 'string' ? error.message : Array.isArray(error.message) ? error.message.join(', ') : '');
+      }
+      if (error?.duplicateFields && typeof error.duplicateFields === 'object') {
+        setBackendDuplicateFields(error.duplicateFields);
+      }
+      
       toast.error(extractErrorMessage(error, 'Erreur lors de la création/modification du rapport d\'activité'));
+      
+      // Scroller vers le résumé des erreurs
+      setTimeout(() => {
+        errorsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
     } finally {
       setLoading(false);
     }
@@ -1841,8 +1867,42 @@ const CreateRapportActivite: React.FC = () => {
           </div>
         )}
 
+        {/* Résumé des erreurs backend */}
+        {(Object.keys(backendErrors).length > 0 || backendErrorMessage || Object.keys(backendDuplicateFields).length > 0) && (
+          <div ref={errorsRef} className="bg-red-50 border border-red-300 rounded-lg p-4 mb-6">
+            <div className="flex items-center gap-2 mb-2">
+              <svg className="w-5 h-5 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <h3 className="text-red-800 font-semibold">
+                {backendErrorMessage || 'Erreur lors de la soumission du rapport'}
+              </h3>
+            </div>
+            {/* Erreurs de validation par champ */}
+            {Object.keys(backendErrors).length > 0 && (
+              <ul className="list-disc list-inside mt-2 space-y-1">
+                {Object.entries(backendErrors).map(([field, err]) => (
+                  <li key={field} className="text-red-700 text-sm">
+                    <span className="font-medium">{field}</span> : {err.message || JSON.stringify(err)}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {/* Erreurs de doublon */}
+            {Object.keys(backendDuplicateFields).length > 0 && (
+              <ul className="list-disc list-inside mt-2 space-y-1">
+                {Object.entries(backendDuplicateFields).map(([field, value]) => (
+                  <li key={field} className="text-red-700 text-sm">
+                    <span className="font-medium">{field}</span> : la valeur <span className="font-mono">"{value}"</span> existe déjà
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-6">
-                        <BasicInfo formData={formData} handleInputChange={handleInputChange} previousYearEffectifs={previousYearEffectifs} onPreviousYearEffectifsUpdate={(effectifs) => setPrevEffectifs(effectifs)} />
+                        <BasicInfo formData={formData} handleInputChange={handleInputChange} previousYearEffectifs={previousYearEffectifs} onPreviousYearEffectifsUpdate={(effectifs) => setPrevEffectifs(effectifs)} backendErrors={backendErrors} />
               <ParametresCles formData={formData} setFormData={setFormData} />
               <ParametresClesComplete formData={formData} setFormData={setFormData} previousYearEffectifs={previousYearEffectifs} />
               <Personnel formData={formData} setFormData={setFormData} />
@@ -1852,7 +1912,7 @@ const CreateRapportActivite: React.FC = () => {
               <RealisationsComplete formData={formData} setFormData={setFormData} />
               <Gouvernance formData={formData} setFormData={setFormData} autoSaveForceSave={autoSave?.forceSave} />
               <EducationUrgence formData={formData} setFormData={setFormData} />
-              <Conclusion formData={formData} handleInputChange={handleInputChange} />
+              <Conclusion formData={formData} handleInputChange={handleInputChange} backendErrors={backendErrors} />
 
           {/* Boutons d'action en bas */}
           <div className="flex justify-end gap-4">

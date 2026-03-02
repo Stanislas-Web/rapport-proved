@@ -48,8 +48,17 @@ export const extractErrorMessage = (error: any, defaultMessage: string = 'Une er
       .join(', ');
   }
   
+  // Cas 4b: Propriété "error" directe (données unwrapped par BaseService)
+  if (error?.error && typeof error.error === 'string') {
+    return error.error;
+  }
+  
   // Cas 5: Message d'erreur direct
   if (error?.message) {
+    // Gérer le cas où message est un tableau (ex: validation NestJS)
+    if (Array.isArray(error.message)) {
+      return error.message.join(', ');
+    }
     return error.message;
   }
   

@@ -9,9 +9,10 @@ interface BasicInfoProps {
   handleInputChange: (field: string, value: any) => void;
   previousYearEffectifs?: any;
   onPreviousYearEffectifsUpdate?: (effectifs: any) => void;
+  backendErrors?: Record<string, { message: string; path?: string; kind?: string }>;
 }
 
-const BasicInfo: React.FC<BasicInfoProps> = ({ formData, handleInputChange, previousYearEffectifs, onPreviousYearEffectifsUpdate }) => {
+const BasicInfo: React.FC<BasicInfoProps> = ({ formData, handleInputChange, previousYearEffectifs, onPreviousYearEffectifsUpdate, backendErrors = {} }) => {
   // État initial pour les effectifs - utilise les données de formData si disponibles
   const defaultEffectifs: EffectifsAnneePrecedente = {
     niveauPrescolaire: {
@@ -129,10 +130,13 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ formData, handleInputChange, prev
           type="text"
           value={formData.annee}
           onChange={(e) => handleInputChange('annee', e.target.value)}
-          className="w-full rounded border border-stroke bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          className={`w-full rounded border ${backendErrors.annee ? 'border-red-500 ring-1 ring-red-500' : 'border-stroke'} bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary`}
           placeholder="Ex: 2024-2025"
           required
         />
+        {backendErrors.annee && (
+          <p className="text-xs text-red-500 mt-1">{backendErrors.annee.message}</p>
+        )}
         <p className="text-xs text-gray-500 mt-1">Format requis: YYYY-YYYY (ex: 2024-2025)</p>
       </div>
 
@@ -144,9 +148,12 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ formData, handleInputChange, prev
           value={formData.introduction}
           onChange={(e) => handleInputChange('introduction', e.target.value)}
           rows={4}
-          className="w-full rounded border border-stroke bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          className={`w-full rounded border ${backendErrors.introduction ? 'border-red-500 ring-1 ring-red-500' : 'border-stroke'} bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary`}
           placeholder="Brève description de la genèse et présentation de la situation sociogéographique..."
         />
+        {backendErrors.introduction && (
+          <p className="text-xs text-red-500 mt-1">{backendErrors.introduction.message}</p>
+        )}
       </div>
     </div>
   );

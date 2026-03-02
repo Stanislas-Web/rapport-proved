@@ -4,9 +4,10 @@ import { RapportActivite } from '../../../models/RapportActivite';
 interface ConclusionProps {
   formData: RapportActivite;
   handleInputChange: (field: string, value: any) => void;
+  backendErrors?: Record<string, { message: string; path?: string; kind?: string }>;
 }
 
-const Conclusion: React.FC<ConclusionProps> = ({ formData, handleInputChange }) => {
+const Conclusion: React.FC<ConclusionProps> = ({ formData, handleInputChange, backendErrors = {} }) => {
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <h3 className="text-lg font-medium mb-4 text-primary">VI. AUTRES PRINCIPAUX PROBLEMES SPECIFIQUES</h3>
@@ -17,9 +18,12 @@ const Conclusion: React.FC<ConclusionProps> = ({ formData, handleInputChange }) 
         <textarea
           value={formData.autresProblemes.problemesSpecifiques}
           onChange={(e) => handleInputChange('autresProblemes.problemesSpecifiques', e.target.value)}
-          className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={`w-full h-32 p-3 border ${backendErrors.autresProblemes || backendErrors['autresProblemes.problemesSpecifiques'] ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
           placeholder="Décrivez les autres problèmes spécifiques..."
         />
+        {(backendErrors.autresProblemes || backendErrors['autresProblemes.problemesSpecifiques']) && (
+          <p className="text-xs text-red-500 mt-1">{(backendErrors.autresProblemes || backendErrors['autresProblemes.problemesSpecifiques']).message}</p>
+        )}
       </div>
 
       {/* CONCLUSION */}
@@ -27,11 +31,14 @@ const Conclusion: React.FC<ConclusionProps> = ({ formData, handleInputChange }) 
         <h4 className="font-bold mb-3">CONCLUSION</h4>
         <h5 className="font-medium mb-2">Conclusion (10 lignes maximum)</h5>
         <textarea
-          className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={`w-full h-32 p-3 border ${backendErrors.conclusion ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
           placeholder="Entrez votre conclusion..."
           value={formData.conclusion}
           onChange={(e) => handleInputChange('conclusion', e.target.value)}
         />
+        {backendErrors.conclusion && (
+          <p className="text-xs text-red-500 mt-1">{backendErrors.conclusion.message}</p>
+        )}
       </div>
     </div>
   );
