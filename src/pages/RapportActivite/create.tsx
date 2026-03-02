@@ -1754,7 +1754,25 @@ const CreateRapportActivite: React.FC = () => {
         setBackendDuplicateFields(error.duplicateFields);
       }
       
-      toast.error(extractErrorMessage(error, 'Erreur lors de la création/modification du rapport d\'activité'));
+      // Construire un message toast détaillé avec les champs en erreur
+      let toastMsg = extractErrorMessage(error, 'Erreur lors de la création/modification du rapport d\'activité');
+      if (error?.errors && typeof error.errors === 'object' && !Array.isArray(error.errors)) {
+        const fieldDetails = Object.entries(error.errors)
+          .map(([field, err]: [string, any]) => `• ${field}: ${err?.message || JSON.stringify(err)}`)
+          .join('\n');
+        if (fieldDetails) {
+          toastMsg += '\n' + fieldDetails;
+        }
+      }
+      if (error?.duplicateFields && typeof error.duplicateFields === 'object') {
+        const dupDetails = Object.entries(error.duplicateFields)
+          .map(([field, value]: [string, any]) => `• ${field}: "${value}" existe déjà`)
+          .join('\n');
+        if (dupDetails) {
+          toastMsg += '\n' + dupDetails;
+        }
+      }
+      toast.error(toastMsg, { duration: 8000, style: { whiteSpace: 'pre-line', maxWidth: '500px' } });
       
       // Scroller vers le résumé des erreurs
       setTimeout(() => {

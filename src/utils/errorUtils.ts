@@ -67,7 +67,7 @@ export const extractErrorMessage = (error: any, defaultMessage: string = 'Une er
     return error;
   }
   
-  // Cas 7: Erreur de validation
+  // Cas 7: dation
   if (error?.response?.data?.validation) {
     const validationErrors = error.response.data.validation;
     if (typeof validationErrors === 'object') {
