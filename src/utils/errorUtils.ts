@@ -48,6 +48,20 @@ export const extractErrorMessage = (error: any, defaultMessage: string = 'Une er
       .join(', ');
   }
   
+  // Cas 4a: Erreur avec errors en tant qu'objet { "champ": { message, path, kind, value } }
+  // Structure backend: { success: false, message: "...", errors: { "nom.du.champ": { message: "...", ... } } }
+  if (error?.errors && typeof error.errors === 'object' && !Array.isArray(error.errors)) {
+    const fieldErrors = Object.entries(error.errors)
+      .map(([field, err]: [string, any]) => {
+        const msg = err?.message || JSON.stringify(err);
+        return `${field}: ${msg}`;
+      });
+    if (fieldErrors.length > 0) {
+      const mainMsg = error?.message ? `${error.message} — ` : '';
+      return mainMsg + fieldErrors.join(', ');
+    }
+  }
+  
   // Cas 4b: Propriété "error" directe (données unwrapped par BaseService)
   if (error?.error && typeof error.error === 'string') {
     return error.error;
